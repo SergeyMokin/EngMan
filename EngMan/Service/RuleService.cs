@@ -5,35 +5,35 @@ using System.Linq;
 
 namespace EngMan.Service
 {
-    public class RuleService: IService
+    public class RuleService: IRuleService
     {
-        private IRepository rep;
+        private IRuleRepository rep;
 
-        public RuleService(IRepository _rep)
+        public RuleService(IRuleRepository _rep)
         {
             rep = _rep;
         }
 
-        public async Task<IEnumerable<RuleWithImages>> Get()
+        public async Task<IEnumerable<Rule>> Get()
         {
-            var task = new Task<IEnumerable<RuleWithImages>>(delegate () { return rep.Rules; });
+            var task = new Task<IEnumerable<Rule>>(delegate () { return rep.Rules; });
             task.Start();
             return await task;
         }
 
-        public async Task<IEnumerable<RuleWithImages>> GetById(int id)
+        public async Task<IEnumerable<Rule>> GetById(int id)
         {
-            var task = new Task<IEnumerable<RuleWithImages>>(delegate() { return rep.Rules.Where(x => x.Id == id); });
+            var task = new Task<IEnumerable<Rule>>(delegate() { return rep.Rules.Where(x => x.Id == id); });
             task.Start();
             return await task;
         }
 
-        public async Task<RuleWithImages> Edit(RuleWithImages rule)
+        public async Task<Rule> Edit(Rule rule)
         {
             return await rep.SaveRule(rule);
         }
 
-        public async Task<RuleWithImages> Add(RuleWithImages rule)
+        public async Task<Rule> Add(Rule rule)
         {
             return await rep.AddRule(rule);
         }

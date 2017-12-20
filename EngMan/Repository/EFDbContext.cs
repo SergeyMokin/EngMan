@@ -4,7 +4,7 @@ namespace EngMan.Repository
 {
     public class EFDbContext: DbContext
     {
-        public DbSet<Rule> Rules { get; set; }
-        public DbSet<RulesImage> RulesImages { get; set; }
+        public DbSet<RuleModel> Rules { get; set; }
+        public DbSet<RuleImage> RulesImages { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace EngMan.App_Start
     using SimpleInjector.Integration.WebApi;
     using EngMan.Repository;
     using EngMan.Service;
+    using EngMan.Account;
 
     public static class SimpleInjectorWebApiInitializer
     {
@@ -27,12 +28,10 @@ namespace EngMan.App_Start
      
         private static void InitializeContainer(Container container)
         {
-            container.Register<Rule>(Lifestyle.Scoped);
-            container.Register<RulesImage>(Lifestyle.Scoped);
-            container.Register<RuleWithImages>(Lifestyle.Scoped);
+            container.Register<IAuthProvider, FormAuthProvider>(Lifestyle.Scoped);
             container.Register<EFDbContext>(Lifestyle.Scoped);
-            container.Register<IRepository>(() => new RuleRepository(container.GetInstance<EFDbContext>()),Lifestyle.Scoped);
-            container.Register<IService>(() => new RuleService(container.GetInstance<IRepository>()), Lifestyle.Scoped);
+            container.Register<IRuleRepository>(() => new RuleRepository(container.GetInstance<EFDbContext>()),Lifestyle.Scoped);
+            container.Register<IRuleService>(() => new RuleService(container.GetInstance<IRuleRepository>()), Lifestyle.Scoped);
         }
     }
 }

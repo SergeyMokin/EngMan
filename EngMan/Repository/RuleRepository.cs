@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace EngMan.Repository
 {
-    public class RuleRepository: IRepository
+    public class RuleRepository: IRuleRepository
     {
 
-        public IEnumerable<RuleWithImages> Rules {
+        public IEnumerable<Rule> Rules {
             get
             {
                 var rules = context.Rules.ToArray();
                 var images = context.RulesImages.ToArray();
-                var rulesWithImages = rules.Select(x => new RuleWithImages() { Id = x.RuleId, Rule = x, RulesImages = images.Where(y => y.RuleId == x.RuleId)});
+                var rulesWithImages = rules.Select(x => new Rule() { Id = x.RuleId, RuleModel = x, RulesImages = images.Where(y => y.RuleId == x.RuleId)});
                 return rulesWithImages;
             }
         }
@@ -24,27 +24,27 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public async Task<RuleWithImages> SaveRule(RuleWithImages rule)
+        public async Task<Rule> SaveRule(Rule rule)
         {
-            if (rule.Rule.RuleId == 0)
+            if (rule.RuleModel.RuleId == 0)
             {
-                context.Rules.Add(rule.Rule);
-                rule.Rule.RuleId = context.Rules.Last().RuleId;
+                context.Rules.Add(rule.RuleModel);
+                rule.RuleModel.RuleId = context.Rules.Last().RuleId;
                 foreach (var image in rule.RulesImages)
                 {
-                    image.RuleId = rule.Rule.RuleId;
+                    image.RuleId = rule.RuleModel.RuleId;
                     context.RulesImages.Add(image);
                     image.ImageId = context.RulesImages.Last().ImageId;
                 }
             }
             else
             {
-                var entity = await context.Rules.FindAsync(rule.Rule.RuleId);
+                var entity = await context.Rules.FindAsync(rule.RuleModel.RuleId);
                 if(entity != null)
                 {
-                    entity.Title = rule.Rule.Title;
-                    entity.Text = rule.Rule.Text;
-                    entity.Category = rule.Rule.Category;
+                    entity.Title = rule.RuleModel.Title;
+                    entity.Text = rule.RuleModel.Text;
+                    entity.Category = rule.RuleModel.Category;
                 }
                 foreach (var image in rule.RulesImages)
                 {
@@ -61,7 +61,7 @@ namespace EngMan.Repository
             return rule;
         }
 
-        public async Task<RuleWithImages> AddRule(RuleWithImages rule)
+        public async Task<Rule> AddRule(Rule rule)
         {
             return await SaveRule(rule);
         }
