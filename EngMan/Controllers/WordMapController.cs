@@ -6,11 +6,11 @@ using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
 {
-    public class WordMapsController : ApiController
+    public class WordMapController : ApiController
     {
         private IWordService service;
 
-        public WordMapsController(IWordService _service)
+        public WordMapController(IWordService _service)
         {
             service = _service;
         }
