@@ -2,12 +2,10 @@
 using System.Threading.Tasks;
 using System.Linq;
 using EngMan.Models;
-
 namespace EngMan.Repository
 {
     public class RuleRepository: IRuleRepository
     {
-
         public IEnumerable<Rule> Rules {
             get
             {
@@ -69,21 +67,25 @@ namespace EngMan.Repository
 
         public async Task<int> DeleteRule(int id)
         {
-            var entity = await context.Rules.FindAsync(id);
-            if (entity != null)
+            if (id > 0)
             {
-                context.Rules.Remove(entity);
-            }
-            var images = context.RulesImages.Where(x => x.RuleId == id);
-            foreach (var image in images)
-            {
-                if (image != null)
+                var entity = await context.Rules.FindAsync(id);
+                if (entity != null)
                 {
-                    context.RulesImages.Remove(image);
+                    context.Rules.Remove(entity);
                 }
+                var images = context.RulesImages.Where(x => x.RuleId == id);
+                foreach (var image in images)
+                {
+                    if (image != null)
+                    {
+                        context.RulesImages.Remove(image);
+                    }
+                }
+                context.SaveChanges();
+                return id;
             }
-            context.SaveChanges();
-            return id;
+            return -1;
         }
 
     }

@@ -1,0 +1,56 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using EngMan.Models;
+namespace EngMan.Repository
+{
+    public class SentenceTaskRepository: ISentenceTaskRepository
+    {
+        public IEnumerable<SentenceTask> SentenceTasks { get { return context.SentenceTasks; } }
+
+        private EFDbContext context;
+
+        public SentenceTaskRepository(EFDbContext _context)
+        {
+            context = _context;
+        }
+
+        public async Task<SentenceTask> SaveTask(SentenceTask task)
+        {
+            if (task.SentenceTaskId == 0)
+            {
+                context.SentenceTasks.Add(task);
+                task.SentenceTaskId = context.SentenceTasks.Last().SentenceTaskId;
+            }
+            else
+            {
+                var entity = await context.SentenceTasks.FindAsync(task.SentenceTaskId);
+                if (entity != null)
+                {
+                    entity.Sentence = task.Sentence;
+                    entity.Category = task.Category;
+                }
+            }
+            return task;
+        }
+
+        public async Task<SentenceTask> AddTask(SentenceTask task)
+        {
+            return await SaveTask(task);
+        }
+
+        public async Task<int> DeleteTask(int id)
+        {
+            if (id > 0)
+            {
+                var entity = await context.SentenceTasks.FindAsync(id);
+                if (entity != null)
+                {
+                    context.SentenceTasks.Remove(entity);
+                }
+                return id;
+            }
+            return -1;
+        }
+    }
+}

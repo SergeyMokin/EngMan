@@ -17,7 +17,6 @@ namespace EngMan.Models
         [DataMember]
         public string Category { get; set; }
     }
-
     [DataContract]
     public class RuleImage
     {
@@ -31,7 +30,6 @@ namespace EngMan.Models
         [DataMember]
         public string ImageType { get; set; }
     }
-
     [DataContract]
     public class Rule
     {

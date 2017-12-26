@@ -1,5 +1,4 @@
 [assembly: WebActivator.PostApplicationStartMethod(typeof(EngMan.App_Start.SimpleInjectorWebApiInitializer), "Initialize")]
-
 namespace EngMan.App_Start
 {
     using System.Web.Http;
@@ -30,7 +29,11 @@ namespace EngMan.App_Start
         {
             container.Register<IAuthProvider, FormAuthProvider>(Lifestyle.Scoped);
             container.Register<EFDbContext>(Lifestyle.Scoped);
+            container.Register<ISentenceTaskRepository>(() => new SentenceTaskRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
+            container.Register<IWordRepository>(() => new WordRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
             container.Register<IRuleRepository>(() => new RuleRepository(container.GetInstance<EFDbContext>()),Lifestyle.Scoped);
+            container.Register<ISentenceTaskService>(() => new SentenceTaskService(container.GetInstance<ISentenceTaskRepository>()), Lifestyle.Scoped);
+            container.Register<IWordService>(() => new WordService(container.GetInstance<IWordRepository>()), Lifestyle.Scoped);
             container.Register<IRuleService>(() => new RuleService(container.GetInstance<IRuleRepository>()), Lifestyle.Scoped);
         }
     }

@@ -172,6 +172,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AdminSentenceTaskController.cs" />
+    <Compile Include="Controllers\SentenceTaskController.cs" />
+    <Compile Include="Controllers\WordController.cs" />
+    <Compile Include="Controllers\WordMapsController.cs" />
     <Compile Include="Models\AdminAccount.cs" />
     <Compile Include="Account\FormAuthProvider.cs" />
     <Compile Include="Account\IAuthProvider.cs" />
@@ -182,13 +186,23 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\SentenceTask.cs" />
+    <Compile Include="Models\Word.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\SentenceTaskRepository.cs" />
     <Compile Include="Repository\EFDbContext.cs" />
+    <Compile Include="Repository\ISentenceTaskRepository.cs" />
     <Compile Include="Repository\IRuleRepository.cs" />
+    <Compile Include="Repository\IWordRepository.cs" />
     <Compile Include="Repository\RuleRepository.cs" />
     <Compile Include="Models\Rule.cs" />
+    <Compile Include="Repository\WordRepository.cs" />
     <Compile Include="Service\IRuleService.cs" />
+    <Compile Include="Service\ISentenceTaskService.cs" />
+    <Compile Include="Service\IWordService.cs" />
     <Compile Include="Service\RuleService.cs" />
+    <Compile Include="Service\SentenceTaskService.cs" />
+    <Compile Include="Service\WordService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

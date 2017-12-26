@@ -1,5 +1,4 @@
 ﻿using System.Web.Security;
-
 namespace EngMan.Account
 {
     public class FormAuthProvider: IAuthProvider

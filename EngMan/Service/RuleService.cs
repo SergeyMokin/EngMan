@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
-
 namespace EngMan.Service
 {
     public class RuleService: IRuleService
