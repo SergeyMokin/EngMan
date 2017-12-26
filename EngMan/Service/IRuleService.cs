@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using EngMan.Repository;
+using EngMan.Models;
 
 namespace EngMan.Service
 {

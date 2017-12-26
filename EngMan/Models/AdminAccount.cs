@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EngMan.Account
+namespace EngMan.Models
 {
-    public class AdminAccountModel
+    public class AdminAccount
     {
         [Required]
         public string UserName { get; set; }

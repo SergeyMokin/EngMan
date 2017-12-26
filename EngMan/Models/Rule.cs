@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 
-namespace EngMan.Repository
+namespace EngMan.Models
 {
     [DataContract]
     public class RuleModel

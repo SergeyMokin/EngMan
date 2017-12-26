@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using EngMan.Account;
-using System.Web.Security;
+using EngMan.Models;
+
 namespace EngMan.Controllers
 {
     public class AccountController : ApiController
@@ -13,7 +14,7 @@ namespace EngMan.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Login(AdminAccountModel model)
+        public IHttpActionResult Login(AdminAccount model)
         {
             if (provider.Authenticate(model.UserName, model.Password))
             {

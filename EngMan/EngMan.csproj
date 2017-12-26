@@ -172,13 +172,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account\AdminAccountModel.cs" />
+    <Compile Include="Models\AdminAccount.cs" />
     <Compile Include="Account\FormAuthProvider.cs" />
     <Compile Include="Account\IAuthProvider.cs" />
     <Compile Include="App_Start\SimpleInjectorWebApiInitializer.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -187,7 +186,7 @@
     <Compile Include="Repository\EFDbContext.cs" />
     <Compile Include="Repository\IRuleRepository.cs" />
     <Compile Include="Repository\RuleRepository.cs" />
-    <Compile Include="Repository\Rule.cs" />
+    <Compile Include="Models\Rule.cs" />
     <Compile Include="Service\IRuleService.cs" />
     <Compile Include="Service\RuleService.cs" />
   </ItemGroup>
