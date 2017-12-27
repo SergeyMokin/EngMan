@@ -175,7 +175,7 @@
     <Compile Include="Controllers\AdminSentenceTaskController.cs" />
     <Compile Include="Controllers\SentenceTaskController.cs" />
     <Compile Include="Controllers\WordController.cs" />
-    <Compile Include="Controllers\WordMapsController.cs" />
+    <Compile Include="Controllers\WordMapController.cs" />
     <Compile Include="Models\AdminAccount.cs" />
     <Compile Include="Account\FormAuthProvider.cs" />
     <Compile Include="Account\IAuthProvider.cs" />
