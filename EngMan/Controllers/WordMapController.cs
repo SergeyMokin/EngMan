@@ -37,7 +37,7 @@ namespace EngMan.Controllers
             var word = await service.GetById(id);
             if (word != null)
             {
-                return Ok(word.Last());
+                return Ok(word);
             }
             return NotFound();
         }
@@ -48,7 +48,7 @@ namespace EngMan.Controllers
             var _word = await service.GetById(word.WordId);
             if (_word != null)
             {
-                if (_word.Last().Translate.Equals(word.Translate))
+                if (_word.Translate.Equals(word.Translate))
                 {
                     return Ok<bool>(true);
                 }

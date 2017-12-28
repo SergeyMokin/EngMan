@@ -7,7 +7,7 @@ namespace EngMan.Service
     {
         Task<IEnumerable<SentenceTask>> Get();
 
-        Task<IEnumerable<SentenceTask>> GetById(int id);
+        Task<SentenceTask> GetById(int id);
 
         Task<SentenceTask> Edit(SentenceTask task);
 

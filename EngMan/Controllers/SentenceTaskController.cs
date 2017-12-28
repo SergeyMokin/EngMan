@@ -51,7 +51,7 @@ namespace EngMan.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetTask(int id)
         {
-            var rand = new System.Random();
+            var rand = new Random();
             var tasks = await service.Get();
             if (tasks != null)
             {
@@ -88,7 +88,7 @@ namespace EngMan.Controllers
                 var task = await service.GetById(sentence.Item1);
                 if (task != null)
                 {
-                    if (task.Last().Sentence.Equals(sentence.Item2))
+                    if (task.Sentence.Equals(sentence.Item2))
                     {
                         return Ok<bool>(true);
                     }

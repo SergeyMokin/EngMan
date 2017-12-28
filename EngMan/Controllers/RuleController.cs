@@ -27,10 +27,10 @@ namespace EngMan.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetRule(int id)
         {
-            var rules = await service.GetById(id);
-            if (rules != null)
+            var rule = await service.GetById(id);
+            if (rule != null)
             {
-                return Ok(rules);
+                return Ok(rule);
             }
             return NotFound();
         }

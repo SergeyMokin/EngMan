@@ -7,7 +7,7 @@ namespace EngMan.Service
     {
         Task<IEnumerable<Rule>> Get();
 
-        Task<IEnumerable<Rule>> GetById(int id);
+        Task<Rule> GetById(int id);
 
         Task<Rule> Edit(Rule rule);
 

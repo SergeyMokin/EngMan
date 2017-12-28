@@ -7,7 +7,7 @@ namespace EngMan.Service
 {
     public class RuleService: IRuleService
     {
-        private IRuleRepository rep;
+        private readonly IRuleRepository rep;
 
         public RuleService(IRuleRepository _rep)
         {
@@ -16,14 +16,14 @@ namespace EngMan.Service
 
         public async Task<IEnumerable<Rule>> Get()
         {
-            var task = new Task<IEnumerable<Rule>>(delegate () { return rep.Rules; });
+            var task = new Task<IEnumerable<Rule>>(() => rep.Rules);
             task.Start();
             return await task;
         }
 
-        public async Task<IEnumerable<Rule>> GetById(int id)
+        public async Task<Rule> GetById(int id)
         {
-            var task = new Task<IEnumerable<Rule>>(delegate() { return rep.Rules.Where(x => x.Id == id); });
+            var task = new Task<Rule>(() => rep.Rules.FirstOrDefault(x => x.Id == id));
             task.Start();
             return await task;
         }

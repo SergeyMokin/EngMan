@@ -16,14 +16,14 @@ namespace EngMan.Service
 
         public async Task<IEnumerable<Word>> Get()
         {
-            var task = new Task<IEnumerable<Word>>(delegate () { return rep.Words; });
+            var task = new Task<IEnumerable<Word>>(() => rep.Words);
             task.Start();
             return await task;
         }
 
-        public async Task<IEnumerable<Word>> GetById(int id)
+        public async Task<Word> GetById(int id)
         {
-            var task = new Task<IEnumerable<Word>>(delegate () { return rep.Words.Where(x => x.WordId == id); });
+            var task = new Task<Word>(() => rep.Words.FirstOrDefault(x => x.WordId == id));
             task.Start();
             return await task;
         }

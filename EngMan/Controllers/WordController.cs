@@ -28,10 +28,10 @@ namespace EngMan.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetWordById(int id)
         {
-            var words = await service.GetById(id);
-            if (words != null)
+            var word = await service.GetById(id);
+            if (word != null)
             {
-                return Ok(words);
+                return Ok(word);
             }
             return NotFound();
         }
