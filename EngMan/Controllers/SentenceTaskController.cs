@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Threading.Tasks;
 using EngMan.Service;
+using EngMan.Models;
 namespace EngMan.Controllers
 {
     public class SentenceTaskController : ApiController
@@ -22,7 +23,7 @@ namespace EngMan.Controllers
             var tasks = await service.Get();
             if (tasks != null)
             {
-                IEnumerable<Tuple<int, string>> _tasks = tasks.Select(x =>
+                IEnumerable<SentenceTask> _tasks = tasks.Select(x =>
                 {
                     var arr = x.Sentence.Split(new[] { ' ' });
                     var set = new HashSet<int>();
@@ -37,7 +38,7 @@ namespace EngMan.Controllers
                         returnArr[i] = arr[ind];
                         i++;
                     }
-                    return new Tuple<int , string>(x.SentenceTaskId, string.Join(" ", returnArr));
+                    return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category };
                 });
                 var index = rand.Next(0, _tasks.Count());
                 if (_tasks != null)
@@ -55,7 +56,7 @@ namespace EngMan.Controllers
             var tasks = await service.Get();
             if (tasks != null)
             {
-                IEnumerable<Tuple<int, string>> _tasks = tasks.Where(x => x.SentenceTaskId == id).Select(x =>
+                IEnumerable<SentenceTask> _tasks = tasks.Where(x => x.SentenceTaskId == id).Select(x =>
                 {
                     var arr = x.Sentence.Split(new[] { ' ' });
                     var set = new HashSet<int>();
@@ -70,9 +71,9 @@ namespace EngMan.Controllers
                         returnArr[i] = arr[ind];
                         i++;
                     }
-                    return new Tuple<int, string>(x.SentenceTaskId, string.Join(" ", returnArr));
+                    return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category };
                 });
-                if (tasks != null)
+                if (_tasks != null)
                 {
                     return Ok(_tasks.Last());
                 }
@@ -81,14 +82,14 @@ namespace EngMan.Controllers
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> VerificationCorrectness(Tuple<int, string> sentence)
+        public async Task<IHttpActionResult> VerificationCorrectness(SentenceTask sentence)
         {
             if (sentence != null)
             {
-                var task = await service.GetById(sentence.Item1);
+                var task = await service.GetById(sentence.SentenceTaskId);
                 if (task != null)
                 {
-                    if (task.Sentence.Equals(sentence.Item2))
+                    if (task.Sentence.Equals(sentence.Sentence))
                     {
                         return Ok<bool>(true);
                     }
