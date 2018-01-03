@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
+using System.Collections.Generic;
 namespace EngMan.Controllers
 {
     public class WordMapController : ApiController
@@ -22,10 +23,20 @@ namespace EngMan.Controllers
             var words = await service.Get();
             if (words != null)
             {
-                var index = rand.Next(0, words.Count());
+                var indexes = new HashSet<int>();
+                while (indexes.Count() != 5)
+                {
+                    indexes.Add(rand.Next(0, words.Count()));
+                }
+                var returnedWord = words.ElementAt(indexes.First());
+                var translate = new List<string>();
+                foreach (var index in indexes.OrderBy(x => x))
+                {
+                    translate.Add(words.ElementAt(index).Translate);
+                }
                 if (words != null)
                 {
-                    return Ok(words.ElementAt(index));
+                    return Ok(new MapWord { WordId = returnedWord.WordId, Original = returnedWord.Original, Translate = translate, Category = returnedWord.Category });
                 }
             }
             return NotFound();
