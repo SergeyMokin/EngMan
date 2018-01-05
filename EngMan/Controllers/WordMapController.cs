@@ -26,17 +26,22 @@ namespace EngMan.Controllers
                 var indexes = new HashSet<int>();
                 while (indexes.Count() != 5)
                 {
-                    indexes.Add(rand.Next(0, words.Count()));
+                    indexes.Add(rand.Next(1, words.Count() + 1));
                 }
-                var returnedWord = words.ElementAt(indexes.First());
+                var word = words.ElementAt(indexes.Last() - 1);
                 var translate = new List<string>();
-                foreach (var index in indexes.OrderBy(x => x))
+                foreach (var index in indexes)
                 {
-                    translate.Add(words.ElementAt(index).Translate);
+                    translate.Add(words.ElementAt(index-1).Translate);
                 }
                 if (words != null)
                 {
-                    return Ok(new MapWord { WordId = returnedWord.WordId, Original = returnedWord.Original, Translate = translate, Category = returnedWord.Category });
+                    return Ok(new MapWord {
+                        WordId = word.WordId,
+                        Original = word.Original,
+                        Translate = translate.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
+                        Category = word.Category
+                    });
                 }
             }
             return NotFound();
@@ -48,7 +53,27 @@ namespace EngMan.Controllers
             var word = await service.GetById(id);
             if (word != null)
             {
-                return Ok(word);
+                var rand = new Random();
+                var indexes = new HashSet<int> { id };
+                var words = await service.Get();
+                if (words != null)
+                {
+                    while (indexes.Count() != 5)
+                    {
+                        indexes.Add(rand.Next(1, words.Count() + 1));
+                    }
+                    var translate = new List<string>();
+                    foreach (var index in indexes)
+                    {
+                        translate.Add(words.ElementAt(index-1).Translate);
+                    }
+                    return Ok(new MapWord {
+                        WordId = word.WordId,
+                        Original = word.Original,
+                        Translate = translate.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
+                        Category = word.Category
+                    });
+                }
             }
             return NotFound();
         }
