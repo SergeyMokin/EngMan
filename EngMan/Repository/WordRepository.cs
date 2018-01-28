@@ -20,7 +20,7 @@ namespace EngMan.Repository
             if (word.WordId == 0)
             {
                 context.Words.Add(word);
-                word.WordId = context.Words.Last().WordId;
+                word.WordId = context.Words.ToArray().Last().WordId;
             }
             else
             {
@@ -28,10 +28,11 @@ namespace EngMan.Repository
                 if (entity != null)
                 {
                     entity.Original = word.Original;
-                    entity.Translate = entity.Translate;
+                    entity.Translate = word.Translate;
                     entity.Category = word.Category;
                 }
             }
+            context.SaveChanges();
             return word;
         }
 
@@ -49,6 +50,7 @@ namespace EngMan.Repository
                 {
                     context.Words.Remove(entity);
                 }
+                context.SaveChanges();
                 return id;
             }
             return -1;

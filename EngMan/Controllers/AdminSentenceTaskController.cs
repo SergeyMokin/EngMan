@@ -4,7 +4,7 @@ using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class AdminSentenceTaskController : ApiController
     {
         private ISentenceTaskService service;
@@ -15,9 +15,9 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetAllTasks()
+        public IHttpActionResult GetAllTasks()
         {
-            var tasks = await service.Get();
+            var tasks = service.Get();
             if (tasks != null)
             {
                 return Ok(tasks);
@@ -26,9 +26,9 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetTaskById(int id)
+        public IHttpActionResult GetTaskById(int id)
         {
-            var task = await service.GetById(id);
+            var task = service.GetById(id);
             if (task != null)
             {
                 return Ok(task);

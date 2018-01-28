@@ -7,6 +7,7 @@ using EngMan.Models;
 using System.Collections.Generic;
 namespace EngMan.Controllers
 {
+    [Authorize]
     public class WordMapController : ApiController
     {
         private IWordService service;
@@ -17,71 +18,62 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetRandomWord()
+        public IHttpActionResult GetAllCategories()
         {
-            var rand = new Random();
-            var words = await service.Get();
+            var words = service.Get();
             if (words != null)
             {
-                var indexes = new HashSet<int>();
-                while (indexes.Count() != 5)
-                {
-                    indexes.Add(rand.Next(1, words.Count() + 1));
-                }
-                var word = words.ElementAt(indexes.Last() - 1);
-                var translate = new List<string>();
-                foreach (var index in indexes)
-                {
-                    translate.Add(words.ElementAt(index-1).Translate);
-                }
-                if (words != null)
-                {
-                    return Ok(new MapWord {
-                        WordId = word.WordId,
-                        Original = word.Original,
-                        Translate = translate.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
-                        Category = word.Category
-                    });
-                }
+                var categories = words.GroupBy(x => x.Category).Where(x => x.Count() > 4).Select(x => x.Key).ToList();
+                return Ok(categories);
             }
             return NotFound();
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetWordById(int id)
+        public IHttpActionResult GetWord(string category, int id)
         {
-            var word = await service.GetById(id);
-            if (word != null)
+            var rand = new Random();
+            var words = service.Get();
+            words = words.Where(x => x.Category == category);
+            if (words != null)
             {
-                var rand = new Random();
-                var indexes = new HashSet<int> { id };
-                var words = await service.Get();
-                if (words != null)
+                var indexes = new HashSet<int>();
+                if (words.Count() >= 5)
                 {
+                    if (words.Count() - 1 <= id)
+                    {
+                        return NotFound();
+                    }
+                    indexes.Add(id + 1);
                     while (indexes.Count() != 5)
                     {
-                        indexes.Add(rand.Next(1, words.Count() + 1));
+                        indexes.Add(rand.Next(0, words.Count()));
                     }
+                    var word = words.ElementAt(id + 1);
                     var translate = new List<string>();
                     foreach (var index in indexes)
                     {
-                        translate.Add(words.ElementAt(index-1).Translate);
+                        translate.Add(words.ElementAt(index).Translate);
                     }
-                    return Ok(new MapWord {
-                        WordId = word.WordId,
-                        Original = word.Original,
-                        Translate = translate.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
-                        Category = word.Category
-                    });
+                    if (word != null)
+                    {
+                        return Ok(new MapWord
+                        {
+                            WordId = word.WordId,
+                            Original = word.Original,
+                            Translate = translate.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
+                            Category = word.Category
+                        });
+                    }
                 }
             }
             return NotFound();
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> VerificationCorrectness(Word word)
+        public IHttpActionResult VerificationCorrectness(Word word)
         {
-            var _word = await service.GetById(word.WordId);
+            var _word = service.GetById(word.WordId);
             if (_word != null)
             {
                 if (_word.Translate.Equals(word.Translate))

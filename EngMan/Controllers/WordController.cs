@@ -4,7 +4,7 @@ using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class WordController : ApiController
     {
         private IWordService service;
@@ -15,9 +15,9 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetAllWords()
+        public IHttpActionResult GetAllWords()
         {
-            var words = await service.Get();
+            var words = service.Get();
             if (words != null)
             {
                 return Ok(words);
@@ -26,9 +26,9 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetWordById(int id)
+        public IHttpActionResult GetWordById(int id)
         {
-            var word = await service.GetById(id);
+            var word = service.GetById(id);
             if (word != null)
             {
                 return Ok(word);
@@ -36,6 +36,7 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<IHttpActionResult> EditWord(Word word)
         {
@@ -46,7 +47,7 @@ namespace EngMan.Controllers
             }
             return NotFound();
         }
-
+        
         [HttpPost]
         public async Task<IHttpActionResult> AddWord(Word word)
         {
@@ -57,7 +58,7 @@ namespace EngMan.Controllers
             }
             return NotFound();
         }
-
+        
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteWord(int id)
         {

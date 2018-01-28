@@ -6,7 +6,7 @@ namespace EngMan.App_Start
     using SimpleInjector.Integration.WebApi;
     using EngMan.Repository;
     using EngMan.Service;
-    using EngMan.Account;
+    using EngMan.Providers;
 
     public static class SimpleInjectorWebApiInitializer
     {
@@ -27,14 +27,15 @@ namespace EngMan.App_Start
      
         private static void InitializeContainer(Container container)
         {
-            container.Register<IAuthProvider, FormAuthProvider>(Lifestyle.Scoped);
             container.Register<EFDbContext>(Lifestyle.Scoped);
             container.Register<ISentenceTaskRepository>(() => new SentenceTaskRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
             container.Register<IWordRepository>(() => new WordRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
-            container.Register<IRuleRepository>(() => new RuleRepository(container.GetInstance<EFDbContext>()),Lifestyle.Scoped);
+            container.Register<IRuleRepository>(() => new RuleRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
+            container.Register<IUserRepository>(() => new UserRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
             container.Register<ISentenceTaskService>(() => new SentenceTaskService(container.GetInstance<ISentenceTaskRepository>()), Lifestyle.Scoped);
             container.Register<IWordService>(() => new WordService(container.GetInstance<IWordRepository>()), Lifestyle.Scoped);
             container.Register<IRuleService>(() => new RuleService(container.GetInstance<IRuleRepository>()), Lifestyle.Scoped);
+            container.Register<IUserService>(() => new UserService(container.GetInstance<IUserRepository>()), Lifestyle.Scoped);
         }
     }
 }

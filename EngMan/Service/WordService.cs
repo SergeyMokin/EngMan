@@ -7,25 +7,21 @@ namespace EngMan.Service
 {
     public class WordService: IWordService
     {
-        IWordRepository rep;
+        private readonly IWordRepository rep;
 
         public WordService(IWordRepository _rep)
         {
             rep = _rep;
         }
 
-        public async Task<IEnumerable<Word>> Get()
+        public IEnumerable<Word> Get()
         {
-            var task = new Task<IEnumerable<Word>>(() => rep.Words);
-            task.Start();
-            return await task;
+            return rep.Words;
         }
 
-        public async Task<Word> GetById(int id)
+        public Word GetById(int id)
         {
-            var task = new Task<Word>(() => rep.Words.FirstOrDefault(x => x.WordId == id));
-            task.Start();
-            return await task;
+            return rep.Words.FirstOrDefault(x => x.WordId == id);
         }
 
         public async Task<Word> Edit(Word word)

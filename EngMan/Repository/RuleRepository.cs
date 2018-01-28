@@ -6,13 +6,10 @@ namespace EngMan.Repository
 {
     public class RuleRepository: IRuleRepository
     {
-        public IEnumerable<Rule> Rules {
+        public IEnumerable<RuleModel> Rules {
             get
             {
-                var rules = context.Rules.ToArray();
-                var images = context.RulesImages.ToArray();
-                var rulesWithImages = rules.Select(x => new Rule() { Id = x.RuleId, RuleModel = x, RulesImages = images.Where(y => y.RuleId == x.RuleId)});
-                return rulesWithImages;
+                return context.Rules;
             }
         }
 
@@ -23,44 +20,28 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public async Task<Rule> SaveRule(Rule rule)
+        public async Task<RuleModel> SaveRule(RuleModel rule)
         {
-            if (rule.RuleModel.RuleId == 0)
+            if (rule.RuleId == 0)
             {
-                context.Rules.Add(rule.RuleModel);
-                rule.RuleModel.RuleId = context.Rules.Last().RuleId;
-                foreach (var image in rule.RulesImages)
-                {
-                    image.RuleId = rule.RuleModel.RuleId;
-                    context.RulesImages.Add(image);
-                    image.ImageId = context.RulesImages.Last().ImageId;
-                }
+                context.Rules.Add(rule);
+                rule.RuleId = context.Rules.ToArray().Last().RuleId;
             }
             else
             {
-                var entity = await context.Rules.FindAsync(rule.RuleModel.RuleId);
+                var entity = await context.Rules.FindAsync(rule.RuleId);
                 if(entity != null)
                 {
-                    entity.Title = rule.RuleModel.Title;
-                    entity.Text = rule.RuleModel.Text;
-                    entity.Category = rule.RuleModel.Category;
-                }
-                foreach (var image in rule.RulesImages)
-                {
-                    var imageEntity = await context.RulesImages.FindAsync(image.ImageId);
-                    if (imageEntity != null)
-                    {
-                        imageEntity.RuleId = image.RuleId;
-                        imageEntity.ImageData = image.ImageData;
-                        imageEntity.ImageType = image.ImageType;
-                    }
+                    entity.Title = rule.Title;
+                    entity.Text = rule.Text;
+                    entity.Category = rule.Category;
                 }
             }
             context.SaveChanges();
             return rule;
         }
 
-        public async Task<Rule> AddRule(Rule rule)
+        public async Task<RuleModel> AddRule(RuleModel rule)
         {
             return await SaveRule(rule);
         }
@@ -73,14 +54,6 @@ namespace EngMan.Repository
                 if (entity != null)
                 {
                     context.Rules.Remove(entity);
-                }
-                var images = context.RulesImages.Where(x => x.RuleId == id);
-                foreach (var image in images)
-                {
-                    if (image != null)
-                    {
-                        context.RulesImages.Remove(image);
-                    }
                 }
                 context.SaveChanges();
                 return id;

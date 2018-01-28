@@ -7,6 +7,7 @@ using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
 {
+    [Authorize]
     public class SentenceTaskController : ApiController
     {
         private ISentenceTaskService service;
@@ -17,12 +18,29 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetRandomTask()
+        public IHttpActionResult GetAllCategories()
         {
-            var rand = new Random();
-            var tasks = await service.Get();
+            var tasks = service.Get();
             if (tasks != null)
             {
+                var categories = tasks.GroupBy(x => x.Category).Select(x => x.Key).ToList();
+                return Ok(categories);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetTask(string category, int id)
+        {
+            var rand = new Random();
+            var tasks = service.Get();
+            tasks = tasks.Where(x => x.Category == category);
+            if (tasks != null)
+            {
+                if (tasks.Count() - 1 <= id)
+                {
+                    return NotFound();
+                }
                 IEnumerable<SentenceTask> _tasks = tasks.Select(x =>
                 {
                     var arr = x.Sentence.Split(new[] { ' ' });
@@ -40,53 +58,20 @@ namespace EngMan.Controllers
                     }
                     return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category };
                 });
-                var index = rand.Next(0, _tasks.Count());
                 if (_tasks != null)
                 {
-                    return Ok(_tasks.ElementAt(index));
-                }
-            }
-            return NotFound();
-        }
-
-        [HttpGet]
-        public async Task<IHttpActionResult> GetTask(int id)
-        {
-            var rand = new Random();
-            var tasks = await service.Get();
-            if (tasks != null)
-            {
-                IEnumerable<SentenceTask> _tasks = tasks.Where(x => x.SentenceTaskId == id).Select(x =>
-                {
-                    var arr = x.Sentence.Split(new[] { ' ' });
-                    var set = new HashSet<int>();
-                    while (set.Count() != arr.Length)
-                    {
-                        set.Add(rand.Next(0, arr.Length));
-                    }
-                    var returnArr = new string[arr.Length];
-                    var i = 0;
-                    foreach (var ind in set)
-                    {
-                        returnArr[i] = arr[ind];
-                        i++;
-                    }
-                    return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category };
-                });
-                if (_tasks != null)
-                {
-                    return Ok(_tasks.Last());
+                    return Ok(_tasks.ElementAt(id + 1));
                 }
             }
             return NotFound();
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> VerificationCorrectness(SentenceTask sentence)
+        public IHttpActionResult VerificationCorrectness(SentenceTask sentence)
         {
             if (sentence != null)
             {
-                var task = await service.GetById(sentence.SentenceTaskId);
+                var task = service.GetById(sentence.SentenceTaskId);
                 if (task != null)
                 {
                     if (task.Sentence.Equals(sentence.Sentence))

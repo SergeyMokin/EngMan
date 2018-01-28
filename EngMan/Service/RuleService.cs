@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
+using System.IO;
+using System;
 namespace EngMan.Service
 {
     public class RuleService: IRuleService
@@ -14,26 +16,22 @@ namespace EngMan.Service
             rep = _rep;
         }
 
-        public async Task<IEnumerable<Rule>> Get()
+        public IEnumerable<RuleModel> Get()
         {
-            var task = new Task<IEnumerable<Rule>>(() => rep.Rules);
-            task.Start();
-            return await task;
+            return rep.Rules;
         }
 
-        public async Task<Rule> GetById(int id)
+        public RuleModel GetById(int id)
         {
-            var task = new Task<Rule>(() => rep.Rules.FirstOrDefault(x => x.Id == id));
-            task.Start();
-            return await task;
+            return rep.Rules.FirstOrDefault(x => x.RuleId == id);
         }
 
-        public async Task<Rule> Edit(Rule rule)
+        public async Task<RuleModel> Edit(RuleModel rule)
         {
             return await rep.SaveRule(rule);
         }
 
-        public async Task<Rule> Add(Rule rule)
+        public async Task<RuleModel> Add(RuleModel rule)
         {
             return await rep.AddRule(rule);
         }
@@ -41,6 +39,32 @@ namespace EngMan.Service
         public async Task<int> Delete(int id)
         {
             return await rep.DeleteRule(id);
+        }
+
+        public List<string> AddImages(Image[] images) {
+            var pathes = new List<string>();
+            var arr = new List<byte[]>();
+            if (images != null)
+            {
+                foreach (var el in images)
+                {
+                    var bytearr = new List<byte>();
+                    foreach (var ch in el.Data)
+                    {
+                        bytearr.Add(Convert.ToByte(ch));
+                    }
+                    arr.Add(bytearr.ToArray());
+                }
+                for (int i = 0; i < arr.Count; i++)
+                {
+                    var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
+                    var path = string.Format("C:\\Users\\limon\\Documents\\Tasks\\EngMan\\EngMan\\uploads\\" + time + images[i].Name);
+                    File.WriteAllBytes(path, arr[i]);
+                    path = string.Format("http://localhost:58099/uploads/" + time + images[i].Name);
+                    pathes.Add(path);
+                }
+            }
+            return pathes;
         }
     }
 }

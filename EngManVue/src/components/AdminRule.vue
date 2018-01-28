@@ -1,0 +1,271 @@
+<template>
+  <div v-show = "$store.state.user.Role == 'admin'">
+    <div v-if = "!clickRule" class="rules-view-list">
+      <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
+      <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
+      <router-link to="/admin/words" class = "routes-admin">Словарь </router-link><br/><br/>
+      <button type = "submit" v-on:click = "AddRule()">Добавить</button><br/><br/>
+      <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..."><br/>
+      <div v-for = 'el in rules' :key = 'el.RuleId' class = "form-border">
+      <div class = "rules-list--element">
+        <span class = "span-rule--element">
+            <a>{{el.Title}}</a>
+        </span>
+      </div>
+      <div>
+        <button style = "right: 100px" type = "submit" v-on:click = "editRule(el.RuleId)">Изменить</button>
+        <button type = "submit" v-on:click = "deleteRule(el.RuleId)">Удалить</button>
+      </div>
+    </div>
+  </div>
+  <div v-if = "clickRule" style = "text-align: center">
+          <br/><br/>
+          <button type = "submit" v-on:click = "closeEditForm()" class = "button-close">Закрыть</button>
+          <span>Название</span>
+          <textarea class = "rule-edit" type = "text" v-model = "rule.Title"/><br/>
+          <span>Категория</span>
+          <textarea class = "rule-edit" type = "text" v-model = "rule.Category"/><br/>
+          <span>Текст</span>
+          <textarea class = "rule-edit" type = "text" v-model = "rule.Text" style = "height: 450px"/><br/>
+          <div style = "width: 60%; text-align: left; margin-left: 20%"><input type="file" accept="image/*" @change="onFileChange" multiple class = "button-classic"><br/></div>
+          <div v-if = 'pathesOfImages.length > 0' v-for = 'el in pathesOfImages' :key = 'el'>
+              <span>
+                  {{el}}
+              </span>
+          </div>
+          <button type = "submit" v-on:click = "downloadOnServer">Загрузить</button><br/>
+          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
+          <button type = "submit" v-on:click = "saveRule(rule)"><span style = "color: rgb(248, 248, 248);" v-if = "!clickAddRule">Сохранить</span><span style = "color: rgb(248, 248, 248);" v-if = "clickAddRule">Добавить</span></button><br/><br/>
+  </div>
+  </div>
+</template>
+
+<script>
+import api from '../api/api'
+
+export default {
+  name: 'rules-view',
+  data () {
+    return {
+        inProgress: false,
+        searchKey: '',
+        errormessage: '',
+        clickAddRule: false,
+        clickRule: false,
+        pathesOfImages: [],
+        images: [],
+        rule: {
+            RuleId: 0,
+            Title: '',
+            Text: '',
+            Category: ''
+        }
+    }
+  },
+  methods:{
+      onFileChange(e) {
+        this.images = [];
+        var arr = e.target.files || e.dataTransfer.files;
+        if (!arr.length)
+            return;
+        var vue = this;
+        var image = {
+            Name: arr[0].name,
+            Data: ''
+        }
+        var load = (e) => {
+            image.Data = e.target.result;
+            this.images.push(image);
+        };
+        for(var i = 0; i < arr.length; i++)
+        {
+            var reader = new FileReader();
+            reader.onload = load;
+            reader.readAsBinaryString(arr[i]);
+        }
+      },
+      downloadOnServer(){
+          if(this.inProgress) return;
+          this.inProgress = true;
+          this.errormessage = '';
+          if(this.images.length == 0){
+              this.errormessage = 'Для загрузки изображений выберите их';
+              this.inProgress = false;
+              return;
+          }
+          api.addImages(this.images)
+          .then(result => {
+              for(var i = 0; i < result.length; i++)
+              {
+                  this.pathesOfImages.push("<img src=\"" + result[i] + "\" style = \"width: 70%;margin: 0 15% 0 15%; border: none; border-radius: 10px;\">");
+              }
+              this.inProgress = false;
+          })
+          .catch(e => {
+              this.inProgress = false;
+              this.errormessage = 'Не удалось загрузить изображения';
+          })
+          this.inProgress = false;
+      },
+      editRule(id){
+        if(this.inProgress) return;
+        this.inProgress = true;
+        api.getRule(id)
+        .then(result => {
+                this.inProgress = false;
+                this.rule = result;
+                this.clickRule = true;
+        })
+        .catch(e => {
+            this.inProgress = false;
+        });
+        this.inProgress = false;
+      },
+      saveRule(rule){
+          if(this.inProgress) return;
+          this.inProgress = true;
+          this.errormessage = '';
+          if(this.rule.Title.length == 0 || this.rule.Category.length == 0 || this.rule.Text.length == 0)
+          {
+              this.errormessage = 'Заполните все поля';
+              this.inProgress = false;
+              return;
+          }
+          if(!this.clickAddRule){
+            api.editRule(rule)
+            .then(result => {
+                if(result.RuleId > 0){
+                    this.inProgress = false;
+                    this.$store.dispatch('getRules');
+                    this.closeEditForm();
+                }
+            })
+            .catch(e => {
+                this.inProgress = false;
+                this.errormessage = 'Сервер недоступен или у вас нет прав';
+            })
+          } else{
+              api.createRule(rule)
+              .then(result =>{
+                  if(result.RuleId > 0){
+                      this.inProgress = false;
+                      this.$store.dispatch('getRules');
+                      this.closeEditForm();
+                  }
+                  this.inProgress = false;
+              })
+              .catch(e => {
+                  this.inProgress = false;
+                  this.errormessage = 'Сервер недоступен или у вас нет прав';
+              })
+          }
+          this.inProgress = false;
+      },
+      deleteRule(id){
+          if(this.inProgress) return;
+          this.inProgress = true;
+          if(confirm("Вы уверены?") == true){
+            api.deleteRule(id)
+            .then(result =>{
+                this.inProgress = false;
+                this.$store.dispatch('getRules');
+            })
+          } else{
+              this.inProgress = false;
+              alert("Вы отменили удаление!");
+          }
+          this.inProgress = false;
+      },
+      AddRule(){
+          this.clickRule = true;
+          this.clickAddRule = true;
+      },
+      closeEditForm(){
+        this.inProgress = false;
+        this.searchKey = '';
+        this.errormessage = '';
+        this.clickAddRule = false;
+        this.clickRule = false;
+        this.pathesOfImages = [];
+        this.images = [];
+        this.rule = {
+            RuleId: 0,
+            Title: '',
+            Text: '',
+            Category: ''
+        }
+      }
+  },
+  computed: 
+  {
+    rules()
+    {
+      var vue = this;
+      return this.$store.getters.rules.filter(function(rule){
+          return rule.Title.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1;
+      });
+    }
+  },
+  created: function()
+  {
+      if(this.inProgress) return;
+      this.inProgress = true;
+      this.$store.dispatch('getRules');
+      this.inProgress = false;
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.rules-view-list{
+    margin: 5% 20% 5% 20%;
+    width: 60%;
+    text-align: center;
+    display: table;
+}
+.rules-list--element{
+    margin: 10px;
+    padding: 3px;
+    text-align: left;
+    cursor: default;
+    background: rgb(248, 248, 248);
+    height: 35px;
+    border: none;
+    outline:none;
+    border-radius: 10px;
+}
+.span-rule--element{
+    margin: 15px;
+    font-size: 18px;
+}
+.button-close{
+    position: absolute;
+    right: 18.65%;
+    top: 75px;
+}
+.rule-edit{
+    resize: none;
+    text-align: left;
+    width: 60%;
+    margin: 0.5% 20% 0% 20%;
+    padding: 0.5%;
+    background: rgb(248, 248, 248);
+    border: none;
+    outline:none;
+    border-radius: 10px;
+}
+.search-form{
+    outline:none;
+    background: rgb(248, 248, 248);
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    margin: auto;
+    margin-bottom: 10px;
+    resize: none;
+    height: 25px;
+    width: 185px;
+}
+</style>

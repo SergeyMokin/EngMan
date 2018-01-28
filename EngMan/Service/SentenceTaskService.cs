@@ -7,25 +7,21 @@ namespace EngMan.Service
 {
     public class SentenceTaskService: ISentenceTaskService
     {
-        ISentenceTaskRepository rep;
+        private readonly ISentenceTaskRepository rep;
 
         public SentenceTaskService(ISentenceTaskRepository _rep)
         {
             rep = _rep;
         }
 
-        public async Task<IEnumerable<SentenceTask>> Get()
+        public IEnumerable<SentenceTask> Get()
         {
-            var task = new Task<IEnumerable<SentenceTask>>(() => rep.SentenceTasks);
-            task.Start();
-            return await task;
+            return rep.SentenceTasks;
         }
 
-        public async Task<SentenceTask> GetById(int id)
+        public SentenceTask GetById(int id)
         {
-            var task = new Task<SentenceTask>(() => rep.SentenceTasks.FirstOrDefault(x => x.SentenceTaskId == id));
-            task.Start();
-            return await task;
+            return rep.SentenceTasks.FirstOrDefault(x => x.SentenceTaskId == id);
         }
 
         public async Task<SentenceTask> Edit(SentenceTask task)

@@ -5,9 +5,9 @@ namespace EngMan.Service
 {
     public interface IWordService
     {
-        Task<IEnumerable<Word>> Get();
+        IEnumerable<Word> Get();
 
-        Task<Word> GetById(int id);
+        Word GetById(int id);
 
         Task<Word> Edit(Word word);
 

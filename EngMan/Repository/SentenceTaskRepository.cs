@@ -20,7 +20,7 @@ namespace EngMan.Repository
             if (task.SentenceTaskId == 0)
             {
                 context.SentenceTasks.Add(task);
-                task.SentenceTaskId = context.SentenceTasks.Last().SentenceTaskId;
+                task.SentenceTaskId = context.SentenceTasks.ToArray().Last().SentenceTaskId;
             }
             else
             {
@@ -31,6 +31,7 @@ namespace EngMan.Repository
                     entity.Category = task.Category;
                 }
             }
+            context.SaveChanges();
             return task;
         }
 
@@ -48,6 +49,7 @@ namespace EngMan.Repository
                 {
                     context.SentenceTasks.Remove(entity);
                 }
+                context.SaveChanges();
                 return id;
             }
             return -1;

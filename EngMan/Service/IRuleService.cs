@@ -5,14 +5,16 @@ namespace EngMan.Service
 {
     public interface IRuleService
     {
-        Task<IEnumerable<Rule>> Get();
+        IEnumerable<RuleModel> Get();
 
-        Task<Rule> GetById(int id);
+        RuleModel GetById(int id);
 
-        Task<Rule> Edit(Rule rule);
+        Task<RuleModel> Edit(RuleModel rule);
 
-        Task<Rule> Add(Rule rule);
+        Task<RuleModel> Add(RuleModel rule);
 
         Task<int> Delete(int id);
+
+        List<string> AddImages(Image[] images);
     }
 }

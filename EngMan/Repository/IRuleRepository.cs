@@ -5,11 +5,11 @@ namespace EngMan.Repository
 {
     public interface IRuleRepository
     {
-        IEnumerable<Rule> Rules { get; }
+        IEnumerable<RuleModel> Rules { get; }
 
-        Task<Rule> SaveRule(Rule rule);
+        Task<RuleModel> SaveRule(RuleModel rule);
 
-        Task<Rule> AddRule(Rule rule);
+        Task<RuleModel> AddRule(RuleModel rule);
 
         Task<int> DeleteRule(int id);
     }
