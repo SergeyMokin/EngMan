@@ -10,6 +10,11 @@
         <button v-on:click = "downloadWordMap">Старт</button><br/>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
         <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
+        <div v-for = 'el in words' :key = 'el.WordId'>
+            <div class = "words-list--element" style = "cursor: default">
+                <a>{{el.Original}} - {{el.Translate}}</a>
+            </div>
+        </div>
       </div>
       <div v-if = "show" class = "form-border">
         <h2>{{word.Original}}</h2>
@@ -147,6 +152,20 @@ export default {
           this.categories.push('none');
       })
       this.inProgress = false;
+      this.$store.dispatch('getWords');
+  },
+  computed:{
+    words()
+    {
+      var vue = this;
+      if(this.category == 'none' || this.category == '')
+      {
+          return;
+      }
+      return this.$store.getters.words.filter(function(sentence){
+          return sentence.Category.toLowerCase().indexOf(vue.category.toLowerCase()) > -1;
+      });
+    }
   }
 }
 </script>
