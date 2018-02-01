@@ -8,6 +8,7 @@ const state = {
     rules: []
     , sentences: []
     , words: []
+    , users: []
     , user: {
         Logined: false,
         Id: '',
@@ -22,6 +23,7 @@ const getters = {
     rules: state => state.rules
     , sentences: state => state.sentences
     , words: state => state.words
+    , users: state => state.users
 };
 
 
@@ -49,6 +51,10 @@ const mutations = {
     , createWord(state, result)
     {
         state.words.unshift(result);
+    }
+    , getUsers(state, result)
+    {
+        state.users = result;
     }
 };
 
@@ -88,6 +94,11 @@ const actions = {
         api.createWord(word)
         .then(data => commit('createWord', data))
         .catch(e => console.log(e));
+    }
+    , getUsers: ({commit}) => {
+        api.getUsers()
+        .then(res => commit('getUsers', res))
+        .catch(e => console.log(e))
     }
 };
 

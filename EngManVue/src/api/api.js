@@ -54,7 +54,7 @@ export default {
   },
   signout(){
     this.deleteToken();
-    return axios.get(url + '/account/logout')
+    return axios.post(url + '/account/logout')
     .then(response => response.data)
     .catch(e => e);
   },
@@ -136,6 +136,31 @@ export default {
   },
   deleteWord(id) {
     return axios.delete(url + '/word/DeleteWord/' + id)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  getUsers(){
+    return axios.get(url + '/account/getallusers')
+    .then(res => res.data)
+    .catch(e => e)
+  },
+  deleteUser(id){
+    return axios.delete(url + '/account/deleteuser/' + id)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  changeRole(user){
+    return axios.put(url + '/account/changerole', user)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  changePassword(id, oldpassword, newpassword){
+    return axios.put(url + '/account/ChangePassword?id=' + id + '&oldpassword=' + oldpassword + '&newpassword=' + newpassword)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  editUser(user){
+    return axios.put(url + '/account/edituser', user)
     .then(response => response.data)
     .catch(e => e);
   }

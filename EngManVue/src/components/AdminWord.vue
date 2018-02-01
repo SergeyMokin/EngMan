@@ -3,7 +3,8 @@
       <div v-if = "!clickWord" class="words-view" >
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
-        <router-link to="/admin/words" class = "routes-admin">Словарь </router-link><br/><br/>
+        <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
+        <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link><br/><br/>
         <button type = "submit" v-on:click = "addWord()">Добавить</button><br/><br/>
         <select class = "select-form" v-model = "category">
             <option v-for = "category in categories" :key = "category">
@@ -12,7 +13,7 @@
         </select>
         <div v-for = 'el in words' :key = 'el.WordId' class = "form-border">
             <div class = "words-list--element">
-                <a>{{el.Original}} - {{el.Translate}}</a>
+                <span class = "span-word--element">{{el.Original}} - {{el.Translate}}</span>
             </div>
             <button type = "submit" v-on:click = "editWord(el.WordId)">Изменить</button>
             <button type = "submit" v-on:click = "deleteWord(el.WordId)">Удалить</button>

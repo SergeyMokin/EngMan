@@ -87,11 +87,34 @@ namespace EngMan.Controllers
             return NotFound();
         }
         
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult LogOut()
         {
             HttpContext.Current.GetOwinContext().Authentication.SignOut();    
             return Ok();
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "admin")]
+        public async Task<IHttpActionResult> ChangeRole(UserView user)
+        {
+            var _user = await service.ChangeRole(user);
+            if (_user != null)
+            {
+                return Ok(_user);
+            }
+            return NotFound();
+        }
+
+        [HttpPut]
+        public IHttpActionResult ChangePassword(int id, string oldpassword, string newpassword)
+        {
+            var _user = service.ChangePassword(id, oldpassword, newpassword);
+            if (_user != null)
+            {
+                return Ok(_user);
+            }
+            return NotFound();
         }
     }
 }

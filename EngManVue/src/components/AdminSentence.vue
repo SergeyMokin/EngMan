@@ -3,7 +3,8 @@
       <div v-if = "!clickSentence" class = "sentences-view">
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
-        <router-link to="/admin/words" class = "routes-admin">Словарь </router-link><br/><br/>
+        <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
+        <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link><br/><br/>
         <button type = "submit" v-on:click = "AddSentence()">Добавить</button><br/><br/>
         <select class = "select-form" v-model = "category">
             <option v-for = "category in categories" :key = "category">
@@ -12,7 +13,7 @@
         </select>
         <div v-for = 'el in sentences' :key = 'el.SentenceTaskId' class = "form-border">
             <div class = "sentences-list--element">
-                <a>{{el.Sentence}}</a>
+                <span class = "span-sentence--element">{{el.Sentence}}</span>
             </div>
             <button type = "submit" v-on:click = "editSentence(el.SentenceTaskId)">Изменить</button>
             <button type = "submit" v-on:click = "deleteSentence(el.SentenceTaskId)">Удалить</button>

@@ -3,13 +3,14 @@
     <div v-if = "!clickRule" class="rules-view-list">
       <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
       <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
-      <router-link to="/admin/words" class = "routes-admin">Словарь </router-link><br/><br/>
+      <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
+      <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link><br/><br/>
       <button type = "submit" v-on:click = "AddRule()">Добавить</button><br/><br/>
       <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..."><br/>
       <div v-for = 'el in rules' :key = 'el.RuleId' class = "form-border">
       <div class = "rules-list--element">
         <span class = "span-rule--element">
-            <a>{{el.Title}}</a>
+            {{el.Title}}
         </span>
       </div>
       <div>

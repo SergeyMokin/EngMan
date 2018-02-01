@@ -4,8 +4,9 @@
           <span class = "span-anonymous">Вам необходимо войти в профиль</span>
       </div>
       <div v-show = "$store.state.user.Logined">
-          <a v-show = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b>, Вы успешно авторизованы!</a>
-          <button type = "submit" v-on:click = "logout">Выйти</button>
+          <a v-show = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b></a>
+          <button type = "submit" v-on:click = "toProfile()">Профиль</button>
+          <button type = "submit" v-on:click = "logout()">Выйти</button>
       </div>
   </div>
 </template>
@@ -40,6 +41,13 @@ export default {
                 console.log(e);
                 this.inprogress = false;
             });
+        },
+        toProfile(){
+            if(this.inprogress) return;
+            this.inprogress = true;
+            this.$router.push('/user');
+            this.inprogress = false; 
+            this.$emit('closeform');
         }
     },
     mounted(){

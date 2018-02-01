@@ -64,6 +64,7 @@
 <script>
 import api from '../api/api'
 import { required, minLength, sameAs, email } from 'vuelidate/lib/validators'
+
 export default {
     data(){
         return {
