@@ -20,6 +20,7 @@ namespace EngMan.Repository
             if (word.WordId == 0)
             {
                 context.Words.Add(word);
+                context.SaveChanges();
                 word.WordId = context.Words.ToArray().Last().WordId;
             }
             else

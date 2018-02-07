@@ -163,5 +163,20 @@ export default {
     return axios.put(url + '/account/edituser', user)
     .then(response => response.data)
     .catch(e => e);
+  },
+  getMessages(){
+    return axios.get(url + '/message/getallmessages/')
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  deleteMessage(id){
+    return axios.delete(url + '/message/deletemessage/' + id)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  sendMessage(mes){
+    return axios.post(url + '/message/SendMessage', mes)
+    .then(response => response.data)
+    .catch(e => e);
   }
 };

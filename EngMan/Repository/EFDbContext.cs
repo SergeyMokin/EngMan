@@ -9,5 +9,6 @@ namespace EngMan.Repository
         public DbSet<Word> Words { get; set; }
         public DbSet<SentenceTask> SentenceTasks { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

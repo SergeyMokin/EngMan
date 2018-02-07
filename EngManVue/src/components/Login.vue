@@ -128,6 +128,8 @@ export default {
                             this.$store.state.user.FirstName = res.FirstName;
                             this.$store.state.user.LastName = res.LastName;
                             this.$store.state.user.Email = res.Email;
+                            this.$store.dispatch('getMessages');
+                            this.$store.dispatch('getUsers');
                             this.clearLoginForm();
                             this.inprogress = false;
                         }

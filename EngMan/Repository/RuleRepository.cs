@@ -25,6 +25,7 @@ namespace EngMan.Repository
             if (rule.RuleId == 0)
             {
                 context.Rules.Add(rule);
+                context.SaveChanges();
                 rule.RuleId = context.Rules.ToArray().Last().RuleId;
             }
             else

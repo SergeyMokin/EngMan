@@ -49,6 +49,9 @@ export default {
 </script>
 
 <style>
+body{
+  background: #e6e6e6;
+}
 #app {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 18px;

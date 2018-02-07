@@ -20,6 +20,7 @@ namespace EngMan.Repository
             if (task.SentenceTaskId == 0)
             {
                 context.SentenceTasks.Add(task);
+                context.SaveChanges();
                 task.SentenceTaskId = context.SentenceTasks.ToArray().Last().SentenceTaskId;
             }
             else

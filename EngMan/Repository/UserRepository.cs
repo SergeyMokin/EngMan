@@ -86,6 +86,7 @@ namespace EngMan.Repository
                     if (user.Id == 0)
                     {
                         context.Users.Add(user);
+                        context.SaveChanges();
                         user.Id = context.Users.ToArray().Last().Id;
                     }
                     _user = new UserView

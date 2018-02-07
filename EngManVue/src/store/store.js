@@ -9,6 +9,7 @@ const state = {
     , sentences: []
     , words: []
     , users: []
+    , messages: []
     , user: {
         Logined: false,
         Id: '',
@@ -24,10 +25,15 @@ const getters = {
     , sentences: state => state.sentences
     , words: state => state.words
     , users: state => state.users
+    , messages: state => state.messages
 };
 
 
 const mutations = {
+    getMessages(state, result)
+    {
+        state.messages = result;
+    },
     getRules(state, result)
     {
         state.rules = result;
@@ -59,6 +65,13 @@ const mutations = {
 };
 
 const actions = {
+    getMessages: ({ commit }) => {
+        api.getMessages()
+        .then(res => {
+            commit('getMessages', res)
+        })
+        .catch(e => console.log(e));
+    },
     getRules: ({ commit }) => {
       api.getRules()
       .then(rules => {
