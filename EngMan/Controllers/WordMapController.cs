@@ -31,7 +31,7 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetWord(string category, int id)
         {
-            if (id > -1 && category != null)
+            if (category != null)
             {
                 var rand = new Random();
                 var words = service.Get();

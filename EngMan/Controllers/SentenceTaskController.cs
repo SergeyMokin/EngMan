@@ -31,7 +31,7 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetTask(string category, int id)
         {
-            if (id > -1 && category != null)
+            if (category != null)
             {
                 var rand = new Random();
                 var tasks = service.Get();

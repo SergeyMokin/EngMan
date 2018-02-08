@@ -4,7 +4,7 @@ using System.Linq;
 using EngMan.Models;
 namespace EngMan.Repository
 {
-    public class WordRepository: IWordRepository
+    public class WordRepository : IWordRepository
     {
         public IEnumerable<Word> Words { get { return context.Words; } }
 
