@@ -1,5 +1,6 @@
 <template>
   <div class="wordmap-task">
+      <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <h1>Карты слов</h1><br/>
       <div v-if = "!show" class = "form-border">
           <select class = "select-form" v-model = "category">
@@ -11,7 +12,7 @@
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
         <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
         <div v-for = 'el in words' :key = 'el.WordId'>
-            <div class = "words-list--element" style = "cursor: default">
+            <div class = "wordmap-list--element" style = "cursor: default">
                 <a>{{el.Original}} - {{el.Translate}}</a>
             </div>
         </div>
@@ -19,7 +20,7 @@
       <div v-if = "show" class = "form-border">
         <h2>{{word.Original}}</h2>
         <br/>
-        <div v-for = "el in word.Translate" :key = "el" class = "words-list--element" v-on:click = "returnWord.Translate = el">
+        <div v-for = "el in word.Translate" :key = "el" class = "wordmap-list--element" v-on:click = "returnWord.Translate = el">
             <div>
                 {{el}}
             </div>
@@ -169,35 +170,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.wordmap-task{
-    margin: 5% 30% 5% 30%;
-    text-align: center;
-}
-.select-form{
-    outline:none;
-    background: rgb(248, 248, 248);
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 16px;
-    margin: auto;
-    margin-bottom: 10px;
-    resize: none;
-    height: 25px;
-    width: 155px;
-}
-.words-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: pointer;
-    background: rgb(248, 248, 248);
-    height: 35px;
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-</style>

@@ -28,7 +28,8 @@ namespace EngMan.Service
                 MessageId = x.MessageId,
                 Sender = usserv.GetUser(x.SenderId),
                 Beneficiary = usserv.GetUser(x.BeneficiaryId),
-                Text = x.Text
+                Text = x.Text,
+                Time = x.Time
             }); ;
         }
 

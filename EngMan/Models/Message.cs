@@ -17,6 +17,9 @@ namespace EngMan.Models
 
         [DataMember]
         public string Text { get; set; }
+
+        [DataMember]
+        public System.DateTime Time { get; set; }
     }
 
     public class ReturnMessage
@@ -33,5 +36,8 @@ namespace EngMan.Models
 
         [DataMember]
         public string Text { get; set; }
+
+        [DataMember]
+        public System.DateTime Time { get; set; }
     }
 }

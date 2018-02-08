@@ -49,28 +49,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.rules-view-list{
-    margin: 5% 25% 5% 25%;
-    width: 50%;
-    text-align: center;
-    display: table;
-}
-.rules-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: pointer;
-    background: rgb(248, 248, 248);
-    height: 35px;
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.span-rule--element{
-    margin: 15px;
-    font-size: 18px;
-}
-</style>

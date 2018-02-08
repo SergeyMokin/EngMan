@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="loading" v-if = "inProgress">Loading&#8230;</div>
     <div v-if = "!clickEdit && !clickChangePassword" class = "users-view-list">
         <br/><br/>
          <div class = "form-border">
@@ -163,40 +164,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.users-view-list{
-    margin: 5% 20% 5% 20%;
-    width: 60%;
-    text-align: center;
-    display: table;
-}
-.users-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: default;
-    background: rgb(248, 248, 248);
-    height: 35px;
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.button-close{
-    position: absolute;
-    right: 18.65%;
-    top: 75px;
-}
-.user-edit{
-    resize: none;
-    text-align: left;
-    width: 95%;
-    margin: 0.5% 2.5% 0% 2.5%;
-    padding: 0.5%;
-    background: rgb(248, 248, 248);
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-</style>

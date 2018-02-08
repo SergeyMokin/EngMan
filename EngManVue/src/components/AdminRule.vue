@@ -1,5 +1,6 @@
 <template>
   <div v-show = "$store.state.user.Role == 'admin'">
+    <div class="loading" v-if = "inProgress">Loading&#8230;</div>
     <div v-if = "!clickRule" class="rules-view-list">
       <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
       <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
@@ -216,57 +217,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.rules-view-list{
-    margin: 5% 20% 5% 20%;
-    width: 60%;
-    text-align: center;
-    display: table;
-}
-.rules-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: default;
-    background: rgb(248, 248, 248);
-    height: 35px;
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.span-rule--element{
-    margin: 15px;
-    font-size: 18px;
-}
-.button-close{
-    position: absolute;
-    right: 18.65%;
-    top: 75px;
-}
-.rule-edit{
-    resize: none;
-    text-align: left;
-    width: 60%;
-    margin: 0.5% 20% 0% 20%;
-    padding: 0.5%;
-    background: rgb(248, 248, 248);
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.search-form{
-    outline:none;
-    background: rgb(248, 248, 248);
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 16px;
-    margin: auto;
-    margin-bottom: 10px;
-    resize: none;
-    height: 25px;
-    width: 185px;
-}
-</style>

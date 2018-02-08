@@ -1,5 +1,6 @@
 <template>
   <div class="login" id = "login-form">
+      <div class="loading" v-if = "inprogress">Loading&#8230;</div>
       <div v-show = "!isLogined">
         <span>Для доступа к контенту сайта вам необходимо войти в свой аккаунт или зарегистрироваться: </span><br/>
         <button type = "submit" v-on:click = "authentification = !authentification; registration = false;" class = "button">Войти в аккаунт</button>
@@ -201,34 +202,3 @@ export default {
     }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.login{
-    margin: 5%;
-    text-align: center;
-}
-.authentification-form{
-    margin-top: 2%;
-}
-.registration-form{
-    margin-top: 2%;
-}
-.form{
-    font-size: 18px;
-}
-.input-form{
-    border: none;
-    outline:none;
-    border-radius: 10px;
-    width: 250px;
-    height: 25px;
-    text-align: center;
-    font-size: 16px;
-}
-.input-form--error{
-    border: solid;
-    border-color: red;
-    border-width: 0.5px;
-}
-</style>

@@ -1,5 +1,6 @@
 <template>
   <div class="sentence-task">
+      <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <h1>Задания по предложениям</h1><br/>
       <div v-if = "!show" class = "form-border">
           <select class = "select-form" v-model = "category">
@@ -141,35 +142,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.sentence-task{
-    margin: 5% 30% 5% 30%;
-    text-align: center;
-}
-.select-form{
-    outline:none;
-    background: rgb(248, 248, 248);
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 16px;
-    margin: auto;
-    margin-bottom: 10px;
-    resize: none;
-    height: 25px;
-    width: 155px;
-}
-.sentence-input{
-    resize: none;
-    text-align: left;
-    width: 60%;
-    margin: 0.5% 20% 0% 20%;
-    padding: 0.5%;
-    background: rgb(248, 248, 248);
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-</style>

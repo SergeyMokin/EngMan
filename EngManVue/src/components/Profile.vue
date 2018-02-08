@@ -1,5 +1,6 @@
 <template>
   <div class="profile" id = "profile-form">
+      <div class="loading" v-if = "inprogress">Loading&#8230;</div>
       <div v-show = "!$store.state.user.Logined">
           <span class = "span-anonymous">Вам необходимо войти в профиль</span>
       </div>
@@ -68,21 +69,3 @@ export default {
     }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.profile{
-    background:rgba(205, 205, 205, 0.9);
-    width: 173px;
-    height: 119px;
-    padding: 15px;
-    left: 0;
-    top: 80px;
-    position: absolute;
-    z-index: 99;
-    text-align: center;
-}
-.span-anonymous{
-    font-size: 20px;
-}
-</style>

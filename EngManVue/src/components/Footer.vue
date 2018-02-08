@@ -28,17 +28,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.footer img:hover{
-    cursor: pointer;
-}
-.footer{
-    background-color: rgba(205, 205, 205, 0.9);
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-}
-</style>
