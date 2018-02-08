@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
@@ -79,11 +78,11 @@ namespace EngMan.Controllers
                 {
                     if (task.Sentence.Equals(sentence.Sentence))
                     {
-                        return Ok<bool>(true);
+                        return Ok(true);
                     }
                 }
             }
-            return Ok<bool>(false);
+            return Ok(false);
         }
     }
 }
