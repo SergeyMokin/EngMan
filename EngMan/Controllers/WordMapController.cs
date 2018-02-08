@@ -32,38 +32,41 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetWord(string category, int id)
         {
-            var rand = new Random();
-            var words = service.Get();
-            words = words.Where(x => x.Category == category);
-            if (words != null)
+            if (id > -1 && category != null)
             {
-                var indexes = new HashSet<int>();
-                if (words.Count() >= 5)
+                var rand = new Random();
+                var words = service.Get();
+                words = words.Where(x => x.Category == category);
+                if (words != null)
                 {
-                    if (words.Count() - 1 <= id)
+                    var indexes = new HashSet<int>();
+                    if (words.Count() >= 5)
                     {
-                        return NotFound();
-                    }
-                    indexes.Add(id + 1);
-                    while (indexes.Count() != 5)
-                    {
-                        indexes.Add(rand.Next(0, words.Count()));
-                    }
-                    var word = words.ElementAt(id + 1);
-                    var translate = new List<string>();
-                    foreach (var index in indexes)
-                    {
-                        translate.Add(words.ElementAt(index).Translate);
-                    }
-                    if (word != null)
-                    {
-                        return Ok(new MapWord
+                        if (words.Count() - 1 <= id)
                         {
-                            WordId = word.WordId,
-                            Original = word.Original,
-                            Translate = translate.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
-                            Category = word.Category
-                        });
+                            return NotFound();
+                        }
+                        indexes.Add(id + 1);
+                        while (indexes.Count() != 5)
+                        {
+                            indexes.Add(rand.Next(0, words.Count()));
+                        }
+                        var word = words.ElementAt(id + 1);
+                        var translate = new List<string>();
+                        foreach (var index in indexes)
+                        {
+                            translate.Add(words.ElementAt(index).Translate);
+                        }
+                        if (word != null)
+                        {
+                            return Ok(new MapWord
+                            {
+                                WordId = word.WordId,
+                                Original = word.Original,
+                                Translate = translate.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
+                                Category = word.Category
+                            });
+                        }
                     }
                 }
             }
@@ -73,15 +76,18 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult VerificationCorrectness(Word word)
         {
-            var _word = service.GetById(word.WordId);
-            if (_word != null)
+            if (word != null)
             {
-                if (_word.Translate.Equals(word.Translate))
+                var _word = service.GetById(word.WordId);
+                if (_word != null)
                 {
-                    return Ok<bool>(true);
+                    if (_word.Translate.Equals(word.Translate))
+                    {
+                        return Ok(true);
+                    }
                 }
             }
-            return Ok<bool>(false);
+            return Ok(false);
         }
     }
 }

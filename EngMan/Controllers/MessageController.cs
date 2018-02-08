@@ -33,11 +33,14 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult SendMessage(Message mes)
         {
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            if (mes != null)
             {
-                if(mes != null)
+                if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
                 {
-                    return Ok(service.SendMessage(mes, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                    if (mes != null)
+                    {
+                        return Ok(service.SendMessage(mes, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                    }
                 }
             }
             return NotFound();
@@ -46,11 +49,14 @@ namespace EngMan.Controllers
         [HttpDelete]
         public IHttpActionResult DeleteMessage(int id)
         {
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            if (id > 0)
             {
-                if (id > 0)
+                if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
                 {
-                    return Ok(service.DeleteMessage(id, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                    if (id > 0)
+                    {
+                        return Ok(service.DeleteMessage(id, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                    }
                 }
             }
             return NotFound();

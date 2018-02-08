@@ -31,10 +31,13 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetRule(int id)
         {
-            var rule = service.GetById(id);
-            if (rule != null)
+            if (id > 0)
             {
-                return Ok(rule);
+                var rule = service.GetById(id);
+                if (rule != null)
+                {
+                    return Ok(rule);
+                }
             }
             return NotFound();
         }
@@ -43,10 +46,13 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> EditRule(RuleModel rule)
         {
-            var _rule = await service.Edit(rule);
-            if (_rule != null)
+            if (rule != null)
             {
-                return Ok(_rule);
+                var _rule = await service.Edit(rule);
+                if (_rule != null)
+                {
+                    return Ok(_rule);
+                }
             }
             return NotFound();
         }
@@ -55,10 +61,13 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> AddRule(RuleModel rule)
         {
-            var _rule = await service.Add(rule);
-            if (_rule != null)
+            if (rule != null)
             {
-                return Ok(_rule);
+                var _rule = await service.Add(rule);
+                if (_rule != null)
+                {
+                    return Ok(_rule);
+                }
             }
             return NotFound();
         }
@@ -67,10 +76,13 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public IHttpActionResult AddImages(Image[] images)
         {
-            var pathes = service.AddImages(images);
-            if (pathes != null)
+            if (images.Length > 0)
             {
-                return Ok(pathes);
+                var pathes = service.AddImages(images);
+                if (pathes != null)
+                {
+                    return Ok(pathes);
+                }
             }
             return NotFound();
         }
@@ -79,10 +91,13 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> DeleteRule(int id)
         {
-            var _id = await service.Delete(id);
-            if (_id != -1)
+            if (id > 0)
             {
-                return Ok(_id);
+                var _id = await service.Delete(id);
+                if (_id != -1)
+                {
+                    return Ok(_id);
+                }
             }
             return NotFound();
         }

@@ -28,10 +28,13 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetWordById(int id)
         {
-            var word = service.GetById(id);
-            if (word != null)
+            if (id > 0)
             {
-                return Ok(word);
+                var word = service.GetById(id);
+                if (word != null)
+                {
+                    return Ok(word);
+                }
             }
             return NotFound();
         }
@@ -40,10 +43,13 @@ namespace EngMan.Controllers
         [HttpPut]
         public async Task<IHttpActionResult> EditWord(Word word)
         {
-            var _word = await service.Edit(word);
-            if (_word != null)
+            if (word != null)
             {
-                return Ok(_word);
+                var _word = await service.Edit(word);
+                if (_word != null)
+                {
+                    return Ok(_word);
+                }
             }
             return NotFound();
         }
@@ -51,10 +57,13 @@ namespace EngMan.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> AddWord(Word word)
         {
-            var _word = await service.Add(word);
-            if (_word != null)
+            if (word != null)
             {
-                return Ok(_word);
+                var _word = await service.Add(word);
+                if (_word != null)
+                {
+                    return Ok(_word);
+                }
             }
             return NotFound();
         }
@@ -62,10 +71,13 @@ namespace EngMan.Controllers
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteWord(int id)
         {
-            var _id = await service.Delete(id);
-            if (_id != -1)
+            if (id > 0)
             {
-                return Ok(_id);
+                var _id = await service.Delete(id);
+                if (_id != -1)
+                {
+                    return Ok(_id);
+                }
             }
             return NotFound();
         }

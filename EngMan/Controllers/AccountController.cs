@@ -20,10 +20,13 @@ namespace EngMan.Controllers
         [AllowAnonymous]
         [HttpPost]
         public IHttpActionResult Registration(User user) {
-            var _user = service.Registration(user);
-            if (_user != null)
+            if (user != null)
             {
-                return Ok(_user);
+                var _user = service.Registration(user);
+                if (_user != null)
+                {
+                    return Ok(_user);
+                }
             }
             return NotFound();
         }
@@ -56,10 +59,13 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetUserById(int id)
         {
-            var user = service.GetUser(id);
-            if (user != null)
+            if (id > 0)
             {
-                return Ok(user);
+                var user = service.GetUser(id);
+                if (user != null)
+                {
+                    return Ok(user);
+                }
             }
             return NotFound();
         }
@@ -67,10 +73,13 @@ namespace EngMan.Controllers
         [HttpPut]
         public async Task<IHttpActionResult> EditUser(UserView user)
         {
-            var _user = await service.SaveUser(user);
-            if (_user != null)
+            if (user != null)
             {
-                return Ok(_user);
+                var _user = await service.SaveUser(user);
+                if (_user != null)
+                {
+                    return Ok(_user);
+                }
             }
             return NotFound();
         }
@@ -79,10 +88,13 @@ namespace EngMan.Controllers
         [HttpDelete]
         public IHttpActionResult DeleteUser(int id)
         {
-            var _id = service.DeleteUser(id);
-            if (_id != -1)
+            if (id > 0)
             {
-                return Ok(_id);
+                var _id = service.DeleteUser(id);
+                if (_id != -1)
+                {
+                    return Ok(_id);
+                }
             }
             return NotFound();
         }
@@ -98,10 +110,13 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> ChangeRole(UserView user)
         {
-            var _user = await service.ChangeRole(user);
-            if (_user != null)
+            if (user != null)
             {
-                return Ok(_user);
+                var _user = await service.ChangeRole(user);
+                if (_user != null)
+                {
+                    return Ok(_user);
+                }
             }
             return NotFound();
         }
@@ -109,10 +124,13 @@ namespace EngMan.Controllers
         [HttpPut]
         public IHttpActionResult ChangePassword(int id, string oldpassword, string newpassword)
         {
-            var _user = service.ChangePassword(id, oldpassword, newpassword);
-            if (_user != null)
+            if (id > 0 && oldpassword != null && newpassword != null)
             {
-                return Ok(_user);
+                var _user = service.ChangePassword(id, oldpassword, newpassword);
+                if (_user != null)
+                {
+                    return Ok(_user);
+                }
             }
             return NotFound();
         }

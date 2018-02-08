@@ -48,12 +48,15 @@ namespace EngMan.Service
             {
                 foreach (var el in images)
                 {
-                    var bytearr = new List<byte>();
-                    foreach (var ch in el.Data)
+                    if (el != null)
                     {
-                        bytearr.Add(Convert.ToByte(ch));
+                        var bytearr = new List<byte>();
+                        foreach (var ch in el.Data)
+                        {
+                            bytearr.Add(Convert.ToByte(ch));
+                        }
+                        arr.Add(bytearr.ToArray());
                     }
-                    arr.Add(bytearr.ToArray());
                 }
                 for (int i = 0; i < arr.Count; i++)
                 {

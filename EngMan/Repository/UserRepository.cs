@@ -40,25 +40,28 @@ namespace EngMan.Repository
         public UserView ChangePassword(int id, string oldpassword, string newpassword)
         {
             var user = new UserView();
-            if (id > 0)
+            if (!newpassword.Contains(" ") && newpassword.Length > 8 && oldpassword.Length > 0)
             {
-                var entity = context.Users.Find(id);
-                if (entity != null)
+                if (id > 0)
                 {
-                    entity.Password = oldpassword.Equals(entity.Password) ? newpassword : entity.Password;
-                    if (entity.Password.Equals(newpassword))
+                    var entity = context.Users.Find(id);
+                    if (entity != null)
                     {
-                        user = new UserView
+                        entity.Password = oldpassword.Equals(entity.Password) ? newpassword : entity.Password;
+                        if (entity.Password.Equals(newpassword))
                         {
-                            Id = entity.Id,
-                            FirstName = entity.FirstName,
-                            LastName = entity.LastName,
-                            Email = entity.Email,
-                            Role = entity.Role
-                        };
+                            user = new UserView
+                            {
+                                Id = entity.Id,
+                                FirstName = entity.FirstName,
+                                LastName = entity.LastName,
+                                Email = entity.Email,
+                                Role = entity.Role
+                            };
+                        }
                     }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
             }
             return user;
         }

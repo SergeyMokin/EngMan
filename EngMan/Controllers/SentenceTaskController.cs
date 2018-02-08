@@ -32,35 +32,38 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetTask(string category, int id)
         {
-            var rand = new Random();
-            var tasks = service.Get();
-            tasks = tasks.Where(x => x.Category == category);
-            if (tasks != null)
+            if (id > -1 && category != null)
             {
-                if (tasks.Count() - 1 <= id)
+                var rand = new Random();
+                var tasks = service.Get();
+                tasks = tasks.Where(x => x.Category == category);
+                if (tasks != null)
                 {
-                    return NotFound();
-                }
-                IEnumerable<SentenceTask> _tasks = tasks.Select(x =>
-                {
-                    var arr = x.Sentence.Split(new[] { ' ' });
-                    var set = new HashSet<int>();
-                    while (set.Count() != arr.Length)
+                    if (tasks.Count() - 1 <= id)
                     {
-                        set.Add(rand.Next(0, arr.Length));
+                        return NotFound();
                     }
-                    var returnArr = new string[arr.Length];
-                    var i = 0;
-                    foreach (var ind in set)
+                    IEnumerable<SentenceTask> _tasks = tasks.Select(x =>
                     {
-                        returnArr[i] = arr[ind];
-                        i++;
+                        var arr = x.Sentence.Split(new[] { ' ' });
+                        var set = new HashSet<int>();
+                        while (set.Count() != arr.Length)
+                        {
+                            set.Add(rand.Next(0, arr.Length));
+                        }
+                        var returnArr = new string[arr.Length];
+                        var i = 0;
+                        foreach (var ind in set)
+                        {
+                            returnArr[i] = arr[ind];
+                            i++;
+                        }
+                        return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category };
+                    });
+                    if (_tasks != null)
+                    {
+                        return Ok(_tasks.ElementAt(id + 1));
                     }
-                    return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category };
-                });
-                if (_tasks != null)
-                {
-                    return Ok(_tasks.ElementAt(id + 1));
                 }
             }
             return NotFound();

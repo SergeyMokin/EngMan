@@ -15,11 +15,11 @@
       </select>
       <div class = "messages">
           <div v-for = "el in sortedmessages" :key = "el.MessageId">
-              <div v-if = "el.Sender.Id == sender.Id" class = "label-sender"><span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span> You</div>
+              <div v-if = "el.Sender.Id == sender.Id" class = "label-sender"><span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span> <span style = "font-size: 10px">{{dateTime(el.Time)}}</span> You</div>
               <div v-if = "el.Sender.Id == sender.Id" class = "message-sender">
-                  {{el.Text}} - {{dateTime(el.Time)}}
+                  {{el.Text}}
               </div>
-              <div v-if = "el.Sender.Id != sender.Id" class = "label-beneficiary">{{el.Sender.FirstName}} <span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span></div>
+              <div v-if = "el.Sender.Id != sender.Id" class = "label-beneficiary">{{el.Sender.FirstName}} <span style = "font-size: 10px">{{dateTime(el.Time)}}</span> <span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span></div>
               <div v-if = "el.Sender.Id != sender.Id" class = "message-beneficiary">
                   {{el.Text}}
               </div>
@@ -127,6 +127,7 @@ export default {
           return this.$store.getters.users;
       },
       sortedmessages(){
+          this.sender = this.$store.state.user;
           var vue = this;
           if(this.beneficiary != undefined)
           return this.$store.getters.messages.filter(function(mes){
