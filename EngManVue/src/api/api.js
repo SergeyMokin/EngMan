@@ -178,5 +178,40 @@ export default {
     return axios.post(url + '/message/SendMessage', mes)
     .then(response => response.data)
     .catch(e => e);
-  }
+  },
+  getGuessesTheImage(id){
+    return axios.get(url + '/guessestheimage/gettask/' + id)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  verificationGuessesTheImage(task){
+    return axios.post(url + '/guessestheimage/verificationcorrectness/', task)
+    .then(response => response.data)
+    .catch(e => e)
+  },
+  getGuessesTheImages(){
+    return axios.get(url + '/adminguessestheimage/getalltasks/')
+    .then(response => response.data)
+    .catch(e => e)
+  },
+  getGuessesTheImageById(id){
+    return axios.get(url + '/adminguessestheimage/gettaskbyid/' + id)
+    .then(response => response.data)
+    .catch(e => e)
+  },
+  editGuessesTheImage(task){
+    return axios.put(url + '/adminguessestheimage/edittask/', task)
+    .then(response => response.data)
+    .catch(e => e)
+  },
+  addGuessesTheImage(task){
+    return axios.post(url + '/adminguessestheimage/addtask/', task)
+    .then(response => response.data)
+    .catch(e => e)
+  },
+  deleteGuessesTheImage(id){
+    return axios.delete(url + '/adminguessestheimage/deletetask/' + id)
+    .then(response => response.data)
+    .catch(e => e)
+  },
 };

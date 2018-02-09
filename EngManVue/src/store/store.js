@@ -10,6 +10,7 @@ const state = {
     , words: []
     , users: []
     , messages: []
+    , guessestheimages: []
     , user: {
         Logined: false,
         Id: '',
@@ -26,6 +27,7 @@ const getters = {
     , words: state => state.words
     , users: state => state.users
     , messages: state => state.messages
+    , guessestheimages: state => state.guessestheimages
 };
 
 
@@ -33,6 +35,14 @@ const mutations = {
     getMessages(state, result)
     {
         state.messages = result;
+    },
+    getGuessesTheImages(state, result)
+    {
+        state.guessestheimages = result;
+    },
+    createGuessesTheImage(state, result)
+    {
+        state.guessestheimages.unshift(result);
     },
     getRules(state, result)
     {
@@ -71,6 +81,18 @@ const actions = {
             commit('getMessages', res)
         })
         .catch(e => console.log(e));
+    },
+    getGuessesTheImages: ({ commit }) => {
+      api.getGuessesTheImages()
+      .then(rules => {
+        commit('getGuessesTheImages', rules);
+      })
+      .catch(e => {console.log(e)});
+    }
+    , createGuessesTheImage: ({ commit }, rule) => {
+      api.addGuessesTheImage(rule)
+      .then(data => commit('createGuessesTheImage', data))
+      .catch(e => console.log(e));
     },
     getRules: ({ commit }) => {
       api.getRules()

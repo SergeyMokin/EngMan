@@ -35,7 +35,8 @@ namespace EngMan.Repository
                     bytearr.Add(Convert.ToByte(ch));
                 }
                 var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
-                var path = string.Format("C:\\Users\\limon\\Documents\\Tasks\\EngMan\\EngMan\\uploads\\" + time + image.Image.Name);
+                //path to folder with project
+                var path = string.Format("change this" + time + image.Image.Name);
                 File.WriteAllBytes(path, bytearr.ToArray());
                 path = string.Format("http://localhost:58099/uploads/" + time + image.Image.Name);
                 returnimg = new GuessesTheImage

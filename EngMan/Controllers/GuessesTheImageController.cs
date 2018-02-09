@@ -15,13 +15,15 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetTask()
+        public IHttpActionResult GetTask(int id)
         {
-            var rand = new Random();
             var tasks = service.GetGuessesTheImages().ToList();
             if (tasks != null)
             {
-                return Ok(tasks.ElementAt(rand.Next(0, tasks.Count())));
+                if (tasks.Count() > 0 && tasks.Count() - 1 >= id)
+                {
+                    return Ok(tasks.ElementAt(id));
+                }
             }
             return NotFound();
         }
@@ -34,7 +36,7 @@ namespace EngMan.Controllers
                 var task = service.GetGuessesTheImage(img.Id);
                 if (task != null)
                 {
-                    if (task.Word.Equals(img.Word))
+                    if (task.Word.ToLower().Equals(img.Word.ToLower()))
                     {
                         return Ok(true);
                     }

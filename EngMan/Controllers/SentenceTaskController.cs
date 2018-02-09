@@ -76,7 +76,7 @@ namespace EngMan.Controllers
                 var task = service.GetById(sentence.SentenceTaskId);
                 if (task != null)
                 {
-                    if (task.Sentence.Equals(sentence.Sentence))
+                    if (task.Sentence.ToLower().Equals(sentence.Sentence.ToLower()))
                     {
                         return Ok(true);
                     }

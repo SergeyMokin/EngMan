@@ -4,7 +4,8 @@
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
         <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
-        <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link><br/><br/>
+        <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
+      <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
         <select class = "select-form" v-model = "role">
             <option selected>
                 user

@@ -9,6 +9,7 @@
         <li><router-link to="/wordmap">Карты слов</router-link></li>
         <li><router-link to="/rules">Правила</router-link></li>
         <li><router-link to="/sentencetask">Задания по предложениям</router-link></li>
+        <li><router-link to="/guessestheimages">Угадай что на картинке</router-link></li>
         <li v-if = "this.$store.state.user.Role == 'admin'"><router-link to="/admin/rules">Панель администратора</router-link></li>
     </ul>
     </ol>

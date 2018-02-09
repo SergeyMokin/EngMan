@@ -80,7 +80,7 @@ namespace EngMan.Controllers
                 var _word = service.GetById(word.WordId);
                 if (_word != null)
                 {
-                    if (_word.Translate.Equals(word.Translate))
+                    if (_word.Translate.ToLower().Equals(word.Translate.ToLower()))
                     {
                         return Ok(true);
                     }
