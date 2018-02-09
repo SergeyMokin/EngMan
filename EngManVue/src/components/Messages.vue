@@ -130,7 +130,7 @@ export default {
           this.sender = this.$store.state.user;
           var vue = this;
           if(this.beneficiary != undefined)
-          return this.$store.getters.messages.filter(function(mes){
+          return this.$store.getters.messages.reverse().filter(function(mes){
               return mes.Beneficiary.Id == vue.beneficiary.Id || mes.Sender.Id == vue.beneficiary.Id
           });
       }

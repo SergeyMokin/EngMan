@@ -13,6 +13,7 @@
         <input type = "text" v-model = "returnTask.Word" class = "sentence-input">
         <button v-on:click = "verificationCorrectness">Проверить</button><br/>
         <button v-on:click = "closeForm">Завершить</button><br/>
+        <button v-on:click = "downloadTask">Следующий</button><br/>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>

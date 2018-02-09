@@ -14,7 +14,7 @@
                 <a><b>Мэил:</b> {{user.Email}}</a>
             </div>
             <button type = "submit" v-on:click = "clickEdit = true">Изменить профиль</button>
-            <button type = "submit" v-on:click = "clickChangePassword = true">Сменить пароль</button>
+            <button type = "submit" v-on:click = "clickChangePassword = true">Изменить пароль</button>
         </div>
         <br/><br/>
     </div>
