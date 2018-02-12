@@ -46,6 +46,11 @@ export default {
       downloadTask(){
           if(this.inProgress) return;
           this.inProgress = true;
+          this.attempt = 0;
+          this.inProgress = false;
+          this.returnTask.Id = -1;
+          this.returnTask.Word = '';
+          this.returnTask.Path = '';
           this.errormessage = '';
           this.completemessage = '';
           api.getGuessesTheImage(this.id)
@@ -83,11 +88,7 @@ export default {
           {
               if(result){
                 if(this.attempt == 0) this.goodAnswer++;
-                this.attempt = 0;
                 this.inProgress = false;
-                this.returnTask.Id = -1;
-                this.returnTask.Word = '';
-                this.returnTask.Path = '';
                 alert('Правильный ответ');
                 this.downloadTask();
               }

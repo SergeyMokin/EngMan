@@ -1,18 +1,19 @@
 <template>
-  <div v-show = "$store.state.user.Role == 'admin'">
+  <div v-if = "$store.state.user.Role == 'admin'">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div v-if = "!clickSentence" class = "sentences-view">
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
         <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
         <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
-      <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
+        <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
         <button type = "submit" v-on:click = "AddSentence()">Добавить</button><br/><br/>
-        <select class = "select-form" v-model = "category">
+        <input placeholder="Категория" type="text" class = "select-form" list="sentence_category" v-model = "category"/>
+        <datalist id = "sentence_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
-        </select>
+        </datalist>
         <div v-for = 'el in sentences' :key = 'el.SentenceTaskId' class = "form-border">
             <div class = "sentences-list--element">
                 <span class = "span-sentence--element">{{el.Sentence}}</span>
@@ -20,6 +21,7 @@
             <button type = "submit" v-on:click = "editSentence(el.SentenceTaskId)">Изменить</button>
             <button type = "submit" v-on:click = "deleteSentence(el.SentenceTaskId)">Удалить</button>
         </div>
+        <br/><br/>
       </div>
       <div v-if = "clickSentence" style = "text-align: center">
           <br/><br/>
@@ -44,7 +46,7 @@ export default {
         inProgress: false,
         errormessage: '',
         categories: [],
-        category: 'none',
+        category: '',
         clickAddSentence: false,
         clickSentence: false
         , sentence: {
@@ -127,7 +129,7 @@ export default {
       closeEditForm(){
         this.inProgress = false;
         this.errormessage = '';
-        this.category = 'none';
+        this.category = '';
         this.clickAddSentence = false;
         this.clickSentence = false;
         this.sentence = {
@@ -158,7 +160,6 @@ export default {
       api.getAllCategoriesSentences()
       .then(res => {
           this.categories = res;
-          this.categories.push('none');
       })
       this.$store.dispatch('getSentences');
       this.inProgress = false;

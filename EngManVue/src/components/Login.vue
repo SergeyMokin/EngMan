@@ -1,11 +1,11 @@
 <template>
   <div class="login" id = "login-form">
       <div class="loading" v-if = "inprogress">Loading&#8230;</div>
-      <div v-show = "!isLogined">
+      <div v-if = "!isLogined">
         <span>Для доступа к контенту сайта вам необходимо войти в свой аккаунт или зарегистрироваться: </span><br/>
         <button type = "submit" v-on:click = "authentification = !authentification; registration = false;" class = "button">Войти в аккаунт</button>
         <button type = "submit" v-on:click = "registration = !registration; authentification = false;" class = "button">Регистрация</button>
-        <div class = "authentification-form form-border" v-show = "authentification">
+        <div class = "authentification-form form-border" v-if = "authentification">
             <div class = "form">
                 <label for = "username-login">Мэил</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.user.username.$error}" class = "input-form" id = "username-login" type = 'text' v-model = "user.username"/><br/>
@@ -18,7 +18,7 @@
             <span v-if = "$v.user.$error" class = "span-error-message">Мэил и пароль - обязательные поля для заполнения<br/></span>
             <span v-if = "badrequest" class = "span-error-message">Мэил или пароль введены неверно<br/></span>
         </div>
-        <div class = "registration-form form-border" v-show = "registration">
+        <div class = "registration-form form-border" v-if = "registration">
             <div class = "form">
                 <label for = "firstname-registration">Имя</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.FirstName.$error}" class = "input-form" id = "firstname-registration" type = 'text' v-model = "registrationUser.FirstName"/><br/>
@@ -47,7 +47,7 @@
             <span v-if = "$v.registrationUser.confirmPassword.$error" class = "span-error-message">Пароль и его подтверждение должны совпадать<br/></span>
         </div>
       </div>
-      <div v-show = "isLogined">
+      <div v-if = "isLogined">
           <span>Добро пожаловать на сайт, наведите мышкой на меню и перейдите в нужную вкладку!</span><br/>
           <button type = "submit" v-on:click = "showHelp = !showHelp" class = "button">Помощь</button>
           <div v-if = "showHelp" class = "form-border">

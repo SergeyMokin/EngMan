@@ -1,18 +1,19 @@
 <template>
-  <div v-show = "$store.state.user.Role == 'admin'">
+  <div v-if = "$store.state.user.Role == 'admin'">
       <div v-if = "!clickWord" class="words-view" >
         <div class="loading" v-if = "inProgress">Loading&#8230;</div>
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
         <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
         <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
-      <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
+        <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
         <button type = "submit" v-on:click = "addWord()">Добавить</button><br/><br/>
-        <select class = "select-form" v-model = "category">
+        <input placeholder="Категория" type="text" class = "select-form" list="word_category" v-model = "category"/>
+        <datalist id = "word_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
-        </select>
+        </datalist>
         <div v-for = 'el in words' :key = 'el.WordId' class = "form-border">
             <div class = "words-list--element">
                 <span class = "span-word--element">{{el.Original}} - {{el.Translate}}</span>
@@ -20,6 +21,7 @@
             <button type = "submit" v-on:click = "editWord(el.WordId)">Изменить</button>
             <button type = "submit" v-on:click = "deleteWord(el.WordId)">Удалить</button>
         </div>
+        <br/><br/>
       </div>
       <div v-if = "clickWord" style = "text-align: center">
           <br/><br/>
@@ -46,7 +48,7 @@ export default {
         inProgress: false,
         errormessage: '',
         categories: [],
-        category: 'none',
+        category: '',
         clickAddWord: false,
         clickWord: false
         , word: {
@@ -127,7 +129,7 @@ export default {
       closeEditForm(){
         this.inProgress = false;
         this.errormessage = '';
-        this.category = 'none';
+        this.category = '';
         this.clickAddWord = false;
         this.clickWord = false;
         this.word = {
@@ -159,7 +161,6 @@ export default {
       api.getAllCategoriesWords()
       .then(res => {
           this.categories = res;
-          this.categories.push('none');
       })
       this.$store.dispatch('getWords');
       this.inProgress = false;

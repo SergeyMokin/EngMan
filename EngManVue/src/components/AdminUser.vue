@@ -1,11 +1,11 @@
 <template>
-  <div v-show = "$store.state.user.Role == 'admin'" class = "users-view">
+  <div v-if = "$store.state.user.Role == 'admin'" class = "users-view">
         <div class="loading" v-if = "inProgress">Loading&#8230;</div>
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
         <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
         <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
-      <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
+        <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
         <select class = "select-form" v-model = "role">
             <option selected>
                 user
@@ -21,6 +21,7 @@
             <button v-if = "el.Role == 'user'" type = "submit" v-on:click = "changeRole(el)">Повысить</button>
             <button v-if = "el.Role == 'user'" type = "submit" v-on:click = "deleteUser(el.Id)">Удалить</button>
         </div>
+        <br/><br/>
   </div>
 </template>
 

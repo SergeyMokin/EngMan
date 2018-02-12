@@ -35,6 +35,7 @@ const mutations = {
     getMessages(state, result)
     {
         state.messages = result;
+        state.messages = state.messages.reverse();
     },
     getGuessesTheImages(state, result)
     {

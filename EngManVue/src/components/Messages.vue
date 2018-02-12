@@ -1,18 +1,16 @@
 <template>
-  <div class = 'messages-view'>
+  <div id = "messages-view" class = 'messages-view'>
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div class = "label-form-mes">
             <span>Chat</span>
-            <span style = "margin-left: 370px; font-size:10px; cursor: pointer" v-on:click = "closeform()">close</span>
+            <span style = "margin-left: 370px; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;">close</span>
       </div>
-      <select class = "select-form-mes" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)">
+      <input placeholder="Введите/выберите мэил" type="text" class = "select-form-mes" list="users_emails" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
+      <datalist id = "users_emails">
             <option v-for = "user in users" v-if = "user.Id != $store.state.user.Id" :key = "user.Id">
                 {{user.Email}}
             </option>
-            <option>
-                none
-            </option>
-      </select>
+      </datalist>
       <div class = "messages">
           <div v-for = "el in sortedmessages" :key = "el.MessageId">
               <div v-if = "el.Sender.Id == sender.Id" class = "label-sender"><span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span> <span style = "font-size: 10px">{{dateTime(el.Time)}}</span> You</div>
@@ -39,10 +37,12 @@ export default {
   name: 'messages-view',
   data: () => {
       return {
+          clickCloseButton: false,
+          clickAtForm: false,
           inProgress: false,
           message: '',
           beneficiary: undefined,
-          beneficiaryEmail: 'none',
+          beneficiaryEmail: '',
           sender: ''
       }
   },
@@ -119,7 +119,7 @@ export default {
                 var date = new Date(_date);
                 var hours = date.getHours() < 10 ? "0"+date.getHours() : date.getHours();
                 var minutes = date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes();
-                return hours + ":" + minutes;
+                return date.getDay() + '.' + date.getMonth() + '.' + date.getFullYear() + ' - ' + hours + ":" + minutes;
       }
   },
   computed: {
@@ -130,7 +130,7 @@ export default {
           this.sender = this.$store.state.user;
           var vue = this;
           if(this.beneficiary != undefined)
-          return this.$store.getters.messages.reverse().filter(function(mes){
+          return this.$store.getters.messages.filter(function(mes){
               return mes.Beneficiary.Id == vue.beneficiary.Id || mes.Sender.Id == vue.beneficiary.Id
           });
       }
@@ -139,6 +139,30 @@ export default {
       this.$store.dispatch('getMessages');
       this.$store.dispatch('getUsers');
       this.sender = this.$store.state.user;
+  },
+  mounted(){
+        document.getElementById('messages-view').addEventListener('click', clickAtForm, false);
+        document.body.addEventListener('click', clickAtBody, false);
+        var vue = this;
+        function clickAtForm(event){
+            vue.clickAtForm = true;
+            if(vue.clickCloseButton)
+            {
+                document.getElementById('messages-view').removeEventListener('click', clickAtForm);
+                document.body.removeEventListener('click', clickAtBody);
+            }
+        };
+        function clickAtBody(event){
+            if(!vue.clickAtForm){
+                vue.clickAtForm = true;
+                document.getElementById('messages-view').removeEventListener('click', clickAtForm);
+                document.body.removeEventListener('click', clickAtBody);
+                vue.$emit('closeMessages');
+                vue.closeform();
+                return;
+            }
+            vue.clickAtForm = false;
+        };
   }
 }
 </script>

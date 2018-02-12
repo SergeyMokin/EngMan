@@ -1,13 +1,14 @@
 <template>
   <div class="sentence-task">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-      <h1>Задания по предложениям</h1><br/>
+      <h1>Сложи предложение</h1><br/>
       <div v-if = "!show" class = "form-border">
-          <select class = "select-form" v-model = "category">
+        <input placeholder="Категория" type="text" class = "select-form" list="task_sent_category" v-model = "category"/>
+        <datalist id = "task_sent_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
-        </select>
+        </datalist>
         <button v-on:click = "downloadSentenceTask">Старт</button><br/>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
         <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
@@ -39,7 +40,7 @@ export default {
         inProgress: false,
         errormessage: '',
         categories: [],
-        category: 'none',
+        category: '',
         show: false,
         sentence: {},
         returnSentence: {
@@ -53,9 +54,14 @@ export default {
       downloadSentenceTask(){
           if(this.inProgress) return;
           this.inProgress = true;
+          this.attempt = 0;
+          this.inProgress = false;
+          this.returnSentence.SentenceTaskId = -1;
+          this.returnSentence.Sentence = '';
+          this.returnSentence.Category = '';
           this.errormessage = '';
           this.completemessage = '';
-          if(this.category != 'none')
+          if(this.categories.indexOf(this.category) != -1)
           {
             api.getSentenceTask(this.category, this.id)
             .then(result => {
@@ -92,11 +98,7 @@ export default {
           {
               if(result.data){
                 if(this.attempt == 0) this.goodAnswer++;
-                this.attempt = 0;
                 this.inProgress = false;
-                this.returnSentence.SentenceTaskId = -1;
-                this.returnSentence.Sentence = '';
-                this.returnSentence.Category = '';
                 alert('Правильный ответ');
                 this.downloadSentenceTask();
               }
@@ -119,7 +121,7 @@ export default {
         this.attempt = 0;
         this.inProgress = false;
         this.errormessage = '';
-        this.category = 'none';
+        this.category = '';
         this.show = false;
         this.sentence = {};
         this.returnSentence = {
@@ -137,7 +139,6 @@ export default {
       .then(res => {
           this.inProgress = false;
           this.categories = res;
-          this.categories.push('none');
       })
       this.inProgress = false;
   }

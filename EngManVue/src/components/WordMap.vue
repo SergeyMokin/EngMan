@@ -3,11 +3,12 @@
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <h1>Карты слов</h1><br/>
       <div v-if = "!show" class = "form-border">
-          <select class = "select-form" v-model = "category">
+        <input placeholder="Категория" type="text" class = "select-form" list="task_word_category" v-model = "category"/>
+        <datalist id = "task_word_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
-        </select>
+        </datalist>
         <button v-on:click = "downloadWordMap">Старт</button><br/>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
         <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
@@ -49,7 +50,7 @@ export default {
         inProgress: false,
         errormessage: '',
         categories: [],
-        category: 'none',
+        category: '',
         show: false,
         word: {},
         returnWord: {
@@ -64,9 +65,15 @@ export default {
       downloadWordMap(){
           if(this.inProgress) return;
           this.inProgress = true;
+          this.attempt = 0;
+          this.inProgress = false;
+          this.returnWord.WordId = -1;
+          this.returnWord.Original = '';
+          this.returnWord.Translate = '';
+          this.returnWord.Category = '';
           this.errormessage = '';
           this.completemessage = '';
-          if(this.category != 'none')
+          if(this.categories.indexOf(this.category) != -1)
           {
             api.getWordMap(this.category, this.id)
             .then(result => {
@@ -104,12 +111,7 @@ export default {
           {
               if(result.data){
                 if(this.attempt == 0) this.goodAnswer++;
-                this.attempt = 0;
                 this.inProgress = false;
-                this.returnWord.WordId = -1;
-                this.returnWord.Original = '';
-                this.returnWord.Translate = '';
-                this.returnWord.Category = '';
                 alert('Правильный ответ');
                 this.downloadWordMap();
               }
@@ -132,7 +134,7 @@ export default {
         this.attempt = 0;
         this.inProgress = false;
         this.errormessage = '';
-        this.category = 'none';
+        this.category = '';
         this.show = false;
         this.word = {};
         this.returnWord = {
@@ -151,7 +153,6 @@ export default {
       .then(res => {
           this.inProgress = false;
           this.categories = res;
-          this.categories.push('none');
       })
       this.inProgress = false;
       this.$store.dispatch('getWords');

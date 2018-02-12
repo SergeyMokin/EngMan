@@ -1,5 +1,5 @@
 <template>
-  <div v-show = "$store.state.user.Role == 'admin'">
+  <div v-if = "$store.state.user.Role == 'admin'">
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
     <div v-if = "!click" class="rules-view-list">
       <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
@@ -10,7 +10,7 @@
       <button type = "submit" v-on:click = "add()">Добавить</button><br/><br/>
       <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..."><br/>
       <div v-for = 'el in tasks' :key = 'el.Id' class = "form-border">
-      <div class = "rules-list--element">
+      <div class = "rules-list--element admin">
         <span class = "span-rule--element">
             {{el.Word}}
         </span>
@@ -20,6 +20,7 @@
         <button type = "submit" v-on:click = "deletetask(el.Id)">Удалить</button>
       </div>
     </div>
+  <br/><br/>  
   </div>
   <div v-if = "click" style = "text-align: center">
           <br/><br/>

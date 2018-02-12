@@ -1,11 +1,11 @@
 <template>
   <div class="profile" id = "profile-form">
       <div class="loading" v-if = "inprogress">Loading&#8230;</div>
-      <div v-show = "!$store.state.user.Logined">
+      <div v-if = "!$store.state.user.Logined">
           <span class = "span-anonymous">Вам необходимо войти в профиль</span>
       </div>
-      <div v-show = "$store.state.user.Logined">
-          <a v-show = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b></a>
+      <div v-if = "$store.state.user.Logined">
+          <a v-if = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b></a>
           <button type = "submit" v-on:click = "toProfile()">Профиль</button>
           <button type = "submit" v-on:click = "logout()">Выйти</button>
       </div>
@@ -61,6 +61,8 @@ export default {
         function clickAtBody(event){
             if(!vue.clickAtForm){
                 vue.clickAtForm = true;
+                document.getElementById('profile-form').removeEventListener('click', clickAtForm);
+                document.body.removeEventListener('click', clickAtBody);
                 vue.$emit('closeform');
                 return;
             }
