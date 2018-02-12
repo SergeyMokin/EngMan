@@ -4,7 +4,7 @@ using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public class AdminSentenceTaskController : ApiController
     {
         private ISentenceTaskService service;
@@ -39,6 +39,7 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<IHttpActionResult> EditTask(SentenceTask task)
         {
@@ -53,6 +54,7 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IHttpActionResult> AddTask(SentenceTask task)
         {
@@ -67,6 +69,7 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteTask(int id)
         {

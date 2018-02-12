@@ -61,7 +61,8 @@ namespace EngMan.Service
                 for (int i = 0; i < arr.Count; i++)
                 {
                     var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
-                    var path = string.Format("C:\\Users\\limon\\Documents\\Tasks\\EngMan\\EngMan\\uploads\\" + time + images[i].Name);
+                    //path to folder with project
+                    var path = string.Format("C:\\Users\\Siarhei_Mokin\\Documents\\git\\myself\\EngMan\\EngMan\\uploads\\" + time + images[i].Name);
                     File.WriteAllBytes(path, arr[i]);
                     path = string.Format("http://localhost:58099/uploads/" + time + images[i].Name);
                     pathes.Add(path);

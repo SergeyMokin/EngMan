@@ -16,7 +16,7 @@ namespace EngMan.Service
 
         public User ValidateUser(string email, string password)
         {
-            var userList = rep.Users.ToList();
+            var userList = rep.Users;
             var user = userList.FirstOrDefault(x => x.Email == email && x.Password == password);
             return user;
         }

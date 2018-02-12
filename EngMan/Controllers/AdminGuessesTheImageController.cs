@@ -3,6 +3,7 @@ using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
 {
+    [Authorize]
     public class AdminGuessesTheImageController : ApiController
     {
         private IGuessesTheImageService service;
@@ -37,6 +38,7 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public IHttpActionResult EditTask(GuessesTheImage task)
         {
@@ -51,6 +53,7 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IHttpActionResult AddTask(GuessesTheImageToAdd task)
         {
@@ -65,6 +68,7 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         public IHttpActionResult DeleteTask(int id)
         {

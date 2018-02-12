@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
 {
+    [Authorize]
     public class GuessesTheImageController : ApiController
     {
         private IGuessesTheImageService service;

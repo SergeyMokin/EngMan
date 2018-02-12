@@ -1,26 +1,22 @@
 ﻿using System;
 using EngMan.Service;
+using EngMan.Repository;
 using Microsoft.Owin.Security;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Owin.Security.OAuth;
-
 namespace EngMan.Providers
 {
     public class OAuthProvider : OAuthAuthorizationServerProvider
     {
-        IUserService userService;
-
-        public OAuthProvider(IUserService _service) {
-            userService = _service;
-        }
         #region[GrantResourceOwnerCredentials]
         public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
             return Task.Factory.StartNew(() =>
             {
+                var userService = new UserService(new UserRepository(new EFDbContext()));
                 var userName = context.UserName;
                 var password = context.Password;
                 var user = userService.ValidateUser(userName, password);

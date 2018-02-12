@@ -4,7 +4,7 @@ using EngMan.Service;
 using EngMan.Models;
 namespace EngMan.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public class WordController : ApiController
     {
         private IWordService service;
@@ -53,7 +53,8 @@ namespace EngMan.Controllers
             }
             return NotFound();
         }
-        
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IHttpActionResult> AddWord(Word word)
         {
@@ -67,7 +68,8 @@ namespace EngMan.Controllers
             }
             return NotFound();
         }
-        
+
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteWord(int id)
         {

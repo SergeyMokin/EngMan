@@ -36,7 +36,7 @@ namespace EngMan.Repository
                 }
                 var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
                 //path to folder with project
-                var path = string.Format("change this" + time + image.Image.Name);
+                var path = string.Format("C:\\Users\\Siarhei_Mokin\\Documents\\git\\myself\\EngMan\\EngMan\\uploads\\" + time + image.Image.Name);
                 File.WriteAllBytes(path, bytearr.ToArray());
                 path = string.Format("http://localhost:58099/uploads/" + time + image.Image.Name);
                 returnimg = new GuessesTheImage

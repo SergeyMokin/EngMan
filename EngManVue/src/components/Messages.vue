@@ -148,15 +148,15 @@ export default {
             vue.clickAtForm = true;
             if(vue.clickCloseButton)
             {
-                document.getElementById('messages-view').removeEventListener('click', clickAtForm);
                 document.body.removeEventListener('click', clickAtBody);
+                document.getElementById('messages-view').removeEventListener('click', clickAtForm);
             }
         };
         function clickAtBody(event){
             if(!vue.clickAtForm){
                 vue.clickAtForm = true;
-                document.getElementById('messages-view').removeEventListener('click', clickAtForm);
                 document.body.removeEventListener('click', clickAtBody);
+                document.getElementById('messages-view').removeEventListener('click', clickAtForm);
                 vue.$emit('closeMessages');
                 vue.closeform();
                 return;

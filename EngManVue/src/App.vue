@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="loading" v-if = "inProgress">Loading&#8230;</div>
     <headerofapp/>
     <router-view></router-view>
     <footerofapp/>
@@ -13,13 +14,20 @@ import api from './api/api'
 
 export default {
   name: 'app',
+  data: () => {
+    return {
+      inProgress: false
+    }
+  },
   components: {
     headerofapp 
     , footerofapp
   },
   created(){
+      if(this.inProgress) return;
       if(this.$cookie.get('user.login.token.localhost:8080'))
       {
+        this.inProgress = true;
         api.addToken(this.$cookie.get('user.login.token.localhost:8080'));
         api.getUserData()
         .then(res => {
@@ -31,12 +39,20 @@ export default {
             this.$store.state.user.FirstName = res.FirstName;
             this.$store.state.user.LastName = res.LastName;
             this.$store.state.user.Email = res.Email;
+            this.inProgress = false;
           }
           else{
             console.log('NotFound404');
             api.deleteToken();
             this.$cookie.delete('user.login.token.localhost:8080');
+            this.inProgress = false;
           }
+        })
+        .catch(e => {
+            console.log('NotFound404');
+            api.deleteToken();
+            this.$cookie.delete('user.login.token.localhost:8080');
+            this.inProgress = false;
         })
         return;
       }
