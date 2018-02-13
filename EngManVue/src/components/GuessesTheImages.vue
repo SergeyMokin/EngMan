@@ -8,7 +8,7 @@
         <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
       </div>
       <div v-if = "show" class = "form-border">
-        <img :src = "task.Path" style = "width: 50%">
+        <img title="Угадай кто на картинке" :src = "task.Path" style = "width: 50%">
         <br/>
         <input type = "text" v-model = "returnTask.Word" class = "sentence-input">
         <button v-on:click = "verificationCorrectness">Проверить</button><br/>

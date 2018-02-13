@@ -164,6 +164,11 @@ export default {
     .then(response => response.data)
     .catch(e => e);
   },
+  ReadMessages(messages){
+    return axios.post(url + '/message/readmessages/', messages)
+    .then(response => response.data)
+    .catch(e => e)
+  },
   getMessages(){
     return axios.get(url + '/message/getallmessages/')
     .then(response => response.data)

@@ -29,10 +29,22 @@ namespace EngMan.Service
                 Sender = usserv.GetUser(x.SenderId),
                 Beneficiary = usserv.GetUser(x.BeneficiaryId),
                 Text = x.Text,
-                Time = x.Time
-            }); ;
+                Time = x.Time,
+                CheckReadMes = x.CheckReadMes
+            });
         }
 
+        public IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages) {
+            return rep.ReadMessages(messages).ToList().Select(x => new ReturnMessage
+            {
+                MessageId = x.MessageId,
+                Sender = usserv.GetUser(x.SenderId),
+                Beneficiary = usserv.GetUser(x.BeneficiaryId),
+                Text = x.Text,
+                Time = x.Time,
+                CheckReadMes = x.CheckReadMes
+            });
+        }
         public int DeleteMessage(int mesId, int userId)
         {
             return rep.DeleteMessage(mesId, userId);

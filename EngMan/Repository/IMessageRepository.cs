@@ -9,5 +9,7 @@ namespace EngMan.Repository
         IEnumerable<Message> GetMessages(int userId);
 
         int DeleteMessage(int mesId, int userId);
+
+        IEnumerable<Message> ReadMessages(IEnumerable<Message> messages);
     }
 }

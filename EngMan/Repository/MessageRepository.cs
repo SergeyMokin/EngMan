@@ -4,13 +4,32 @@ using EngMan.Models;
 
 namespace EngMan.Repository
 {
-    public class MessageRepository: IMessageRepository
+    public class MessageRepository : IMessageRepository
     {
         private EFDbContext context;
 
         public MessageRepository(EFDbContext _context)
         {
             context = _context;
+        }
+
+        public IEnumerable<Message> ReadMessages(IEnumerable<Message> messages){
+            if (messages != null)
+            {
+                foreach (var el in messages)
+                {
+                    if (el != null)
+                    {
+                        var entity = context.Messages.Find(el.MessageId);
+                        if (entity != null)
+                        {
+                            entity.CheckReadMes = true;
+                        }
+                    }
+                }
+                context.SaveChanges();
+            }
+            return messages;
         }
 
         public Message SendMessage(Message mes, int userId)

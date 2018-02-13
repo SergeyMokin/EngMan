@@ -52,9 +52,9 @@
           <button type = "submit" v-on:click = "showHelp = !showHelp" class = "button">Помощь</button>
           <div v-if = "showHelp" class = "form-border">
             <span>Для навигации по сайту наведите мышкой на иконку меню</span><br/><br/>
-            <img src = "../assets/help-menu.png" style = "width: 300px; border: none; border-radius: 10px;"><br/><br/>
+            <img title="Картинка навигации по сайту" src = "../assets/help-menu.png" style = "width: 300px; border: none; border-radius: 10px;"><br/><br/>
             <span>Для управления аккаунтом нажмите на иконку головы слева вверху экрана</span><br/><br/>
-            <img src = "../assets/help-account.png" style = "width: 300px; border: none; border-radius: 10px;"><br/><br/>
+            <img title="Картинка навигации по сайту" src = "../assets/help-account.png" style = "width: 300px; border: none; border-radius: 10px;"><br/><br/>
           </div>
       </div>
   </div>

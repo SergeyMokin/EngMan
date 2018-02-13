@@ -14,6 +14,7 @@
         <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
       </div>
       <div v-if = "show" class = "form-border">
+        <h1>Категория: {{category}}</h1><br/>
         <h2>{{sentence.Sentence}}</h2>
         <br/>
         <input type = "text" v-model = "returnSentence.Sentence" class = "sentence-input">

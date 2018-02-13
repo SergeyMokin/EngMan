@@ -61,7 +61,6 @@ export default {
         function clickAtBody(event){
             if(!vue.clickAtForm){
                 vue.clickAtForm = true;
-                document.getElementById('profile-form').removeEventListener('click', clickAtForm);
                 document.body.removeEventListener('click', clickAtBody);
                 vue.$emit('closeform');
                 return;

@@ -3,7 +3,7 @@
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div class = "label-form-mes">
             <span>Chat</span>
-            <span style = "margin-left: 370px; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;">close</span>
+            <span style = "margin-left: 370px; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;"><img title="Закрыть окно" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
       </div>
       <input placeholder="Введите/выберите мэил" type="text" class = "select-form-mes" list="users_emails" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
       <datalist id = "users_emails">
@@ -11,7 +11,13 @@
                 {{user.Email}}
             </option>
       </datalist>
-      <div class = "messages">
+      <div v-if = "beneficiary == undefined && beneficiaryEmail == '' && $store.state.newmessUsers.length > 0" class = "new-mess-users-list">
+          <p><b>New messages:</b></p>
+          <div v-for = "el in $store.state.newmessUsers" :key = "el.Id" class = "new-mess-users-element" v-on:click = "beneficiaryEmail = el.Email;changeBeneficiary(beneficiaryEmail)">
+            {{el.Email}}
+          </div>
+      </div>
+      <div v-else class = "messages">
           <div v-for = "el in sortedmessages" :key = "el.MessageId">
               <div v-if = "el.Sender.Id == sender.Id" class = "label-sender"><span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span> <span style = "font-size: 10px">{{dateTime(el.Time)}}</span> You</div>
               <div v-if = "el.Sender.Id == sender.Id" class = "message-sender">
@@ -81,7 +87,33 @@ export default {
           this.beneficiary = this.$store.getters.users.filter(function(user){
               return user.Email == email;
           })[0];
-          this.inProgress = false;
+          if(this.$store.state.newmess)
+          {
+            for(var i = 0; i < this.sortedmessages.length; i++)
+            {
+                if(!this.sortedmessages[i].CheckReadMes)
+                {
+                    api.ReadMessages(this.sortedmessages)
+                    .then(res => {
+                        this.inProgress = false;
+                        if(res != undefined)
+                        {
+                            if(res.length > 0)
+                            {
+                                this.$store.dispatch('getMessages');
+                            }
+                        }
+                    })
+                    .catch(e => {
+                        this.inProgress = false;
+                    })
+                }
+            }
+            this.inProgress = false;
+          }
+          else{
+            this.inProgress = false;
+          }
       },
       sendMessage(){
           if(this.inProgress) return;
@@ -95,13 +127,14 @@ export default {
                 var minutes = date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes();
                 var seconds = date.getSeconds() < 10 ? "0"+date.getSeconds() : date.getSeconds();
                 var month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
-                var day = date.getDate < 10 ? "0"+date.getDate() : date.getDate();
+                var day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
                 api.sendMessage({
                     MessageId: 0,
                     SenderId: this.sender.Id,
                     BeneficiaryId: this.beneficiary.Id,
                     Text: this.message,
-                    Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00"
+                    Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
+                    CheckReadMes: 0
                 })
                 .then(res => 
                 {
@@ -119,7 +152,7 @@ export default {
                 var date = new Date(_date);
                 var hours = date.getHours() < 10 ? "0"+date.getHours() : date.getHours();
                 var minutes = date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes();
-                return date.getDay() + '.' + date.getMonth() + '.' + date.getFullYear() + ' - ' + hours + ":" + minutes;
+                return date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() + ' - ' + hours + ":" + minutes;
       }
   },
   computed: {
@@ -129,7 +162,7 @@ export default {
       sortedmessages(){
           this.sender = this.$store.state.user;
           var vue = this;
-          if(this.beneficiary != undefined)
+          if(this.beneficiary != undefined && this.beneficiaryEmail != '')
           return this.$store.getters.messages.filter(function(mes){
               return mes.Beneficiary.Id == vue.beneficiary.Id || mes.Sender.Id == vue.beneficiary.Id
           });
@@ -149,14 +182,12 @@ export default {
             if(vue.clickCloseButton)
             {
                 document.body.removeEventListener('click', clickAtBody);
-                document.getElementById('messages-view').removeEventListener('click', clickAtForm);
             }
         };
         function clickAtBody(event){
             if(!vue.clickAtForm){
                 vue.clickAtForm = true;
                 document.body.removeEventListener('click', clickAtBody);
-                document.getElementById('messages-view').removeEventListener('click', clickAtForm);
                 vue.$emit('closeMessages');
                 vue.closeform();
                 return;

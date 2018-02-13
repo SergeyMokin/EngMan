@@ -19,6 +19,7 @@
         </div>
       </div>
       <div v-if = "show" class = "form-border">
+        <h1>Категория: {{category}}</h1><br/>
         <h2>{{word.Original}}</h2>
         <br/>
         <div v-for = "el in word.Translate" :key = "el" class = "wordmap-list--element" v-on:click = "returnWord.Translate = el">

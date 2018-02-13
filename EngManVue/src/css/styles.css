@@ -314,6 +314,7 @@ label{
     border-width: 0.5px;
 }
 .messages-view{
+    margin-right: 55px;
     position: fixed;
     right: 1%;
     bottom: 2.5%;
@@ -331,6 +332,37 @@ label{
     margin-left: 10px;
     height: 345px;
     overflow-y: scroll;
+}
+.new-mess-users-list{
+    margin: 0.5%;
+    margin-left: 10px;
+    height: 345px;
+    overflow-y: scroll;
+}
+.new-mess-users-element{
+    cursor: pointer;
+}
+.new-mes-select{
+    background:green;
+    width: 10px;
+    height: 10px;
+}
+.new-mes-in{
+    -webkit-border-radius: 50em;
+	-moz-border-radius: 50em;
+    border-radius: 50em;
+    -webkit-animation: blink-mes 3s linear infinite;
+    animation: blink-mes 3s linear infinite;
+}
+@-webkit-keyframes blink-mes {
+    0% { background: rgba(34, 34, 34, 1); }
+    50% { background: rgba(34, 34, 34, 0); }
+    100% { background: rgba(34, 34, 34, 1); }
+}
+@keyframes blink-mes {
+    0% { background: rgba(34, 34, 34, 1); }
+    50% { background: rgba(34, 34, 34, 0); }
+    100% { background: rgba(34, 34, 34, 1); }
 }
 .label-form-mes{
     background: rgba(0,0,0,.15);

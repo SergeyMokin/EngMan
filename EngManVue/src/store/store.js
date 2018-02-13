@@ -10,6 +10,8 @@ const state = {
     , words: []
     , users: []
     , messages: []
+    , newmess: false
+    , newmessUsers: []
     , guessestheimages: []
     , user: {
         Logined: false,
@@ -34,8 +36,18 @@ const getters = {
 const mutations = {
     getMessages(state, result)
     {
+        state.newmessUsers = [];
+        state.newmess = false;
         state.messages = result;
         state.messages = state.messages.reverse();
+        for(var i = 0; i < state.messages.length; i++)
+        {
+            if(!state.messages[i].CheckReadMes && state.messages[i].Sender.Id != state.user.Id)
+            {
+                state.newmess = true;
+                state.newmessUsers.push(state.messages[i].Sender);
+            }
+        }
     },
     getGuessesTheImages(state, result)
     {

@@ -3,6 +3,7 @@ using EngMan.Service;
 using EngMan.Models;
 using System.Web;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace EngMan.Controllers
 {
@@ -42,6 +43,16 @@ namespace EngMan.Controllers
                         return Ok(service.SendMessage(mes, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
                     }
                 }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IHttpActionResult ReadMessages(IEnumerable<Message> mesgs)
+        {
+            if (mesgs != null)
+            {
+                return Ok(service.ReadMessages(mesgs));
             }
             return NotFound();
         }

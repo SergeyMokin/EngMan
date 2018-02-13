@@ -20,6 +20,9 @@ namespace EngMan.Models
 
         [DataMember]
         public System.DateTime Time { get; set; }
+
+        [DataMember]
+        public bool CheckReadMes { get; set; }
     }
 
     public class ReturnMessage
@@ -39,5 +42,8 @@ namespace EngMan.Models
 
         [DataMember]
         public System.DateTime Time { get; set; }
+
+        [DataMember]
+        public bool CheckReadMes { get; set; }
     }
 }

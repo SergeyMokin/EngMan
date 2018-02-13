@@ -25,6 +25,13 @@ export default {
   },
   created(){
       if(this.inProgress) return;
+      var vue = this;
+      setInterval(function(){
+      if(vue.$store.state.user.Logined)
+        {
+          vue.$store.dispatch('getMessages');
+        }
+      }, 60000);
       if(this.$cookie.get('user.login.token.localhost:8080'))
       {
         this.inProgress = true;
@@ -33,6 +40,7 @@ export default {
         .then(res => {
           if(res.Id)
           {
+            this.$store.dispatch('getMessages');
             this.$store.state.user.Logined = true;
             this.$store.state.user.Id = res.Id;
             this.$store.state.user.Role = res.Role;
