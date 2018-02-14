@@ -417,8 +417,8 @@ label{
     height: 50px;
 }
 .textarea-mes{
-    width: 400px;
-    height: 45px;
+    width: 350px;
+    height: 70px;
     border-radius: 10px;
     border-style: solid;
     border-width: 1px;
@@ -426,6 +426,8 @@ label{
     outline: none;
     resize: none;
     padding: 0.5%;
+    float: left;
+    margin-left: 15px;
 }
 .select-form-mes{
     outline:none;

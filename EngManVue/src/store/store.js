@@ -36,6 +36,10 @@ const getters = {
 const mutations = {
     getMessages(state, result)
     {
+        Array.prototype.unique = function() {
+            return this.filter(function(value, index, _this) {
+                return _this.indexOf(value) === index;
+        })}
         state.newmessUsers = [];
         state.newmess = false;
         state.messages = result;
@@ -45,7 +49,7 @@ const mutations = {
             if(!state.messages[i].CheckReadMes && state.messages[i].Sender.Id != state.user.Id)
             {
                 state.newmess = true;
-                state.newmessUsers.push(state.messages[i].Sender);
+                state.newmessUsers.push(state.messages[i].Sender).unique();
             }
         }
     },

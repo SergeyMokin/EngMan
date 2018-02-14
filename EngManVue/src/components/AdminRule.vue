@@ -23,21 +23,21 @@
   <div v-if = "clickRule" style = "text-align: center">
           <br/><br/>
           <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "saveRule(rule)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
           <span>Название</span>
           <textarea class = "rule-edit" type = "text" v-model = "rule.Title"/><br/>
           <span>Категория</span>
           <textarea class = "rule-edit" type = "text" v-model = "rule.Category"/><br/>
           <span>Текст</span>
           <textarea class = "rule-edit" type = "text" v-model = "rule.Text" style = "height: 450px"/><br/>
-          <div style = "width: 60%; text-align: left; margin-left: 20%"><input type="file" accept="image/*" @change="onFileChange" multiple class = "button-classic"><br/></div>
+          <span style = "float: left; margin-right: 10px; margin-left: 20%;" v-on:click = "downloadOnServer()"><img title="Загрузить на сервер" style = "cursor:pointer;width: 25px; height: auto;" type = "img" src = "../assets/upload-icon.png"></span>
+          <span style = "float: left; text-align: left;"><input type="file" accept="image/*" @change="onFileChange" multiple class = "button-classic"><br/></span>
           <div v-if = 'pathesOfImages.length > 0' v-for = 'el in pathesOfImages' :key = 'el'>
               <span>
                   {{el}}
               </span>
-          </div>
-          <button type = "submit" v-on:click = "downloadOnServer">Загрузить</button><br/>
-          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-          <button type = "submit" v-on:click = "saveRule(rule)"><span style = "color: rgb(248, 248, 248);" v-if = "!clickAddRule">Сохранить</span><span style = "color: rgb(248, 248, 248);" v-if = "clickAddRule">Добавить</span></button><br/><br/>
+          </div><br/><br/>
+          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
   </div>
   </div>
 </template>

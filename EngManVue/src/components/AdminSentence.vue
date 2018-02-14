@@ -8,7 +8,7 @@
         <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
         <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
         <span style = "cursor: pointer;" v-on:click = "AddSentence()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-        <input placeholder="Категория" type="text" class = "select-form" list="sentence_category" v-model = "category"/>
+        <input placeholder="Выберите..." type="text" class = "select-form" list="sentence_category" v-model = "category"/>
         <datalist id = "sentence_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
@@ -28,12 +28,12 @@
       <div v-if = "clickSentence" style = "text-align: center">
           <br/><br/>
           <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "saveSentence(sentence)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
           <span>Категория</span>
           <textarea type = "text" v-model = "sentence.Category" class = "sentence-edit"/><br/>
           <span>Предложение</span>
           <textarea type = "text" v-model = "sentence.Sentence" class = "sentence-edit"/><br/>
-          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-          <button type = "submit" v-on:click = "saveSentence(sentence)"><span style = "color: rgb(248, 248, 248);" v-if = "!clickAddSentence">Сохранить</span><span style = "color: rgb(248, 248, 248);" v-if = "clickAddSentence">Добавить</span></button><br/><br/>
+          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
       </div>
   </div>
 </template>

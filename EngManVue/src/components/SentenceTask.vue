@@ -4,10 +4,9 @@
       <h2>Составь предложение</h2><br/>
       <div v-if = "!show" class = "form-border">
         <div class = "button-close"><router-link to="/grammar"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-        <input placeholder="Категория" type="text" class = "select-form" list="task_sent_category" v-model = "category"/><br/>
-        <span style = "float: right; bottom: 0" v-on:click = "downloadSentenceTask"><img src = "../assets/start-icon.png" title="Начать" style = "cursor: pointer; width: 25px; "></span>
-        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-        <span style = "margin-left: 25px" v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
+        <div v-on:click = "downloadSentenceTask()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
+        <input placeholder="Выберите..." type="text" class = "select-form" list="task_sent_category" v-model = "category"/><br/>
+        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
         <datalist id = "task_sent_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
@@ -16,12 +15,12 @@
       </div>
       <div v-if = "show" class = "form-border">
         <div class = "button-close" v-on:click = "closeForm"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
+        <div v-on:click = "downloadSentenceTask()"><img title="Следующий" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/arrow-right.png"></div>
+        <div v-on:click = "verificationCorrectness()"><img title="Проверить" style = "width: 20px; height: auto; margin-right: 50px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
         <span style = "font-size: larger;">{{sentence.Sentence}}</span>
         <br/>
         <input type = "text" v-model = "returnSentence.Sentence" class = "sentence-input"/>
-        <span style = "float: right; bottom: 0" v-on:click = "downloadSentenceTask"><img src = "../assets/arrow-right.png" title="Следующий" style = "cursor: pointer; width: 25px; "></span>
-        <span style = "float: right; bottom: 0" v-on:click = "verificationCorrectness"><img src = "../assets/start-icon.png" title="Проверить" style = "cursor: pointer; width: 25px; "></span><br/>
-        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
+        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
 </template>
@@ -116,6 +115,7 @@ export default {
       },
       closeForm(){
         this.completemessage = 'Вы успешно закончили! Правильных ответов: ' + this.goodAnswer + '/' + this.countOfSentences;
+        alert(this.completemessage);
         this.countOfSentences = 0;
         this.id = -1;
         this.goodAnswer = 0;

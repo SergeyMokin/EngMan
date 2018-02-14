@@ -30,38 +30,43 @@
             deleteUserWord(id){
                 if(this.inProgress) return;
                 this.inProgress = true;
-                api.deleteUserWord(id)
-                .then(res => {
-                    if(res > 0)
-                    {
-                        alert('Успешно удалён');
-                        this.inProgress = true;
-                        api.getUserDictionary()
-                        .then(res => {
-                            if(res.User)
-                            {
-                                this.dictionary = res;
+                if(confirm("Вы уверены, что хотите удалить это слово?") == true){
+                    api.deleteUserWord(id)
+                    .then(res => {
+                        if(res > 0)
+                        {
+                            alert('Успешно удалён');
+                            this.inProgress = true;
+                            api.getUserDictionary()
+                            .then(res => {
+                                if(res.User)
+                                {
+                                    this.dictionary = res;
+                                }
+                                else
+                                {
+                                    this.errorMessage = 'Словарь пуст';
+                                }
+                                this.inProgress = false;
+                            })
+                            .catch(e => {
+                                this.errorMessage = 'Сервер недоступен';
+                                this.inProgress = false;
+                            })  
                             }
                             else
                             {
-                                this.errorMessage = 'Словарь пуст';
-                            }
-                            this.inProgress = false;
-                        })
-                        .catch(e => {
-                            this.errorMessage = 'Сервер недоступен';
-                            this.inProgress = false;
-                        })  
-                    }
-                    else
-                    {
-                        alert('В базе данных не существует такого слова, обновите страницу');
-                    }
+                                alert('В базе данных не существует такого слова, обновите страницу');
+                        }
+                    })
+                    .catch(e => {
+                        this.inProgress = false;
+                    })
+                }
+                else{
+                    alert('Удаление отменено');
                     this.inProgress = false;
-                })
-                .catch(e => {
-                    this.inProgress = false;
-                })
+                }
             },
         },
         computed: {
@@ -72,8 +77,8 @@
                 if(this.dictionary.Words != undefined)
                 {
                     this.dictionary.Words.sort((lword, rword) => {
-                        if(lword.Id > rword.Id) return 1;
-                        if(lword.Id < rword.Id) return -1;
+                        if(lword.Category > rword.Category) return 1;
+                        if(lword.Category < rword.Category) return -1;
                         return 0;
                     });
                     var vue = this;

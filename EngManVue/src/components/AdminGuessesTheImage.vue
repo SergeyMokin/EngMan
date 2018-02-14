@@ -23,11 +23,11 @@
   <div v-if = "click" style = "text-align: center">
           <br/><br/>
           <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "save(task)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
           <span>Слово на английском</span>
           <textarea class = "rule-edit" type = "text" v-model = "task.Word"/><br/>
           <div v-if = "clickAdd" style = "width: 60%; text-align: left; margin-left: 20%"><input type="file" accept="image/*" @change="onFileChange" class = "button-classic"><br/></div>
-          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-          <button type = "submit" v-on:click = "save(task)"><span style = "color: rgb(248, 248, 248);" v-if = "!clickAdd">Сохранить</span><span style = "color: rgb(248, 248, 248);" v-if = "clickAdd">Добавить</span></button><br/><br/>
+          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
   </div>
   </div>
 </template>
@@ -132,6 +132,7 @@ export default {
                       this.$store.dispatch('getGuessesTheImages');
                       this.closeEditForm();
                   }
+                  this.errormessage = 'Сервер недоступен или у вас нет прав';
                   this.inProgress = false;
               })
               .catch(e => {
@@ -139,7 +140,6 @@ export default {
                   this.errormessage = 'Сервер недоступен или у вас нет прав';
               })
           }
-          this.inProgress = false;
       },
       deletetask(id){
           if(this.inProgress) return;

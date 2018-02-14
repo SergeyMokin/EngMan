@@ -4,15 +4,14 @@
       <h2>Карты слов</h2><br/>
       <div v-if = "!show" class = "form-border">
         <div class = "button-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-        <input placeholder="Категория" type="text" class = "select-form" list="task_word_category" v-model = "category"/><br/>
+        <div v-on:click = "downloadWordMap()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
+        <input placeholder="Выберите..." type="text" class = "select-form" list="task_word_category" v-model = "category"/><br/>
         <datalist id = "task_word_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
         </datalist>
-        <span style = "float: right; bottom: 0" v-on:click = "downloadWordMap()"><img src = "../assets/start-icon.png" title="Начать" style = "cursor: pointer; width: 25px;"></span>
-        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-        <span style = "margin-left: 25px" v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
+        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
         <br/>
         <div v-for = 'el in words' :key = 'el.WordId'>
             <div title = "Добавить себе в словарь" class = "wordmap-list--element" v-on:click = "addWordToDictionary(el)">
@@ -22,6 +21,8 @@
       </div>
       <div v-if = "show" class = "form-border">
         <div class = "button-close" v-on:click = "closeForm()"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
+        <div v-on:click = "downloadWordMap()"><img title="Следующий" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/arrow-right.png"></div>
+        <div v-on:click = "verificationCorrectness()"><img title="Проверить" style = "width: 20px; height: auto; margin-right: 50px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
         <span style = "font-size: larger;">{{word.Original}}</span>
         <br/>
         <div v-for = "el in word.Translate" :key = "el" v-on:click = "returnWord.Translate = el">
@@ -29,9 +30,7 @@
                 {{el}}
             </div>
         </div>
-        <span style = "float: right; bottom: 0" v-on:click = "downloadWordMap()"><img src = "../assets/arrow-right.png" title="Следующий" style = "cursor: pointer; width: 25px;"></span>
-        <span style = "float: right; bottom: 0" v-on:click = "verificationCorrectness()"><img src = "../assets/start-icon.png" title="Проверить" style = "cursor: pointer; width: 25px;"></span>
-        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
+        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
 </template>
@@ -150,6 +149,7 @@ export default {
       },
       closeForm(){
         this.completemessage = 'Вы успешно закончили! Правильных ответов: ' + this.goodAnswer + '/' + this.countOfWords;
+        alert(this.completemessage);
         this.countOfWords = 0;
         this.id = -1;
         this.goodAnswer = 0;

@@ -2,6 +2,8 @@
   <div>
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
     <div v-if = "!clickEdit && !clickChangePassword" class = "users-view-list">
+        <span style = "float: right; margin-right: 10px" v-on:click = "clickChangePassword = true"><img title="Изменить пароль" style = "cursor: pointer; width: 30px; height: auto;" type = "img" src = "../assets/security-icon.png"></span>
+        <span style = "float: right; margin-top: 5px" v-on:click = "clickEdit = true"><img title="Редактировать профиль" style = "cursor: pointer; width: 20px; height: auto;" type = "img" src = "../assets/edit-icon.png"></span>
         <br/><br/>
          <div class = "form-border">
             <div class = "users-list--element">
@@ -13,8 +15,6 @@
             <div class = "users-list--element">
                 <a><b>Мэил:</b> {{user.Email}}</a>
             </div>
-            <button type = "submit" v-on:click = "clickEdit = true">Изменить профиль</button>
-            <button type = "submit" v-on:click = "clickChangePassword = true">Изменить пароль</button>
         </div>
         <br/><br/>
     </div>
@@ -22,6 +22,7 @@
           <br/><br/>
           <div class = "form-border">
             <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
+            <span v-on:click = "saveUser()"><img title="Сохранить изменения" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
             <span>Имя</span>
             <textarea class = "user-edit" type = "text" v-model = "user.FirstName"/><br/>
             <span>Фамилия</span>
@@ -31,7 +32,6 @@
             <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
             <span v-if = "!$v.user.FirstName.required || !$v.user.LastName.required || !$v.user.Email.required" class = "span-error-message">Заполните все поля<br/></span>
             <span v-if = "!$v.user.Email.email" class = "span-error-message">Введите корректный мэил<br/></span>
-            <button type = "submit" v-on:click = "saveUser()">Сохранить</button>
           </div>
           <br/><br/>
     </div>
@@ -39,6 +39,7 @@
           <br/><br/>
           <div class = "form-border">
             <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
+            <span v-on:click = "changePassword()"><img title="Изменить пароль" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
             <span>Старый пароль</span>
             <input class = "user-edit" type = "password" v-model = "oldpassword" style = "height: 30px; text-align: center;"/><br/>
             <span>Новый пароль</span>
@@ -46,7 +47,6 @@
             <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
             <span v-if = "(!$v.oldpassword.required || !$v.newpassword.required) && ($v.oldpassword.$error || $v.newpassword.$error)" class = "span-error-message">Заполните все поля<br/></span>
             <span v-if = "!$v.newpassword.minlength && $v.newpassword.$error" class = "span-error-message">Новый пароль должен содержать не меньше 8 символов<br/></span>
-            <button type = "submit" v-on:click = "changePassword()">Изменить</button>
           </div>
           <br/><br/>
     </div>

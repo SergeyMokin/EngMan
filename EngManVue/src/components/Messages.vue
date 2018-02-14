@@ -2,7 +2,7 @@
   <div id = "messages-view" class = 'messages-view'>
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div class = "label-form-mes">
-            <span>Chat</span>
+            <span>Сообщения</span>
             <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;"><img title="Закрыть окно" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
       </div>
       <input :disabled = "chooseUser" v-bind:class = "{'messages-input-choosen': chooseUser}" placeholder="Поиск..." type="text" class = "select-form-mes" list="users_emails" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
@@ -32,8 +32,8 @@
       </div>
       <div class = "input-form-mes">
             <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''"/>
+            <span style = "float: right; font-size:10px; cursor: pointer; margin-right: 15px; margin-top: 5px" v-on:click = "sendMessage();"><img title="Отправить" style = "width: 60px; height: auto" type = "img" src = "../assets/start-icon.png"></span>
       </div>
-      <button v-on:click = "sendMessage">Отправить</button>
   </div>
 </template>
 
