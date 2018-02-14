@@ -1,20 +1,21 @@
 <template>
   <div class="sentence-task">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-      <h1>Угадай что на картинке</h1><br/>
+      <h2>Угадай что на картинке</h2><br/>
       <div v-if = "!show" class = "form-border">
-        <button v-on:click = "downloadTask">Старт</button><br/>
-        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-        <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
+        <div class = "button-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
+        <span style = "float: right; bottom: 0" v-on:click = "downloadTask()"><img src = "../assets/start-icon.png" title="Начать" style = "cursor: pointer; width: 25px;"></span>
+        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
+        <span style = "margin-left: 25px" v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
       </div>
       <div v-if = "show" class = "form-border">
+        <div class = "button-close" v-on:click = "closeForm"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
         <img title="Угадай кто на картинке" :src = "task.Path" style = "width: 50%">
         <br/>
         <input type = "text" v-model = "returnTask.Word" class = "sentence-input">
-        <button v-on:click = "verificationCorrectness">Проверить</button><br/>
-        <button v-on:click = "closeForm">Завершить</button><br/>
-        <button v-on:click = "downloadTask">Следующий</button><br/>
-        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
+        <span style = "float: right; bottom: 0" v-on:click = "downloadTask()"><img src = "../assets/arrow-right.png" title="Следующий" style = "cursor: pointer; width: 25px;"></span>
+        <span style = "float: right; bottom: 0" v-on:click = "verificationCorrectness()"><img src = "../assets/start-icon.png" title="Проверить" style = "cursor: pointer; width: 25px;"></span>
+        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
 </template>

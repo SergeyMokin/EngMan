@@ -11,10 +11,12 @@ namespace EngMan.Controllers
     public class AccountController : ApiController
     {
         private readonly IUserService service;
+        private readonly IUserDictionaryService serviceDictionary;
 
-        public AccountController(IUserService _service)
+        public AccountController(IUserService _service, IUserDictionaryService _serviceDictionary)
         {
             service = _service;
+            serviceDictionary = _serviceDictionary;
         }
 
         [AllowAnonymous]
@@ -38,6 +40,48 @@ namespace EngMan.Controllers
             if (users != null)
             {
                 return Ok(users);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetUserDictionary()
+        {
+            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            {
+                var result = serviceDictionary.Get(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IHttpActionResult AddWordToDictionary(UserWord word)
+        {
+            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            {
+                var result = serviceDictionary.Add(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), word);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult DeleteWordFromDictionary(int id)
+        {
+            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            {
+                var result = serviceDictionary.Delete(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), id);
+                if (result > 0)
+                {
+                    return Ok(result);
+                }
             }
             return NotFound();
         }

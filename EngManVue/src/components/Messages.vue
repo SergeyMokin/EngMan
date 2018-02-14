@@ -3,9 +3,10 @@
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div class = "label-form-mes">
             <span>Chat</span>
-            <span style = "margin-left: 370px; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;"><img title="Закрыть окно" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+            <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;"><img title="Закрыть окно" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
       </div>
-      <input placeholder="Введите/выберите мэил" type="text" class = "select-form-mes" list="users_emails" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
+      <input :disabled = "chooseUser" v-bind:class = "{'messages-input-choosen': chooseUser}" placeholder="Поиск..." type="text" class = "select-form-mes" list="users_emails" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
+      <span v-if = "chooseUser" style = "float: left; font-size:10px; cursor: pointer" v-on:click = "activeInputChooseUser"><img title="Вернуть к выбору пользователя" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>
       <datalist id = "users_emails">
             <option v-for = "user in users" v-if = "user.Id != $store.state.user.Id" :key = "user.Id">
                 {{user.Email}}
@@ -30,7 +31,7 @@
           </div>
       </div>
       <div class = "input-form-mes">
-            <textarea class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == 'none'"/>
+            <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''"/>
       </div>
       <button v-on:click = "sendMessage">Отправить</button>
   </div>
@@ -43,6 +44,7 @@ export default {
   name: 'messages-view',
   data: () => {
       return {
+          chooseUser: false,
           clickCloseButton: false,
           clickAtForm: false,
           inProgress: false,
@@ -53,6 +55,11 @@ export default {
       }
   },
   methods: {
+      activeInputChooseUser(){
+          this.chooseUser = false;
+          this.beneficiary = undefined;
+          this.beneficiaryEmail = '';
+      },
       closeform(){
           this.inProgress = false;
           this.message = '';
@@ -79,7 +86,8 @@ export default {
           if(this.inProgress) return;
           this.inProgress = true;
           this.message = '';
-          if(this.beneficiaryEmail == 'none'){
+          this.chooseUser = false;
+          if(this.beneficiaryEmail == ''){
                this.beneficiary = undefined;
                this.inProgress = false;
                return;
@@ -114,6 +122,7 @@ export default {
           else{
             this.inProgress = false;
           }
+          this.chooseUser = true;
       },
       sendMessage(){
           if(this.inProgress) return;

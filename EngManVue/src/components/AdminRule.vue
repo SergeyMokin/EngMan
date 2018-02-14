@@ -7,24 +7,22 @@
       <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
       <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
       <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
-      <button type = "submit" v-on:click = "AddRule()">Добавить</button><br/><br/>
+      <span style = "cursor: pointer;" v-on:click = "AddRule()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
       <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..."><br/>
       <div v-for = 'el in rules' :key = 'el.RuleId' class = "form-border">
       <div class = "rules-list--element admin">
         <span class = "span-rule--element">
             {{el.Title}}
+            <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteRule(el.RuleId);"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+            <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editRule(el.RuleId);"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
         </span>
-      </div>
-      <div>
-        <button style = "right: 100px" type = "submit" v-on:click = "editRule(el.RuleId)">Изменить</button>
-        <button type = "submit" v-on:click = "deleteRule(el.RuleId)">Удалить</button>
       </div>
     </div>
   <br/><br/>  
   </div>  
   <div v-if = "clickRule" style = "text-align: center">
           <br/><br/>
-          <button type = "submit" v-on:click = "closeEditForm()" class = "button-close">Закрыть</button>
+          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
           <span>Название</span>
           <textarea class = "rule-edit" type = "text" v-model = "rule.Title"/><br/>
           <span>Категория</span>

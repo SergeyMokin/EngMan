@@ -7,24 +7,22 @@
       <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
       <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
       <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
-      <button type = "submit" v-on:click = "add()">Добавить</button><br/><br/>
+      <span style = "cursor: pointer;" v-on:click = "add()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
       <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..."><br/>
       <div v-for = 'el in tasks' :key = 'el.Id' class = "form-border">
       <div class = "rules-list--element admin">
         <span class = "span-rule--element">
             {{el.Word}}
+            <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deletetask(el.Id)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+            <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "edit(el.Id)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
         </span>
-      </div>
-      <div>
-        <button style = "right: 100px" type = "submit" v-on:click = "edit(el.Id)">Изменить</button>
-        <button type = "submit" v-on:click = "deletetask(el.Id)">Удалить</button>
       </div>
     </div>
   <br/><br/>  
   </div>
   <div v-if = "click" style = "text-align: center">
           <br/><br/>
-          <button type = "submit" v-on:click = "closeEditForm()" class = "button-close">Закрыть</button>
+          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
           <span>Слово на английском</span>
           <textarea class = "rule-edit" type = "text" v-model = "task.Word"/><br/>
           <div v-if = "clickAdd" style = "width: 60%; text-align: left; margin-left: 20%"><input type="file" accept="image/*" @change="onFileChange" class = "button-classic"><br/></div>

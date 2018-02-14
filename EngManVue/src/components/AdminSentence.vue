@@ -7,7 +7,7 @@
         <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
         <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
         <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
-        <button type = "submit" v-on:click = "AddSentence()">Добавить</button><br/><br/>
+        <span style = "cursor: pointer;" v-on:click = "AddSentence()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
         <input placeholder="Категория" type="text" class = "select-form" list="sentence_category" v-model = "category"/>
         <datalist id = "sentence_category">
             <option v-for = "category in categories" :key = "category">
@@ -16,16 +16,18 @@
         </datalist>
         <div v-for = 'el in sentences' :key = 'el.SentenceTaskId' class = "form-border">
             <div class = "sentences-list--element">
-                <span class = "span-sentence--element">{{el.Sentence}}</span>
+                <span class = "span-sentence--element">
+                    {{el.Sentence}}
+                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteSentence(el.SentenceTaskId)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editSentence(el.SentenceTaskId)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
+                </span>
             </div>
-            <button type = "submit" v-on:click = "editSentence(el.SentenceTaskId)">Изменить</button>
-            <button type = "submit" v-on:click = "deleteSentence(el.SentenceTaskId)">Удалить</button>
         </div>
         <br/><br/>
       </div>
       <div v-if = "clickSentence" style = "text-align: center">
           <br/><br/>
-          <button type = "submit" v-on:click = "closeEditForm()" class = "button-close">Закрыть</button>
+          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
           <span>Категория</span>
           <textarea type = "text" v-model = "sentence.Category" class = "sentence-edit"/><br/>
           <span>Предложение</span>

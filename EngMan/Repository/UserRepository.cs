@@ -34,8 +34,7 @@ namespace EngMan.Repository
             context.SaveChanges();
             return user;
         }
-
-        //entity findasync()
+        
         public UserView ChangePassword(int id, string oldpassword, string newpassword)
         {
             var user = new UserView();
@@ -85,6 +84,7 @@ namespace EngMan.Repository
                 var entity = context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
                 if (entity == null)
                 {
+                    user.Email = user.Email.ToLower();
                     if (user.Id == 0)
                     {
                         context.Users.Add(user);

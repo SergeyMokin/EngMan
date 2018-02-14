@@ -32,6 +32,7 @@ namespace EngMan.App_Start
             container.Register<IRuleRepository>(() => new RuleRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
             container.Register<IUserRepository>(() => new UserRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
             container.Register<IMessageRepository>(() => new MessageRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
+            container.Register<IUserDictionaryRepository>(() => new UserDictionaryRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
             container.Register<IGuessesTheImageRepository>(() => new GuessesTheImageRepository(container.GetInstance<EFDbContext>()), Lifestyle.Scoped);
             container.Register<ISentenceTaskService>(() => new SentenceTaskService(container.GetInstance<ISentenceTaskRepository>()), Lifestyle.Scoped);
             container.Register<IWordService>(() => new WordService(container.GetInstance<IWordRepository>()), Lifestyle.Scoped);
@@ -39,6 +40,7 @@ namespace EngMan.App_Start
             container.Register<IUserService>(() => new UserService(container.GetInstance<IUserRepository>()), Lifestyle.Scoped);
             container.Register<IMessageService>(() => new MessageService(container.GetInstance<IMessageRepository>(), container.GetInstance<IUserService>()), Lifestyle.Scoped);
             container.Register<IGuessesTheImageService>(() => new GuessesTheImageService(container.GetInstance<IGuessesTheImageRepository>()), Lifestyle.Scoped);
+            container.Register<IUserDictionaryService>(() => new UserDictionaryService(container.GetInstance<IUserDictionaryRepository>()), Lifestyle.Scoped);
         }
     }
 }

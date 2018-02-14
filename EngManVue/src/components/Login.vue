@@ -48,14 +48,13 @@
         </div>
       </div>
       <div v-if = "isLogined">
-          <span>Добро пожаловать на сайт, наведите мышкой на меню и перейдите в нужную вкладку!</span><br/>
-          <button type = "submit" v-on:click = "showHelp = !showHelp" class = "button">Помощь</button>
-          <div v-if = "showHelp" class = "form-border">
-            <span>Для навигации по сайту наведите мышкой на иконку меню</span><br/><br/>
-            <img title="Картинка навигации по сайту" src = "../assets/help-menu.png" style = "width: 300px; border: none; border-radius: 10px;"><br/><br/>
-            <span>Для управления аккаунтом нажмите на иконку головы слева вверху экрана</span><br/><br/>
-            <img title="Картинка навигации по сайту" src = "../assets/help-account.png" style = "width: 300px; border: none; border-radius: 10px;"><br/><br/>
-          </div>
+          <span>Добро пожаловать на сайт, наведите мышкой на меню и перейдите в нужную вкладку!</span><br/><br/><br/>
+          <!--<div class = "form-border">
+            <span>Для навигации по сайту наведите мышкой на иконку меню</span><br/>
+            <img title="Картинка навигации по сайту" src = "../assets/help-menu.png" style = "width: 300px; border: none; border-radius: 10px;"><br/>
+            <span>Для управления аккаунтом нажмите на иконку головы слева вверху экрана</span><br/>
+            <img title="Картинка навигации по сайту" src = "../assets/help-account.png" style = "width: 300px; border: none; border-radius: 10px;"><br/>
+          </div>-->
       </div>
   </div>
 </template>
@@ -71,7 +70,6 @@ export default {
         return {
             inprogress: false,
             badrequest: false,
-            showHelp: false,
             authentification: false,
             registration: false,
             clickAtForm: true,
@@ -155,8 +153,8 @@ export default {
             };
             var user = {
                 Id: 0,
-                FirstName: this.registrationUser.FirstName,
-                LastName: this.registrationUser.LastName,
+                FirstName: this.capitalizeFirstLetter(this.registrationUser.FirstName),
+                LastName: this.capitalizeFirstLetter(this.registrationUser.LastName),
                 Email: this.registrationUser.Email,
                 Password: this.registrationUser.Password,
                 Role: 'user'
@@ -192,6 +190,9 @@ export default {
             else{
                 this.badrequest = true;
             }
+        },
+        capitalizeFirstLetter(str){
+            return str.charAt(0).toUpperCase() + str.slice(1);
         }
     },
     computed: {

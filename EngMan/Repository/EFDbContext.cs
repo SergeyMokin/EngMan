@@ -11,5 +11,6 @@ namespace EngMan.Repository
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<GuessesTheImage> GuessesTheImages { get; set; }
+        public DbSet<UserWord> UserWords { get; set; }
     }
 }

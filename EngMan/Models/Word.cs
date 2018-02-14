@@ -29,4 +29,23 @@ namespace EngMan.Models
         [DataMember]
         public string Category { get; set; }
     }
+
+    public class UserWord
+    {
+        [Key]
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public int UserId { get; set; }
+        [DataMember]
+        public int WordId { get; set; }
+    }
+
+    public class UserDictionary
+    {
+        [DataMember]
+        public UserView User { get; set; }
+        [DataMember]
+        public IEnumerable<Word> Words { get; set; }
+    }
 }

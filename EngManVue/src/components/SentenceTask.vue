@@ -1,27 +1,27 @@
 <template>
   <div class="sentence-task">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-      <h1>Сложи предложение</h1><br/>
+      <h2>Составь предложение</h2><br/>
       <div v-if = "!show" class = "form-border">
-        <input placeholder="Категория" type="text" class = "select-form" list="task_sent_category" v-model = "category"/>
+        <div class = "button-close"><router-link to="/grammar"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
+        <input placeholder="Категория" type="text" class = "select-form" list="task_sent_category" v-model = "category"/><br/>
+        <span style = "float: right; bottom: 0" v-on:click = "downloadSentenceTask"><img src = "../assets/start-icon.png" title="Начать" style = "cursor: pointer; width: 25px; "></span>
+        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
+        <span style = "margin-left: 25px" v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
         <datalist id = "task_sent_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
         </datalist>
-        <button v-on:click = "downloadSentenceTask">Старт</button><br/>
-        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-        <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
       </div>
       <div v-if = "show" class = "form-border">
-        <h1>Категория: {{category}}</h1><br/>
-        <h2>{{sentence.Sentence}}</h2>
+        <div class = "button-close" v-on:click = "closeForm"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
+        <span style = "font-size: larger;">{{sentence.Sentence}}</span>
         <br/>
-        <input type = "text" v-model = "returnSentence.Sentence" class = "sentence-input">
-        <button v-on:click = "verificationCorrectness">Проверить</button><br/>
-        <button v-on:click = "closeForm">Завершить</button><br/>
-        <button v-on:click = "downloadSentenceTask">Следующий</button><br/>
-        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
+        <input type = "text" v-model = "returnSentence.Sentence" class = "sentence-input"/>
+        <span style = "float: right; bottom: 0" v-on:click = "downloadSentenceTask"><img src = "../assets/arrow-right.png" title="Следующий" style = "cursor: pointer; width: 25px; "></span>
+        <span style = "float: right; bottom: 0" v-on:click = "verificationCorrectness"><img src = "../assets/start-icon.png" title="Проверить" style = "cursor: pointer; width: 25px; "></span><br/>
+        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
 </template>

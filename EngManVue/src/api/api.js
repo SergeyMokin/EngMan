@@ -63,6 +63,21 @@ export default {
     .then(res => res.data)
     .catch(e => e)
   },
+  getUserDictionary(){
+    return axios.get(url + '/account/getuserdictionary')
+    .then(res => res.data)
+    .catch(e => e)
+  },
+  deleteUserWord(id){
+    return axios.delete(url + '/account/deletewordfromdictionary/' + id)
+    .then(res => res.data)
+    .catch(e => e)
+  },
+  addUserWord(word){
+    return axios.post(url + '/account/addwordtodictionary/', word)
+    .then(res => res.data)
+    .catch(e => e)
+  },
   getSentenceTask(category, id){
     return axios.get(url + '/sentencetask/gettask?category=' + category + '&id=' + id)
     .then(response => response.data)

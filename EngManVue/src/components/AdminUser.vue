@@ -16,10 +16,12 @@
         </select>
         <div v-for = 'el in users' :key = 'el.Id' class = "form-border">
             <div class = "users-list--element">
-                <span class = "span-user--element">{{el.FirstName}} {{el.LastName}} <b>[e-mail: {{el.Email}}]</b></span>
+                <span class = "span-user--element">
+                    {{el.FirstName}} {{el.LastName}} <b>[e-mail: {{el.Email}}]</b>  
+                    <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteUser(el.Id)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+                    <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "changeRole(el)"><img title="Повысить" style = "margin-right: 5px; width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>
+                </span>
             </div>
-            <button v-if = "el.Role == 'user'" type = "submit" v-on:click = "changeRole(el)">Повысить</button>
-            <button v-if = "el.Role == 'user'" type = "submit" v-on:click = "deleteUser(el.Id)">Удалить</button>
         </div>
         <br/><br/>
   </div>

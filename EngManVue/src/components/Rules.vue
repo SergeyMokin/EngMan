@@ -4,6 +4,7 @@
         <rule :rule.sync = 'rule' v-on:close-rule = "clickRule = false"/>
   </div>
   <div class="rules-view-list">
+      <div v-if = "!clickRule" class = "button-close"><router-link to="/grammar"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
       <span style = "font-size: 30px" v-if = "!clickRule">Правила</span>
       <div class = "rules-list--element" v-for = 'el in rules' :key = 'el.id' v-if = "!clickRule" v-on:click = "openRule(el.RuleId)">
           <span class = "span-rule--element">{{el.Title}}</span> 

@@ -21,7 +21,7 @@
     <div v-if = "clickEdit" class = "users-view-list">
           <br/><br/>
           <div class = "form-border">
-            <button type = "submit" v-on:click = "closeEditForm()" class = "button-close">Закрыть</button>
+            <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
             <span>Имя</span>
             <textarea class = "user-edit" type = "text" v-model = "user.FirstName"/><br/>
             <span>Фамилия</span>
@@ -38,7 +38,7 @@
     <div v-if = "clickChangePassword" class = "users-view-list">
           <br/><br/>
           <div class = "form-border">
-            <button type = "submit" v-on:click = "closeEditForm()" class = "button-close">Закрыть</button>
+            <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
             <span>Старый пароль</span>
             <input class = "user-edit" type = "password" v-model = "oldpassword" style = "height: 30px; text-align: center;"/><br/>
             <span>Новый пароль</span>

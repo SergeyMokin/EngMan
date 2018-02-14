@@ -7,7 +7,7 @@
         <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
         <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
         <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
-        <button type = "submit" v-on:click = "addWord()">Добавить</button><br/><br/>
+        <span style = "cursor: pointer;" v-on:click = "addWord()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
         <input placeholder="Категория" type="text" class = "select-form" list="word_category" v-model = "category"/>
         <datalist id = "word_category">
             <option v-for = "category in categories" :key = "category">
@@ -16,16 +16,18 @@
         </datalist>
         <div v-for = 'el in words' :key = 'el.WordId' class = "form-border">
             <div class = "words-list--element">
-                <span class = "span-word--element">{{el.Original}} - {{el.Translate}}</span>
+                <span class = "span-word--element">
+                    {{el.Original}} - {{el.Translate}}
+                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteWord(el.WordId)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editWord(el.WordId)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
+                </span>
             </div>
-            <button type = "submit" v-on:click = "editWord(el.WordId)">Изменить</button>
-            <button type = "submit" v-on:click = "deleteWord(el.WordId)">Удалить</button>
         </div>
         <br/><br/>
       </div>
       <div v-if = "clickWord" style = "text-align: center">
           <br/><br/>
-          <button type = "submit" v-on:click = "closeEditForm()" class = "button-close">Закрыть</button>
+          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
           <span>Категория</span>
           <textarea type = "text" v-model = "word.Category" class = "word-edit"/><br/>
           <span>Оригинал на английском</span>

@@ -1,7 +1,7 @@
 <template>
 <div style = "text-align: center;">
   <br/><br/>
-  <button class = "button-close" type = "submit" v-on:click = "$emit('close-rule')">Закрыть</button>
+  <span v-on:click = "$emit('close-rule')"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
   <span class = "span-view">{{rule.Title}}</span>
   <div class="rule-view">
         <p  v-html = "rule.Text" id = "Text" style="white-space: pre-line; text-align: left">

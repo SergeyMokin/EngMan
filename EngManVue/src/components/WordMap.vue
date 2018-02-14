@@ -1,37 +1,37 @@
 <template>
   <div class="wordmap-task">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-      <h1>Карты слов</h1><br/>
+      <h2>Карты слов</h2><br/>
       <div v-if = "!show" class = "form-border">
-        <input placeholder="Категория" type="text" class = "select-form" list="task_word_category" v-model = "category"/>
+        <div class = "button-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
+        <input placeholder="Категория" type="text" class = "select-form" list="task_word_category" v-model = "category"/><br/>
         <datalist id = "task_word_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
         </datalist>
-        <button v-on:click = "downloadWordMap">Старт</button><br/>
-        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-        <span v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
+        <span style = "float: right; bottom: 0" v-on:click = "downloadWordMap()"><img src = "../assets/start-icon.png" title="Начать" style = "cursor: pointer; width: 25px;"></span>
+        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
+        <span style = "margin-left: 25px" v-if = "completemessage" class = "span-complete-message">{{completemessage}}<br/></span>
+        <br/>
         <div v-for = 'el in words' :key = 'el.WordId'>
-            <div class = "wordmap-list--element" style = "cursor: default">
+            <div title = "Добавить себе в словарь" class = "wordmap-list--element" v-on:click = "addWordToDictionary(el)">
                 <a>{{el.Original}} - {{el.Translate}}</a>
             </div>
         </div>
       </div>
       <div v-if = "show" class = "form-border">
-        <h1>Категория: {{category}}</h1><br/>
-        <h2>{{word.Original}}</h2>
+        <div class = "button-close" v-on:click = "closeForm()"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
+        <span style = "font-size: larger;">{{word.Original}}</span>
         <br/>
-        <div v-for = "el in word.Translate" :key = "el" class = "wordmap-list--element" v-on:click = "returnWord.Translate = el">
-            <div>
+        <div v-for = "el in word.Translate" :key = "el" v-on:click = "returnWord.Translate = el">
+            <div v-bind:class = "{'selected-wordmap': el == returnWord.Translate}" class = "wordmap-list--element">
                 {{el}}
             </div>
         </div>
-        <h2><a>Ваш выбор: {{returnWord.Translate}}</a></h2><br/>
-        <button v-on:click = "verificationCorrectness">Проверить</button><br/>
-        <button v-on:click = "closeForm">Завершить</button><br/>
-        <button v-on:click = "downloadWordMap">Следующий</button><br/>
-        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
+        <span style = "float: right; bottom: 0" v-on:click = "downloadWordMap()"><img src = "../assets/arrow-right.png" title="Следующий" style = "cursor: pointer; width: 25px;"></span>
+        <span style = "float: right; bottom: 0" v-on:click = "verificationCorrectness()"><img src = "../assets/start-icon.png" title="Проверить" style = "cursor: pointer; width: 25px;"></span>
+        <span style = "margin-left: 25px" v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
 </template>
@@ -63,6 +63,27 @@ export default {
     }
   },
   methods:{
+      addWordToDictionary(word){
+          if(this.inProgress) return;
+          this.inProgress = true;
+          api.addUserWord({
+              UserId: this.$store.state.user.Id,
+              WordId: word.WordId
+          })
+          .then(res => {
+              if(res.Id > 0)
+              {
+                  alert('Успешно добавлено');
+              }
+              else{
+                  alert('Уже добавлен');
+              } 
+              this.inProgress = false;
+          })
+          .catch(e => {
+              alert('Сервер недоступен');
+          })
+      },
       downloadWordMap(){
           if(this.inProgress) return;
           this.inProgress = true;

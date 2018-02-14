@@ -32,6 +32,11 @@ a {
 span{
     color: rgb(75, 75, 75);
 }
+.selected-wordmap{
+    border: solid;
+    border-color: rgb(75, 75, 75);
+    border-width: 1px;
+}
 .span-error-message{
       color: red;
       font-size: 16px;
@@ -80,7 +85,8 @@ label{
 .button-close{
     position: absolute;
     right: 18.65%;
-    top: 75px;
+    top: 100px;
+    cursor: pointer;
 }
 .rule-edit{
     resize: none;
@@ -333,6 +339,9 @@ label{
     height: 345px;
     overflow-y: scroll;
 }
+.select-form-mes.messages-input-choosen{
+    margin-left: -19px;
+}
 .new-mess-users-list{
     margin: 0.5%;
     margin-left: 10px;
@@ -516,11 +525,17 @@ label{
     cursor: pointer;
     background: rgb(248, 248, 248);
     height: 35px;
-    border: none;
     outline:none;
     border-radius: 10px;
 }
-  .loading {
+.wordmap-list--element:hover{
+    background: rgb(218, 218, 218);
+}
+.wordmap-list--element:hover:before{
+    background: rgb(218, 218, 218);
+    background: rgb(248, 248, 248);
+}
+.loading {
     position: fixed;
     z-index: 999;
     height: 2em;
@@ -531,10 +546,10 @@ label{
     left: 0;
     bottom: 0;
     right: 0;
-  }
+}
   
   /* Transparent Overlay */
-  .loading:before {
+.loading:before {
     content: '';
     display: block;
     position: fixed;
@@ -543,19 +558,19 @@ label{
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.3);
-  }
+}
   
   /* :not(:required) hides these rules from IE9 and below */
-  .loading:not(:required) {
+.loading:not(:required) {
     /* hide "loading..." text */
     font: 0/0 a;
     color: transparent;
     text-shadow: none;
     background-color: transparent;
     border: 0;
-  }
+}
   
-  .loading:not(:required):after {
+.loading:not(:required):after {
     content: '';
     display: block;
     font-size: 10px;
@@ -570,11 +585,11 @@ label{
     border-radius: 0.5em;
     -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
     box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
-  }
+}
   
   /* Animation */
   
-  @-webkit-keyframes spinner {
+@-webkit-keyframes spinner {
     0% {
       -webkit-transform: rotate(0deg);
       -moz-transform: rotate(0deg);
@@ -589,8 +604,8 @@ label{
       -o-transform: rotate(360deg);
       transform: rotate(360deg);
     }
-  }
-  @-moz-keyframes spinner {
+}
+@-moz-keyframes spinner {
     0% {
       -webkit-transform: rotate(0deg);
       -moz-transform: rotate(0deg);
@@ -605,8 +620,8 @@ label{
       -o-transform: rotate(360deg);
       transform: rotate(360deg);
     }
-  }
-  @-o-keyframes spinner {
+}
+@-o-keyframes spinner {
     0% {
       -webkit-transform: rotate(0deg);
       -moz-transform: rotate(0deg);
@@ -621,8 +636,8 @@ label{
       -o-transform: rotate(360deg);
       transform: rotate(360deg);
     }
-  }
-  @keyframes spinner {
+}
+@keyframes spinner {
     0% {
       -webkit-transform: rotate(0deg);
       -moz-transform: rotate(0deg);
@@ -637,4 +652,4 @@ label{
       -o-transform: rotate(360deg);
       transform: rotate(360deg);
     }
-  }
+}

@@ -4,10 +4,10 @@
       <div v-if = "!$store.state.user.Logined">
           <span class = "span-anonymous">Вам необходимо войти в профиль</span>
       </div>
-      <div v-if = "$store.state.user.Logined">
-          <a v-if = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b></a>
-          <button type = "submit" v-on:click = "toProfile()">Профиль</button>
-          <button type = "submit" v-on:click = "logout()">Выйти</button>
+      <div v-if = "$store.state.user.Logined" style = "display: grid">
+          <a style = "margin-bottom: 5px" v-if = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b></a>
+          <div class = "routes-admin" style = "padding: 5px; cursor: pointer" v-on:click = "toProfile()">Профиль</div>
+          <div class = "routes-admin" style = "padding: 5px; cursor: pointer" v-on:click = "logout()">Выйти</div>
       </div>
   </div>
 </template>

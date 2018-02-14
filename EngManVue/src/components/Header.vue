@@ -6,10 +6,9 @@
     <ol class="square" v-if = "hovermenu" v-on:mouseover = "changeShow()" v-on:mouseout = "changeShow()">
     <ul>
         <li><router-link to="/">Домой</router-link></li>
-        <li><router-link to="/wordmap">Карты слов</router-link></li>
-        <li><router-link to="/sentencetask">Сложи предложение</router-link></li>
-        <li><router-link to="/guessestheimages">Угадай что на картинке</router-link></li>
-        <li><router-link to="/rules">Правила</router-link></li>
+        <li><router-link to="/grammar">Грамматика</router-link></li>
+        <li><router-link to="/trainings">Тренинги</router-link></li>
+        <li><router-link to="/dictionary">Ваш словарь</router-link></li>
         <li v-if = "this.$store.state.user.Role == 'admin'"><router-link to="/admin/rules">Панель администратора</router-link></li>
     </ul>
     </ol>

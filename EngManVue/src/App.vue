@@ -31,7 +31,7 @@ export default {
         {
           vue.$store.dispatch('getMessages');
         }
-      }, 60000);
+      }, 5000);
       if(this.$cookie.get('user.login.token.localhost:8080'))
       {
         this.inProgress = true;
