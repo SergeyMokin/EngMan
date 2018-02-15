@@ -14,7 +14,7 @@
                 <label for = "password-login">Пароль</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.user.password.$error}" class = "input-form" id = "password-login" type = 'password' v-model = "user.password"/><br/>
             </div>
-            <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;" v-on:click = "login()">Войти</div><br/>
+            <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;width: 100px;" v-on:click = "login()">Войти</div><br/>
             <span v-if = "$v.user.$error" class = "span-error-message">Мэил и пароль - обязательные поля для заполнения<br/></span>
             <span v-if = "badrequest" class = "span-error-message">Мэил или пароль введены неверно<br/></span>
         </div>
@@ -134,11 +134,21 @@ export default {
                         }
                         else{
                             console.log('NotFound404');
+                            this.inprogress = false;
+                            this.badrequest = true;
                         }
                     })
                 }
-                this.badrequest = true;
+                else{
+                    console.log('NotFound404');
+                    this.inprogress = false;
+                    this.badrequest = true;
+                }
+            })
+            .catch(e => {
+                console.log('NotFound404');
                 this.inprogress = false;
+                this.badrequest = true;
             })
         },
         registrationUserReq(){

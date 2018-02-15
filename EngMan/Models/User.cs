@@ -48,4 +48,22 @@ namespace EngMan.Models
         [DataMember]
         public string Role { get; set; }
     }
+
+    [DataContract]
+    public class UserConnect
+    {
+        [Key]
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public string ConnectionId { get; set; }
+        [DataMember]
+        public string FirstName { get; set; }
+        [DataMember]
+        public string LastName { get; set; }
+        [DataMember]
+        public string Email { get; set; }
+        [DataMember]
+        public string Role { get; set; }
+    }
 }

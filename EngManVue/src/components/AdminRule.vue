@@ -31,7 +31,7 @@
           <span>Текст</span>
           <textarea class = "rule-edit" type = "text" v-model = "rule.Text" style = "height: 450px"/><br/>
           <span style = "float: left; margin-right: 10px; margin-left: 20%;" v-on:click = "downloadOnServer()"><img title="Загрузить на сервер" style = "cursor:pointer;width: 25px; height: auto;" type = "img" src = "../assets/upload-icon.png"></span>
-          <span style = "float: left; text-align: left;"><input type="file" accept="image/*" @change="onFileChange" multiple class = "button-classic"><br/></span>
+          <span style = "float: left; text-align: left;"><input type="file" accept="image/*" @change="onFileChange" multiple class = "button-classic"><br/></span><br/><br/>
           <div v-if = 'pathesOfImages.length > 0' v-for = 'el in pathesOfImages' :key = 'el'>
               <span>
                   {{el}}
@@ -107,7 +107,6 @@ export default {
               this.inProgress = false;
               this.errormessage = 'Не удалось загрузить изображения';
           })
-          this.inProgress = false;
       },
       editRule(id){
         if(this.inProgress) return;

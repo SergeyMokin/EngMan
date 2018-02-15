@@ -62,7 +62,7 @@ namespace EngMan.Service
                 {
                     var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
                     //path to folder with project
-                    var path = string.Format("C:\\Users\\limon\\Documents\\Tasks\\EngMan\\EngMan\\uploads\\" + time + images[i].Name);
+                    var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + images[i].Name));
                     File.WriteAllBytes(path, arr[i]);
                     path = string.Format("http://localhost:58099/uploads/" + time + images[i].Name);
                     pathes.Add(path);
