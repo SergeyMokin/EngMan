@@ -5,7 +5,7 @@
       <div v-if = "!show" class = "form-border">
         <div class = "button-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
         <div v-on:click = "downloadWordMap()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
-        <input placeholder="Выберите..." type="text" class = "select-form" list="task_word_category" v-model = "category"/><br/>
+        <input placeholder="Выберите..." type="text" class = "select-form" list="task_word_category" v-model = "category" v-on:click = "category = ''"/><br/>
         <datalist id = "task_word_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
@@ -42,6 +42,7 @@ export default {
   name: 'wordmap-task',
   data () {
     return {
+        choose: false,
         countOfWords: 0,
         completemessage: '',
         id: -1,

@@ -8,7 +8,7 @@
         <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
         <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
         <span style = "cursor: pointer;" v-on:click = "AddSentence()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-        <input placeholder="Выберите..." type="text" class = "select-form" list="sentence_category" v-model = "category"/>
+        <input placeholder="Выберите..." type="text" class = "select-form" list="sentence_category" v-model = "category" v-on:click = "category = ''"/>
         <datalist id = "sentence_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}

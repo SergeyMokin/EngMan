@@ -5,7 +5,7 @@
       <div v-if = "!show" class = "form-border">
         <div class = "button-close"><router-link to="/grammar"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
         <div v-on:click = "downloadSentenceTask()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
-        <input placeholder="Выберите..." type="text" class = "select-form" list="task_sent_category" v-model = "category"/><br/>
+        <input placeholder="Выберите..." type="text" class = "select-form" list="task_sent_category" v-model = "category" v-on:click = "category = ''"/><br/>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
         <datalist id = "task_sent_category">
             <option v-for = "category in categories" :key = "category">

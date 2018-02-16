@@ -49,12 +49,6 @@
       </div>
       <div v-if = "isLogined">
           <span>Добро пожаловать на сайт, наведите мышкой на меню и перейдите в нужную вкладку!</span><br/><br/><br/>
-          <!--<div class = "form-border">
-            <span>Для навигации по сайту наведите мышкой на иконку меню</span><br/>
-            <img title="Картинка навигации по сайту" src = "../assets/help-menu.png" style = "width: 300px; border: none; border-radius: 10px;"><br/>
-            <span>Для управления аккаунтом нажмите на иконку головы слева вверху экрана</span><br/>
-            <img title="Картинка навигации по сайту" src = "../assets/help-account.png" style = "width: 300px; border: none; border-radius: 10px;"><br/>
-          </div>-->
       </div>
   </div>
 </template>

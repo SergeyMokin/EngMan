@@ -8,7 +8,7 @@
       <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
       <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
       <span style = "cursor: pointer;" v-on:click = "add()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-      <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..."><br/>
+      <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..." v-on:click = "searchKey = ''"><br/>
       <div v-for = 'el in tasks' :key = 'el.Id' class = "form-border">
       <div class = "rules-list--element admin">
         <span class = "span-rule--element">
