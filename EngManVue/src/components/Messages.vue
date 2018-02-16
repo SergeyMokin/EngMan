@@ -32,7 +32,7 @@
       </div>
       <div class = "input-form-mes">
             <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''"/>
-            <span style = "float: right; font-size:10px; cursor: pointer; margin-right: 15px; margin-top: 5px" v-on:click = "sendMessage();"><img title="Отправить" style = "width: 60px; height: auto" type = "img" src = "../assets/start-icon.png"></span>
+            <span style = "float: right; font-size:10px; cursor: pointer; margin-right: 15px; margin-top: 5px" v-on:click = "sendMessage();"><img title="Отправить" style = "width: 60px; height: auto" type = "img" src = "../assets/send-icon.png"></span>
       </div>
   </div>
 </template>
@@ -129,7 +129,7 @@ export default {
           this.inProgress = true;
           if(this.beneficiary != undefined)
           {
-            if(this.message.length > 0)
+            if(this.message != '')
             {
                 var date = new Date(Date.now());
                 var hours = date.getHours() < 10 ? "0"+date.getHours() : date.getHours();

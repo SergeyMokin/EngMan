@@ -115,6 +115,7 @@ export default {
                     .then(res => {
                         if(res.Id)
                         {
+                            this.$store.dispatch('connectToServ');
                             this.$store.state.user.Logined = true;
                             this.$store.state.user.Id = res.Id;
                             this.$store.state.user.Role = res.Role;

@@ -26,12 +26,7 @@ export default {
   created(){
       if(this.inProgress) return;
       var vue = this;
-      setInterval(function(){
-      if(vue.$store.state.user.Logined)
-        {
-          vue.$store.dispatch('getMessages');
-        }
-      }, 5000);
+      this.$store.dispatch('connectToServ');
       if(this.$cookie.get('user.login.token.localhost:8080'))
       {
         this.inProgress = true;

@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '../api/api'
+import $ from 'jquery'
+window.jQuery = $
+require('ms-signalr-client')
 
 Vue.use(Vuex);
 
@@ -13,6 +16,8 @@ const state = {
     , newmess: false
     , newmessUsers: []
     , guessestheimages: []
+    , connectionSignalR: {}
+    , proxySignalR: {}
     , user: {
         Logined: false,
         Id: '',
@@ -89,6 +94,12 @@ const mutations = {
     {
         state.users = result;
     }
+    , connectToServ(state, con, proxy)
+    {
+        state.connectionSignalR = con;
+        state.proxySignalR = proxy;
+        console.log(state.connectionSignalR);
+    }
 };
 
 const actions = {
@@ -151,6 +162,17 @@ const actions = {
         api.getUsers()
         .then(res => commit('getUsers', res))
         .catch(e => console.log(e))
+    }
+    , connectToServ: ( {commit} ) => {
+        var vue = this;
+        var connection = $.hubConnection('http://localhost:58099'); 
+        var proxy = connection.createHubProxy('chat');
+        proxy.on('onUpdateMessages', function(){
+          vue.getMessages;
+        })
+        connection.start()
+        .done(() => commit('connectToServ', connection, proxy))
+        .fail(() => console.log('not connected'));
     }
 };
 
