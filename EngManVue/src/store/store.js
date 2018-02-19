@@ -17,7 +17,6 @@ const state = {
     , newmessUsers: []
     , guessestheimages: []
     , connectionSignalR: {}
-    , proxySignalR: {}
     , user: {
         Logined: false,
         Id: '',
@@ -94,11 +93,9 @@ const mutations = {
     {
         state.users = result;
     }
-    , connectToServ(state, con, proxy)
+    , connectToServ(state, con)
     {
         state.connectionSignalR = con;
-        state.proxySignalR = proxy;
-        console.log(state.connectionSignalR);
     }
 };
 
@@ -163,16 +160,19 @@ const actions = {
         .then(res => commit('getUsers', res))
         .catch(e => console.log(e))
     }
-    , connectToServ: ( {commit} ) => {
-        var vue = this;
+    , connectToServ: ( {dispatch, commit}, userview ) => {
         var connection = $.hubConnection('http://localhost:58099'); 
         var proxy = connection.createHubProxy('chat');
         proxy.on('onUpdateMessages', function(){
-          vue.getMessages;
+          dispatch('getMessages');
         })
         connection.start()
-        .done(() => commit('connectToServ', connection, proxy))
-        .fail(() => console.log('not connected'));
+        .done(() => 
+        {
+            proxy.invoke('Connect', userview);
+            commit('connectToServ', connection)
+        })
+        .fail(() => console.log('Невозможно подключиться к серверу'));
     }
 };
 

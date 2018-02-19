@@ -25,6 +25,8 @@ export default {
         logout(){
             if(this.inprogress) return;
             this.inprogress = true;
+            var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
+            proxy.invoke("Disconnect");
             api.signout()
             .then(res => {
                 this.$cookie.delete('user.login.token.localhost:8080');

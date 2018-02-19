@@ -17,6 +17,41 @@ namespace EngMan.Hubs
                 Clients.Client(user.ConnectionId).onUpdateMessages();
             }
         }
+        
+        public void Connect(UserView user)
+        {
+            var id = Context.ConnectionId;
+
+
+            if (!Users.Any(x => x.ConnectionId == id) && !Users.Any(x => x.Id == user.Id))
+            {
+                var usr = new UserConnect
+                {
+                    ConnectionId = id,
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Role = user.Role
+                };
+                Users.Add(usr);
+            }
+        }
+
+        public void Disconnect() {
+            OnDisconnected(true);
+        }
+        
+        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
+        {
+            var usr = Users.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            if (usr != null)
+            {
+                Users.Remove(usr);
+            }
+
+            return base.OnDisconnected(stopCalled);
+        }
 
     }
 }

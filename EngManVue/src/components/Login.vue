@@ -115,7 +115,6 @@ export default {
                     .then(res => {
                         if(res.Id)
                         {
-                            this.$store.dispatch('connectToServ');
                             this.$store.state.user.Logined = true;
                             this.$store.state.user.Id = res.Id;
                             this.$store.state.user.Role = res.Role;
@@ -124,6 +123,7 @@ export default {
                             this.$store.state.user.Email = res.Email;
                             this.$store.dispatch('getMessages');
                             this.$store.dispatch('getUsers');
+                            this.$store.dispatch('connectToServ', this.$store.state.user);
                             this.clearLoginForm();
                             this.inprogress = false;
                         }

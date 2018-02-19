@@ -53,9 +53,12 @@ export default {
     .catch(e => e)
   },
   signout(){
-    this.deleteToken();
+    var vue = this;
     return axios.post(url + '/account/logout')
-    .then(response => response.data)
+    .then(response => {
+      vue.deleteToken();
+      response.data
+    })
     .catch(e => e);
   },
   getUserData(){

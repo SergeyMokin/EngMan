@@ -26,7 +26,6 @@ export default {
   created(){
       if(this.inProgress) return;
       var vue = this;
-      this.$store.dispatch('connectToServ');
       if(this.$cookie.get('user.login.token.localhost:8080'))
       {
         this.inProgress = true;
@@ -42,6 +41,7 @@ export default {
             this.$store.state.user.FirstName = res.FirstName;
             this.$store.state.user.LastName = res.LastName;
             this.$store.state.user.Email = res.Email;
+            this.$store.dispatch('connectToServ', this.$store.state.user);
             this.inProgress = false;
           }
           else{

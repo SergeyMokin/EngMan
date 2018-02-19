@@ -149,6 +149,15 @@ export default {
                 {
                     if(res.MessageId > 0)
                     {
+                        var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
+                        proxy.invoke("Send", {
+                            MessageId: 0,
+                            SenderId: this.sender.Id,
+                            BeneficiaryId: this.beneficiary.Id,
+                            Text: this.message,
+                            Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
+                            CheckReadMes: 0
+                        });
                         this.$store.dispatch('getMessages')
                     }
                 })
