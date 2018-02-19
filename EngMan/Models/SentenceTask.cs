@@ -12,5 +12,7 @@ namespace EngMan.Models
         public string Sentence { get; set; }
         [DataMember]
         public string Category { get; set; }
+        [DataMember]
+        public string Translate { get; set; }
     }
 }

@@ -31,8 +31,10 @@
           <span v-on:click = "saveSentence(sentence)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
           <span>Категория</span>
           <textarea type = "text" v-model = "sentence.Category" class = "sentence-edit"/><br/>
-          <span>Предложение</span>
+          <span>Предложение на английском</span>
           <textarea type = "text" v-model = "sentence.Sentence" class = "sentence-edit"/><br/>
+          <span>Перевод на русском</span>
+          <textarea type = "text" v-model = "sentence.Translate" class = "sentence-edit"/><br/>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
       </div>
   </div>
@@ -54,7 +56,8 @@ export default {
         , sentence: {
             SentenceTaskId: 0,
             Sentence: '',
-            Category: ''
+            Category: '',
+            Translate: ''
         }
     }
   },
@@ -76,7 +79,7 @@ export default {
           if(this.inProgress) return;
           this.errormessage = '';
           this.inProgress = true;
-          if(this.sentence.Sentence.length == 0 || this.sentence.Category.length == 0)
+          if(this.sentence.Sentence.length == 0 || this.sentence.Category.length == 0 || this.sentence.Translate.length == 0)
           {
               this.errormessage = 'Заполните все поля';
               this.inProgress = false;

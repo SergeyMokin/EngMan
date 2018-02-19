@@ -30,6 +30,7 @@ namespace EngMan.Repository
                 {
                     entity.Sentence = task.Sentence;
                     entity.Category = task.Category;
+                    entity.Translate = task.Translate;
                 }
             }
             context.SaveChanges();
