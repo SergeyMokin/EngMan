@@ -12,5 +12,9 @@ namespace EngMan.Repository
         Task<SentenceTask> AddTask(SentenceTask task);
 
         Task<int> DeleteTask(int id);
+
+        IEnumerable<string> GetAllCategories();
+
+        IEnumerable<SentenceTask> GetByCategory(string category);
     }
 }

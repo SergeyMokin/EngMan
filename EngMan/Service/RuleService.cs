@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
-using System.IO;
-using System;
 namespace EngMan.Service
 {
     public class RuleService: IRuleService
@@ -43,29 +41,11 @@ namespace EngMan.Service
 
         public List<string> AddImages(Image[] images) {
             var pathes = new List<string>();
-            var arr = new List<byte[]>();
-            if (images != null)
+            if (images != null && images.Length > 0)
             {
-                foreach (var el in images)
+                foreach (var img in images)
                 {
-                    if (el != null)
-                    {
-                        var bytearr = new List<byte>();
-                        foreach (var ch in el.Data)
-                        {
-                            bytearr.Add(Convert.ToByte(ch));
-                        }
-                        arr.Add(bytearr.ToArray());
-                    }
-                }
-                for (int i = 0; i < arr.Count; i++)
-                {
-                    var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
-                    //path to folder with project
-                    var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + images[i].Name));
-                    File.WriteAllBytes(path, arr[i]);
-                    path = string.Format("http://localhost:58099/uploads/" + time + images[i].Name);
-                    pathes.Add(path);
+                    pathes.Add(Extensions.Extensions.SaveImage(img));
                 }
             }
             return pathes;

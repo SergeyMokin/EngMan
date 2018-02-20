@@ -6,10 +6,10 @@ namespace EngMan.Repository
     {
         Message SendMessage(Message mes, int userId);
 
-        IEnumerable<Message> GetMessages(int userId);
+        IEnumerable<ReturnMessage> GetMessages(int userId);
 
         int DeleteMessage(int mesId, int userId);
 
-        IEnumerable<Message> ReadMessages(IEnumerable<Message> messages);
+        IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId);
     }
 }

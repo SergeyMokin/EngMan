@@ -25,6 +25,44 @@ namespace EngMan.Models
         public bool CheckReadMes { get; set; }
     }
 
+    public class ReturnMessageWithTheQueryBD
+    {
+        [Key]
+        [DataMember]
+        public int MessageId { get; set; }
+
+        [DataMember]
+        public int SenderId { get; set; }
+        [DataMember]
+        public string SenderFirstName { get; set; }
+        [DataMember]
+        public string SenderLastName { get; set; }
+        [DataMember]
+        public string SenderEmail { get; set; }
+        [DataMember]
+        public string SenderRole { get; set; }
+
+        [DataMember]
+        public int BeneficiaryId { get; set; }
+        [DataMember]
+        public string BeneficiaryFirstName { get; set; }
+        [DataMember]
+        public string BeneficiaryLastName { get; set; }
+        [DataMember]
+        public string BeneficiaryEmail { get; set; }
+        [DataMember]
+        public string BeneficiaryRole { get; set; }
+
+        [DataMember]
+        public string Text { get; set; }
+
+        [DataMember]
+        public System.DateTime Time { get; set; }
+
+        [DataMember]
+        public bool CheckReadMes { get; set; }
+    }
+
     public class ReturnMessage
     {
         [Key]

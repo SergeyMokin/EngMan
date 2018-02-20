@@ -38,7 +38,7 @@ namespace EngMan.App_Start
             container.Register<IWordService>(() => new WordService(container.GetInstance<IWordRepository>()), Lifestyle.Scoped);
             container.Register<IRuleService>(() => new RuleService(container.GetInstance<IRuleRepository>()), Lifestyle.Scoped);
             container.Register<IUserService>(() => new UserService(container.GetInstance<IUserRepository>()), Lifestyle.Scoped);
-            container.Register<IMessageService>(() => new MessageService(container.GetInstance<IMessageRepository>(), container.GetInstance<IUserService>()), Lifestyle.Scoped);
+            container.Register<IMessageService>(() => new MessageService(container.GetInstance<IMessageRepository>()));
             container.Register<IGuessesTheImageService>(() => new GuessesTheImageService(container.GetInstance<IGuessesTheImageRepository>()), Lifestyle.Scoped);
             container.Register<IUserDictionaryService>(() => new UserDictionaryService(container.GetInstance<IUserDictionaryRepository>()), Lifestyle.Scoped);
         }

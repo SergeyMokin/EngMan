@@ -12,5 +12,9 @@ namespace EngMan.Repository
         Task<Word> AddWord(Word word);
 
         Task<int> DeleteWord(int id);
+
+        IEnumerable<Word> GetByCategory(string category);
+
+        IEnumerable<string> GetAllCategories();
     }
 }

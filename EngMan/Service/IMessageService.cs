@@ -10,6 +10,6 @@ namespace EngMan.Service
 
         int DeleteMessage(int mesId, int userId);
 
-        IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages);
+        IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId);
     }
 }

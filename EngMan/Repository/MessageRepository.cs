@@ -13,12 +13,12 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public IEnumerable<Message> ReadMessages(IEnumerable<Message> messages){
+        public IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId){
             if (messages != null)
             {
                 foreach (var el in messages)
                 {
-                    if (el != null)
+                    if (!el.CheckReadMes)
                     {
                         var entity = context.Messages.Find(el.MessageId);
                         if (entity != null)
@@ -29,7 +29,7 @@ namespace EngMan.Repository
                 }
                 context.SaveChanges();
             }
-            return messages;
+            return GetMessages(userId);
         }
 
         public Message SendMessage(Message mes, int userId)
@@ -43,9 +43,49 @@ namespace EngMan.Repository
             return mes;
         }
 
-        public IEnumerable<Message> GetMessages(int userId)
+        public IEnumerable<ReturnMessage> GetMessages(int userId)
         {
-            return context.Messages.Where(x => x.SenderId == userId || x.BeneficiaryId == userId);
+            return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(string.Format(
+                @"
+                    SELECT [MessageId]
+                          , B.[Id] [SenderId]
+	                      , B.[FirstName] [SenderFirstName]
+	                      , B.[LastName] [SenderLastName]
+	                      , B.[Email] [SenderEmail]
+	                      , B.[Role] [SenderRole]
+                          , A.[Id] [BeneficiaryId]
+	                      , A.[FirstName] [BeneficiaryFirstName]
+	                      , A.[LastName] [BeneficiaryLastName]
+	                      , A.[Email] [BeneficiaryEmail]
+	                      , A.[Role] [BeneficiaryRole]
+                          ,[Text]
+                          ,[Time]
+                          ,[CheckReadMes]
+                      FROM [EngMan].[dbo].[Messages]
+                      JOIN [EngMan].[dbo].[Users] A ON A.[Id] = [EngMan].[dbo].[Messages].[BeneficiaryId]
+                      JOIN [EngMan].[dbo].[Users] B ON B.[Id] = [EngMan].[dbo].[Messages].[SenderId]
+                      WHERE  [EngMan].[dbo].[Messages].[BeneficiaryId] = {0} OR [EngMan].[dbo].[Messages].[SenderId] = {0}
+                ", userId
+                )).Select(x => new ReturnMessage {
+                    MessageId = x.MessageId,
+                    CheckReadMes = x.CheckReadMes,
+                    Text = x.Text,
+                    Time = x.Time,
+                    Sender = new UserView {
+                        Id = x.SenderId,
+                        FirstName = x.SenderFirstName,
+                        LastName = x.SenderLastName,
+                        Email = x.SenderEmail,
+                        Role = x.SenderRole
+                    },
+                    Beneficiary = new UserView {
+                        Id = x.BeneficiaryId,
+                        FirstName = x.BeneficiaryFirstName,
+                        LastName = x.BeneficiaryLastName,
+                        Email = x.BeneficiaryEmail,
+                        Role = x.BeneficiaryRole
+                    }
+                });
         }
 
         public int DeleteMessage(int mesId, int userId)

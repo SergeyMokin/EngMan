@@ -15,6 +15,16 @@ namespace EngMan.Repository
             context = _context;
         }
 
+        public IEnumerable<Word> GetByCategory(string category)
+        {
+            return context.Words.Where(x => x.Category.ToLower().Equals(category.ToLower()));
+        }
+
+        public IEnumerable<string> GetAllCategories()
+        {
+            return context.Words.GroupBy(x => x.Category).Select(x => x.Key);
+        }
+
         public async Task<Word> SaveWord(Word word)
         {
             if (word.WordId == 0)

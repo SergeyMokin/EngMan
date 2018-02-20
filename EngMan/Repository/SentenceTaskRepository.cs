@@ -15,6 +15,16 @@ namespace EngMan.Repository
             context = _context;
         }
 
+        public IEnumerable<SentenceTask> GetByCategory(string category)
+        {
+            return context.SentenceTasks.Where(x => x.Category.ToLower().Equals(category.ToLower()));
+        }
+
+        public IEnumerable<string> GetAllCategories()
+        {
+            return context.SentenceTasks.GroupBy(x => x.Category).Select(x => x.Key);
+        }
+
         public async Task<SentenceTask> SaveTask(SentenceTask task)
         {
             if (task.SentenceTaskId == 0)

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EngMan.Models;
-using System;
-using System.IO;
 
 namespace EngMan.Repository
 {
@@ -16,23 +14,57 @@ namespace EngMan.Repository
         }
 
         public IEnumerable<GuessesTheImageToReturn> GetGuessesTheImages() {
-            return context.GuessesTheImages.ToList().Select(x => new GuessesTheImageToReturn {
-                Id = x.Id,
-                Word = context.Words.FirstOrDefault(y => x.WordId == y.WordId),
-                Path = x.Path
-            });
+            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
+                    $"SELECT [Id]" +
+                    $",[EngMan].[dbo].[GuessesTheImages].[WordId]" +
+                    $",[Original]" +
+                    $",[Translate]" +
+                    $",[Category]" +
+                    $",[Transcription]" +
+                    $",[Path]" +
+                    $"FROM [EngMan].[dbo].[GuessesTheImages]" +
+                    $"JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]"
+                )
+                .Select(x => new GuessesTheImageToReturn {
+                    Id = x.Id,
+                    Word = new Word {
+                        WordId = x.WordId,
+                        Category = x.Category,
+                        Original = x.Original,
+                        Transcription = x.Transcription,
+                        Translate = x.Translate
+                    },
+                    Path = x.Path
+                });
         }
 
         public GuessesTheImageToReturn GetGuessesTheImage(int id)
         {
-            var ggi = context.GuessesTheImages.Where(x => x.Id == id).FirstOrDefault();
-            var ggiToReturn = new GuessesTheImageToReturn
+            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
+                $"SELECT [Id]" +
+                $",[EngMan].[dbo].[GuessesTheImages].[WordId]" +
+                $",[Original]" +
+                $",[Translate]" +
+                $",[Category]" +
+                $",[Transcription]" +
+                $",[Path]" +
+                $"FROM [EngMan].[dbo].[GuessesTheImages]" +
+                $"JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]" +
+                $"WHERE [EngMan].[dbo].[GuessesTheImages].[Id] = " + id
+            )
+            .Select(x => new GuessesTheImageToReturn
             {
-                Id = ggi.Id,
-                Word = context.Words.FirstOrDefault(y => ggi.WordId == y.WordId),
-                Path = ggi.Path
-            };
-            return ggiToReturn;
+                Id = x.Id,
+                Word = new Word
+                {
+                    WordId = x.WordId,
+                    Category = x.Category,
+                    Original = x.Original,
+                    Transcription = x.Transcription,
+                    Translate = x.Translate
+                },
+                Path = x.Path
+            }).FirstOrDefault();
         }
 
         public GuessesTheImageToReturn AddGuessesTheImage(GuessesTheImageToAdd image)
@@ -40,7 +72,7 @@ namespace EngMan.Repository
             GuessesTheImage returnimg = new GuessesTheImage();
             if (image.Image != null)
             {
-                var path = saveImage(image.Image);
+                var path = Extensions.Extensions.SaveImage(image.Image);
                 returnimg = new GuessesTheImage
                 {
                     Id = image.Id,
@@ -64,7 +96,7 @@ namespace EngMan.Repository
                 {
                     if (image.Image.Data.Length > 0 && image.Image.Name.Length > 0)
                     {
-                        entity.Path = saveImage(image.Image);
+                        entity.Path = Extensions.Extensions.SaveImage(image.Image);
                     }
                 }
                 context.SaveChanges();
@@ -85,19 +117,6 @@ namespace EngMan.Repository
                 return id;
             }
             return -1;
-        }
-
-        private string saveImage(Image image) {
-            var bytearr = new List<byte>();
-            foreach (var ch in image.Data)
-            {
-                bytearr.Add(Convert.ToByte(ch));
-            }
-            var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
-            //path to folder with project
-            var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + image.Name));
-            File.WriteAllBytes(path, bytearr.ToArray());
-            return string.Format("http://localhost:58099/uploads/" + time + image.Name);
         }
     }
 }

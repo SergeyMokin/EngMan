@@ -15,6 +15,31 @@ namespace EngMan.Models
         public string Path { get; set; }
     }
 
+    public class GuessesTheImageWithTheQueryBD
+    {
+        [Key]
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public int WordId { get; set; }
+
+        [DataMember]
+        public string Original { get; set; }
+
+        [DataMember]
+        public string Translate { get; set; }
+
+        [DataMember]
+        public string Category { get; set; }
+
+        [DataMember]
+        public string Transcription { get; set; }
+
+        [DataMember]
+        public string Path { get; set; }
+    }
+
     public class GuessesTheImageToReturn
     {
         [Key]

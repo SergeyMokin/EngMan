@@ -52,7 +52,7 @@ namespace EngMan.Controllers
         {
             if (mesgs != null)
             {
-                return Ok(service.ReadMessages(mesgs));
+                return Ok(service.ReadMessages(mesgs, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
             }
             return NotFound();
         }
