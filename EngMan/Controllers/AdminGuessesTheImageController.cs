@@ -40,7 +40,7 @@ namespace EngMan.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public IHttpActionResult EditTask(GuessesTheImage task)
+        public IHttpActionResult EditTask(GuessesTheImageToAdd task)
         {
             if (task != null)
             {

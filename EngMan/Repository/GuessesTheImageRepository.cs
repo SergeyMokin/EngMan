@@ -15,52 +15,61 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public IEnumerable<GuessesTheImage> GetGuessesTheImages() {
-            return context.GuessesTheImages;
+        public IEnumerable<GuessesTheImageToReturn> GetGuessesTheImages() {
+            return context.GuessesTheImages.ToList().Select(x => new GuessesTheImageToReturn {
+                Id = x.Id,
+                Word = context.Words.FirstOrDefault(y => x.WordId == y.WordId),
+                Path = x.Path
+            });
         }
 
-        public GuessesTheImage GetGuessesTheImage(int id)
+        public GuessesTheImageToReturn GetGuessesTheImage(int id)
         {
-            return context.GuessesTheImages.Where(x => x.Id == id).FirstOrDefault();
+            var ggi = context.GuessesTheImages.Where(x => x.Id == id).FirstOrDefault();
+            var ggiToReturn = new GuessesTheImageToReturn
+            {
+                Id = ggi.Id,
+                Word = context.Words.FirstOrDefault(y => ggi.WordId == y.WordId),
+                Path = ggi.Path
+            };
+            return ggiToReturn;
         }
 
-        public GuessesTheImage AddGuessesTheImage(GuessesTheImageToAdd image)
+        public GuessesTheImageToReturn AddGuessesTheImage(GuessesTheImageToAdd image)
         {
             GuessesTheImage returnimg = new GuessesTheImage();
             if (image.Image != null)
             {
-                var bytearr = new List<byte>();
-                foreach (var ch in image.Image.Data)
-                {
-                    bytearr.Add(Convert.ToByte(ch));
-                }
-                var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
-                //path to folder with project
-                var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + image.Image.Name));
-                File.WriteAllBytes(path, bytearr.ToArray());
-                path = string.Format("http://localhost:58099/uploads/" + time + image.Image.Name);
+                var path = saveImage(image.Image);
                 returnimg = new GuessesTheImage
                 {
                     Id = image.Id,
-                    Word = image.Word,
+                    WordId = image.WordId,
                     Path = path
                 };
                 context.GuessesTheImages.Add(returnimg);
                 context.SaveChanges();
                 returnimg.Id = context.GuessesTheImages.ToArray().Last().Id;
             }
-            return returnimg;
+            return GetGuessesTheImage(returnimg.Id);
         }
 
-        public GuessesTheImage EditGuessesTheImage(GuessesTheImage image)
+        public GuessesTheImageToReturn EditGuessesTheImage(GuessesTheImageToAdd image)
         {
             var entity = context.GuessesTheImages.Find(image.Id);
             if (entity != null)
             {
-                entity.Word = image.Word;
+                entity.WordId = image.WordId;
+                if (image.Image != null)
+                {
+                    if (image.Image.Data.Length > 0 && image.Image.Name.Length > 0)
+                    {
+                        entity.Path = saveImage(image.Image);
+                    }
+                }
                 context.SaveChanges();
             }
-            return entity;
+            return GetGuessesTheImage(entity.Id);
         }
 
         public int DeleteGuessesTheImage(int id)
@@ -76,6 +85,19 @@ namespace EngMan.Repository
                 return id;
             }
             return -1;
+        }
+
+        private string saveImage(Image image) {
+            var bytearr = new List<byte>();
+            foreach (var ch in image.Data)
+            {
+                bytearr.Add(Convert.ToByte(ch));
+            }
+            var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
+            //path to folder with project
+            var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + image.Name));
+            File.WriteAllBytes(path, bytearr.ToArray());
+            return string.Format("http://localhost:58099/uploads/" + time + image.Name);
         }
     }
 }

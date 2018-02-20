@@ -1,3 +1,4 @@
+<!--edit-->
 <template>
   <div class="sentence-task">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
@@ -13,6 +14,7 @@
         <div v-on:click = "verificationCorrectness()"><img title="Проверить" style = "width: 20px; height: auto; margin-right: 50px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
         <img title="Угадай кто на картинке" :src = "task.Path" style = "width: 50%">
         <br/>
+        <span>{{task.Word.Translate}}</span><br/>
         <input type = "text" v-model = "returnTask.Word" class = "sentence-input">
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
@@ -23,7 +25,7 @@
 import api from '../api/api'
 
 export default {
-  name: 'sentence-task',
+  name: 'guessestheimages-task',
   data () {
     return {
         id: 0,

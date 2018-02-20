@@ -15,7 +15,7 @@
         <br/>
         <div v-for = 'el in words' :key = 'el.WordId'>
             <div title = "Добавить себе в словарь" class = "wordmap-list--element" v-on:click = "addWordToDictionary(el)">
-                <a>{{el.Original}} - {{el.Translate}}</a>
+                <a>{{el.Original}} {{el.Transcription}} - {{el.Translate}}</a>
             </div>
         </div>
       </div>

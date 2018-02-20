@@ -29,14 +29,14 @@ namespace EngMan.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult VerificationCorrectness(GuessesTheImage img)
+        public IHttpActionResult VerificationCorrectness(GuessesTheImageToReturn img)
         {
             if (img != null)
             {
                 var task = service.GetGuessesTheImage(img.Id);
                 if (task != null)
                 {
-                    if (task.Word.ToLower().Equals(img.Word.ToLower()))
+                    if (task.Word.Original.ToLower().Equals(img.Word.Original.ToLower()))
                     {
                         return Ok(true);
                     }

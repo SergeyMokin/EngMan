@@ -31,6 +31,7 @@ namespace EngMan.Repository
                     entity.Original = word.Original;
                     entity.Translate = word.Translate;
                     entity.Category = word.Category;
+                    entity.Transcription = word.Transcription;
                 }
             }
             context.SaveChanges();

@@ -7,9 +7,22 @@ namespace EngMan.Models
         [Key]
         [DataMember]
         public int Id { get; set; }
-        
+
         [DataMember]
-        public string Word { get; set; }
+        public int WordId { get; set; }
+
+        [DataMember]
+        public string Path { get; set; }
+    }
+
+    public class GuessesTheImageToReturn
+    {
+        [Key]
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public Word Word { get; set; }
 
         [DataMember]
         public string Path { get; set; }
@@ -22,7 +35,7 @@ namespace EngMan.Models
         public int Id { get; set; }
 
         [DataMember]
-        public string Word { get; set; }
+        public int WordId { get; set; }
 
         [DataMember]
         public Image Image { get; set; }

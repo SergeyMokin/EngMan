@@ -1,3 +1,4 @@
+<!--edit-->
 <template>
   <div v-if = "$store.state.user.Role == 'admin'">
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
@@ -12,21 +13,34 @@
       <div v-for = 'el in tasks' :key = 'el.Id' class = "form-border">
       <div class = "rules-list--element admin">
         <span class = "span-rule--element">
-            {{el.Word}}
+            {{el.Word.Original}}
             <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deletetask(el.Id)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
             <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "edit(el.Id)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
         </span>
       </div>
     </div>
-  <br/><br/>  
   </div>
   <div v-if = "click" style = "text-align: center">
           <br/><br/>
           <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
           <span v-on:click = "save(task)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
-          <span>Слово на английском</span>
-          <textarea class = "rule-edit" type = "text" v-model = "task.Word"/><br/>
-          <div v-if = "clickAdd" style = "width: 60%; text-align: left; margin-left: 20%"><input type="file" accept="image/*" @change="onFileChange" class = "button-classic"><br/></div>
+          <div style = "width: 60%; text-align: left; margin-left: 20%">
+          <span>Категория: </span>
+          <input placeholder="Выберите..." type="text" class = "select-form" list="guessestheimage_category" v-model = "searchKey" v-on:click = "searchKey = ''"/>
+          <datalist id = "guessestheimage_category">
+            <option v-for = "category in categories" :key = "category">
+                {{category}}
+            </option>
+          </datalist><br/>
+          <span>Слово на английском: </span>
+          <input placeholder="Выберите..." type="text" class = "select-form" list="guessestheimage_word" v-model = "choosenWord" v-on:click = "choosenWord = ''"/>
+          <datalist id = "guessestheimage_word">
+            <option v-for = "word in words" :key = "word.WordId">
+                {{word.Original}}
+            </option>
+          </datalist><br/>
+          </div>
+          <div style = "width: 60%; text-align: left; margin-left: 20%"><input type="file" accept="image/*" @change="onFileChange" class = "button-classic"><br/></div>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
   </div>
   </div>
@@ -42,15 +56,17 @@ export default {
         inProgress: false,
         searchKey: '',
         errormessage: '',
+        categories: [],
         clickAdd: false,
         click: false,
+        choosenWord: '',
         image: {
             Name: '',
             Data: ''
         },
         task: {
             Id: 0,
-            Word: '',
+            WordId: 0,
             Path: ''
         }
     }
@@ -93,6 +109,7 @@ export default {
           if(this.inProgress) return;
           this.inProgress = true;
           this.errormessage = '';
+          this.task.WordId = this.wordComputedId();
           if(this.image.Data.length == 0 && this.clickAdd){
               this.errormessage = 'Выберите изображение';
               this.inProgress = false;
@@ -118,14 +135,7 @@ export default {
                 this.errormessage = 'Сервер недоступен или у вас нет прав';
             })
           } else{
-              api.addGuessesTheImage({
-                Id: this.task.Id,
-                Word: this.task.Word,
-                Image: {
-                    Name: this.image.Name,
-                    Data: this.image.Data
-                }
-            })
+              api.addGuessesTheImage(task)
               .then(result =>{
                   if(result.Id > 0){
                       this.inProgress = false;
@@ -159,6 +169,7 @@ export default {
       add(){
           this.click = true;
           this.clickAdd = true;
+          this.$store.dispatch('getWords');
       },
       closeEditForm(){
         this.inProgress = false,
@@ -183,8 +194,19 @@ export default {
     {
       var vue = this;
       return this.$store.getters.guessestheimages.filter(function(task){
-          return task.Word.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1;
+          return task.Word.Original.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1;
       });
+    },
+    words()
+    {
+      var vue = this;
+      return this.$store.getters.words.filter(function(task){
+          return task.Category.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1;
+      });
+    },
+    wordComputedId(){
+        var index = this.words.indexOf(choosenWord);
+        return index > -1 ? this.words[index].WordId : 0;
     }
   },
   created: function()
@@ -192,7 +214,14 @@ export default {
       if(this.inProgress) return;
       this.inProgress = true;
       this.$store.dispatch('getGuessesTheImages');
-      this.inProgress = false;
+      api.getAllCategoriesWords()
+      .then(res => {
+          this.categories = res;
+          this.inProgress = false;
+      })
+      .catch(e => {
+          this.inProgress = false;
+      })
   }
 }
 </script>

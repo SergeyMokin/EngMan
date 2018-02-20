@@ -12,22 +12,22 @@ namespace EngMan.Service
             rep = _rep;
         }
 
-        public GuessesTheImage AddGuessesTheImage(GuessesTheImageToAdd image)
+        public GuessesTheImageToReturn AddGuessesTheImage(GuessesTheImageToAdd image)
         {
             return rep.AddGuessesTheImage(image);
         }
 
-        public GuessesTheImage EditGuessesTheImage(GuessesTheImage image)
+        public GuessesTheImageToReturn EditGuessesTheImage(GuessesTheImageToAdd image)
         {
             return rep.EditGuessesTheImage(image);
         }
 
-        public IEnumerable<GuessesTheImage> GetGuessesTheImages()
+        public IEnumerable<GuessesTheImageToReturn> GetGuessesTheImages()
         {
             return rep.GetGuessesTheImages();
         }
 
-        public GuessesTheImage GetGuessesTheImage(int id)
+        public GuessesTheImageToReturn GetGuessesTheImage(int id)
         {
             return rep.GetGuessesTheImage(id);
         }

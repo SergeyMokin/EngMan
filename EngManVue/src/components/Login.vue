@@ -39,7 +39,7 @@
                 <label for = "confirmpassword-registration">Подтвердите пароль</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.confirmPassword.$error}" class = "input-form" id = "confirmpassword-registration" type = 'password' v-model = "registrationUser.confirmPassword"/><br/>
             </div>
-            <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;" v-on:click = "login()">Зарегистрироваться</div><br/>
+            <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;" v-on:click = "registrationUserReq()">Зарегистрироваться</div><br/>
             <span v-if = "$v.registrationUser.$error" class = "span-error-message">Все поля должны быть заполнены<br/></span>
             <span v-if = "badrequest" class = "span-error-message">Пользователь с таким мэилом уже существует<br/></span>
             <span v-if = "$v.registrationUser.Email.$error" class = "span-error-message">Неверный мэил<br/></span>

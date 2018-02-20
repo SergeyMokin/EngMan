@@ -18,7 +18,6 @@
         </span>
       </div>
     </div>
-  <br/><br/>  
   </div>  
   <div v-if = "clickRule" style = "text-align: center">
           <br/><br/>

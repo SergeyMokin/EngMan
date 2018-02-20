@@ -23,7 +23,6 @@
                 </span>
             </div>
         </div>
-        <br/><br/>
   </div>
 </template>
 

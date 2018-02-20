@@ -15,7 +15,9 @@ namespace EngMan.Models
         public string Translate { get; set; }
         [DataMember]
         public string Category { get; set; }
-    }
+        [DataMember]
+        public string Transcription { get; set; }
+}
 
     public class MapWord
     {

@@ -17,13 +17,12 @@
         <div v-for = 'el in words' :key = 'el.WordId' class = "form-border">
             <div class = "words-list--element">
                 <span class = "span-word--element">
-                    {{el.Original}} - {{el.Translate}}
+                    {{el.Original}} {{el.Transcription}} - {{el.Translate}}
                     <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteWord(el.WordId)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
                     <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editWord(el.WordId)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
                 </span>
             </div>
         </div>
-        <br/><br/>
       </div>
       <div v-if = "clickWord" style = "text-align: center">
           <br/><br/>
@@ -35,6 +34,8 @@
           <textarea type = "text" v-model = "word.Original" class = "word-edit"/><br/>
           <span>Русский перевод</span>
           <textarea type = "text" v-model = "word.Translate" class = "word-edit"/><br/>
+          <span>Транскрипция</span>
+          <textarea type = "text" v-model = "word.Transcription" class = "word-edit"/><br/>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
       </div>
   </div>
@@ -57,7 +58,8 @@ export default {
             WordId: 0,
             Original: '',
             Translate: '',
-            Category: ''
+            Category: '',
+            Transcription: ''
         }
     }
   },
@@ -77,7 +79,7 @@ export default {
           if(this.inProgress) return;
           this.errormessage = '';
           this.inProgress = true;
-          if(this.word.Original.length == 0 || this.word.Translate.length == 0 || this.word.Category.length == 0)
+          if(this.word.Original.length == 0 || this.word.Translate.length == 0 || this.word.Category.length == 0 || this.word.Transcription.length == 0)
           {
               this.errormessage = 'Заполните все поля';
               this.inProgress = false;
