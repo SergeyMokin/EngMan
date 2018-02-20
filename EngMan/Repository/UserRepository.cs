@@ -45,7 +45,7 @@ namespace EngMan.Repository
                     var entity = context.Users.Find(id);
                     if (entity != null)
                     {
-                        entity.Password = oldpassword.Equals(entity.Password) ? newpassword : entity.Password;
+                        entity.Password = Extensions.Extensions.VerifyHashedPassword(entity.Password, oldpassword) ? Extensions.Extensions.HashPassword(newpassword) : entity.Password;
                         if (entity.Password.Equals(newpassword))
                         {
                             user = new UserView
@@ -84,6 +84,7 @@ namespace EngMan.Repository
                 var entity = context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
                 if (entity == null)
                 {
+                    user.Password = Extensions.Extensions.HashPassword(user.Password);
                     user.Email = user.Email.ToLower();
                     if (user.Id == 0)
                     {
