@@ -4,6 +4,8 @@ using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
 using System.Collections.Generic;
+using System.Net.Http;
+
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -17,44 +19,31 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetAllCategories()
-        {
-            var words = service.Get();
-            if (words != null)
-            {
-                var categories = words.GroupBy(x => x.Category).Where(x => x.Count() > 4).Select(x => x.Key).ToList();
-                return Ok(categories);
-            }
-            return NotFound();
-        }
-
-        [HttpGet]
         public IHttpActionResult GetWord(string category, int id)
         {
-            if (category != null)
+            try
             {
+                var tasks = service.GetByCategory(category).ToList();
                 var rand = new Random();
-                var words = service.Get();
-                words = words.Where(x => x.Category == category);
-                if (words != null)
+                if (tasks != null)
                 {
                     var indexes = new HashSet<int>();
-                    if (words.Count() >= 5)
+                    if (tasks.Count() >= 5)
                     {
-                        if (words.Count() - 1 <= id)
+                        if (tasks.Count() - 1 <= id)
                         {
                             return NotFound();
                         }
                         indexes.Add(id + 1);
                         while (indexes.Count() != 5)
                         {
-                            indexes.Add(rand.Next(0, words.Count()));
+                            indexes.Add(rand.Next(0, tasks.Count()));
                         }
-                        var word = words.ElementAt(id + 1);
+                        var word = tasks.ElementAt(id + 1);
                         var translate = new List<string>();
                         foreach (var index in indexes)
                         {
-                            translate.Add(words.ElementAt(index).Translate);
+                            translate.Add(tasks.ElementAt(index).Translate);
                         }
                         if (word != null)
                         {
@@ -69,13 +58,21 @@ namespace EngMan.Controllers
                     }
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return NotFound();
         }
 
         [HttpPost]
         public IHttpActionResult VerificationCorrectness(Word word)
         {
-            if (word != null)
+            try
             {
                 var _word = service.GetById(word.WordId);
                 if (_word != null)
@@ -86,7 +83,11 @@ namespace EngMan.Controllers
                     }
                 }
             }
-            return Ok(false);
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
         }
     }
 }

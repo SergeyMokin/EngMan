@@ -19,24 +19,6 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetAllCategories()
-        {
-            try
-            {
-                var tasks = service.GetAllCategories();
-                if (tasks != null)
-                {
-                    return Ok(tasks);
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return NotFound();
-        }
-
-        [HttpGet]
         public IHttpActionResult GetTask(string category, int id)
         {
             try

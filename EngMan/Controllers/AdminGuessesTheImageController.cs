@@ -33,7 +33,7 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetTaskByCategory(string category)
+        public IHttpActionResult GetByCategory(string category)
         {
             try
             {

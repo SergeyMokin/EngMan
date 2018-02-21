@@ -6,11 +6,11 @@
             <div class = "routes-admin" style = "padding: 5px; cursor: pointer;" v-on:click = "authentification = !authentification; registration = false;">Войти в аккаунт</div>
             <div class = "routes-admin" style = "padding: 5px; cursor: pointer;" v-on:click = "registration = !registration; authentification = false;">Регистрация</div>
         <div class = "authentification-form form-border" v-if = "authentification">
-            <div class = "form">
+            <div class = "login-form">
                 <label for = "username-login">Мэил</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.user.username.$error}" class = "input-form" id = "username-login" type = 'text' v-model = "user.username"/><br/>
             </div>
-            <div class = "form">
+            <div class = "login-form">
                 <label for = "password-login">Пароль</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.user.password.$error}" class = "input-form" id = "password-login" type = 'password' v-model = "user.password"/><br/>
             </div>
@@ -19,23 +19,23 @@
             <span v-if = "badrequest" class = "span-error-message">Мэил или пароль введены неверно<br/></span>
         </div>
         <div class = "registration-form form-border" v-if = "registration">
-            <div class = "form">
+            <div class = "login-form">
                 <label for = "firstname-registration">Имя</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.FirstName.$error}" class = "input-form" id = "firstname-registration" type = 'text' v-model = "registrationUser.FirstName"/><br/>
             </div>
-            <div class = "form">
+            <div class = "login-form">
                 <label for = "lastname-registration">Фамилия</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.LastName.$error}" class = "input-form" id = "lastname-registration" type = 'text' v-model = "registrationUser.LastName"/><br/>
             </div>
-            <div class = "form">
+            <div class = "login-form">
                 <label for = "email-registration">Мэил</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.Email.$error}" class = "input-form" id = "email-registration" type = 'text' v-model = "registrationUser.Email"/><br/>
             </div>
-            <div class = "form">
+            <div class = "login-form">
                 <label for = "password-registration">Пароль</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.Password.$error}" class = "input-form" id = "password-registration" type = 'password' v-model = "registrationUser.Password"/><br/>
             </div>
-            <div class = "form">
+            <div class = "login-form">
                 <label for = "confirmpassword-registration">Подтвердите пароль</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.confirmPassword.$error}" class = "input-form" id = "confirmpassword-registration" type = 'password' v-model = "registrationUser.confirmPassword"/><br/>
             </div>

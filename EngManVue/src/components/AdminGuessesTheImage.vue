@@ -2,17 +2,17 @@
 <template>
   <div v-if = "$store.state.user.Role == 'admin'">
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-    <div v-if = "!click" class="rules-view-list">
+    <div v-if = "!click" class="view-list">
       <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
       <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
       <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
       <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
       <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
       <span style = "cursor: pointer;" v-on:click = "add()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-      <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..." v-on:click = "searchKey = ''"><br/>
-      <div v-for = 'el in tasks' :key = 'el.Id' class = "form-border">
-      <div class = "rules-list--element admin">
-        <span class = "span-rule--element">
+      <input type = "text" v-model="searchKey" class = "select-form" placeholder = "Поиск..." v-on:click = "searchKey = ''"><br/>
+      <div v-for = 'el in tasks' :key = 'el.Id'>
+      <div class = "list--element">
+        <span class = "span--element">
             {{el.Word.Original}}
             <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deletetask(el.Id)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
             <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "edit(el.Id)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
@@ -22,8 +22,8 @@
   </div>
   <div v-if = "click" style = "text-align: center">
           <br/><br/>
-          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
-          <span v-on:click = "save(task)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
+          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "save(task)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
           <div style = "width: 60%; text-align: left; margin-left: 20%">
           <span>Категория: </span>
           <input placeholder="Выберите..." type="text" class = "select-form" list="guessestheimage_category" v-model = "searchKey" v-on:click = "searchKey = ''"/>
@@ -40,7 +40,7 @@
             </option>
           </datalist><br/>
           </div>
-          <div style = "width: 60%; text-align: left; margin-left: 20%"><input type="file" accept="image/*" @change="onFileChange" class = "button-classic"><br/></div>
+          <div style = "width: 60%; text-align: left; margin-left: 20%"><input type="file" accept="image/*" @change="onFileChange"><br/></div>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
   </div>
   </div>

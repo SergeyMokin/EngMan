@@ -57,6 +57,48 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
+        public IHttpActionResult GetAllCategoriesOfDictionary()
+        {
+            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            {
+                try
+                {
+                    var result = serviceDictionary.GetAllCategories(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                    if (result != null)
+                    {
+                        return Ok(result);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetByCategoryDictionary(string category)
+        {
+            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            {
+                try
+                {
+                    var result = serviceDictionary.GetByCategory(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), category);
+                    if (result != null)
+                    {
+                        return Ok(result);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
         public IHttpActionResult GetUserDictionary()
         {
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)

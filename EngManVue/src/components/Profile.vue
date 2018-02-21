@@ -2,7 +2,7 @@
   <div class="profile" id = "profile-form">
       <div class="loading" v-if = "inprogress">Loading&#8230;</div>
       <div v-if = "!$store.state.user.Logined">
-          <span class = "span-anonymous">Вам необходимо войти в профиль</span>
+          <span>Вам необходимо войти в профиль</span>
       </div>
       <div v-if = "$store.state.user.Logined" style = "display: grid">
           <a style = "margin-bottom: 5px" v-if = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b></a>

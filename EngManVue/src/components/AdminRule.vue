@@ -1,17 +1,17 @@
 <template>
   <div v-if = "$store.state.user.Role == 'admin'">
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-    <div v-if = "!clickRule" class="rules-view-list">
+    <div v-if = "!clickRule" class="view-list">
       <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
       <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
       <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
       <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
       <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
       <span style = "cursor: pointer;" v-on:click = "AddRule()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-      <input type = "text" v-model="searchKey" class = "search-form" placeholder = "Поиск..." v-on:click = "searchKey = ''"><br/>
-      <div v-for = 'el in rules' :key = 'el.RuleId' class = "form-border">
-      <div class = "rules-list--element admin">
-        <span class = "span-rule--element">
+      <input type = "text" v-model="searchKey" class = "select-form" placeholder = "Поиск..." v-on:click = "searchKey = ''"><br/>
+      <div v-for = 'el in rules' :key = 'el.RuleId'>
+      <div class = "list--element">
+        <span class = "span--element">
             {{el.Title}}
             <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteRule(el.RuleId);"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
             <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editRule(el.RuleId);"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
@@ -21,16 +21,16 @@
   </div>  
   <div v-if = "clickRule" style = "text-align: center">
           <br/><br/>
-          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
-          <span v-on:click = "saveRule(rule)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
+          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "saveRule(rule)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
           <span>Название</span>
-          <textarea class = "rule-edit" type = "text" v-model = "rule.Title"/><br/>
+          <textarea class = "admin-edit" type = "text" v-model = "rule.Title"/><br/>
           <span>Категория</span>
-          <textarea class = "rule-edit" type = "text" v-model = "rule.Category"/><br/>
+          <textarea class = "admin-edit" type = "text" v-model = "rule.Category"/><br/>
           <span>Текст</span>
-          <textarea class = "rule-edit" type = "text" v-model = "rule.Text" style = "height: 450px"/><br/>
+          <textarea class = "admin-edit" type = "text" v-model = "rule.Text" style = "height: 450px"/><br/>
           <span style = "float: left; margin-right: 10px; margin-left: 20%;" v-on:click = "downloadOnServer()"><img title="Загрузить на сервер" style = "cursor:pointer;width: 25px; height: auto;" type = "img" src = "../assets/upload-icon.png"></span>
-          <span style = "float: left; text-align: left;"><input type="file" accept="image/*" @change="onFileChange" multiple class = "button-classic"><br/></span><br/><br/>
+          <span style = "float: left; text-align: left;"><input type="file" accept="image/*" @change="onFileChange" multiple><br/></span><br/><br/>
           <div v-if = 'pathesOfImages.length > 0' v-for = 'el in pathesOfImages' :key = 'el'>
               <span>
                   {{el}}

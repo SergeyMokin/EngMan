@@ -1,6 +1,6 @@
 <template>
   <div v-if = "$store.state.user.Role == 'admin'">
-      <div v-if = "!clickWord" class="words-view" >
+      <div v-if = "!clickWord" class="view-list" >
         <div class="loading" v-if = "inProgress">Loading&#8230;</div>
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
@@ -14,9 +14,9 @@
                 {{category}}
             </option>
         </datalist>
-        <div v-for = 'el in words' :key = 'el.WordId' class = "form-border">
-            <div class = "words-list--element">
-                <span class = "span-word--element">
+        <div v-for = 'el in words' :key = 'el.WordId'>
+            <div class = "list--element">
+                <span class = "span--element">
                     {{el.Original}} {{el.Transcription}} - {{el.Translate}}
                     <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteWord(el.WordId)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
                     <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editWord(el.WordId)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
@@ -26,16 +26,16 @@
       </div>
       <div v-if = "clickWord" style = "text-align: center">
           <br/><br/>
-          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
-          <span v-on:click = "saveWord(word)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
+          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "saveWord(word)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
           <span>Категория</span>
-          <textarea type = "text" v-model = "word.Category" class = "word-edit"/><br/>
+          <textarea type = "text" v-model = "word.Category" class = "admin-edit"/><br/>
           <span>Оригинал на английском</span>
-          <textarea type = "text" v-model = "word.Original" class = "word-edit"/><br/>
+          <textarea type = "text" v-model = "word.Original" class = "admin-edit"/><br/>
           <span>Русский перевод</span>
-          <textarea type = "text" v-model = "word.Translate" class = "word-edit"/><br/>
+          <textarea type = "text" v-model = "word.Translate" class = "admin-edit"/><br/>
           <span>Транскрипция</span>
-          <textarea type = "text" v-model = "word.Transcription" class = "word-edit"/><br/>
+          <textarea type = "text" v-model = "word.Transcription" class = "admin-edit"/><br/>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
       </div>
   </div>

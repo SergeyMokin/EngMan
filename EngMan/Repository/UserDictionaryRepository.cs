@@ -23,7 +23,7 @@ namespace EngMan.Repository
                   + @"GROUP BY w.Category").ToList();
         }
 
-        public UserDictionary GetUserDictionaryByCategory(int id, string category)
+        public UserDictionary GetByCategory(int id, string category)
         {
             var result = context.Database.SqlQuery<UserWordSqlScript>(@"
 	              SELECT uw.Id [Id]

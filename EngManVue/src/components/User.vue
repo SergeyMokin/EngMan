@@ -1,28 +1,28 @@
 <template>
   <div>
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-    <div v-if = "!clickEdit && !clickChangePassword" class = "users-view-list">
+    <div v-if = "!clickEdit && !clickChangePassword" class = "view-list">
         <span style = "float: right; margin-right: 10px" v-on:click = "clickChangePassword = true"><img title="Изменить пароль" style = "cursor: pointer; width: 30px; height: auto;" type = "img" src = "../assets/security-icon.png"></span>
         <span style = "float: right; margin-top: 5px" v-on:click = "clickEdit = true"><img title="Редактировать профиль" style = "cursor: pointer; width: 20px; height: auto;" type = "img" src = "../assets/edit-icon.png"></span>
         <br/><br/>
-         <div class = "form-border">
-            <div class = "users-list--element">
+         <div>
+            <div class = "list--element">
                 <a><b>Имя:</b> {{user.FirstName}}</a>
             </div>
-            <div class = "users-list--element">
+            <div class = "list--element">
                 <a><b>Фамилия:</b> {{user.LastName}}</a>
             </div>
-            <div class = "users-list--element">
+            <div class = "list--element">
                 <a><b>Мэил:</b> {{user.Email}}</a>
             </div>
         </div>
         <br/><br/>
     </div>
-    <div v-if = "clickEdit" class = "users-view-list">
+    <div v-if = "clickEdit" class = "view-list">
           <br/><br/>
-          <div class = "form-border">
-            <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
-            <span v-on:click = "saveUser()"><img title="Сохранить изменения" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
+          <div>
+            <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
+            <span v-on:click = "saveUser()"><img title="Сохранить изменения" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
             <span>Имя</span>
             <textarea class = "user-edit" type = "text" v-model = "user.FirstName"/><br/>
             <span>Фамилия</span>
@@ -35,11 +35,11 @@
           </div>
           <br/><br/>
     </div>
-    <div v-if = "clickChangePassword" class = "users-view-list">
+    <div v-if = "clickChangePassword" class = "view-list">
           <br/><br/>
           <div class = "form-border">
-            <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
-            <span v-on:click = "changePassword()"><img title="Изменить пароль" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
+            <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
+            <span v-on:click = "changePassword()"><img title="Изменить пароль" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
             <span>Старый пароль</span>
             <input class = "user-edit" type = "password" v-model = "oldpassword" style = "height: 30px; text-align: center;"/><br/>
             <span>Новый пароль</span>

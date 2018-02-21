@@ -9,36 +9,6 @@ export default {
   deleteToken(){
     delete axios.defaults.headers.common['Authorization'];
   },
-  getRules() {
-    return axios.get(url + '/rule/getallrules')
-    .then(response => response.data)
-    .catch(e => e);
-  },
-  getRule(id) {
-    return axios.get(url + '/rule/getrule/' + id)
-    .then(response => response.data)
-    .catch(e => e);
-  },
-  createRule(rule) {
-    return axios.post(url + '/rule/addrule', rule)
-    .then(response => response.data)
-    .catch(e => e);
-  },
-  editRule(rule) {
-    return axios.put(url + '/rule/editrule', rule)
-    .then(response => response.data)
-    .catch(e => e);
-  },
-  deleteRule(id) {
-    return axios.delete(url + '/rule/deleterule/' + id)
-    .then(response => response.data)
-    .catch(e => e);
-  },
-  addImages(images){
-    return axios.post(url + '/rule/addimages', images)
-    .then(response => response.data)
-    .catch(e => e)
-  },
   login(model){
     return axios.post('http://localhost:58099/token', require('querystring').stringify(model))
     .then(response => {
@@ -81,6 +51,81 @@ export default {
     .then(res => res.data)
     .catch(e => e)
   },
+  getUsers(){
+    return axios.get(url + '/account/getallusers')
+    .then(res => res.data)
+    .catch(e => e)
+  },
+  deleteUser(id){
+    return axios.delete(url + '/account/deleteuser/' + id)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  changeRole(user){
+    return axios.put(url + '/account/changerole', user)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  changePassword(id, oldpassword, newpassword){
+    return axios.put(url + '/account/ChangePassword?id=' + id + '&oldpassword=' + oldpassword + '&newpassword=' + newpassword)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  editUser(user){
+    return axios.put(url + '/account/edituser', user)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  getAllCategoriesOfUserDictionary(){
+    return axios.get(url + '/account/GetByCategoryDictionary')
+    .then(res => res.data)
+    .catch(e => e)
+  },
+  getUserDictionaryByCategory(category) {
+    return axios.get(url + '/account/GetByCategory?category=' + category)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  getRules() {
+    return axios.get(url + '/rule/getallrules')
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  getRule(id) {
+    return axios.get(url + '/rule/getrule/' + id)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  createRule(rule) {
+    return axios.post(url + '/rule/addrule', rule)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  editRule(rule) {
+    return axios.put(url + '/rule/editrule', rule)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  deleteRule(id) {
+    return axios.delete(url + '/rule/deleterule/' + id)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  getAllCategoriesRules() {
+    return axios.get(url + '/rule/GetAllCategories')
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  getRulesByCategory(category) {
+    return axios.get(url + '/rule/GetByCategory?category=' + category)
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  addImages(images){
+    return axios.post(url + '/rule/addimages', images)
+    .then(response => response.data)
+    .catch(e => e)
+  },
   getSentenceTask(category, id){
     return axios.get(url + '/sentencetask/gettask?category=' + category + '&id=' + id)
     .then(response => response.data)
@@ -98,7 +143,7 @@ export default {
     return axios.post(url + '/wordmap/VerificationCorrectness', wordmap)
   },
   getAllCategoriesSentences(){
-    return axios.get(url + '/sentencetask/getallcategories')
+    return axios.get(url + '/adminsentencetask/GetAllCategories')
     .then(res => res.data)
     .catch(e => e)
   },
@@ -127,8 +172,13 @@ export default {
     .then(response => response.data)
     .catch(e => e);
   },
+  getSentencesByCategory(category) {
+    return axios.get(url + '/adminsentencetask/GetByCategory?category=' + category)
+    .then(response => response.data)
+    .catch(e => e);
+  },
   getAllCategoriesWords(){
-    return axios.get(url + '/wordmap/getallcategories')
+    return axios.get(url + '/word/GetAllCategories')
     .then(res => res.data)
     .catch(e => e)
   },
@@ -157,28 +207,8 @@ export default {
     .then(response => response.data)
     .catch(e => e);
   },
-  getUsers(){
-    return axios.get(url + '/account/getallusers')
-    .then(res => res.data)
-    .catch(e => e)
-  },
-  deleteUser(id){
-    return axios.delete(url + '/account/deleteuser/' + id)
-    .then(response => response.data)
-    .catch(e => e);
-  },
-  changeRole(user){
-    return axios.put(url + '/account/changerole', user)
-    .then(response => response.data)
-    .catch(e => e);
-  },
-  changePassword(id, oldpassword, newpassword){
-    return axios.put(url + '/account/ChangePassword?id=' + id + '&oldpassword=' + oldpassword + '&newpassword=' + newpassword)
-    .then(response => response.data)
-    .catch(e => e);
-  },
-  editUser(user){
-    return axios.put(url + '/account/edituser', user)
+  getWordsByCategory(category) {
+    return axios.get(url + '/word/GetByCategory?category=' + category)
     .then(response => response.data)
     .catch(e => e);
   },
@@ -237,4 +267,14 @@ export default {
     .then(response => response.data)
     .catch(e => e)
   },
+  getAllCategoriesGuessesTheImages(){
+    return axios.get(url + '/adminguessestheimage/GetAllCategories')
+    .then(res => res.data)
+    .catch(e => e)
+  },
+  getGuessesTheImagesByCategory(category) {
+    return axios.get(url + '/adminguessestheimage/GetByCategory?category=' + category)
+    .then(response => response.data)
+    .catch(e => e);
+  }
 };

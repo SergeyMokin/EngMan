@@ -1,5 +1,5 @@
 <template>
-  <div v-if = "$store.state.user.Role == 'admin'" class = "users-view">
+  <div v-if = "$store.state.user.Role == 'admin'" class = "view-list">
         <div class="loading" v-if = "inProgress">Loading&#8230;</div>
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
@@ -14,9 +14,9 @@
                 admin
             </option>
         </select>
-        <div v-for = 'el in users' :key = 'el.Id' class = "form-border">
-            <div class = "users-list--element">
-                <span class = "span-user--element">
+        <div v-for = 'el in users' :key = 'el.Id'>
+            <div class = "list--element">
+                <span class = "span--element">
                     {{el.FirstName}} {{el.LastName}} <b>[e-mail: {{el.Email}}]</b>  
                     <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteUser(el.Id)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
                     <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "changeRole(el)"><img title="Повысить" style = "margin-right: 5px; width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>

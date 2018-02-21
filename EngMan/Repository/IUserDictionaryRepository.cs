@@ -8,6 +8,6 @@ namespace EngMan.Repository
         UserWord AddWordToDictionary(int id, UserWord word);
         int DeleteWordFromDictionary(int userId, int wordId);
         IEnumerable<string> GetAllCategories(int id);
-        UserDictionary GetUserDictionaryByCategory(int id, string category);
+        UserDictionary GetByCategory(int id, string category);
     }
 }

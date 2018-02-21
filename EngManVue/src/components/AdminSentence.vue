@@ -1,7 +1,7 @@
 <template>
   <div v-if = "$store.state.user.Role == 'admin'">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-      <div v-if = "!clickSentence" class = "sentences-view">
+      <div v-if = "!clickSentence" class = "view-list">
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
         <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
@@ -14,9 +14,9 @@
                 {{category}}
             </option>
         </datalist>
-        <div v-for = 'el in sentences' :key = 'el.SentenceTaskId' class = "form-border">
-            <div class = "sentences-list--element">
-                <span class = "span-sentence--element">
+        <div v-for = 'el in sentences' :key = 'el.SentenceTaskId'>
+            <div class = "list--element">
+                <span class = "span--element">
                     {{el.Sentence}}
                     <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteSentence(el.SentenceTaskId)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
                     <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editSentence(el.SentenceTaskId)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
@@ -26,14 +26,14 @@
       </div>
       <div v-if = "clickSentence" style = "text-align: center">
           <br/><br/>
-          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "button-close" type = "img" src = "../assets/close-icon.png"></span>
-          <span v-on:click = "saveSentence(sentence)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "button-close" type = "img" src = "../assets/save-icon.png"></span>
+          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "saveSentence(sentence)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
           <span>Категория</span>
-          <textarea type = "text" v-model = "sentence.Category" class = "sentence-edit"/><br/>
+          <textarea type = "text" v-model = "sentence.Category" class = "admin-edit"/><br/>
           <span>Предложение на английском</span>
-          <textarea type = "text" v-model = "sentence.Sentence" class = "sentence-edit"/><br/>
+          <textarea type = "text" v-model = "sentence.Sentence" class = "admin-edit"/><br/>
           <span>Перевод на русском</span>
-          <textarea type = "text" v-model = "sentence.Translate" class = "sentence-edit"/><br/>
+          <textarea type = "text" v-model = "sentence.Translate" class = "admin-edit"/><br/>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
       </div>
   </div>

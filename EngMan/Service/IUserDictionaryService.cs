@@ -8,6 +8,6 @@ namespace EngMan.Service
         UserWord Add(int id, UserWord word);
         int Delete(int userId, int wordId);
         IEnumerable<string> GetAllCategories(int id);
-        UserDictionary GetUserDictionaryByCategory(int id, string category);
+        UserDictionary GetByCategory(int id, string category);
     }
 }

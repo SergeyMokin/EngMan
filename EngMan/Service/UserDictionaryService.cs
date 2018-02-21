@@ -77,13 +77,13 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public UserDictionary GetUserDictionaryByCategory(int id, string category)
+        public UserDictionary GetByCategory(int id, string category)
         {
             if (id.Validate() && category.Validate())
             {
                 try
                 {
-                    return rep.GetUserDictionaryByCategory(id, category);
+                    return rep.GetByCategory(id, category);
                 }
                 catch (System.Exception ex)
                 {

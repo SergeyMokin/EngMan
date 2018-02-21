@@ -1,30 +1,17 @@
 html, body{
     height: 100% !important;
-    background: #e6e6e6;
+    background: #e6e6e6 !important;
 }
 #app {
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family:'Times new roman', sans-serif;
     font-size: 18px;
     color: #32353a;
-}
-button{
-      outline:none;
-      margin: 10px;
-      cursor: pointer;
-      width: 85px;
-      border: none;
-      border-radius: 10px;
-      width: 155px;
-      height: 25px;
-      background: rgb(75, 75, 75);
-      font-size: 16px;
-      color: rgb(248, 248, 248);
 }
 * {
     margin: 0%;
     padding: 0%;
 }
-a {
+a{
       outline: none;
       text-decoration: none;
       color: rgb(75, 75, 75);
@@ -32,24 +19,16 @@ a {
 span{
     color: rgb(75, 75, 75);
 }
-.selected-wordmap{
-    border: solid;
-    border-color: rgb(75, 75, 75);
-    border-width: 1px;
-}
-.span-error-message{
-      color: red;
-      font-size: 16px;
-}
-.span-complete-message{
-      color: green;
-      font-size: 20px;
-}
 label{
     color: rgb(75, 75, 75);
 }
-.form-border{
-      margin-bottom: 1%;
+.span-error-message{
+    color: red;
+    font-size: 16px;
+}
+.span-complete-message{
+    color: green;
+    font-size: 20px;
 }
 .routes-admin{
     display: inline-block;
@@ -58,14 +37,16 @@ label{
     text-align: center;
     padding: 14px 16px;
 }
-.rules-view-list{
-    margin: 5% 20% 5% 20%;
-    width: 60%;
-    text-align: center;
-    display: table;
+.routes-admin:hover {
+    background-color: #ddd;
 }
-.rules-list--element{
-    cursor: pointer;
+
+.tasks-align{
+    margin: 5% 30% 5% 30%;
+    text-align: center;
+}
+.list--element{
+    cursor: default;
     margin: 10px;
     padding: 3px;
     text-align: left;
@@ -75,65 +56,41 @@ label{
     outline:none;
     border-radius: 10px;
 }
-.rules-list--element.admin{
-    cursor: default;
+.list--element.pointer{
+    cursor: pointer;
 }
-.span-rule--element{
+.wordmap-list--element:hover{
+    background: rgb(218, 218, 218);
+}
+.wordmap-list--element:hover:before{
+    background: rgb(218, 218, 218);
+    background: rgb(248, 248, 248);
+}
+.selected-wordmap{
+    border: solid;
+    border-color: rgb(75, 75, 75);
+    border-width: 1px;
+}
+.view-list{
+    margin: 5% 20% 5% 20%;
+    width: 60%;
+    text-align: center;
+    display: table;
+}
+.span--element{
     margin: 15px;
     font-size: 18px;
 }
-.button-close{
+.span-view{
+    font-size: 30px;
+}
+.icon-close{
     position: absolute;
     right: 18.65%;
     top: 100px;
     cursor: pointer;
 }
-.rule-edit{
-    resize: none;
-    text-align: left;
-    width: 60%;
-    margin: 0.5% 19% 0% 19%;
-    padding: 0.5%;
-    background: rgb(248, 248, 248);
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.search-form{
-    outline:none;
-    background: rgb(248, 248, 248);
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 16px;
-    margin: auto;
-    margin-bottom: 10px;
-    resize: none;
-    height: 25px;
-    width: 185px;
-}
-.sentences-view{
-    margin: 5% 20% 5% 20%;
-    width: 60%;
-    text-align: center;
-    display: table;
-}
-.sentences-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: default;
-    background: rgb(248, 248, 248);
-    height: 35px;
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.span-sentence--element{
-    margin: 15px;
-    font-size: 18px;
-}
-.sentence-edit{
+.admin-edit{
     resize: none;
     text-align: left;
     width: 60%;
@@ -157,59 +114,6 @@ label{
     height: 25px;
     width: 155px;
     text-decoration: none;
-}
-.users-view{
-    margin: 5% 20% 5% 20%;
-    width: 60%;
-    text-align: center;
-    display: table;
-}
-.users-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: default;
-    background: rgb(248, 248, 248);
-    height: 35px;
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.span-user--element{
-    margin: 15px;
-    font-size: 18px;
-}
-.words-view{
-    margin: 5% 20% 5% 20%;
-    width: 60%;
-    text-align: center;
-    display: table;
-}
-.words-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: default;
-    background: rgb(248, 248, 248);
-    height: 35px;
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.span-word--element{
-    margin: 15px;
-    font-size: 18px;
-}
-.word-edit{
-    resize: none;
-    text-align: left;
-    width: 60%;
-    margin: 0.5% 19% 0% 19%;
-    padding: 0.5%;
-    background: rgb(248, 248, 248);
-    border: none;
-    outline:none;
-    border-radius: 10px;
 }
 .footer img:hover{
     cursor: pointer;
@@ -240,9 +144,6 @@ label{
     margin: 0;
     padding: 0;
     overflow: hidden;
-}
-.routes-admin:hover {
-    background-color: #ddd;
 }
 .square {
   margin-left: 120px;
@@ -289,21 +190,12 @@ label{
   border: 2px solid rgb(21, 21, 21);
   background: rgb(200, 200, 200);
 }
-.link{
-  outline: none;
-}
 .login{
     margin: 5%;
     text-align: center;
 }
-.authentification-form{
+.login-form{
     margin-top: 2%;
-}
-.registration-form{
-    margin-top: 2%;
-}
-.form{
-    font-size: 18px;
 }
 .input-form{
     border: none;
@@ -362,16 +254,6 @@ label{
     border-radius: 50em;
     -webkit-animation: blink-mes 3s linear infinite;
     animation: blink-mes 3s linear infinite;
-}
-@-webkit-keyframes blink-mes {
-    0% { background: rgba(34, 34, 34, 1); }
-    50% { background: rgba(34, 34, 34, 0); }
-    100% { background: rgba(34, 34, 34, 1); }
-}
-@keyframes blink-mes {
-    0% { background: rgba(34, 34, 34, 1); }
-    50% { background: rgba(34, 34, 34, 0); }
-    100% { background: rgba(34, 34, 34, 1); }
 }
 .label-form-mes{
     background: rgba(0,0,0,.15);
@@ -442,6 +324,16 @@ label{
     width: 250px;
     text-decoration: none;
 }
+@-webkit-keyframes blink-mes {
+    0% { background: rgba(34, 34, 34, 1); }
+    50% { background: rgba(34, 34, 34, 0); }
+    100% { background: rgba(34, 34, 34, 1); }
+}
+@keyframes blink-mes {
+    0% { background: rgba(34, 34, 34, 1); }
+    50% { background: rgba(34, 34, 34, 0); }
+    100% { background: rgba(34, 34, 34, 1); }
+}
 .profile{
     background:rgba(205, 205, 205, 0.9);
     width: 173px;
@@ -450,9 +342,6 @@ label{
     position: absolute;
     z-index: 99;
     text-align: center;
-}
-.span-anonymous{
-    font-size: 20px;
 }
 .rule-view{
     text-align: left;
@@ -464,17 +353,6 @@ label{
     outline:none;
     border-radius: 10px;
 }
-.span-view{
-    font-size: 30px;
-}
-.span-rule--element{
-    margin: 15px;
-    font-size: 18px;
-}
-.sentence-task{
-    margin: 5% 30% 5% 30%;
-    text-align: center;
-}
 .sentence-input{
     resize: none;
     text-align: left;
@@ -482,23 +360,6 @@ label{
     margin: 0.5% 20% 0% 20%;
     padding: 0.5%;
     background: rgb(248, 248, 248);
-    border: none;
-    outline:none;
-    border-radius: 10px;
-}
-.users-view-list{
-    margin: 5% 20% 5% 20%;
-    width: 60%;
-    text-align: center;
-    display: table;
-}
-.users-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: default;
-    background: rgb(248, 248, 248);
-    height: 35px;
     border: none;
     outline:none;
     border-radius: 10px;
@@ -513,27 +374,6 @@ label{
     border: none;
     outline:none;
     border-radius: 10px;
-}
-.wordmap-task{
-    margin: 5% 30% 5% 30%;
-    text-align: center;
-}
-.wordmap-list--element{
-    margin: 10px;
-    padding: 3px;
-    text-align: left;
-    cursor: pointer;
-    background: rgb(248, 248, 248);
-    height: 35px;
-    outline:none;
-    border-radius: 10px;
-}
-.wordmap-list--element:hover{
-    background: rgb(218, 218, 218);
-}
-.wordmap-list--element:hover:before{
-    background: rgb(218, 218, 218);
-    background: rgb(248, 248, 248);
 }
 .loading {
     position: fixed;

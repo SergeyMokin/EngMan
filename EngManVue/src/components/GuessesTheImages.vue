@@ -1,17 +1,17 @@
 <!--edit-->
 <template>
-  <div class="sentence-task">
+  <div class="tasks-align">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <h2>Угадай что на картинке</h2><br/>
-      <div v-if = "!show" class = "form-border">
-        <div class = "button-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-        <div v-on:click = "downloadTask()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
+      <div v-if = "!show">
+        <div class = "icon-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
+        <div v-on:click = "downloadTask()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
       </div>
-      <div v-if = "show" class = "form-border">
-        <div class = "button-close" v-on:click = "closeForm"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
-        <div v-on:click = "downloadTask()"><img title="Следующий" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/arrow-right.png"></div>
-        <div v-on:click = "verificationCorrectness()"><img title="Проверить" style = "width: 20px; height: auto; margin-right: 50px; margin-top: 5px" class = "button-close" type = "img" src = "../assets/start-icon.png"></div>
+      <div v-if = "show">
+        <div class = "icon-close" v-on:click = "closeForm"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
+        <div v-on:click = "downloadTask()"><img title="Следующий" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/arrow-right.png"></div>
+        <div v-on:click = "verificationCorrectness()"><img title="Проверить" style = "width: 20px; height: auto; margin-right: 50px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
         <img title="Угадай кто на картинке" :src = "task.Path" style = "width: 50%">
         <br/>
         <span>{{task.Word.Translate}}</span><br/>
