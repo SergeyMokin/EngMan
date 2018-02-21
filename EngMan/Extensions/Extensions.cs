@@ -15,7 +15,7 @@ namespace EngMan.Extensions
         public static bool IsCorrectPassword(this string password)
         {
             const int minLength = 8;
-            const int maxLength = 15;
+            const int maxLength = 25;
 
             if (password == null) return false;
 
