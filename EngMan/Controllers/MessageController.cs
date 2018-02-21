@@ -4,7 +4,7 @@ using EngMan.Models;
 using System.Web;
 using System.Linq;
 using System.Collections.Generic;
-
+using System.Net.Http;
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -22,10 +22,17 @@ namespace EngMan.Controllers
         {
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
-                var list = service.GetMessages(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                if (list != null)
+                try
                 {
-                    return Ok(list);
+                    var list = service.GetMessages(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                    if (list != null)
+                    {
+                        return Ok(list);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return NotFound();
@@ -34,14 +41,15 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult SendMessage(Message mes)
         {
-            if (mes != null)
+            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
-                if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+                try
                 {
-                    if (mes != null)
-                    {
-                        return Ok(service.SendMessage(mes, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
-                    }
+                    return Ok(service.SendMessage(mes, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return NotFound();
@@ -50,9 +58,17 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult ReadMessages(IEnumerable<Message> mesgs)
         {
-            if (mesgs != null)
+            try
             {
-                return Ok(service.ReadMessages(mesgs, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                var result = service.ReadMessages(mesgs, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -60,14 +76,15 @@ namespace EngMan.Controllers
         [HttpDelete]
         public IHttpActionResult DeleteMessage(int id)
         {
-            if (id > 0)
+            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
-                if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+                try
                 {
-                    if (id > 0)
-                    {
-                        return Ok(service.DeleteMessage(id, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
-                    }
+                    return Ok(service.DeleteMessage(id, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return NotFound();

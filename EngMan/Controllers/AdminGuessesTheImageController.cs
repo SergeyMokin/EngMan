@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
+using System.Net.Http;
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -14,12 +15,55 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
+        public IHttpActionResult GetAllCategories()
+        {
+            try
+            {
+                var categories = service.GetAllCategories();
+                if (categories != null)
+                {
+                    return Ok(categories);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetTaskByCategory(string category)
+        {
+            try
+            {
+                var task = service.GetByCategory(category);
+                if (task != null)
+                {
+                    return Ok(task);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
         public IHttpActionResult GetAllTasks()
         {
-            var tasks = service.GetGuessesTheImages();
-            if (tasks != null)
+            try
             {
-                return Ok(tasks);
+                var tasks = service.GetAll();
+                if (tasks != null)
+                {
+                    return Ok(tasks);
+                }
+            }
+            catch(HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -27,13 +71,17 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetTaskById(int id)
         {
-            if (id > 0)
+            try
             {
-                var task = service.GetGuessesTheImage(id);
+                var task = service.Get(id);
                 if (task != null)
                 {
                     return Ok(task);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -42,13 +90,17 @@ namespace EngMan.Controllers
         [HttpPut]
         public IHttpActionResult EditTask(GuessesTheImageToAdd task)
         {
-            if (task != null)
+            try
             {
-                var _task = service.EditGuessesTheImage(task);
+                var _task = service.Edit(task);
                 if (_task != null)
                 {
-                    return Ok(_task);
+                    return Ok("Edit completed successful");
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -57,13 +109,17 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult AddTask(GuessesTheImageToAdd task)
         {
-            if (task != null)
+            try
             {
-                var _task = service.AddGuessesTheImage(task);
+                var _task = service.Add(task);
                 if (_task != null)
                 {
-                    return Ok(_task);
+                    return Ok("Add completed successful");
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -72,13 +128,17 @@ namespace EngMan.Controllers
         [HttpDelete]
         public IHttpActionResult DeleteTask(int id)
         {
-            if (id > 0)
+            try
             {
-                var _id = service.DeleteGuessesTheImage(id);
-                if (_id != -1)
+                var _task = service.Delete(id);
+                if (_task > 0)
                 {
-                    return Ok(_id);
+                    return Ok("Delete completed successful");
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }

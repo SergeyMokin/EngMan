@@ -28,7 +28,7 @@ export default {
   name: 'guessestheimages-task',
   data () {
     return {
-        id: 0,
+        id: 1,
         countOfTasks: 0,
         completemessage: '',
         goodAnswer: 0,
@@ -38,7 +38,7 @@ export default {
         show: false,
         task: {},
         returnTask: {
-            Id: 0,
+            Id: 1,
             Word: '',
             Path: ''
         }
@@ -109,7 +109,7 @@ export default {
         this.completemessage = 'Вы успешно закончили! Правильных ответов: ' + this.goodAnswer + '/' + this.countOfTasks;
         alert(this.completemessage);
         this.countOfTasks = 0;
-        this.id = 0;
+        this.id = 1;
         this.goodAnswer = 0;
         this.attempt = 0;
         this.inProgress = false;
@@ -117,7 +117,7 @@ export default {
         this.show = false;
         this.task = {};
         this.returnTask = {
-            Id: -1,
+            Id: 1,
             Word: '',
             Path: ''
         }

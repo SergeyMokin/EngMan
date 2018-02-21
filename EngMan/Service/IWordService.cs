@@ -14,5 +14,9 @@ namespace EngMan.Service
         Task<Word> Add(Word word);
 
         Task<int> Delete(int id);
+
+        IEnumerable<Word> GetByCategory(string category);
+
+        IEnumerable<string> GetAllCategories();
     }
 }

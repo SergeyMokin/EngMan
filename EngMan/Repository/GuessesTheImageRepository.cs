@@ -13,17 +13,33 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public IEnumerable<GuessesTheImageToReturn> GetGuessesTheImages() {
+        public IEnumerable<string> GetAllCategories()
+        {
+            return context.Database.SqlQuery<string>(
+              @"SELECT [Category]
+                FROM [EngMan].[dbo].[GuessesTheImages]
+                JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
+                GROUP BY [Category]"
+            );
+        }
+
+        public IEnumerable<GuessesTheImageToReturn> GetByCategory(string category)
+        {
+            return GetAll().Where(x => x.Word.Category.ToLower().Equals(category));
+        }
+
+        public IEnumerable<GuessesTheImageToReturn> GetAll()
+        {
             return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
-                    $"SELECT [Id]" +
-                    $",[EngMan].[dbo].[GuessesTheImages].[WordId]" +
-                    $",[Original]" +
-                    $",[Translate]" +
-                    $",[Category]" +
-                    $",[Transcription]" +
-                    $",[Path]" +
-                    $"FROM [EngMan].[dbo].[GuessesTheImages]" +
-                    $"JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]"
+                  @"SELECT [Id]
+                    , [EngMan].[dbo].[GuessesTheImages].[WordId]
+                    , [Original]
+                    , [Translate]
+                    , [Category]
+                    , [Transcription]
+                    , [Path]
+                    FROM [EngMan].[dbo].[GuessesTheImages]
+                    JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]"
                 )
                 .Select(x => new GuessesTheImageToReturn {
                     Id = x.Id,
@@ -38,19 +54,19 @@ namespace EngMan.Repository
                 });
         }
 
-        public GuessesTheImageToReturn GetGuessesTheImage(int id)
+        public GuessesTheImageToReturn Get(int id)
         {
             return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
-                $"SELECT [Id]" +
-                $",[EngMan].[dbo].[GuessesTheImages].[WordId]" +
-                $",[Original]" +
-                $",[Translate]" +
-                $",[Category]" +
-                $",[Transcription]" +
-                $",[Path]" +
-                $"FROM [EngMan].[dbo].[GuessesTheImages]" +
-                $"JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]" +
-                $"WHERE [EngMan].[dbo].[GuessesTheImages].[Id] = " + id
+                @"SELECT [Id]
+                ,[EngMan].[dbo].[GuessesTheImages].[WordId]
+                ,[Original]
+                ,[Translate]
+                ,[Category]
+                ,[Transcription]
+                ,[Path]
+                FROM [EngMan].[dbo].[GuessesTheImages]
+                JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
+                WHERE [EngMan].[dbo].[GuessesTheImages].[Id] = " + id
             )
             .Select(x => new GuessesTheImageToReturn
             {
@@ -67,7 +83,7 @@ namespace EngMan.Repository
             }).FirstOrDefault();
         }
 
-        public GuessesTheImageToReturn AddGuessesTheImage(GuessesTheImageToAdd image)
+        public GuessesTheImageToReturn Add(GuessesTheImageToAdd image)
         {
             GuessesTheImage returnimg = new GuessesTheImage();
             if (image.Image != null)
@@ -83,10 +99,10 @@ namespace EngMan.Repository
                 context.SaveChanges();
                 returnimg.Id = context.GuessesTheImages.ToArray().Last().Id;
             }
-            return GetGuessesTheImage(returnimg.Id);
+            return Get(returnimg.Id);
         }
 
-        public GuessesTheImageToReturn EditGuessesTheImage(GuessesTheImageToAdd image)
+        public GuessesTheImageToReturn Edit(GuessesTheImageToAdd image)
         {
             var entity = context.GuessesTheImages.Find(image.Id);
             if (entity != null)
@@ -94,17 +110,17 @@ namespace EngMan.Repository
                 entity.WordId = image.WordId;
                 if (image.Image != null)
                 {
-                    if (image.Image.Data.Length > 0 && image.Image.Name.Length > 0)
+                    if (image.Image.Data != null && image.Image.Name != null)
                     {
                         entity.Path = Extensions.Extensions.SaveImage(image.Image);
                     }
                 }
                 context.SaveChanges();
             }
-            return GetGuessesTheImage(entity.Id);
+            return Get(entity.Id);
         }
 
-        public int DeleteGuessesTheImage(int id)
+        public int Delete(int id)
         {
             if (id > 0)
             {

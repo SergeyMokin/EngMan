@@ -22,7 +22,7 @@ namespace EngMan.Controllers
         [AllowAnonymous]
         [HttpPost]
         public IHttpActionResult Registration(User user) {
-            if (user != null)
+            try
             {
                 var _user = service.Registration(user);
                 if (_user != null)
@@ -30,16 +30,27 @@ namespace EngMan.Controllers
                     return Ok(_user);
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return NotFound();
         }
         
         [HttpGet]
         public IHttpActionResult GetAllUsers()
         {
-            var users = service.GetUserList();
-            if (users != null)
+            try
             {
-                return Ok(users);
+                var users = service.GetUserList();
+                if (users != null)
+                {
+                    return Ok(users);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -49,10 +60,17 @@ namespace EngMan.Controllers
         {
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
-                var result = serviceDictionary.Get(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                if (result != null)
+                try
                 {
-                    return Ok(result);
+                    var result = serviceDictionary.Get(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                    if (result != null)
+                    {
+                        return Ok(result);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return NotFound();
@@ -63,10 +81,17 @@ namespace EngMan.Controllers
         {
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
-                var result = serviceDictionary.Add(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), word);
-                if (result != null)
+                try
                 {
-                    return Ok(result);
+                    var result = serviceDictionary.Add(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), word);
+                    if (result != null)
+                    {
+                        return Ok(result);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return NotFound();
@@ -77,10 +102,17 @@ namespace EngMan.Controllers
         {
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
-                var result = serviceDictionary.Delete(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), id);
-                if (result > 0)
+                try
                 {
-                    return Ok(result);
+                    var result = serviceDictionary.Delete(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), id);
+                    if (result > 0)
+                    {
+                        return Ok(result);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return NotFound();
@@ -91,10 +123,17 @@ namespace EngMan.Controllers
         {
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
-                var user = service.GetUser(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                if (user != null)
+                try
                 {
-                    return Ok(user);
+                    var user = service.GetUser(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                    if (user != null)
+                    {
+                        return Ok(user);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return NotFound();
@@ -103,7 +142,7 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetUserById(int id)
         {
-            if (id > 0)
+            try
             {
                 var user = service.GetUser(id);
                 if (user != null)
@@ -111,19 +150,27 @@ namespace EngMan.Controllers
                     return Ok(user);
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return NotFound();
         }
         
         [HttpPut]
         public async Task<IHttpActionResult> EditUser(UserView user)
         {
-            if (user != null)
+            try
             {
                 var _user = await service.SaveUser(user);
                 if (_user != null)
                 {
                     return Ok(_user);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -132,7 +179,7 @@ namespace EngMan.Controllers
         [HttpDelete]
         public IHttpActionResult DeleteUser(int id)
         {
-            if (id > 0)
+            try
             {
                 var _id = service.DeleteUser(id);
                 if (_id != -1)
@@ -140,21 +187,32 @@ namespace EngMan.Controllers
                     return Ok(_id);
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return NotFound();
         }
         
         [HttpPost]
         public IHttpActionResult LogOut()
         {
-            HttpContext.Current.GetOwinContext().Authentication.SignOut();    
-            return Ok();
+            try
+            {
+                HttpContext.Current.GetOwinContext().Authentication.SignOut();
+                return Ok();
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> ChangeRole(UserView user)
         {
-            if (user != null)
+            try
             {
                 var _user = await service.ChangeRole(user);
                 if (_user != null)
@@ -162,18 +220,29 @@ namespace EngMan.Controllers
                     return Ok(_user);
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return NotFound();
         }
 
         [HttpPut]
-        public IHttpActionResult ChangePassword(int id, string oldpassword, string newpassword)
+        public IHttpActionResult ChangePassword(string oldpassword, string newpassword)
         {
-            if (id > 0 && oldpassword != null && newpassword != null)
+            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
-                var _user = service.ChangePassword(id, oldpassword, newpassword);
-                if (_user != null)
+                try
                 {
-                    return Ok(_user);
+                    var _user = service.ChangePassword(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), oldpassword, newpassword);
+                    if (_user != null)
+                    {
+                        return Ok(_user);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return NotFound();

@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
+using EngMan.Extensions;
+using System.Net.Http;
+
 namespace EngMan.Service
 {
     public class RuleService: IRuleService
@@ -14,41 +17,131 @@ namespace EngMan.Service
             rep = _rep;
         }
 
+        public IEnumerable<string> GetAllCategories()
+        {
+            try
+            {
+                return rep.GetAllCategories();
+            }
+            catch (System.Exception ex)
+            {
+                throw new HttpRequestException(ex.Message);
+            }
+        }
+
+        public IEnumerable<RuleModel> GetByCategory(string category)
+        {
+            if (category.Validate())
+            {
+                try
+                {
+                    return rep.GetByCategory(category);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
+        }
+
         public IEnumerable<RuleModel> Get()
         {
-            return rep.Rules;
+            try
+            {
+                return rep.Rules;
+            }
+            catch (System.Exception ex)
+            {
+                throw new HttpRequestException(ex.Message);
+            }
         }
 
         public RuleModel GetById(int id)
         {
-            return rep.Rules.FirstOrDefault(x => x.RuleId == id);
+            if (id.Validate())
+            {
+                try
+                {
+                    return rep.Rules.FirstOrDefault(x => x.RuleId == id);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public async Task<RuleModel> Edit(RuleModel rule)
         {
-            return await rep.SaveRule(rule);
+            if (rule.Validate())
+            {
+                try
+                {
+                    return await rep.SaveRule(rule);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public async Task<RuleModel> Add(RuleModel rule)
         {
-            return await rep.AddRule(rule);
+            if (rule.Validate())
+            {
+                try
+                {
+                    return await rep.AddRule(rule);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public async Task<int> Delete(int id)
         {
-            return await rep.DeleteRule(id);
+            if (id.Validate())
+            {
+                try
+                {
+                    return await rep.DeleteRule(id);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public List<string> AddImages(Image[] images) {
-            var pathes = new List<string>();
             if (images != null && images.Length > 0)
             {
-                foreach (var img in images)
+                try
                 {
-                    pathes.Add(Extensions.Extensions.SaveImage(img));
+                    var pathes = new List<string>();
+                    foreach (var img in images)
+                    {
+                        if (img.Validate())
+                        {
+                            pathes.Add(Extensions.Extensions.SaveImage(img));
+                        }
+                    }
+                    return pathes;
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
                 }
             }
-            return pathes;
+            throw new HttpRequestException("Invalid model");
         }
     }
 }

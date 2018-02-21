@@ -50,4 +50,30 @@ namespace EngMan.Models
         [DataMember]
         public IEnumerable<Word> Words { get; set; }
     }
+
+    public class UserWordSqlScript
+    {
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public int UserId { get; set; }
+        [DataMember]
+        public string FirstName { get; set; }
+        [DataMember]
+        public string LastName { get; set; }
+        [DataMember]
+        public string Email { get; set; }
+        [DataMember]
+        public string Role { get; set; }
+        [DataMember]
+        public int WordId { get; set; }
+        [DataMember]
+        public string Original { get; set; }
+        [DataMember]
+        public string Translate { get; set; }
+        [DataMember]
+        public string Category { get; set; }
+        [DataMember]
+        public string Transcription { get; set; }
+    }
 }

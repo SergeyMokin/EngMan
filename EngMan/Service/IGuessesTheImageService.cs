@@ -5,14 +5,18 @@ namespace EngMan.Service
 {
     public interface IGuessesTheImageService
     {
-        GuessesTheImageToReturn AddGuessesTheImage(GuessesTheImageToAdd image);
+        GuessesTheImageToReturn Add(GuessesTheImageToAdd image);
 
-        GuessesTheImageToReturn EditGuessesTheImage(GuessesTheImageToAdd image);
+        GuessesTheImageToReturn Edit(GuessesTheImageToAdd image);
 
-        IEnumerable<GuessesTheImageToReturn> GetGuessesTheImages();
+        IEnumerable<GuessesTheImageToReturn> GetAll();
 
-        GuessesTheImageToReturn GetGuessesTheImage(int id);
+        GuessesTheImageToReturn Get(int id);
 
-        int DeleteGuessesTheImage(int id);
+        int Delete(int id);
+
+        IEnumerable<string> GetAllCategories();
+
+        IEnumerable<GuessesTheImageToReturn> GetByCategory(string category);
     }
 }

@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
+using System.Net.Http;
+
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -15,12 +17,55 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
+        public IHttpActionResult GetAllCategories()
+        {
+            try
+            {
+                var tasks = service.GetAllCategories();
+                if (tasks != null)
+                {
+                    return Ok(tasks);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetByCategory(string category)
+        {
+            try
+            {
+                var tasks = service.GetByCategory(category);
+                if (tasks != null)
+                {
+                    return Ok(tasks);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
         public IHttpActionResult GetAllTasks()
         {
-            var tasks = service.Get();
-            if (tasks != null)
+            try
             {
-                return Ok(tasks);
+                var tasks = service.Get();
+                if (tasks != null)
+                {
+                    return Ok(tasks);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -28,13 +73,17 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetTaskById(int id)
         {
-            if (id > 0)
+            try
             {
                 var task = service.GetById(id);
                 if (task != null)
                 {
                     return Ok(task);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -43,13 +92,17 @@ namespace EngMan.Controllers
         [HttpPut]
         public async Task<IHttpActionResult> EditTask(SentenceTask task)
         {
-            if (task != null)
+            try
             {
                 var _task = await service.Edit(task);
                 if (_task != null)
                 {
                     return Ok(_task);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -58,13 +111,17 @@ namespace EngMan.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> AddTask(SentenceTask task)
         {
-            if (task != null)
+            try
             {
                 var _task = await service.Add(task);
                 if (_task != null)
                 {
                     return Ok(_task);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -73,13 +130,17 @@ namespace EngMan.Controllers
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteTask(int id)
         {
-            if (id > 0)
+            try
             {
                 var _id = await service.Delete(id);
                 if (_id != -1)
                 {
                     return Ok(_id);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }

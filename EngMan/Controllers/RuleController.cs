@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
+using System.Net.Http;
 
 namespace EngMan.Controllers
 {
@@ -16,12 +17,55 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
+        public IHttpActionResult GetAllCategories()
+        {
+            try
+            {
+                var rules = service.Get();
+                if (rules != null)
+                {
+                    return Ok(rules);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetByCategory(string category)
+        {
+            try
+            {
+                var rules = service.Get();
+                if (rules != null)
+                {
+                    return Ok(rules);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
         public IHttpActionResult GetAllRules()
         {
-            var rules = service.Get();
-            if (rules != null)
+            try
             {
-                return Ok(rules);
+                var rules = service.Get();
+                if (rules != null)
+                {
+                    return Ok(rules);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -29,13 +73,17 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetRule(int id)
         {
-            if (id > 0)
+            try
             {
                 var rule = service.GetById(id);
                 if (rule != null)
                 {
                     return Ok(rule);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -44,13 +92,17 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> EditRule(RuleModel rule)
         {
-            if (rule != null)
+            try
             {
                 var _rule = await service.Edit(rule);
                 if (_rule != null)
                 {
                     return Ok(_rule);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -59,13 +111,17 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> AddRule(RuleModel rule)
         {
-            if (rule != null)
+            try
             {
                 var _rule = await service.Add(rule);
                 if (_rule != null)
                 {
                     return Ok(_rule);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -74,13 +130,17 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public IHttpActionResult AddImages(Image[] images)
         {
-            if (images.Length > 0)
+            try
             {
                 var pathes = service.AddImages(images);
                 if (pathes != null)
                 {
                     return Ok(pathes);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -89,13 +149,17 @@ namespace EngMan.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> DeleteRule(int id)
         {
-            if (id > 0)
+            try
             {
                 var _id = await service.Delete(id);
                 if (_id != -1)
                 {
                     return Ok(_id);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }

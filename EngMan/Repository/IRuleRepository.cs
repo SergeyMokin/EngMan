@@ -12,5 +12,9 @@ namespace EngMan.Repository
         Task<RuleModel> AddRule(RuleModel rule);
 
         Task<int> DeleteRule(int id);
+
+        IEnumerable<string> GetAllCategories();
+
+        IEnumerable<RuleModel> GetByCategory(string category);
     }
 }

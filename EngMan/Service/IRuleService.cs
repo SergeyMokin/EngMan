@@ -16,5 +16,9 @@ namespace EngMan.Service
         Task<int> Delete(int id);
 
         List<string> AddImages(Image[] images);
+
+        IEnumerable<string> GetAllCategories();
+
+        IEnumerable<RuleModel> GetByCategory(string category);
     }
 }

@@ -14,5 +14,9 @@ namespace EngMan.Service
         Task<SentenceTask> Add(SentenceTask task);
 
         Task<int> Delete(int id);
+
+        IEnumerable<string> GetAllCategories();
+
+        IEnumerable<SentenceTask> GetByCategory(string category);
     }
 }

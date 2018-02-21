@@ -5,28 +5,267 @@ using System.Web;
 using EngMan.Models;
 using System.IO;
 using System.Security.Cryptography;
+using System.Net.Mail;
 
 namespace EngMan.Extensions
 {
     public static class Extensions
     {
+        //Validate password
+        public static bool IsCorrectPassword(this string password)
+        {
+            const int minLength = 8;
+            const int maxLength = 15;
+
+            if (password == null) return false;
+
+            bool meetsLengthRequirements = password.Length >= minLength && password.Length <= maxLength;
+            bool hasUpperCaseLetter = false;
+            bool hasLowerCaseLetter = false;
+            bool hasDecimalDigit = false;
+            bool hasNoSpace = true;
+
+            if (meetsLengthRequirements)
+            {
+                foreach (char c in password)
+                {
+                    if (char.IsUpper(c)) hasUpperCaseLetter = true;
+                    else if (char.IsLower(c)) hasLowerCaseLetter = true;
+                    else if (char.IsDigit(c)) hasDecimalDigit = true;
+                    else if (char.IsWhiteSpace(c)) hasNoSpace = false;
+                }
+            }
+
+            bool isValid = meetsLengthRequirements
+                        && hasUpperCaseLetter
+                        && hasLowerCaseLetter
+                        && hasDecimalDigit
+                        && hasNoSpace
+                        ;
+            return isValid;
+        }
+        //Validate email
+        public static bool IsEmail(this string email)
+        {
+            try
+            {
+                MailAddress m = new MailAddress(email);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+        //Validate User
+        public static bool Validate(this User task)
+        {
+            if (task == null
+                || task.Id < 0
+                || task.FirstName == null
+                || task.LastName == null
+                || task.Email == null
+                || task.Password == null
+                || task.Role == null
+                || !(task.FirstName.Length > 0)
+                || !(task.LastName.Length > 0)
+                || !task.Email.IsEmail()
+                || !(task.Password.Length > 0)
+                || !(task.Role.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+        //Validate UserView
+        public static bool Validate(this UserView task)
+        {
+            if (task == null
+                || task.Id < 0
+                || task.FirstName == null
+                || task.LastName == null
+                || task.Email == null
+                || task.Role == null
+                || !(task.FirstName.Length > 0)
+                || !(task.LastName.Length > 0)
+                || !task.Email.IsEmail()
+                || !(task.Role.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+        //Validate UserWord
+        public static bool Validate(this UserWord task)
+        {
+            if (task == null
+                || task.Id < 0
+                || !(task.UserId > 0)
+                || !(task.WordId > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+        //Validate SentenceTask
+        public static bool Validate(this SentenceTask task)
+        {
+            if (task == null
+                || task.SentenceTaskId < 0
+                || task.Sentence == null
+                || task.Translate == null
+                || task.Category == null
+                || !(task.Sentence.Length > 0)
+                || !(task.Translate.Length > 0)
+                || !(task.Category.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+        //Validate RuleModel
+        public static bool Validate(this RuleModel task)
+        {
+            if (task == null
+                || task.RuleId < 0
+                || task.Text == null
+                || task.Title == null
+                || task.Category == null
+                || !(task.Text.Length > 0)
+                || !(task.Title.Length > 0)
+                || !(task.Category.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+        //Validate Message
+        public static bool Validate(this Message task)
+        {
+            if (task == null
+                    || task.MessageId < 0
+                    || !(task.SenderId > 0)
+                    || !(task.BeneficiaryId > 0)
+                    || task.Time == null
+                    || task.Text == null
+                    || !(task.Text.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+        //Validate GuessesTheImageToReturn
+        public static bool Validate(this GuessesTheImageToReturn task)
+        {
+            if (task == null
+                    || task.Id < 0
+                    || task.Word.Validate()
+                    || task.Path != null
+                    || !(task.Path.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+        //Validate Word
+        public static bool Validate(this Word task)
+        {
+            if (task == null
+                    || task.WordId < 0
+                    || task.Original == null
+                    || task.Translate == null
+                    || task.Transcription == null
+                    || task.Category == null
+                    || !(task.Original.Length > 0)
+                    || !(task.Translate.Length > 0)
+                    || !(task.Transcription.Length > 0)
+                    || !(task.Category.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+        //Validate GuessesTheImageToAdd, CheckTheImage -> (validate)/(not validate) image
+        public static bool Validate(this GuessesTheImageToAdd task, bool ValidateTheImage)
+        {
+            if (ValidateTheImage)
+            {
+                if (task == null
+                    || task.Id < 0
+                    || task.WordId < 0
+                    || task.Image.Validate())
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (task == null
+                    || task.Id < 0
+                    || task.WordId < 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        //Validate image
+        public static bool Validate(this Image task)
+        {
+            if(task == null
+                || task.Name == null
+                || task.Data == null
+                || !(task.Name.Length > 0)
+                || !(task.Data.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        //Validate id
+        public static bool Validate(this int id)
+        {
+            if (!(id > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        //Validate request string
+        public static bool Validate(this string str)
+        {
+            if (str == null
+                || !(str.Length > 0))
+            {
+                return false;
+            }
+            return true;
+        }
+
         //saving image to server
         public static string SaveImage(Image image)
         {
-            var bytearr = new List<byte>();
-            foreach (var ch in image.Data)
+            if (image.Validate())
             {
-                bytearr.Add(Convert.ToByte(ch));
+                var bytearr = new List<byte>();
+                foreach (var ch in image.Data)
+                {
+                    bytearr.Add(Convert.ToByte(ch));
+                }
+                var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
+                //path to folder with project
+                var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + image.Name));
+                File.WriteAllBytes(path, bytearr.ToArray());
+                return string.Format("http://localhost:58099/uploads/" + time + image.Name);
             }
-            var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
-            //path to folder with project
-            var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + image.Name));
-            File.WriteAllBytes(path, bytearr.ToArray());
-            return string.Format("http://localhost:58099/uploads/" + time + image.Name);
+            throw new System.Net.Http.HttpRequestException("Invalid model");
         }
 
         //creating hashpassword
-        public static string HashPassword(string password)
+        public static string HashPassword(this string password)
         {
             byte[] salt;
             byte[] buffer2;
@@ -46,7 +285,7 @@ namespace EngMan.Extensions
         }
 
         //verificating password
-        public static bool VerifyHashedPassword(string hashedPassword, string password)
+        public static bool VerifyHashedPassword(this string hashedPassword, string password)
         {
             byte[] buffer4;
             if (hashedPassword == null)

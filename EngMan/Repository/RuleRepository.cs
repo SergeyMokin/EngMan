@@ -20,6 +20,16 @@ namespace EngMan.Repository
             context = _context;
         }
 
+        public IEnumerable<string> GetAllCategories()
+        {
+            return context.Rules.GroupBy(x => x.Category).Select(x => x.Key);
+        }
+
+        public IEnumerable<RuleModel> GetByCategory(string category)
+        {
+            return context.Rules.Where(x => x.Category.ToLower().Equals(category.ToLower()));
+        }
+
         public async Task<RuleModel> SaveRule(RuleModel rule)
         {
             if (rule.RuleId == 0)

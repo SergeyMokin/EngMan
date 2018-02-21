@@ -1,7 +1,8 @@
-﻿using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
+using System.Net.Http;
+using EngMan.Extensions;
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -17,13 +18,17 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetTask(int id)
         {
-            var tasks = service.GetGuessesTheImages().ToList();
-            if (tasks != null)
+            try
             {
-                if (tasks.Count() > 0 && tasks.Count() - 1 >= id)
+                var task = service.Get(id);
+                if (task != null)
                 {
-                    return Ok(tasks.ElementAt(id));
+                    return Ok(task);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -31,15 +36,22 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult VerificationCorrectness(GuessesTheImageToReturn img)
         {
-            if (img != null)
+            if (img.Validate())
             {
-                var task = service.GetGuessesTheImage(img.Id);
-                if (task != null)
+                try
                 {
-                    if (task.Word.Original.ToLower().Equals(img.Word.Original.ToLower()))
+                    var task = service.Get(img.Id);
+                    if (task != null)
                     {
-                        return Ok(true);
+                        if (task.Word.Original.ToLower().Equals(img.Word.Original.ToLower()))
+                        {
+                            return Ok(true);
+                        }
                     }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
             return Ok(false);

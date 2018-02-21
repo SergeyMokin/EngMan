@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
+using System.Net.Http;
+
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -19,11 +21,17 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetAllCategories()
         {
-            var tasks = service.Get();
-            if (tasks != null)
+            try
             {
-                var categories = tasks.GroupBy(x => x.Category).Select(x => x.Key).ToList();
-                return Ok(categories);
+                var tasks = service.GetAllCategories();
+                if (tasks != null)
+                {
+                    return Ok(tasks);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -31,18 +39,17 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetTask(string category, int id)
         {
-            if (category != null)
+            try
             {
-                var rand = new Random();
-                var tasks = service.Get();
-                tasks = tasks.Where(x => x.Category == category);
+                var tasks = service.GetByCategory(category).ToList();
                 if (tasks != null)
                 {
+                    var rand = new Random();
                     if (tasks.Count() - 1 <= id)
                     {
                         return NotFound();
                     }
-                    IEnumerable<SentenceTask> _tasks = tasks.Select(x =>
+                    return Ok(tasks.Select(x =>
                     {
                         var arr = x.Sentence.Split(new[] { ' ' });
                         var set = new HashSet<int>();
@@ -58,12 +65,12 @@ namespace EngMan.Controllers
                             i++;
                         }
                         return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category };
-                    });
-                    if (_tasks != null)
-                    {
-                        return Ok(_tasks.ElementAt(id + 1));
-                    }
+                    }).ElementAt(id + 1));
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -71,7 +78,7 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult VerificationCorrectness(SentenceTask sentence)
         {
-            if (sentence != null)
+            try
             {
                 var task = service.GetById(sentence.SentenceTaskId);
                 if (task != null)
@@ -82,7 +89,11 @@ namespace EngMan.Controllers
                     }
                 }
             }
-            return Ok(false);
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
         }
     }
 }

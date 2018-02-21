@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using EngMan.Repository;
 using EngMan.Models;
+using EngMan.Extensions;
+using System.Net.Http;
+
 namespace EngMan.Service
 {
     public class GuessesTheImageService: IGuessesTheImageService
@@ -12,29 +15,111 @@ namespace EngMan.Service
             rep = _rep;
         }
 
-        public GuessesTheImageToReturn AddGuessesTheImage(GuessesTheImageToAdd image)
+        public GuessesTheImageToReturn Add(GuessesTheImageToAdd image)
         {
-            return rep.AddGuessesTheImage(image);
+            if (image.Validate(true))
+            {
+                try
+                {
+                    var result = rep.Add(image);
+                    return result;
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
-        public GuessesTheImageToReturn EditGuessesTheImage(GuessesTheImageToAdd image)
+        public GuessesTheImageToReturn Edit(GuessesTheImageToAdd image)
         {
-            return rep.EditGuessesTheImage(image);
+            if (image.Validate(false))
+            {
+                try
+                {
+                    var result = rep.Edit(image);
+                    return result;
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
-        public IEnumerable<GuessesTheImageToReturn> GetGuessesTheImages()
+        public IEnumerable<GuessesTheImageToReturn> GetAll()
         {
-            return rep.GetGuessesTheImages();
+            try
+            {
+                return rep.GetAll();
+            }
+            catch (System.Exception ex)
+            {
+                throw new HttpRequestException(ex.Message);
+            }
         }
 
-        public GuessesTheImageToReturn GetGuessesTheImage(int id)
+        public GuessesTheImageToReturn Get(int id)
         {
-            return rep.GetGuessesTheImage(id);
+            if(id.Validate())
+            {
+                try
+                {
+                    return rep.Get(id);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
-        public int DeleteGuessesTheImage(int id)
+        public int Delete(int id)
         {
-            return rep.DeleteGuessesTheImage(id);
+            if (id.Validate())
+            {
+                try
+                {
+                    return rep.Delete(id);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
+        }
+
+
+        public IEnumerable<string> GetAllCategories()
+        {
+            try
+            {
+                return rep.GetAllCategories();
+            }
+            catch (System.Exception ex)
+            {
+                throw new HttpRequestException(ex.Message);
+            }
+        }
+
+        public IEnumerable<GuessesTheImageToReturn> GetByCategory(string category)
+        {
+            if (category.Validate())
+            {
+                try
+                {
+                    return rep.GetByCategory(category);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
     }
 }

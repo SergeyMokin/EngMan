@@ -2,11 +2,13 @@
 using System.Threading.Tasks;
 using System.Linq;
 using EngMan.Models;
+using EngMan.Extensions;
 namespace EngMan.Repository
 {
     public class UserRepository: IUserRepository
     {
-        public IEnumerable<User> Users {
+        public IEnumerable<User> Users
+        {
             get
             {
                 return context.Users;
@@ -20,7 +22,8 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public async Task<UserView> SaveUser(UserView user) {
+        public async Task<UserView> SaveUser(UserView user)
+        {
             if(user != null)
             {
                 var entity = await context.Users.FindAsync(user.Id);
@@ -37,34 +40,33 @@ namespace EngMan.Repository
         
         public UserView ChangePassword(int id, string oldpassword, string newpassword)
         {
-            var user = new UserView();
-            if (!newpassword.Contains(" ") && newpassword.Length > 8 && oldpassword.Length > 0)
+            if (id > 0)
             {
-                if (id > 0)
+                var user = new UserView();
+                var entity = context.Users.Find(id);
+                if (entity != null)
                 {
-                    var entity = context.Users.Find(id);
-                    if (entity != null)
+                    entity.Password = entity.Password.VerifyHashedPassword(oldpassword) ? newpassword.HashPassword() : entity.Password;
+                    if (entity.Password.Equals(newpassword))
                     {
-                        entity.Password = Extensions.Extensions.VerifyHashedPassword(entity.Password, oldpassword) ? Extensions.Extensions.HashPassword(newpassword) : entity.Password;
-                        if (entity.Password.Equals(newpassword))
+                        user = new UserView
                         {
-                            user = new UserView
-                            {
-                                Id = entity.Id,
-                                FirstName = entity.FirstName,
-                                LastName = entity.LastName,
-                                Email = entity.Email,
-                                Role = entity.Role
-                            };
-                        }
+                            Id = entity.Id,
+                            FirstName = entity.FirstName,
+                            LastName = entity.LastName,
+                            Email = entity.Email,
+                            Role = entity.Role
+                        };
                     }
-                    context.SaveChanges();
                 }
+                context.SaveChanges();
+                return user;
             }
-            return user;
+            return null;
         }
 
-        public async Task<UserView> ChangeRole(UserView user) {
+        public async Task<UserView> ChangeRole(UserView user)
+        {
             if (user != null)
             {
                 var entity = await context.Users.FindAsync(user.Id);
@@ -77,7 +79,8 @@ namespace EngMan.Repository
             return user;
         }
 
-        public UserView AddUser(User user) {
+        public UserView AddUser(User user)
+        {
             var _user = new UserView();
             if (user != null)
             {
@@ -106,7 +109,8 @@ namespace EngMan.Repository
             return _user;
         }
 
-        public int DeleteUser(int id) {
+        public int DeleteUser(int id)
+        {
             if (id > 0)
             {
                 var entity = context.Users.Find(id);

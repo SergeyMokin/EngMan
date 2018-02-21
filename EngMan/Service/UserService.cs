@@ -3,6 +3,9 @@ using System.Linq;
 using EngMan.Models;
 using EngMan.Repository;
 using System.Threading.Tasks;
+using EngMan.Extensions;
+using System.Net.Http;
+
 namespace EngMan.Service
 {
     public class UserService: IUserService
@@ -16,51 +19,134 @@ namespace EngMan.Service
 
         public User ValidateUser(string email, string password)
         {
-            var userList = rep.Users;
-            var user = userList.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && Extensions.Extensions.VerifyHashedPassword(x.Password, password));
-            return user;
+            if (email.IsEmail())
+            {
+                try
+                {
+                    var user = rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password));
+                    return user;
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public UserView GetUser(int id)
         {
-            return GetUserList().Where(x => x.Id == id).FirstOrDefault();
+            if (id.Validate())
+            {
+                try
+                {
+                    return GetUserList().Where(x => x.Id == id).FirstOrDefault();
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public UserView Registration(User user)
         {
-            return rep.AddUser(user);
+            if (user.Validate())
+            {
+                try
+                {
+                    return rep.AddUser(user);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public async Task<UserView> SaveUser(UserView user)
         {
-            return await rep.SaveUser(user);
+            if (user.Validate())
+            {
+                try
+                {
+                    return await rep.SaveUser(user);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public int DeleteUser(int id)
         {
-            return rep.DeleteUser(id);
+            if (id.Validate())
+            {
+                try
+                {
+                    return rep.DeleteUser(id);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public List<UserView> GetUserList()
         {
-            return rep.Users.Select(x => new UserView
+            try
             {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Email = x.Email,
-                Role = x.Role
-            }).ToList();
+                return rep.Users.Select(x => new UserView
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    Role = x.Role
+                }).ToList();
+            }
+            catch (System.Exception ex)
+            {
+                throw new HttpRequestException(ex.Message);
+            }
         }
 
         public UserView ChangePassword(int id, string oldpassword, string newpassword)
         {
-            return rep.ChangePassword(id, oldpassword, newpassword);
+            if (id.Validate() && oldpassword.Validate() && newpassword.IsCorrectPassword())
+            {
+                try
+                {
+                    return rep.ChangePassword(id, oldpassword, newpassword);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public async Task<UserView> ChangeRole(UserView user)
         {
-            return await rep.ChangeRole(user);
+            if (user.Validate())
+            {
+                try
+                {
+                    return await rep.ChangeRole(user);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
     }
 }

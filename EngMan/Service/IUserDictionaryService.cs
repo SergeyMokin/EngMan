@@ -1,4 +1,5 @@
 ﻿using EngMan.Models;
+using System.Collections.Generic;
 namespace EngMan.Service
 {
     public interface IUserDictionaryService
@@ -6,5 +7,7 @@ namespace EngMan.Service
         UserDictionary Get(int id);
         UserWord Add(int id, UserWord word);
         int Delete(int userId, int wordId);
+        IEnumerable<string> GetAllCategories(int id);
+        UserDictionary GetUserDictionaryByCategory(int id, string category);
     }
 }

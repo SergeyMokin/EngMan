@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
+using EngMan.Extensions;
+using System.Net.Http;
 namespace EngMan.Service
 {
     public class WordService: IWordService
@@ -14,29 +16,108 @@ namespace EngMan.Service
             rep = _rep;
         }
 
+        public IEnumerable<Word> GetByCategory(string category)
+        {
+            if (category.Validate())
+            {
+                try
+                {
+                    return rep.GetByCategory(category);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
+        }
+
+        public IEnumerable<string> GetAllCategories()
+        {
+            try
+            {
+                return rep.GetAllCategories();
+            }
+            catch (System.Exception ex)
+            {
+                throw new HttpRequestException(ex.Message);
+            }
+        }
+
         public IEnumerable<Word> Get()
         {
-            return rep.Words;
+            try
+            {
+                return rep.Words;
+            }
+            catch (System.Exception ex)
+            {
+                throw new HttpRequestException(ex.Message);
+            }
         }
 
         public Word GetById(int id)
         {
-            return rep.Words.FirstOrDefault(x => x.WordId == id);
+            if (id.Validate())
+            {
+                try
+                {
+                    return rep.Words.FirstOrDefault(x => x.WordId == id);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public async Task<Word> Edit(Word word)
         {
-            return await rep.SaveWord(word);
+            if (word.Validate())
+            {
+                try
+                {
+                    return await rep.SaveWord(word);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public async Task<Word> Add(Word word)
         {
-            return await rep.AddWord(word);
+            if (word.Validate())
+            {
+                try
+                {
+                    return await rep.AddWord(word);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
 
         public async Task<int> Delete(int id)
         {
-            return await rep.DeleteWord(id);
+            if (id.Validate())
+            {
+                try
+                {
+                    return await rep.DeleteWord(id);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+            }
+            throw new HttpRequestException("Invalid model");
         }
     }
 }

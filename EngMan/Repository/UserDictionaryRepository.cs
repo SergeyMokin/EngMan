@@ -1,8 +1,9 @@
 ﻿using EngMan.Models;
 using System.Linq;
+using System.Collections.Generic;
 namespace EngMan.Repository
 {
-    public class UserDictionaryRepository: IUserDictionaryRepository
+    public class UserDictionaryRepository : IUserDictionaryRepository
     {
         private readonly EFDbContext context;
 
@@ -11,20 +12,105 @@ namespace EngMan.Repository
             context = _context;
         }
 
+        public IEnumerable<string> GetAllCategories(int id)
+        {
+            return context.Database.SqlQuery<string>(@"
+	              SELECT w.Category
+	              FROM [EngMan].[dbo].[UserWords] uw
+	              JOIN [EngMan].[dbo].[Words] w ON w.WordId = uw.WordId
+	              JOIN [EngMan].[dbo].[Users] u ON u.Id = uw.UserId
+	              WHERE u.Id = " + id
+                  + @"GROUP BY w.Category").ToList();
+        }
+
+        public UserDictionary GetUserDictionaryByCategory(int id, string category)
+        {
+            var result = context.Database.SqlQuery<UserWordSqlScript>(@"
+	              SELECT uw.Id [Id]
+                  ,u.Id [UserId]
+	              ,u.FirstName 
+	              ,u.LastName 
+	              ,u.Email
+	              ,u.Role 
+                  ,w.WordId 
+                  ,w.Original
+                  ,w.Translate 
+                  ,w.Category
+                  ,w.Transcription
+	              FROM [EngMan].[dbo].[UserWords] uw
+	              JOIN [EngMan].[dbo].[Words] w ON w.WordId = uw.WordId
+	              JOIN [EngMan].[dbo].[Users] u ON u.Id = uw.UserId
+	              WHERE u.Id = " + id
+                  + "AND w.Category LIKE '" + category + "'").ToList();
+            if (result != null)
+            {
+                var user = result.Select(x => new UserView
+                {
+                    Id = x.UserId,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    Role = x.Role
+                }).FirstOrDefault();
+                var dictionary = new UserDictionary
+                {
+                    User = user,
+                    Words = result.Select(x => new Word
+                    {
+                        WordId = x.WordId,
+                        Category = x.Category,
+                        Original = x.Original,
+                        Transcription = x.Transcription,
+                        Translate = x.Translate
+                    }).ToList()
+                };
+                return dictionary;
+            }
+            throw new System.Exception("Not found");
+        }
+
         public UserDictionary GetUserDictionary(int id)
         {
-            return context.UserWords.Where(x => x.UserId == id).Select(x => new UserDictionary
+            var result = context.Database.SqlQuery<UserWordSqlScript>(@"
+	              SELECT uw.Id [Id]
+                  ,u.Id [UserId]
+	              ,u.FirstName 
+	              ,u.LastName 
+	              ,u.Email
+	              ,u.Role 
+                  ,w.WordId 
+                  ,w.Original
+                  ,w.Translate 
+                  ,w.Category
+                  ,w.Transcription
+	              FROM [EngMan].[dbo].[UserWords] uw
+	              JOIN [EngMan].[dbo].[Words] w ON w.WordId = uw.WordId
+	              JOIN [EngMan].[dbo].[Users] u ON u.Id = uw.UserId
+	              WHERE u.Id = " + id).ToList();
+            if (result != null)
             {
-                User = context.Users.Select(user => new UserView
+                var user = result.Select(x => new UserView {
+                    Id = x.UserId,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    Role = x.Role
+                }).FirstOrDefault();
+                var dictionary = new UserDictionary
                 {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    Role = user.Role
-                }).FirstOrDefault(),
-                Words = context.UserWords.Where(usrwrd => usrwrd.UserId == id).Select(word => context.Words.FirstOrDefault(wrd => wrd.WordId == word.WordId))
-            }).FirstOrDefault();
+                    User = user,
+                    Words = result.Select(x => new Word
+                    {
+                        WordId = x.WordId,
+                        Category = x.Category,
+                        Original = x.Original,
+                        Transcription = x.Transcription,
+                        Translate = x.Translate
+                    }).ToList()
+                };
+                return dictionary;
+            }
+            throw new System.Exception("Not found");
         }
 
         public UserWord AddWordToDictionary(int id, UserWord word)
@@ -61,7 +147,7 @@ namespace EngMan.Repository
                 context.SaveChanges();
                 return wordId;
             }
-            return 0;
+            return -1;
         }
     }
 }

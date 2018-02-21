@@ -46,8 +46,7 @@ namespace EngMan.Repository
         public IEnumerable<ReturnMessage> GetMessages(int userId)
         {
             return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(string.Format(
-                @"
-                    SELECT [MessageId]
+                    @"SELECT [MessageId]
                           , B.[Id] [SenderId]
 	                      , B.[FirstName] [SenderFirstName]
 	                      , B.[LastName] [SenderLastName]
@@ -94,12 +93,12 @@ namespace EngMan.Repository
             if (entity != null)
             {
                 context.Messages.Remove(entity);
+                context.SaveChanges();
             }
             else
             {
-                return 0;
+                return -1;
             }
-            context.SaveChanges();
             return mesId;
         }
     }
