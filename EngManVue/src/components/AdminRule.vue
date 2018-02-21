@@ -66,16 +66,17 @@ export default {
   methods:{
       onFileChange(e) {
         this.images = [];
+        var check = 0;
         var arr = e.target.files || e.dataTransfer.files;
         if (!arr.length)
             return;
         var vue = this;
-        var image = {
-            Name: arr[0].name,
-            Data: ''
-        }
         var load = (e) => {
-            image.Data = e.target.result;
+            var image = {
+                Name: arr[check].name,
+                Data: e.target.result
+            }
+            check++;
             this.images.push(image);
         };
         for(var i = 0; i < arr.length; i++)

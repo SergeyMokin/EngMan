@@ -121,7 +121,8 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public List<string> AddImages(Image[] images) {
+        public List<string> AddImages(Image[] images)
+        {
             if (images != null && images.Length > 0)
             {
                 try

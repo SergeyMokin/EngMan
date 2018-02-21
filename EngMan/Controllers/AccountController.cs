@@ -21,7 +21,8 @@ namespace EngMan.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IHttpActionResult Registration(User user) {
+        public IHttpActionResult Registration(User user)
+        {
             try
             {
                 var _user = service.Registration(user);

@@ -38,7 +38,8 @@ namespace EngMan.Hubs
             }
         }
 
-        public void Disconnect() {
+        public void Disconnect()
+        {
             OnDisconnected(true);
         }
         

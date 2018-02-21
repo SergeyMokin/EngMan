@@ -6,7 +6,8 @@ namespace EngMan.Repository
 {
     public class RuleRepository: IRuleRepository
     {
-        public IEnumerable<RuleModel> Rules {
+        public IEnumerable<RuleModel> Rules
+        {
             get
             {
                 return context.Rules;

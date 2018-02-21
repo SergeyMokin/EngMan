@@ -3,6 +3,7 @@ namespace EngMan.App_Start
 {
     using System.Web.Http;
     using SimpleInjector;
+    using SimpleInjector.Lifestyles;
     using SimpleInjector.Integration.WebApi;
     using EngMan.Repository;
     using EngMan.Service;
@@ -12,7 +13,7 @@ namespace EngMan.App_Start
         public static void Initialize()
         {
             var container = new Container();
-            container.Options.DefaultScopedLifestyle = new WebApiRequestLifestyle();
+            container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
             
             InitializeContainer(container);
 

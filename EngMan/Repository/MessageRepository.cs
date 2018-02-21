@@ -13,7 +13,8 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId){
+        public IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId)
+        {
             if (messages != null)
             {
                 foreach (var el in messages)
@@ -65,19 +66,22 @@ namespace EngMan.Repository
                       JOIN [EngMan].[dbo].[Users] B ON B.[Id] = [EngMan].[dbo].[Messages].[SenderId]
                       WHERE  [EngMan].[dbo].[Messages].[BeneficiaryId] = {0} OR [EngMan].[dbo].[Messages].[SenderId] = {0}
                 ", userId
-                )).Select(x => new ReturnMessage {
+                )).Select(x => new ReturnMessage
+                {
                     MessageId = x.MessageId,
                     CheckReadMes = x.CheckReadMes,
                     Text = x.Text,
                     Time = x.Time,
-                    Sender = new UserView {
+                    Sender = new UserView
+                    {
                         Id = x.SenderId,
                         FirstName = x.SenderFirstName,
                         LastName = x.SenderLastName,
                         Email = x.SenderEmail,
                         Role = x.SenderRole
                     },
-                    Beneficiary = new UserView {
+                    Beneficiary = new UserView
+                    {
                         Id = x.BeneficiaryId,
                         FirstName = x.BeneficiaryFirstName,
                         LastName = x.BeneficiaryLastName,

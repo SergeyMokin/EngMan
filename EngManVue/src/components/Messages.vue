@@ -77,6 +77,10 @@ export default {
                 this.$store.dispatch('getMessages');
                 this.inProgress = false;
             })
+            .catch(e => {
+                alert('Ошибка удаления');
+                this.inProgress = false;
+            })
           } else{
               alert("Вы отменили удаление!");
               this.inProgress = false;
@@ -101,7 +105,16 @@ export default {
             {
                 if(!this.sortedmessages[i].CheckReadMes)
                 {
-                    api.ReadMessages(this.sortedmessages)
+                    api.ReadMessages(this.sortedmessages.map(function(item){
+                        return {
+                            MessageId: item.MessageId,
+                            SenderId: item.Sender.Id,
+                            BeneficiaryId: item.Beneficiary.Id,
+                            Text: item.Text,
+                            Time: item.Time,
+                            CheckReadMes: item.CheckReadMes
+                        }
+                    }))
                     .then(res => {
                         this.inProgress = false;
                         if(res != undefined)

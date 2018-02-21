@@ -89,7 +89,8 @@ namespace EngMan.Repository
 	              WHERE u.Id = " + id).ToList();
             if (result != null)
             {
-                var user = result.Select(x => new UserView {
+                var user = result.Select(x => new UserView
+                {
                     Id = x.UserId,
                     FirstName = x.FirstName,
                     LastName = x.LastName,

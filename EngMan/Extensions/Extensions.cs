@@ -309,11 +309,11 @@ namespace EngMan.Extensions
             {
                 buffer4 = bytes.GetBytes(0x20);
             }
-            return ByteArraysEqual(buffer3, buffer4);
+            return buffer3.IsEqual(buffer4);
         }
 
         //comparison of byte arrays
-        private static bool ByteArraysEqual(byte[] b1, byte[] b2)
+        private static bool IsEqual(this byte[] b1, byte[] b2)
         {
             if (b1 == b2) return true;
             if (b1 == null || b2 == null) return false;
