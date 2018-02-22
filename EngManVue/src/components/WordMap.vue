@@ -14,7 +14,7 @@
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
         <br/>
         <div v-for = 'el in words' :key = 'el.WordId'>
-            <div title = "Добавить себе в словарь" class = "list--element" v-on:click = "addWordToDictionary(el)">
+            <div title = "Добавить себе в словарь" class = "list--element pointer" v-on:click = "addWordToDictionary(el)">
                 <a>{{el.Original}} {{el.Transcription}} - {{el.Translate}}</a>
             </div>
         </div>
@@ -45,7 +45,7 @@ export default {
         choose: false,
         countOfWords: 0,
         completemessage: '',
-        id: -1,
+        indexes: '',
         goodAnswer: 0,
         attempt: 0,
         inProgress: false,
@@ -58,7 +58,7 @@ export default {
             WordId: -1,
             Original: '',
             Translate: '',
-            Category: ''
+            Category: '',
         }
     }
   },
@@ -97,12 +97,12 @@ export default {
           this.completemessage = '';
           if(this.categories.indexOf(this.category) != -1)
           {
-            api.getWordMap(this.category, this.id)
+            api.getWordMap(this.category, this.indexes)
             .then(result => {
                     if(result.Original)
                     {
                         this.countOfWords++;
-                        this.id = this.id + 1;
+                        this.indexes += result.WordId + ',';
                         this.word = result;
                         this.returnWord.WordId = this.word.WordId;
                         this.returnWord.Original = this.word.Original;
@@ -165,6 +165,7 @@ export default {
             Original: '',
             Translate: '',
             Category: ''
+
         }
       }
   },

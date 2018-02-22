@@ -25,7 +25,64 @@ namespace EngMan.Repository
 
         public IEnumerable<GuessesTheImageToReturn> GetByCategory(string category)
         {
-            return GetAll().Where(x => x.Word.Category.ToLower().Equals(category));
+            category = category.ToLower();
+            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
+                  @"SELECT [Id]
+                    , [EngMan].[dbo].[GuessesTheImages].[WordId]
+                    , [Original]
+                    , [Translate]
+                    , [Category]
+                    , [Transcription]
+                    , [Path]
+                    FROM [EngMan].[dbo].[GuessesTheImages]
+                    JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
+                    WHERE LOWER([Category]) LIKE LOWER('" + category + "')"
+                )
+                .Select(x => new GuessesTheImageToReturn
+                {
+                    Id = x.Id,
+                    Word = new Word
+                    {
+                        WordId = x.WordId,
+                        Category = x.Category,
+                        Original = x.Original,
+                        Transcription = x.Transcription,
+                        Translate = x.Translate
+                    },
+                    Path = x.Path
+                });
+        }
+
+        public IEnumerable<GuessesTheImageToReturn> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
+        {
+            var query = @"SELECT [Id]
+                    , [EngMan].[dbo].[GuessesTheImages].[WordId]
+                    , [Original]
+                    , [Translate]
+                    , [Category]
+                    , [Transcription]
+                    , [Path]
+                    FROM [EngMan].[dbo].[GuessesTheImages]
+                    JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
+                    WHERE LOWER([Category]) LIKE LOWER('" + category + "')";
+            foreach (var index in indexes)
+            {
+                query += (" AND [Id]!=" + index);
+            }
+            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(query)
+                .Select(x => new GuessesTheImageToReturn
+                {
+                    Id = x.Id,
+                    Word = new Word
+                    {
+                        WordId = x.WordId,
+                        Category = x.Category,
+                        Original = x.Original,
+                        Transcription = x.Transcription,
+                        Translate = x.Translate
+                    },
+                    Path = x.Path
+                });
         }
 
         public IEnumerable<GuessesTheImageToReturn> GetAll()

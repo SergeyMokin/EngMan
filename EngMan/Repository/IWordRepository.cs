@@ -16,5 +16,8 @@ namespace EngMan.Repository
         IEnumerable<Word> GetByCategory(string category);
 
         IEnumerable<string> GetAllCategories();
+
+        IEnumerable<Word> GetTasks(string category, IEnumerable<int> indexes = default(int[]));
+
     }
 }

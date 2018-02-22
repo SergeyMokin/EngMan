@@ -2,7 +2,6 @@
 using EngMan.Service;
 using EngMan.Models;
 using System.Net.Http;
-using EngMan.Extensions;
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -16,11 +15,11 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetTask(int id)
+        public IHttpActionResult GetTask(string category, string indexes)
         {
             try
             {
-                var task = service.Get(id);
+                var task = service.GetTask(category, indexes);
                 if (task != null)
                 {
                     return Ok(task);
@@ -36,25 +35,15 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult VerificationCorrectness(GuessesTheImageToReturn img)
         {
-            if (img.Validate())
+            try
             {
-                try
-                {
-                    var task = service.Get(img.Id);
-                    if (task != null)
-                    {
-                        if (task.Word.Original.ToLower().Equals(img.Word.Original.ToLower()))
-                        {
-                            return Ok(true);
-                        }
-                    }
-                }
-                catch (HttpRequestException ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                var task = service.VerificationCorrectness(img);
+                return Ok(task);
             }
-            return Ok(false);
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

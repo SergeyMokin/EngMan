@@ -5,7 +5,12 @@
   </div>
   <div class="view-list">
       <div v-if = "!clickRule" class = "icon-close"><router-link to="/grammar"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-      <span style = "font-size: 30px" v-if = "!clickRule">Правила</span>
+      <span style = "font-size: 30px" v-if = "!clickRule">Правила</span><br/>
+      <select v-model = "category" v-on:change = "downloadRules()">
+          <option v-for = "category in categories" :key="category">
+              {{category}}
+          </option>
+      </select>
       <div class = "list--element pointer" v-for = 'el in rules' :key = 'el.id' v-if = "!clickRule" v-on:click = "openRule(el.RuleId)">
           <span class = "span--element">{{el.Title}}</span> 
       </div>
@@ -20,6 +25,9 @@ export default {
   name: 'rules-view',
   data () {
     return {
+        inProgress: false,
+        category: '',
+        categories: [],
         clickRule: false
         , rule: {}
     }
@@ -28,6 +36,24 @@ export default {
       rule
   },
   methods:{
+      downloadRules(){
+        if(this.inProgress) return;
+        this.inProgress = true;
+        api.getRulesByCategory(this.category)
+            .then(res => 
+            {
+                this.$store.state.rules = res;
+                this.inProgress = false;
+            })
+            .catch(e => 
+            {
+                if(e.message)
+                {
+                    allert(e.message);
+                }
+                this.inProgress = false;
+            })
+      },
       openRule(id){
           api.getRule(id)
           .then(result => {
@@ -41,12 +67,30 @@ export default {
   {
     rules()
     {
-      return this.$store.getters.rules;
+      if(this.category)
+      {
+        return this.$store.getters.rules;
+      }
     }
   },
   created: function()
   {
-      this.$store.dispatch('getRules');
+      if(this.inProgress) return;
+      this.inProgress = true;
+      api.getAllCategoriesRules()
+      .then(res => 
+      {
+          this.categories = res;
+          this.inProgress = false;
+      })
+      .catch(e => 
+      {
+          if(e.message)
+          {
+              allert(e.message);
+          }
+          this.inProgress = false;
+      })
   }
 }
 </script>

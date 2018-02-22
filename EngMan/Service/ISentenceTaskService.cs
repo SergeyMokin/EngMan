@@ -18,5 +18,9 @@ namespace EngMan.Service
         IEnumerable<string> GetAllCategories();
 
         IEnumerable<SentenceTask> GetByCategory(string category);
+
+        SentenceTask GetTask(string category, string indexes);
+
+        bool VerificationCorrectness(SentenceTask task);
     }
 }

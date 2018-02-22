@@ -34,7 +34,7 @@ export default {
     return {
         countOfSentences: 0,
         completemessage: '',
-        id: -1,
+        indexes: '',
         goodAnswer: 0,
         attempt: 0,
         inProgress: false,
@@ -46,7 +46,8 @@ export default {
         returnSentence: {
             SentenceTaskId: -1,
             Sentence: '',
-            Category: ''
+            Category: '',
+            Translate: ''
         }
     }
   },
@@ -59,19 +60,21 @@ export default {
           this.returnSentence.SentenceTaskId = -1;
           this.returnSentence.Sentence = '';
           this.returnSentence.Category = '';
+          this.returnSentence.Translate = '';
           this.errormessage = '';
           this.completemessage = '';
           if(this.categories.indexOf(this.category) != -1)
           {
-            api.getSentenceTask(this.category, this.id)
+            api.getSentenceTask(this.category, this.indexes)
             .then(result => {
                     if(result.Sentence)
                     {
                         this.countOfSentences++;
-                        this.id = this.id + 1;
+                        this.indexes += result.SentenceTaskId + ',';
                         this.sentence = result;
                         this.returnSentence.SentenceTaskId = this.sentence.SentenceTaskId;
                         this.returnSentence.Category = this.sentence.Category;
+                        this.returnSentence.Translate = this.sentence.Translate;
                         this.show = true;
                         this.inProgress = false;
                     }
@@ -117,7 +120,7 @@ export default {
         this.completemessage = 'Вы успешно закончили! Правильных ответов: ' + this.goodAnswer + '/' + this.countOfSentences;
         alert(this.completemessage);
         this.countOfSentences = 0;
-        this.id = -1;
+        this.indexes = '';
         this.goodAnswer = 0;
         this.attempt = 0;
         this.inProgress = false;

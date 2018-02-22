@@ -126,16 +126,16 @@ export default {
     .then(response => response.data)
     .catch(e => e)
   },
-  getSentenceTask(category, id){
-    return axios.get(url + '/sentencetask/gettask?category=' + category + '&id=' + id)
+  getSentenceTask(category, indexes){
+    return axios.get(url + '/sentencetask/gettask?category=' + category + '&indexes=' + indexes)
     .then(response => response.data)
     .catch(e => e);
   },
   verificationSentenceTask(sentence){
     return axios.post(url + '/sentencetask/verificationcorrectness', sentence)
   },
-  getWordMap(category, id){
-    return axios.get(url + '/wordmap/getword?category=' + category + '&id=' + id)
+  getWordMap(category, indexes){
+    return axios.get(url + '/wordmap/getword?category=' + category + '&indexes=' + indexes)
     .then(response => response.data)
     .catch(e => e);
   },
@@ -232,8 +232,8 @@ export default {
     .then(response => response.data)
     .catch(e => e);
   },
-  getGuessesTheImage(id){
-    return axios.get(url + '/guessestheimage/gettask/' + id)
+  getGuessesTheImage(category, indexes){
+    return axios.get(url + '/guessestheimage/gettask?category=' + category + "&indexes=" + indexes)
     .then(response => response.data)
     .catch(e => e);
   },

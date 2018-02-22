@@ -19,35 +19,14 @@ namespace EngMan.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetTask(string category, int id)
+        public IHttpActionResult GetTask(string category, string indexes)
         {
             try
             {
-                var tasks = service.GetByCategory(category).ToList();
-                if (tasks != null)
+                var task = service.GetTask(category, indexes);
+                if (task != null)
                 {
-                    var rand = new Random();
-                    if (tasks.Count() - 1 <= id)
-                    {
-                        return NotFound();
-                    }
-                    return Ok(tasks.Select(x =>
-                    {
-                        var arr = x.Sentence.Split(new[] { ' ' });
-                        var set = new HashSet<int>();
-                        while (set.Count() != arr.Length)
-                        {
-                            set.Add(rand.Next(0, arr.Length));
-                        }
-                        var returnArr = new string[arr.Length];
-                        var i = 0;
-                        foreach (var ind in set)
-                        {
-                            returnArr[i] = arr[ind];
-                            i++;
-                        }
-                        return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category };
-                    }).ElementAt(id + 1));
+                    return Ok(task);
                 }
             }
             catch (HttpRequestException ex)
@@ -62,20 +41,13 @@ namespace EngMan.Controllers
         {
             try
             {
-                var task = service.GetById(sentence.SentenceTaskId);
-                if (task != null)
-                {
-                    if (task.Sentence.ToLower().Equals(sentence.Sentence.ToLower()))
-                    {
-                        return Ok(true);
-                    }
-                }
+                var task = service.VerificationCorrectness(sentence);
+                return Ok(task);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
     }
 }

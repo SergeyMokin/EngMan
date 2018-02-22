@@ -17,5 +17,8 @@ namespace EngMan.Repository
         IEnumerable<string> GetAllCategories();
 
         IEnumerable<GuessesTheImageToReturn> GetByCategory(string category);
+
+        IEnumerable<GuessesTheImageToReturn> GetTasks(string category, IEnumerable<int> indexes = default(int[]));
+
     }
 }

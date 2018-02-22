@@ -66,5 +66,21 @@ namespace EngMan.Repository
             }
             return -1;
         }
+
+        public IEnumerable<SentenceTask> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
+        {
+            var query = @"
+                    SELECT [SentenceTaskId]
+						  ,[Sentence]
+						  ,[Category]
+						  ,[Translate]
+					FROM [dbo].[SentenceTasks]
+                    WHERE LOWER([Category]) LIKE LOWER('" + category + "')";
+            foreach (var index in indexes)
+            {
+                query += (" AND [SentenceTaskId]!=" + index);
+            }
+            return context.Database.SqlQuery<SentenceTask>(query);
+        }
     }
 }

@@ -67,5 +67,22 @@ namespace EngMan.Repository
             }
             return -1;
         }
+
+        public IEnumerable<Word> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
+        {
+            var query = @"
+                    SELECT [WordId]
+						  ,[Original]
+						  ,[Translate]
+						  ,[Category]
+						  ,[Transcription]
+					FROM [dbo].[Words]
+                    WHERE LOWER([Category]) LIKE LOWER('" + category + "')";
+            foreach (var index in indexes)
+            {
+                query += (" AND [WordId]!=" + index);
+            }
+            return context.Database.SqlQuery<Word>(query);
+        }
     }
 }

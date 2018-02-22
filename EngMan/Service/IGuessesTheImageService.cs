@@ -18,5 +18,10 @@ namespace EngMan.Service
         IEnumerable<string> GetAllCategories();
 
         IEnumerable<GuessesTheImageToReturn> GetByCategory(string category);
+
+        GuessesTheImageToReturn GetTask(string category, string indexes);
+
+        bool VerificationCorrectness(GuessesTheImageToReturn img);
+
     }
 }

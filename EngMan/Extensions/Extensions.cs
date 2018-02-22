@@ -11,6 +11,16 @@ namespace EngMan.Extensions
 {
     public static class Extensions
     {
+        //Validate indexes array
+        public static bool IsCorrect(this IEnumerable<int> task)
+        {
+            if (task == null
+                || task.Count() > 9)
+            {
+                return false;
+            }
+            return true;
+        }
         //Validate password
         public static bool IsCorrectPassword(this string password)
         {
@@ -159,8 +169,8 @@ namespace EngMan.Extensions
         {
             if (task == null
                     || task.Id < 0
-                    || task.Word.Validate()
-                    || task.Path != null
+                    || !task.Word.Validate(true)
+                    || task.Path == null
                     || !(task.Path.Length > 0))
             {
                 return false;
@@ -168,20 +178,36 @@ namespace EngMan.Extensions
             return true;
         }
         //Validate Word
-        public static bool Validate(this Word task)
+        public static bool Validate(this Word task, bool checkTranscription)
         {
-            if (task == null
-                    || task.WordId < 0
-                    || task.Original == null
-                    || task.Translate == null
-                    || task.Transcription == null
-                    || task.Category == null
-                    || !(task.Original.Length > 0)
-                    || !(task.Translate.Length > 0)
-                    || !(task.Transcription.Length > 0)
-                    || !(task.Category.Length > 0))
+            if (checkTranscription)
             {
-                return false;
+                if (task == null
+                        || task.WordId < 0
+                        || task.Original == null
+                        || task.Translate == null
+                        || task.Transcription == null
+                        || task.Category == null
+                        || !(task.Original.Length > 0)
+                        || !(task.Translate.Length > 0)
+                        || !(task.Transcription.Length > 0)
+                        || !(task.Category.Length > 0))
+                {
+                    return false;
+                }
+            }
+            else {
+                if (task == null
+                        || task.WordId < 0
+                        || task.Original == null
+                        || task.Translate == null
+                        || task.Category == null
+                        || !(task.Original.Length > 0)
+                        || !(task.Translate.Length > 0)
+                        || !(task.Category.Length > 0))
+                {
+                    return false;
+                }
             }
             return true;
         }
@@ -193,7 +219,7 @@ namespace EngMan.Extensions
                 if (task == null
                     || task.Id < 0
                     || task.WordId < 0
-                    || task.Image.Validate())
+                    || !task.Image.Validate())
                 {
                     return false;
                 }

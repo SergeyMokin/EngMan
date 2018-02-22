@@ -6,6 +6,11 @@
       <div v-if = "!show">
         <div class = "icon-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
         <div v-on:click = "downloadTask()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
+        <select v-model = "category">
+            <option v-for = "category in categories" :key = "category">
+                {{category}}
+            </option>
+        </select>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
       </div>
       <div v-if = "show">
@@ -15,7 +20,7 @@
         <img title="Угадай кто на картинке" :src = "task.Path" style = "width: 50%">
         <br/>
         <span>{{task.Word.Translate}}</span><br/>
-        <input type = "text" v-model = "returnTask.Word" class = "sentence-input">
+        <input type = "text" v-model = "task.Word.Original" class = "sentence-input">
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
@@ -28,20 +33,17 @@ export default {
   name: 'guessestheimages-task',
   data () {
     return {
-        id: 1,
+        indexes: '',
         countOfTasks: 0,
         completemessage: '',
         goodAnswer: 0,
         attempt: 0,
+        category: '',
+        categories: [],
         inProgress: false,
         errormessage: '',
         show: false,
-        task: {},
-        returnTask: {
-            Id: 1,
-            Word: '',
-            Path: ''
-        }
+        task: {}
     }
   },
   methods:{
@@ -50,20 +52,20 @@ export default {
           this.inProgress = true;
           this.attempt = 0;
           this.inProgress = false;
-          this.returnTask.Id = -1;
-          this.returnTask.Word = '';
-          this.returnTask.Path = '';
           this.errormessage = '';
           this.completemessage = '';
-          api.getGuessesTheImage(this.id)
+          if(this.category.length == 0)
+          {
+              return;
+          }
+          api.getGuessesTheImage(this.category, this.indexes)
           .then(result => {
                 if(result.Path)
                 {
-                    this.id++;
+                    this.indexes += result.Id + ',';
                     this.countOfTasks++;
                     this.task = result;
-                    this.returnTask.Id = result.Id;
-                    this.returnTask.Path = result.Path;
+                    this.task.Word.Original = '';
                     this.show = true;
                     this.inProgress = false;
                 }
@@ -80,12 +82,13 @@ export default {
           if(this.inProgress) return;
           this.inProgress = true;
           this.errormessage = '';
-          if(this.returnTask.Word == '')
+          if(this.task.Word.Original == '')
           {
               this.inProgress = false;
               this.errormessage = 'Напишите ответ';
+              return;
           }
-          api.verificationGuessesTheImage(this.returnTask)
+          api.verificationGuessesTheImage(this.task)
           .then(result =>
           {
               if(result){
@@ -109,19 +112,32 @@ export default {
         this.completemessage = 'Вы успешно закончили! Правильных ответов: ' + this.goodAnswer + '/' + this.countOfTasks;
         alert(this.completemessage);
         this.countOfTasks = 0;
-        this.id = 1;
+        this.id = 0;
         this.goodAnswer = 0;
         this.attempt = 0;
         this.inProgress = false;
         this.errormessage = '';
         this.show = false;
         this.task = {};
-        this.returnTask = {
-            Id: 1,
-            Word: '',
-            Path: ''
-        }
+        this.category = '';
+        this.categories = [];
       }
+  },
+  created: function(){
+      if(this.inProgress) return;
+      this.inProgress = true;
+      api.getAllCategoriesGuessesTheImages()
+            .then(res => {
+                this.categories = res;
+                this.inProgress = false;
+            })
+            .catch(e => {
+                if(e.message)
+                {
+                    allert(e.message);
+                }
+                this.inProgress = false;
+            })
   }
 }
 </script>

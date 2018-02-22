@@ -21,10 +21,10 @@ namespace EngMan.Controllers
         {
             try
             {
-                var rules = service.Get();
-                if (rules != null)
+                var result = service.GetAllCategories();
+                if (result != null)
                 {
-                    return Ok(rules);
+                    return Ok(result);
                 }
             }
             catch (HttpRequestException ex)
@@ -39,7 +39,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var rules = service.Get();
+                var rules = service.GetByCategory(category);
                 if (rules != null)
                 {
                     return Ok(rules);

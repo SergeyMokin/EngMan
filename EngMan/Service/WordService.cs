@@ -5,6 +5,8 @@ using System.Linq;
 using EngMan.Models;
 using EngMan.Extensions;
 using System.Net.Http;
+using System.Text.RegularExpressions;
+
 namespace EngMan.Service
 {
     public class WordService: IWordService
@@ -74,7 +76,7 @@ namespace EngMan.Service
 
         public async Task<Word> Edit(Word word)
         {
-            if (word.Validate())
+            if (word.Validate(true))
             {
                 try
                 {
@@ -90,7 +92,7 @@ namespace EngMan.Service
 
         public async Task<Word> Add(Word word)
         {
-            if (word.Validate())
+            if (word.Validate(true))
             {
                 try
                 {
@@ -116,6 +118,101 @@ namespace EngMan.Service
                 {
                     throw new HttpRequestException(ex.Message);
                 }
+            }
+            throw new HttpRequestException("Invalid model");
+        }
+
+        public MapWord GetTask(string category, string indexes)
+        {
+            try
+            {
+                var ParsedIndexes = new List<int>();
+                if (indexes.Validate())
+                {
+                    foreach (var ch in indexes.Split(','))
+                    {
+                        int i;
+                        if (int.TryParse(ch, out i))
+                        {
+                            ParsedIndexes.Add(i);
+                        }
+                    }
+                }
+                if (category.Validate())
+                {
+                    List<Word> tasks;
+                    if (ParsedIndexes.IsCorrect())
+                    {
+                        tasks = rep.GetTasks(category, ParsedIndexes).ToList();
+                    }
+                    else
+                    {
+                        tasks = rep.GetTasks(category).ToList();
+                    }
+                    if (tasks != null)
+                    {
+                        if (tasks.Count() >= (5 - ParsedIndexes.Count()))
+                        {
+                            var rand = new System.Random();
+                            var index = rand.Next(0, tasks.Count());
+                            var indexesTranslate = new HashSet<int>();
+                            indexesTranslate.Add(index);
+                            while (indexesTranslate.Count() != 5)
+                            {
+                                indexesTranslate.Add(rand.Next(0, tasks.Count()));
+                            }
+                            var word = tasks.ElementAt(index);
+                            var translate = new List<string>();
+                            foreach (var i in indexesTranslate)
+                            {
+                                translate.Add(tasks.ElementAt(i).Translate);
+                            }
+                            if (word != null)
+                            {
+                                return new MapWord
+                                {
+                                    WordId = word.WordId,
+                                    Original = word.Original,
+                                    Translate = translate.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
+                                    Category = word.Category
+                                };
+                            }
+                        }
+                        else
+                        {
+                            throw new HttpRequestException("Few words");
+                        }
+                    }
+                }
+                throw new HttpRequestException("Invalid model");
+            }
+            catch (System.Exception ex)
+            {
+                throw new HttpRequestException(ex.Message);
+            }
+        }
+
+        public bool VerificationCorrectness(Word task)
+        {
+            if (task.Validate(false))
+            {
+                try
+                {
+                    var _task = GetById(task.WordId);
+                    if (_task != null)
+                    {
+                        Regex rx = new Regex("[^a-zA-Zа-яА-Я0-9]");
+                        if (rx.Replace(task.Translate.ToLower(), "").Equals(rx.Replace(_task.Translate.ToLower(), "")))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    throw new HttpRequestException(ex.Message);
+                }
+                return false;
             }
             throw new HttpRequestException("Invalid model");
         }
