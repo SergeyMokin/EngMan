@@ -10,7 +10,7 @@ namespace EngMan.Repository
         {
             get
             {
-                return context.Rules;
+                return context.Rules.Select(x => x);
             }
         }
 
