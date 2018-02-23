@@ -7,9 +7,9 @@ namespace EngMan.Repository
     {
         IEnumerable<Word> Words { get; }
 
-        Task<Word> SaveWord(Word word);
+        Task<bool> SaveWord(Word word);
 
-        Task<Word> AddWord(Word word);
+        bool AddWord(Word word);
 
         Task<int> DeleteWord(int id);
 

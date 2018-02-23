@@ -7,9 +7,9 @@ namespace EngMan.Repository
     {
         IEnumerable<RuleModel> Rules { get; }
 
-        Task<RuleModel> SaveRule(RuleModel rule);
+        Task<bool> SaveRule(RuleModel rule);
 
-        Task<RuleModel> AddRule(RuleModel rule);
+        bool AddRule(RuleModel rule);
 
         Task<int> DeleteRule(int id);
 

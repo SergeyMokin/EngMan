@@ -25,15 +25,13 @@ namespace EngMan.Repository
             return context.Words.GroupBy(x => x.Category).Select(x => x.Key);
         }
 
-        public async Task<Word> SaveWord(Word word)
+        public async Task<bool> SaveWord(Word word)
         {
-            if (word.WordId == 0)
+            if (word == null)
             {
-                context.Words.Add(word);
-                context.SaveChanges();
-                word.WordId = context.Words.ToArray().Last().WordId;
+                throw new System.ArgumentNullException();
             }
-            else
+            if (word.WordId >= 1)
             {
                 var entity = await context.Words.FindAsync(word.WordId);
                 if (entity != null)
@@ -43,14 +41,35 @@ namespace EngMan.Repository
                     entity.Category = word.Category;
                     entity.Transcription = word.Transcription;
                 }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
             context.SaveChanges();
-            return word;
+            return true;
         }
 
-        public async Task<Word> AddWord(Word word)
+        public bool AddWord(Word word)
         {
-            return await SaveWord(word);
+            if (word == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+            if (word.WordId <= 0)
+            {
+                context.Words.Add(word);
+                context.SaveChanges();
+            }
+            else
+            {
+                return false;
+            }
+            return true;
         }
 
         public async Task<int> DeleteWord(int id)

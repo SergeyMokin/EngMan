@@ -9,9 +9,9 @@ namespace EngMan.Service
 
         Word GetById(int id);
 
-        Task<Word> Edit(Word word);
+        Task<bool> Edit(Word word);
 
-        Task<Word> Add(Word word);
+        bool Add(Word word);
 
         Task<int> Delete(int id);
 

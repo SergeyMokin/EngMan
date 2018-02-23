@@ -74,7 +74,7 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public async Task<Word> Edit(Word word)
+        public async Task<bool> Edit(Word word)
         {
             if (word.Validate(true))
             {
@@ -90,13 +90,13 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public async Task<Word> Add(Word word)
+        public bool Add(Word word)
         {
             if (word.Validate(true))
             {
                 try
                 {
-                    return await rep.AddWord(word);
+                    return rep.AddWord(word);
                 }
                 catch (System.Exception ex)
                 {

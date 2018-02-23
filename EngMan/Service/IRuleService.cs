@@ -9,9 +9,9 @@ namespace EngMan.Service
 
         RuleModel GetById(int id);
 
-        Task<RuleModel> Edit(RuleModel rule);
+        Task<bool> Edit(RuleModel rule);
 
-        Task<RuleModel> Add(RuleModel rule);
+        bool Add(RuleModel rule);
 
         Task<int> Delete(int id);
 

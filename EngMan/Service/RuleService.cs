@@ -73,7 +73,7 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public async Task<RuleModel> Edit(RuleModel rule)
+        public async Task<bool> Edit(RuleModel rule)
         {
             if (rule.Validate())
             {
@@ -89,13 +89,13 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public async Task<RuleModel> Add(RuleModel rule)
+        public bool Add(RuleModel rule)
         {
             if (rule.Validate())
             {
                 try
                 {
-                    return await rep.AddRule(rule);
+                    return rep.AddRule(rule);
                 }
                 catch (System.Exception ex)
                 {

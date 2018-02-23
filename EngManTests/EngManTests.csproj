@@ -101,8 +101,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestIRuleRepository.cs" />
+    <Compile Include="Repository\TestIGuessesTheImageRepository.cs" />
+    <Compile Include="Repository\TestIMessageRepository.cs" />
+    <Compile Include="Repository\TestIRuleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\TestISentenceTaskRepository.cs" />
+    <Compile Include="Repository\TestIUserDictionaryRepository.cs" />
+    <Compile Include="Repository\TestIUserRepository.cs" />
+    <Compile Include="Repository\TestIWordRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

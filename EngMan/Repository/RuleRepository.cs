@@ -28,34 +28,57 @@ namespace EngMan.Repository
 
         public IEnumerable<RuleModel> GetByCategory(string category)
         {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             return context.Rules.Where(x => x.Category.ToLower().Equals(category.ToLower()));
         }
 
-        public async Task<RuleModel> SaveRule(RuleModel rule)
+        public async Task<bool> SaveRule(RuleModel rule)
         {
-            if (rule.RuleId == 0)
+            if (rule == null)
             {
-                context.Rules.Add(rule);
-                context.SaveChanges();
-                rule.RuleId = context.Rules.ToArray().Last().RuleId;
+                throw new System.ArgumentNullException();
             }
-            else
+            if (rule.RuleId >= 1)
             {
                 var entity = await context.Rules.FindAsync(rule.RuleId);
-                if(entity != null)
+                if (entity != null)
                 {
                     entity.Title = rule.Title;
                     entity.Text = rule.Text;
                     entity.Category = rule.Category;
                 }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
             context.SaveChanges();
-            return rule;
+            return true;
         }
 
-        public async Task<RuleModel> AddRule(RuleModel rule)
+        public bool AddRule(RuleModel rule)
         {
-            return await SaveRule(rule);
+            if (rule == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+            if (rule.RuleId <= 0)
+            {
+                context.Rules.Add(rule);
+                context.SaveChanges();
+            }
+            else
+            {
+                return false;
+            }
+            return true;
         }
 
         public async Task<int> DeleteRule(int id)

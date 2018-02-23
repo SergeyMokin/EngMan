@@ -95,35 +95,27 @@ namespace EngMan.Controllers
             try
             {
                 var _rule = await service.Edit(rule);
-                if (_rule != null)
-                {
-                    return Ok(_rule);
-                }
+                return Ok(_rule);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IHttpActionResult> AddRule(RuleModel rule)
+        public IHttpActionResult AddRule(RuleModel rule)
         {
             try
             {
-                var _rule = await service.Add(rule);
-                if (_rule != null)
-                {
-                    return Ok(_rule);
-                }
+                var _rule = service.Add(rule);
+                return Ok(_rule);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         [HttpPost]

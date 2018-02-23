@@ -95,35 +95,27 @@ namespace EngMan.Controllers
             try
             {
                 var _word = await service.Edit(word);
-                if (_word != null)
-                {
-                    return Ok(_word);
-                }
+                return Ok(_word);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IHttpActionResult> AddWord(Word word)
+        public IHttpActionResult AddWord(Word word)
         {
             try
             {
-                var _word = await service.Add(word);
-                if (_word != null)
-                {
-                    return Ok(_word);
-                }
+                var _word = service.Add(word);
+                return Ok(_word);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         [Authorize(Roles = "admin")]
