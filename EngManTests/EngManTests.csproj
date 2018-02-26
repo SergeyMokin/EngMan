@@ -109,6 +109,13 @@
     <Compile Include="Repository\TestIUserDictionaryRepository.cs" />
     <Compile Include="Repository\TestIUserRepository.cs" />
     <Compile Include="Repository\TestIWordRepository.cs" />
+    <Compile Include="Service\TestIGuessesTheImageService.cs" />
+    <Compile Include="Service\TestIMessageService.cs" />
+    <Compile Include="Service\TestIRuleService.cs" />
+    <Compile Include="Service\TestISentenceTaskService.cs" />
+    <Compile Include="Service\TestIUserDictionaryService.cs" />
+    <Compile Include="Service\TestIUserService.cs" />
+    <Compile Include="Service\TestIWordService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -120,6 +127,7 @@
       <Name>EngMan</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

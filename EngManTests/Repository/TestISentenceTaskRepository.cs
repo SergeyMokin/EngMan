@@ -64,7 +64,7 @@ namespace EngManTests.Repository
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Value cannot be null.", string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.Message, string.Format("result != expected"));
             }
         }
 
@@ -101,7 +101,7 @@ namespace EngManTests.Repository
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Value cannot be null.", string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.Message, string.Format("result != expected"));
             }
         }
 
@@ -142,7 +142,7 @@ namespace EngManTests.Repository
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.InnerException.Message, "Value cannot be null.", string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.InnerException.Message, string.Format("result != expected"));
             }
         }
 
@@ -183,7 +183,7 @@ namespace EngManTests.Repository
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Value cannot be null.", string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.Message, string.Format("result != expected"));
             }
         }
 

@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web.Http.Results;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EngMan.Controllers;
 using EngMan.Models;
-using EngMan.Service;
 using EngMan.Repository;
-using System.Web.Http;
 using System.Linq;
 using Moq;
 using System.Data.Entity;
-using System.Linq.Expressions;
 
 namespace EngManTests.Repository
 {
@@ -63,7 +57,7 @@ namespace EngManTests.Repository
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Value cannot be null.", string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.Message, string.Format("result != expected"));
             }
         }
 
@@ -102,7 +96,7 @@ namespace EngManTests.Repository
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Value cannot be null.", string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.Message, string.Format("result != expected"));
             }
         }
 
