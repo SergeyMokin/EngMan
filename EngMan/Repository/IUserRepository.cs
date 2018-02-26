@@ -7,14 +7,14 @@ namespace EngMan.Repository
     {
         IEnumerable<User> Users { get; }
 
-        Task<UserView> SaveUser(UserView user);
+        Task<bool> SaveUser(UserView user);
 
-        UserView AddUser(User user);
+        bool AddUser(User user);
 
         int DeleteUser(int id);
 
-        UserView ChangePassword(int id, string oldpassword, string newpassword);
+        bool ChangePassword(int id, string oldpassword, string newpassword);
 
-        Task<UserView> ChangeRole(UserView user);
+        Task<bool> ChangeRole(UserView user);
     }
 }

@@ -7,11 +7,11 @@ namespace EngMan.Service
     {
         User ValidateUser(string email, string password);
         List<UserView> GetUserList();
-        UserView Registration(User user);
-        Task<UserView> SaveUser(UserView user);
+        bool Registration(User user);
+        Task<bool> SaveUser(UserView user);
         int DeleteUser(int id);
         UserView GetUser(int id);
-        UserView ChangePassword(int id, string oldpassword, string newpassword);
-        Task<UserView> ChangeRole(UserView user);
+        bool ChangePassword(int id, string oldpassword, string newpassword);
+        Task<bool> ChangeRole(UserView user);
     }
 }

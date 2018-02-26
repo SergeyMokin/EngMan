@@ -93,16 +93,12 @@ namespace EngMan.Controllers
             try
             {
                 var _task = service.Edit(task);
-                if (_task != null)
-                {
-                    return Ok("Edit completed successful");
-                }
+                return Ok(_task);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         [Authorize(Roles = "admin")]
@@ -112,16 +108,12 @@ namespace EngMan.Controllers
             try
             {
                 var _task = service.Add(task);
-                if (_task != null)
-                {
-                    return Ok("Add completed successful");
-                }
+                return Ok(_task);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         [Authorize(Roles = "admin")]

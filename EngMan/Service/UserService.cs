@@ -50,7 +50,7 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public UserView Registration(User user)
+        public bool Registration(User user)
         {
             if (user.Validate())
             {
@@ -66,7 +66,7 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public async Task<UserView> SaveUser(UserView user)
+        public async Task<bool> SaveUser(UserView user)
         {
             if (user.Validate())
             {
@@ -117,7 +117,7 @@ namespace EngMan.Service
             }
         }
 
-        public UserView ChangePassword(int id, string oldpassword, string newpassword)
+        public bool ChangePassword(int id, string oldpassword, string newpassword)
         {
             if (id.Validate() && oldpassword.Validate() && newpassword.IsCorrectPassword())
             {
@@ -133,7 +133,7 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public async Task<UserView> ChangeRole(UserView user)
+        public async Task<bool> ChangeRole(UserView user)
         {
             if (user.Validate())
             {

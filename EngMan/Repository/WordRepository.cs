@@ -17,6 +17,10 @@ namespace EngMan.Repository
 
         public IEnumerable<Word> GetByCategory(string category)
         {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             return context.Words.Where(x => x.Category.ToLower().Equals(category.ToLower()));
         }
 
@@ -89,7 +93,9 @@ namespace EngMan.Repository
 
         public IEnumerable<Word> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
         {
-            var query = @"
+            if (category != null)
+            {
+                var query = @"
                     SELECT [WordId]
 						  ,[Original]
 						  ,[Translate]
@@ -97,11 +103,13 @@ namespace EngMan.Repository
 						  ,[Transcription]
 					FROM [dbo].[Words]
                     WHERE LOWER([Category]) LIKE LOWER('" + category + "')";
-            foreach (var index in indexes)
-            {
-                query += (" AND [WordId]!=" + index);
+                foreach (var index in indexes)
+                {
+                    query += (" AND [WordId]!=" + index);
+                }
+                return context.Database.SqlQuery<Word>(query);
             }
-            return context.Database.SqlQuery<Word>(query);
+            throw new System.ArgumentNullException();
         }
     }
 }

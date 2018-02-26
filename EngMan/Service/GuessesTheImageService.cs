@@ -17,7 +17,7 @@ namespace EngMan.Service
             rep = _rep;
         }
 
-        public GuessesTheImageToReturn Add(GuessesTheImageToAdd image)
+        public bool Add(GuessesTheImageToAdd image)
         {
             if (image.Validate(true))
             {
@@ -34,7 +34,7 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public GuessesTheImageToReturn Edit(GuessesTheImageToAdd image)
+        public bool Edit(GuessesTheImageToAdd image)
         {
             if (image.Validate(false))
             {

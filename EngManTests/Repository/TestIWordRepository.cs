@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EngMan.Controllers;
 using EngMan.Models;
-using EngMan.Service;
 using EngMan.Repository;
-using System.Web.Http;
 using System.Linq;
 using Moq;
 using System.Data.Entity;
-using System.Linq.Expressions;
-using System.Data.Entity.Infrastructure;
 
 namespace EngManTests.Repository
 {
@@ -29,7 +23,7 @@ namespace EngManTests.Repository
 
         private void CreateCorrectTestData()
         {
-            var data = GenerateRuleData();
+            var data = GenerateData();
             context = new Mock<EFDbContext>();
             var mockSet = new Mock<DbSet<Word>>();
             mockSet.As<IQueryable<Word>>().Setup(m => m.Provider).Returns(data.Provider);
@@ -45,10 +39,10 @@ namespace EngManTests.Repository
             rep = new WordRepository(context.Object);
         }
 
-        public IQueryable<Word> GenerateRuleData()
+        public IQueryable<Word> GenerateData()
         {
             var lst = new List<Word>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 1; i < 101; i++)
             {
                 lst.Add(new Word
                 {
@@ -60,6 +54,19 @@ namespace EngManTests.Repository
                 });
             }
             return lst.AsQueryable();
+        }
+
+        [TestMethod]
+        public void WordRepositoryTest_Words_getTasks_nullException()
+        {
+            try
+            {
+                rep.GetTasks(null);
+            }
+            catch(Exception e)
+            {
+                Assert.AreEqual(e.Message, "Value cannot be null.", string.Format("result != expected"));
+            }
         }
 
         [TestMethod]
@@ -84,6 +91,19 @@ namespace EngManTests.Repository
             var count = context.Object.Words.GroupBy(x => x.Category).Where(x => x.Key.Equals("Category2")).Count();
             var rep_count = rep.GetByCategory("Category2").Count();
             Assert.AreEqual(count, rep_count, string.Format(count + " != " + rep_count));
+        }
+
+        [TestMethod]
+        public void WordRepositoryTest_Words_getByCategory_nullException()
+        {
+            try
+            {
+                rep.GetByCategory(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Value cannot be null.", string.Format("result != expected"));
+            }
         }
 
         [TestMethod]
@@ -175,7 +195,7 @@ namespace EngManTests.Repository
         }
 
         [TestMethod]
-        public void WordRepositoryTest_Words_DeleteRule_validModel()
+        public void WordRepositoryTest_Words_Delete_validModel()
         {
             var model = new Word
             {
@@ -190,7 +210,7 @@ namespace EngManTests.Repository
         }
 
         [TestMethod]
-        public void WordRepositoryTest_Words_Deleteule_invalidModel()
+        public void WordRepositoryTest_Words_Delete_invalidModel()
         {
             var model = new Word
             {
@@ -203,5 +223,6 @@ namespace EngManTests.Repository
             var result = rep.DeleteWord(model.WordId).Result;
             Assert.AreEqual(-1, result);
         }
+
     }
 }

@@ -17,7 +17,7 @@ namespace EngMan.Service
             rep = _rep;
         }
 
-        public Message SendMessage(Message mes, int userId)
+        public bool SendMessage(Message mes, int userId)
         {
             if (mes.Validate() && userId.Validate())
             {

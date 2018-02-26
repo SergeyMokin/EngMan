@@ -7,9 +7,9 @@ namespace EngMan.Repository
     {
         IEnumerable<SentenceTask> SentenceTasks { get; }
 
-        Task<SentenceTask> SaveTask(SentenceTask task);
+        Task<bool> SaveTask(SentenceTask task);
 
-        Task<SentenceTask> AddTask(SentenceTask task);
+        bool AddTask(SentenceTask task);
 
         Task<int> DeleteTask(int id);
 

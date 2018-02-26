@@ -284,6 +284,10 @@ namespace EngMan.Extensions
                 var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
                 //path to folder with project
                 var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + image.Name));
+                if (path == null)
+                {
+                    return string.Format("Can not be written");
+                }
                 File.WriteAllBytes(path, bytearr.ToArray());
                 return string.Format("http://localhost:58099/uploads/" + time + image.Name);
             }

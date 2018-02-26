@@ -9,9 +9,9 @@ namespace EngMan.Service
 
         SentenceTask GetById(int id);
 
-        Task<SentenceTask> Edit(SentenceTask task);
+        Task<bool> Edit(SentenceTask task);
 
-        Task<SentenceTask> Add(SentenceTask task);
+        bool Add(SentenceTask task);
 
         Task<int> Delete(int id);
 

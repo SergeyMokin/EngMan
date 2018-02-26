@@ -26,16 +26,12 @@ namespace EngMan.Controllers
             try
             {
                 var _user = service.Registration(user);
-                if (_user != null)
-                {
-                    return Ok(_user);
-                }
+                return Ok(_user);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
         
         [HttpGet]
@@ -127,10 +123,7 @@ namespace EngMan.Controllers
                 try
                 {
                     var result = serviceDictionary.Add(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), word);
-                    if (result != null)
-                    {
-                        return Ok(result);
-                    }
+                    return Ok(result);
                 }
                 catch (HttpRequestException ex)
                 {
@@ -206,16 +199,12 @@ namespace EngMan.Controllers
             try
             {
                 var _user = await service.SaveUser(user);
-                if (_user != null)
-                {
-                    return Ok(_user);
-                }
+                return Ok(_user);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         [Authorize(Roles = "admin")]
@@ -258,16 +247,12 @@ namespace EngMan.Controllers
             try
             {
                 var _user = await service.ChangeRole(user);
-                if (_user != null)
-                {
-                    return Ok(_user);
-                }
+                return Ok(_user);
             }
             catch (HttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         [HttpPut]
@@ -278,17 +263,17 @@ namespace EngMan.Controllers
                 try
                 {
                     var _user = service.ChangePassword(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), oldpassword, newpassword);
-                    if (_user != null)
-                    {
-                        return Ok(_user);
-                    }
+                    return Ok(_user);
                 }
                 catch (HttpRequestException ex)
                 {
                     return BadRequest(ex.Message);
                 }
             }
-            return NotFound();
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

@@ -17,6 +17,10 @@ namespace EngMan.Repository
 
         public IEnumerable<SentenceTask> GetByCategory(string category)
         {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             return context.SentenceTasks.Where(x => x.Category.ToLower().Equals(category.ToLower()));
         }
 
@@ -25,31 +29,37 @@ namespace EngMan.Repository
             return context.SentenceTasks.GroupBy(x => x.Category).Select(x => x.Key);
         }
 
-        public async Task<SentenceTask> SaveTask(SentenceTask task)
+        public async Task<bool> SaveTask(SentenceTask task)
         {
+            if (task == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+            var entity = await context.SentenceTasks.FindAsync(task.SentenceTaskId);
+            if (entity != null)
+            {
+                entity.Sentence = task.Sentence;
+                entity.Category = task.Category;
+                entity.Translate = task.Translate;
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool AddTask(SentenceTask task)
+        {
+            if (task == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             if (task.SentenceTaskId == 0)
             {
                 context.SentenceTasks.Add(task);
                 context.SaveChanges();
-                task.SentenceTaskId = context.SentenceTasks.ToArray().Last().SentenceTaskId;
+                return true;
             }
-            else
-            {
-                var entity = await context.SentenceTasks.FindAsync(task.SentenceTaskId);
-                if (entity != null)
-                {
-                    entity.Sentence = task.Sentence;
-                    entity.Category = task.Category;
-                    entity.Translate = task.Translate;
-                }
-            }
-            context.SaveChanges();
-            return task;
-        }
-
-        public async Task<SentenceTask> AddTask(SentenceTask task)
-        {
-            return await SaveTask(task);
+            return false;
         }
 
         public async Task<int> DeleteTask(int id)
@@ -69,6 +79,10 @@ namespace EngMan.Repository
 
         public IEnumerable<SentenceTask> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
         {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             var query = @"
                     SELECT [SentenceTaskId]
 						  ,[Sentence]

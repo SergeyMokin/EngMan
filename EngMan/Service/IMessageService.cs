@@ -4,7 +4,7 @@ namespace EngMan.Service
 {
     public interface IMessageService
     {
-        Message SendMessage(Message mes, int userId);
+        bool SendMessage(Message mes, int userId);
 
         IEnumerable<ReturnMessage> GetMessages(int userId);
 

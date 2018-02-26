@@ -30,7 +30,7 @@ namespace EngMan.Service
             }
             throw new HttpRequestException("Invalid model");
         }
-        public UserWord Add(int id, UserWord word)
+        public bool Add(int id, UserWord word)
         {
             if (id.Validate() && word.Validate())
             {

@@ -19,24 +19,31 @@ namespace EngMan.Providers
                 var userService = new UserService(new UserRepository(new EFDbContext()));
                 var userName = context.UserName;
                 var password = context.Password;
-                var user = userService.ValidateUser(userName, password);
-                if (user != null)
+                try
                 {
-                    var claims = new List<Claim>()
+                    var user = userService.ValidateUser(userName, password);
+                    if (user != null)
+                    {
+                        var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Sid, Convert.ToString(user.Id)),
                         new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, user.Role)
                     };
-                    ClaimsIdentity oAuthIdentity = new ClaimsIdentity(claims,
-                                Startup.OAuthOptions.AuthenticationType);
+                        ClaimsIdentity oAuthIdentity = new ClaimsIdentity(claims,
+                                    Startup.OAuthOptions.AuthenticationType);
 
-                    var properties = CreateProperties(user.FirstName + " " + user.LastName);
-                    var ticket = new AuthenticationTicket(oAuthIdentity, properties);
-                    context.Validated(ticket);
+                        var properties = CreateProperties(user.FirstName + " " + user.LastName);
+                        var ticket = new AuthenticationTicket(oAuthIdentity, properties);
+                        context.Validated(ticket);
+                    }
+                    else
+                    {
+                        context.SetError("invalid_grant", "The user name or password is incorrect");
+                    }
                 }
-                else
+                catch
                 {
                     context.SetError("invalid_grant", "The user name or password is incorrect");
                 }

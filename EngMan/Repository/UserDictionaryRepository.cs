@@ -25,6 +25,10 @@ namespace EngMan.Repository
 
         public UserDictionary GetByCategory(int id, string category)
         {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             var result = context.Database.SqlQuery<UserWordSqlScript>(@"
 	              SELECT uw.Id [Id]
                   ,u.Id [UserId]
@@ -114,26 +118,26 @@ namespace EngMan.Repository
             throw new System.Exception("Not found");
         }
 
-        public UserWord AddWordToDictionary(int id, UserWord word)
+        public bool AddWordToDictionary(int id, UserWord word)
         {
-            if (word != null)
+            if (word == null)
             {
-                if (word.UserId == id)
-                {
-                    var entity = context.UserWords.Where(x => x.WordId == word.WordId).FirstOrDefault();
-                    if (entity == null)
-                    {
-                        context.UserWords.Add(word);
-                    }
-                    else
-                    {
-                        return word;
-                    }
-                }
-                context.SaveChanges();
-                word.Id = context.UserWords.ToArray().Last().Id;
+                throw new System.ArgumentNullException();
             }
-            return word;
+            if (word.UserId == id)
+            {
+                var entity = context.UserWords.Where(x => x.WordId == word.WordId).FirstOrDefault();
+                if (entity == null)
+                {
+                    context.UserWords.Add(word);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            context.SaveChanges();
+            return true;
         }
 
         public int DeleteWordFromDictionary(int userId, int wordId)

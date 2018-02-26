@@ -33,15 +33,19 @@ namespace EngMan.Repository
             return GetMessages(userId);
         }
 
-        public Message SendMessage(Message mes, int userId)
+        public bool SendMessage(Message mes, int userId)
         {
+            if (mes == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             if (mes.SenderId == userId)
             {
                 context.Messages.Add(mes);
                 context.SaveChanges();
-                mes.MessageId = context.Messages.Where(x => x.SenderId == userId).ToArray().Last().MessageId;
+                return true;
             }
-            return mes;
+            return false;
         }
 
         public IEnumerable<ReturnMessage> GetMessages(int userId)

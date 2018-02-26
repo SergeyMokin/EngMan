@@ -4,9 +4,9 @@ namespace EngMan.Repository
 {
     public interface IGuessesTheImageRepository
     {
-        GuessesTheImageToReturn Add(GuessesTheImageToAdd image);
+        bool Add(GuessesTheImageToAdd image);
 
-        GuessesTheImageToReturn Edit(GuessesTheImageToAdd image);
+        bool Edit(GuessesTheImageToAdd image);
 
         IEnumerable<GuessesTheImageToReturn> GetAll();
 

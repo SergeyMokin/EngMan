@@ -25,6 +25,10 @@ namespace EngMan.Repository
 
         public IEnumerable<GuessesTheImageToReturn> GetByCategory(string category)
         {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             category = category.ToLower();
             return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
                   @"SELECT [Id]
@@ -55,6 +59,10 @@ namespace EngMan.Repository
 
         public IEnumerable<GuessesTheImageToReturn> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
         {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             var query = @"SELECT [Id]
                     , [EngMan].[dbo].[GuessesTheImages].[WordId]
                     , [Original]
@@ -140,8 +148,12 @@ namespace EngMan.Repository
             }).FirstOrDefault();
         }
 
-        public GuessesTheImageToReturn Add(GuessesTheImageToAdd image)
+        public bool Add(GuessesTheImageToAdd image)
         {
+            if (image == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             GuessesTheImage returnimg = new GuessesTheImage();
             if (image.Image != null)
             {
@@ -154,13 +166,17 @@ namespace EngMan.Repository
                 };
                 context.GuessesTheImages.Add(returnimg);
                 context.SaveChanges();
-                returnimg.Id = context.GuessesTheImages.ToArray().Last().Id;
+                return true;
             }
-            return Get(returnimg.Id);
+            return false;
         }
 
-        public GuessesTheImageToReturn Edit(GuessesTheImageToAdd image)
+        public bool Edit(GuessesTheImageToAdd image)
         {
+            if (image == null)
+            {
+                throw new System.ArgumentNullException();
+            }
             var entity = context.GuessesTheImages.Find(image.Id);
             if (entity != null)
             {
@@ -173,8 +189,9 @@ namespace EngMan.Repository
                     }
                 }
                 context.SaveChanges();
+                return true;
             }
-            return Get(entity.Id);
+            return false;
         }
 
         public int Delete(int id)

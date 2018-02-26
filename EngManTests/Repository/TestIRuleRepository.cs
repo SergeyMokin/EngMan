@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EngMan.Controllers;
 using EngMan.Models;
-using EngMan.Service;
 using EngMan.Repository;
-using System.Web.Http;
 using System.Linq;
 using Moq;
 using System.Data.Entity;
-using System.Linq.Expressions;
 
 namespace EngManTests.Repository
 {
@@ -47,7 +42,7 @@ namespace EngManTests.Repository
         public IQueryable<RuleModel> GenerateRuleData()
         {
             var lst = new List<RuleModel>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 1; i < 101; i++)
             {
                 lst.Add(new RuleModel
                 {
@@ -183,7 +178,7 @@ namespace EngManTests.Repository
         }
 
         [TestMethod]
-        public void RuleRepositoryTest_Rules_Deleteule_invalidModel()
+        public void RuleRepositoryTest_Rules_DeleteRule_invalidModel()
         {
             var model = new RuleModel
             {

@@ -73,7 +73,7 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public async Task<SentenceTask> Edit(SentenceTask task)
+        public async Task<bool> Edit(SentenceTask task)
         {
             if (task.Validate())
             {
@@ -89,13 +89,13 @@ namespace EngMan.Service
             throw new HttpRequestException("Invalid model");
         }
 
-        public async Task<SentenceTask> Add(SentenceTask task)
+        public bool Add(SentenceTask task)
         {
             if (task.Validate())
             {
                 try
                 {
-                    return await rep.AddTask(task);
+                    return rep.AddTask(task);
                 }
                 catch (System.Exception ex)
                 {
@@ -130,8 +130,7 @@ namespace EngMan.Service
                 {
                     foreach (var ch in indexes.Split(','))
                     {
-                        int i;
-                        if (int.TryParse(ch, out i))
+                        if (int.TryParse(ch, out int i))
                         {
                             ParsedIndexes.Add(i);
                         }
