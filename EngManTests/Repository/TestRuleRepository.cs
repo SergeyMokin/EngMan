@@ -11,12 +11,12 @@ using System.Data.Entity;
 namespace EngManTests.Repository
 {
     [TestClass]
-    public class TestIRuleRepository
+    public class TestRuleRepository
     {
         private Mock<EFDbContext> context;
         private IRuleRepository rep;
 
-        public TestIRuleRepository()
+        public TestRuleRepository()
         {
             CreateCorrectTestData();
         }
@@ -39,7 +39,7 @@ namespace EngManTests.Repository
             rep = new RuleRepository(context.Object);
         }
 
-        public IQueryable<RuleModel> GenerateRuleData()
+        private IQueryable<RuleModel> GenerateRuleData()
         {
             var lst = new List<RuleModel>();
             for (int i = 1; i < 101; i++)

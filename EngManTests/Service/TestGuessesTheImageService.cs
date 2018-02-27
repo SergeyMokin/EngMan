@@ -10,12 +10,12 @@ using Moq;
 namespace EngManTests.Repository
 {
     [TestClass]
-    public class TestIGuessesTheImageService
+    public class TestGuessesTheImageService
     {
         private IGuessesTheImageRepository rep;
         private IGuessesTheImageService service;
 
-        public TestIGuessesTheImageService()
+        public TestGuessesTheImageService()
         {
             CreateCorrectTestData();
         }
@@ -28,14 +28,14 @@ namespace EngManTests.Repository
             _rep.Setup(x => x.Add(It.IsAny<GuessesTheImageToAdd>()))
                 .Returns(true);
             _rep.Setup(x => x.Delete(It.IsAny<int>()))
-                .Returns(1);
+                .Returns<int>(x => x);
             _rep.Setup(x => x.Edit(It.IsAny<GuessesTheImageToAdd>()))
                 .Returns(true);
             _rep.Setup(x => x.GetAll())
                 .Returns(data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) }).AsEnumerable());
             _rep.Setup(x => x.Get(It.IsAny<int>()))
                 .Returns<int>(y => data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(word => word.WordId == word.WordId) }).FirstOrDefault(x => x.Id == y));
-            _rep.Setup(x => x.GetAllCategories()).Returns(dataWords.Select(x => x.Category));
+            _rep.Setup(x => x.GetAllCategories()).Returns(dataWords.GroupBy(x => x.Category).Select(x => x.Key));
             _rep.Setup(x => x.GetByCategory(It.IsAny<string>()))
                 .Returns<string>(str => data
                                         .Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) })
@@ -50,7 +50,7 @@ namespace EngManTests.Repository
             rep = _rep.Object;
         }
 
-        public IQueryable<GuessesTheImage> GenerateData()
+        private IQueryable<GuessesTheImage> GenerateData()
         {
             var lst = new List<GuessesTheImage>();
             for (int i = 1; i < 101; i++)
@@ -65,7 +65,7 @@ namespace EngManTests.Repository
             return lst.AsQueryable();
         }
 
-        public IQueryable<Word> GenerateDataWords()
+        private IQueryable<Word> GenerateDataWords()
         {
             var lst = new List<Word>();
             for (int i = 1; i < 101; i++)

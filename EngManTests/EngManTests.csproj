@@ -101,21 +101,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Repository\TestIGuessesTheImageRepository.cs" />
-    <Compile Include="Repository\TestIMessageRepository.cs" />
-    <Compile Include="Repository\TestIRuleRepository.cs" />
+    <Compile Include="Repository\TestGuessesTheImageRepository.cs" />
+    <Compile Include="Repository\TestMessageRepository.cs" />
+    <Compile Include="Repository\TestRuleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\TestISentenceTaskRepository.cs" />
-    <Compile Include="Repository\TestIUserDictionaryRepository.cs" />
-    <Compile Include="Repository\TestIUserRepository.cs" />
-    <Compile Include="Repository\TestIWordRepository.cs" />
-    <Compile Include="Service\TestIGuessesTheImageService.cs" />
-    <Compile Include="Service\TestIMessageService.cs" />
-    <Compile Include="Service\TestIRuleService.cs" />
-    <Compile Include="Service\TestISentenceTaskService.cs" />
-    <Compile Include="Service\TestIUserDictionaryService.cs" />
-    <Compile Include="Service\TestIUserService.cs" />
-    <Compile Include="Service\TestIWordService.cs" />
+    <Compile Include="Repository\TestSentenceTaskRepository.cs" />
+    <Compile Include="Repository\TestUserDictionaryRepository.cs" />
+    <Compile Include="Repository\TestUserRepository.cs" />
+    <Compile Include="Repository\TestWordRepository.cs" />
+    <Compile Include="Service\TestGuessesTheImageService.cs" />
+    <Compile Include="Service\TestMessageService.cs" />
+    <Compile Include="Service\TestRuleService.cs" />
+    <Compile Include="Service\TestSentenceTaskService.cs" />
+    <Compile Include="Service\TestUserDictionaryService.cs" />
+    <Compile Include="Service\TestUserService.cs" />
+    <Compile Include="Service\TestWordService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

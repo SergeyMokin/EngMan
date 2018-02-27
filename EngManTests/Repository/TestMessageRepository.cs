@@ -10,12 +10,12 @@ using System.Data.Entity;
 namespace EngManTests.Repository
 {
     [TestClass]
-    public class TestIMessageRepository
+    public class TestMessageRepository
     {
         private Mock<EFDbContext> context;
         private IMessageRepository rep;
 
-        public TestIMessageRepository()
+        public TestMessageRepository()
         {
             CreateCorrectTestData();
         }
@@ -38,7 +38,7 @@ namespace EngManTests.Repository
             rep = new MessageRepository(context.Object);
         }
 
-        public IQueryable<Message> GenerateData()
+        private IQueryable<Message> GenerateData()
         {
             var lst = new List<Message>();
             for (int i = 1; i < 101; i++)

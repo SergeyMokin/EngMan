@@ -10,12 +10,12 @@ using System.Data.Entity;
 namespace EngManTests.Repository
 {
     [TestClass]
-    public class TestIUserDictionaryRepository
+    public class TestUserDictionaryRepository
     {
         private Mock<EFDbContext> context;
         private IUserDictionaryRepository rep;
 
-        public TestIUserDictionaryRepository()
+        public TestUserDictionaryRepository()
         {
             CreateCorrectTestData();
         }
@@ -33,7 +33,7 @@ namespace EngManTests.Repository
             rep = new UserDictionaryRepository(context.Object);
         }
 
-        public IQueryable<UserWord> GenerateData()
+        private IQueryable<UserWord> GenerateData()
         {
             var lst = new List<UserWord>();
             for (int i = 1; i < 101; i++)

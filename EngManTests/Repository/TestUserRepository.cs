@@ -12,12 +12,12 @@ using EngMan.Extensions;
 namespace EngManTests.Repository
 {
     [TestClass]
-    public class TestIUserRepository
+    public class TestUserRepository
     {
         private Mock<EFDbContext> context;
         private IUserRepository rep;
 
-        public TestIUserRepository()
+        public TestUserRepository()
         {
             CreateCorrectTestData();
         }
@@ -45,7 +45,7 @@ namespace EngManTests.Repository
             rep = new UserRepository(context.Object);
         }
 
-        public IQueryable<User> GenerateData()
+        private IQueryable<User> GenerateData()
         {
             var lst = new List<User>();
             for (int i = 1; i < 101; i++)

@@ -10,12 +10,12 @@ using System.Data.Entity;
 namespace EngManTests.Service
 {
     [TestClass]
-    public class TestIGuessesTheImageRepository
+    public class TestGuessesTheImageRepository
     {
         private Mock<EFDbContext> context;
         private IGuessesTheImageRepository rep;
 
-        public TestIGuessesTheImageRepository()
+        public TestGuessesTheImageRepository()
         {
             CreateCorrectTestData();
         }
@@ -38,7 +38,7 @@ namespace EngManTests.Service
             rep = new GuessesTheImageRepository(context.Object);
         }
 
-        public IQueryable<GuessesTheImage> GenerateData()
+        private IQueryable<GuessesTheImage> GenerateData()
         {
             var lst = new List<GuessesTheImage>();
             for (int i = 1; i < 101; i++)
