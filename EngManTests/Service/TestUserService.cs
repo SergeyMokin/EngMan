@@ -47,14 +47,194 @@ namespace EngManTests.Service
                 lst.Add(new User
                 {
                     Id = i,
-                    Email = "email" + i,
+                    Email = "email" + i + "@email.com",
                     FirstName = "fname" + i,
                     LastName = "lname" + i,
                     Role = "user",
-                    Password = "password" + i
+                    Password = "AMiGXC + zX4Apg3WyLkvFTfeRyNr8rdRr2n3mHIwY4gchRDX / uQfj / skDh1pLGkZBHw == "
                 });
             }
             return lst.AsQueryable();
+        }
+
+        [TestMethod]
+        public void UserServiceTest_ValidateUser_valid()
+        {
+            var expected = rep.Users.FirstOrDefault();
+            var actual = service.ValidateUser("email1@email.com", "password1");
+            Assert.AreEqual(expected.Id, actual.Id);
+        }
+
+        [TestMethod]
+        public void UserServiceTest_ValidateUser_invalid()
+        {
+            try
+            {
+                service.ValidateUser(null, null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void UserServiceTest_GetUser_valid()
+        {
+            var expected = rep.Users.FirstOrDefault();
+            var actual = service.GetUser(1);
+            Assert.AreEqual(expected.Id, actual.Id);
+        }
+
+        [TestMethod]
+        public void UserServiceTest_GetUser_invalid()
+        {
+            try
+            {
+                service.GetUser(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void UserServiceTest_Registration_valid()
+        {
+            var model = new User
+            {
+                Id = 0,
+                Email = "email@email.email",
+                FirstName = "Fname",
+                LastName = "Lname",
+                Password = "Password9856",
+                Role = "user"
+            };
+            var expected = true;
+            var actual = service.Registration(model);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserServiceTest_Registration_invalid()
+        {
+            try
+            {
+                service.Registration(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void UserServiceTest_SaveUser_valid()
+        {
+            var model = new UserView
+            {
+                Id = 3,
+                Email = "email@email.email",
+                FirstName = "Fname",
+                LastName = "Lname",
+                Role = "user"
+            };
+            var expected = true;
+            var actual = service.SaveUser(model).Result;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserServiceTest_SaveUser_invalid()
+        {
+            try
+            {
+                service.SaveUser(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void UserServiceTest_DeleteUser_valid()
+        {
+            var expected = rep.DeleteUser(1);
+            var actual = service.DeleteUser(1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserServiceTest_DeleteUser_invalid()
+        {
+            try
+            {
+                service.DeleteUser(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void UserServiceTest_GetUserList_count()
+        {
+            var expected = rep.Users.Count();
+            var actual = service.GetUserList().Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserServiceTest_ChangePassword_valid()
+        {
+            var expected = rep.ChangePassword(1, "Password1", "NewPassword9856");
+            var actual = service.ChangePassword(1, "Password1", "NewPassword9856");
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserServiceTest_ChangePassword_invalid()
+        {
+            try
+            {
+                service.ChangePassword(1, null, null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void UserServiceTest_ChangeRole_valid()
+        {
+            var model = new UserView
+            {
+                Id = 3,
+                Email = "email@email.email",
+                FirstName = "Fname",
+                LastName = "Lname",
+                Role = "admin"
+            };
+            var expected = rep.ChangeRole(model).Result;
+            var actual = service.ChangeRole(model).Result;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserServiceTest_ChangeRole_invalid()
+        {
+            try
+            {
+                service.ChangeRole(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
         }
     }
 }

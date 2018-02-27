@@ -54,5 +54,161 @@ namespace EngManTests.Service
             }
             return lst.AsQueryable();
         }
+
+        [TestMethod]
+        public void RuleServiceTest_GetAllCategories_count()
+        {
+            var expected = rep.GetAllCategories().Count();
+            var actual = service.GetAllCategories().Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_GetByCategory_valid()
+        {
+            var expected = rep.GetByCategory("Category1").Count();
+            var actual = service.GetByCategory("Category1").Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_GetByCategory_invalid()
+        {
+            try
+            {
+                service.GetByCategory(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_Get_count()
+        {
+            var expected = rep.Rules.Count();
+            var actual = service.Get().Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_GetById_valid()
+        {
+            var expected = rep.Rules.FirstOrDefault(x => x.RuleId == 1);
+            var actual = service.GetById(1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_GetById_invalid()
+        {
+            try
+            {
+                service.GetById(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_Edit_valid()
+        {
+            var model = new RuleModel
+            {
+                RuleId = 1,
+                Category = "Category",
+                Text = "Text",
+                Title = "Title"
+            };
+            var expected = rep.SaveRule(model).Result;
+            var actual = service.Edit(model).Result;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_Edit_invalid()
+        {
+            try
+            {
+                service.Edit(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_Add_valid()
+        {
+            var model = new RuleModel
+            {
+                RuleId = 1,
+                Category = "Category",
+                Text = "Text",
+                Title = "Title"
+            };
+            var expected = rep.AddRule(model);
+            var actual = service.Add(model);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_Add_invalid()
+        {
+            try
+            {
+                service.Add(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_Delete_valid()
+        {
+            var expected = rep.DeleteRule(1).Result;
+            var actual = service.Delete(1).Result;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_Delete_invalid()
+        {
+            try
+            {
+                service.Delete(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_AddImages_valid()
+        {
+            var expected = new List<string> { "Can not be written" };
+            var actual = service.AddImages(new Image[] { new Image { Data = "asdfadsf", Name = "asdf.jpg" } });
+            Assert.AreEqual(expected.ElementAt(0), actual.ElementAt(0));
+        }
+
+        [TestMethod]
+        public void RuleServiceTest_AddImages_invalid()
+        {
+            try
+            {
+                service.AddImages(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
     }
 }

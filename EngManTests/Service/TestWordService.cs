@@ -58,5 +58,184 @@ namespace EngManTests.Service
             }
             return lst.AsQueryable();
         }
+
+        [TestMethod]
+        public void WordServiceTest_GetAllCategories_count()
+        {
+            var expected = rep.GetAllCategories().Count();
+            var actual = service.GetAllCategories().Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WordServiceTest_GetByCategory_valid()
+        {
+            var expected = rep.GetByCategory("Category1").Count();
+            var actual = service.GetByCategory("Category1").Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WordServiceTest_GetByCategory_invalid()
+        {
+            try
+            {
+                service.GetByCategory(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void WordServiceTest_Get_count()
+        {
+            var expected = rep.Words.Count();
+            var actual = service.Get().Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WordServiceTest_GetById_valid()
+        {
+            var expected = rep.Words.FirstOrDefault(x => x.WordId == 1);
+            var actual = service.GetById(1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WordServiceTest_GetById_invalid()
+        {
+            try
+            {
+                service.GetById(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void WordServiceTest_Edit_valid()
+        {
+            var model = new Word
+            {
+                WordId = 1,
+                Category = "Category" + 1,
+                Original = "Original" + 1,
+                Translate = "Translate" + 1,
+                Transcription = "Transcription" + 1
+            };
+            var expected = rep.SaveWord(model).Result;
+            var actual = service.Edit(model).Result;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WordServiceTest_Edit_invalid()
+        {
+            try
+            {
+                service.Edit(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void WordServiceTest_Add_valid()
+        {
+            var model = new Word
+            {
+                WordId = 1,
+                Category = "Category" + 1,
+                Original = "Original" + 1,
+                Translate = "Translate" + 1,
+                Transcription = "Transcription" + 1
+            };
+            var expected = rep.AddWord(model);
+            var actual = service.Add(model);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WordServiceTest_Add_invalid()
+        {
+            try
+            {
+                service.Add(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void WordServiceTest_Delete_valid()
+        {
+            var expected = rep.DeleteWord(1).Result;
+            var actual = service.Delete(1).Result;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WordServiceTest_Delete_invalid()
+        {
+            try
+            {
+                service.Delete(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void WordServiceTest_GetTask_invalid()
+        {
+            try
+            {
+                service.GetTask(null, null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void WordServiceTest_VerificationCorrectness_valid()
+        {
+            var model = new Word
+            {
+                WordId = 1,
+                Category = "Category" + 1,
+                Original = "Original" + 1,
+                Translate = "Translate" + 1,
+                Transcription = "Transcription" + 1
+            };
+            var expected = true;
+            var actual = service.VerificationCorrectness(model);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WordServiceTest_VerificationCorrectness_invalid()
+        {
+            try
+            {
+                service.VerificationCorrectness(null);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using Moq;
 using System.Data.Entity;
 
-namespace EngManTests.Service
+namespace EngManTests.Repository
 {
     [TestClass]
     public class TestGuessesTheImageRepository

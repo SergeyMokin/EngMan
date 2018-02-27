@@ -25,11 +25,11 @@ namespace EngManTests.Service
             var dataToReturn = GenerateData();
             var _rep = new Mock<IMessageRepository>();
             _rep.Setup(x => x.DeleteMessage(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns<int>(x => x);
+                .Returns<int, int>((id, userid) => id);
             _rep.Setup(x => x.GetMessages(It.IsAny<int>()))
                 .Returns<int>(x => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
             _rep.Setup(x => x.ReadMessages(It.IsAny<IEnumerable<Message>>(), It.IsAny<int>()))
-                .Returns<int>(x => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x)
+                .Returns<IEnumerable<Message>, int>((messages, x) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x)
                 .Select(mes => new ReturnMessage {
                     MessageId = mes.MessageId,
                     Sender = mes.Sender,
@@ -74,6 +74,108 @@ namespace EngManTests.Service
                 });
             }
             return lst.AsQueryable();
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_SendMessage_valid()
+        {
+            var model = new Message
+            {
+                MessageId = 0,
+                SenderId = 1,
+                BeneficiaryId = 2,
+                CheckReadMes = false,
+                Text = "text",
+                Time = DateTime.Now
+            };
+            var expected = rep.SendMessage(model, 1);
+            var actual = service.SendMessage(model, 1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_SendMessage_invalid()
+        {
+            var model = new Message
+            {
+                MessageId = 0,
+                SenderId = -1,
+                BeneficiaryId = -2,
+                CheckReadMes = false,
+                Text = "text",
+                Time = DateTime.Now
+            };
+            try
+            {
+                service.SendMessage(model, 1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+        
+        [TestMethod]
+        public void MessageServiceTest_GetMessages_valid()
+        {
+            var expected = rep.GetMessages(1).Count();
+            var actual = service.GetMessages(1).Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_GetMessages_invalid()
+        {
+            try
+            {
+                service.GetMessages(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_ReadMessagess_valid()
+        {
+            var expected = rep.ReadMessages(new List<Message>(), 1).Count();
+            var actual = service.ReadMessages(new List<Message>(), 1).Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_ReadMessages_invalid()
+        {
+            try
+            {
+                service.ReadMessages(null, -1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_DeleteMessage_valid()
+        {
+            var expected = rep.DeleteMessage(1, 1);
+            var actual = service.DeleteMessage(1, 1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_DeleteMessage_invalid()
+        {
+            try
+            {
+                service.DeleteMessage(-1, -1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
         }
     }
 }

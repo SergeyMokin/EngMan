@@ -54,6 +54,24 @@ namespace EngMan.Extensions
                         ;
             return isValid;
         }
+        //Validate name
+        public static bool IsName(this string name)
+        {
+            bool isName = true;
+            name.Select(x =>
+            {
+                if (!char.IsLetter(x))
+                {
+                    isName = false;
+                }
+                return x;
+            }).ToList();
+            if (!isName)
+            {
+                return false;
+            }
+            return true;
+        }
         //Validate email
         public static bool IsEmail(this string email)
         {
@@ -62,7 +80,7 @@ namespace EngMan.Extensions
                 MailAddress m = new MailAddress(email);
                 return true;
             }
-            catch (FormatException)
+            catch
             {
                 return false;
             }
@@ -81,7 +99,9 @@ namespace EngMan.Extensions
                 || !(task.LastName.Length > 0)
                 || !task.Email.IsEmail()
                 || !(task.Password.Length > 0)
-                || !(task.Role.Length > 0))
+                || !(task.Role.Length > 0)
+                || !task.FirstName.IsName()
+                || !task.LastName.IsName())
             {
                 return false;
             }

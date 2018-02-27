@@ -41,6 +41,9 @@ namespace EngMan.Repository
             }
             if (mes.SenderId == userId)
             {
+                mes.CheckReadMes = false;
+                mes.Time = System.DateTime.Now;
+                mes.SenderId = userId;
                 context.Messages.Add(mes);
                 context.SaveChanges();
                 return true;
