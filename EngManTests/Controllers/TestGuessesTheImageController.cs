@@ -7,7 +7,7 @@ using EngMan.Service;
 using System.Linq;
 using Moq;
 
-namespace EngManTests.Controllers
+namespace EngManTests.Service
 {
     [TestClass]
     public class TestGuessesTheImageService

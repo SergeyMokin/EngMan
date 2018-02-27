@@ -136,5 +136,37 @@ namespace EngMan.Controllers
             }
             return NotFound();
         }
+
+        [HttpGet]
+        public IHttpActionResult GetWordMap(string category, string indexes)
+        {
+            try
+            {
+                var task = service.GetTask(category, indexes);
+                if (task != null)
+                {
+                    return Ok(task);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IHttpActionResult VerificationCorrectness(Word word)
+        {
+            try
+            {
+                var task = service.VerificationCorrectness(word);
+                return Ok(task);
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -135,45 +135,45 @@ export default {
     return axios.post(url + '/sentencetask/verificationcorrectness', sentence)
   },
   getWordMap(category, indexes){
-    return axios.get(url + '/wordmap/getword?category=' + category + '&indexes=' + indexes)
+    return axios.get(url + '/word/getwordmap?category=' + category + '&indexes=' + indexes)
     .then(response => response.data)
     .catch(e => e);
   },
   verificationWordMap(wordmap){
-    return axios.post(url + '/wordmap/VerificationCorrectness', wordmap)
+    return axios.post(url + '/word/VerificationCorrectness', wordmap)
   },
   getAllCategoriesSentences(){
-    return axios.get(url + '/adminsentencetask/GetAllCategories')
+    return axios.get(url + '/sentencetask/GetAllCategories')
     .then(res => res.data)
     .catch(e => e)
   },
   getSentences() {
-    return axios.get(url + '/adminsentencetask/GetAllTasks')
+    return axios.get(url + '/sentencetask/GetAllTasks')
     .then(response => response.data)
     .catch(e => e);
   },
   getSentence(id) {
-    return axios.get(url + '/adminsentencetask/GetTaskById/' + id)
+    return axios.get(url + '/sentencetask/GetTaskById/' + id)
     .then(response => response.data)
     .catch(e => e);
   },
   createSentence(sentence) {
-    return axios.post(url + '/adminsentencetask/AddTask', sentence)
+    return axios.post(url + '/sentencetask/AddTask', sentence)
     .then(response => response.data)
     .catch(e => e);
   },
   editSentence(sentence) {
-    return axios.put(url + '/adminsentencetask/EditTask', sentence)
+    return axios.put(url + '/sentencetask/EditTask', sentence)
     .then(response => response.data)
     .catch(e => e);
   },
   deleteSentence(id) {
-    return axios.delete(url + '/adminsentencetask/DeleteTask/' + id)
+    return axios.delete(url + '/sentencetask/DeleteTask/' + id)
     .then(response => response.data)
     .catch(e => e);
   },
   getSentencesByCategory(category) {
-    return axios.get(url + '/adminsentencetask/GetByCategory?category=' + category)
+    return axios.get(url + '/sentencetask/GetByCategory?category=' + category)
     .then(response => response.data)
     .catch(e => e);
   },
@@ -243,37 +243,37 @@ export default {
     .catch(e => e)
   },
   getGuessesTheImages(){
-    return axios.get(url + '/adminguessestheimage/getalltasks/')
+    return axios.get(url + '/guessestheimage/getalltasks/')
     .then(response => response.data)
     .catch(e => e)
   },
   getGuessesTheImageById(id){
-    return axios.get(url + '/adminguessestheimage/gettaskbyid/' + id)
+    return axios.get(url + '/guessestheimage/gettaskbyid/' + id)
     .then(response => response.data)
     .catch(e => e)
   },
   editGuessesTheImage(task){
-    return axios.put(url + '/adminguessestheimage/edittask/', task)
+    return axios.put(url + '/guessestheimage/edittask/', task)
     .then(response => response.data)
     .catch(e => e)
   },
   addGuessesTheImage(task){
-    return axios.post(url + '/adminguessestheimage/addtask/', task)
+    return axios.post(url + '/guessestheimage/addtask/', task)
     .then(response => response.data)
     .catch(e => e)
   },
   deleteGuessesTheImage(id){
-    return axios.delete(url + '/adminguessestheimage/deletetask/' + id)
+    return axios.delete(url + '/guessestheimage/deletetask/' + id)
     .then(response => response.data)
     .catch(e => e)
   },
   getAllCategoriesGuessesTheImages(){
-    return axios.get(url + '/adminguessestheimage/GetAllCategories')
+    return axios.get(url + '/guessestheimage/GetAllCategories')
     .then(res => res.data)
     .catch(e => e)
   },
   getGuessesTheImagesByCategory(category) {
-    return axios.get(url + '/adminguessestheimage/GetByCategory?category=' + category)
+    return axios.get(url + '/guessestheimage/GetByCategory?category=' + category)
     .then(response => response.data)
     .catch(e => e);
   }
