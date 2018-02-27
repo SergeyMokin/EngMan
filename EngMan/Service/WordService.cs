@@ -131,8 +131,7 @@ namespace EngMan.Service
                 {
                     foreach (var ch in indexes.Split(','))
                     {
-                        int i;
-                        if (int.TryParse(ch, out i))
+                        if (int.TryParse(ch, out int i))
                         {
                             ParsedIndexes.Add(i);
                         }
@@ -155,8 +154,10 @@ namespace EngMan.Service
                         {
                             var rand = new System.Random();
                             var index = rand.Next(0, tasks.Count());
-                            var indexesTranslate = new HashSet<int>();
-                            indexesTranslate.Add(index);
+                            var indexesTranslate = new HashSet<int>()
+                            {
+                                index
+                            };
                             while (indexesTranslate.Count() != 5)
                             {
                                 indexesTranslate.Add(rand.Next(0, tasks.Count()));
