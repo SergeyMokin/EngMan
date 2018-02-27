@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EngMan.Models;
-using EngMan.Repository;
+using EngMan.Controllers;
 using EngMan.Service;
 using System.Linq;
 using Moq;
+using System.Web.Http.Results;
 
 namespace EngManTests.Service
 {
     [TestClass]
-    public class TestGuessesTheImageService
+    public class TestGuessesTheImageController
     {
-        private IGuessesTheImageRepository rep;
         private IGuessesTheImageService service;
+        private GuessesTheImageController controller;
 
-        public TestGuessesTheImageService()
+        public TestGuessesTheImageController()
         {
             CreateCorrectTestData();
         }
@@ -24,30 +24,32 @@ namespace EngManTests.Service
         {
             var data = GenerateData();
             var dataWords = GenerateDataWords();
-            var _rep = new Mock<IGuessesTheImageRepository>();
-            _rep.Setup(x => x.Add(It.IsAny<GuessesTheImageToAdd>()))
+            var _service = new Mock<IGuessesTheImageService>();
+            _service.Setup(x => x.VerificationCorrectness(It.IsAny<GuessesTheImageToReturn>()))
+               .Returns(true);
+            _service.Setup(x => x.Add(It.IsAny<GuessesTheImageToAdd>()))
                 .Returns(true);
-            _rep.Setup(x => x.Delete(It.IsAny<int>()))
+            _service.Setup(x => x.Delete(It.IsAny<int>()))
                 .Returns<int>(x => x);
-            _rep.Setup(x => x.Edit(It.IsAny<GuessesTheImageToAdd>()))
+            _service.Setup(x => x.Edit(It.IsAny<GuessesTheImageToAdd>()))
                 .Returns(true);
-            _rep.Setup(x => x.GetAll())
+            _service.Setup(x => x.GetAll())
                 .Returns(data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) }).AsEnumerable());
-            _rep.Setup(x => x.Get(It.IsAny<int>()))
+            _service.Setup(x => x.Get(It.IsAny<int>()))
                 .Returns<int>(y => data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(word => word.WordId == word.WordId) }).FirstOrDefault(x => x.Id == y));
-            _rep.Setup(x => x.GetAllCategories()).Returns(dataWords.GroupBy(x => x.Category).Select(x => x.Key));
-            _rep.Setup(x => x.GetByCategory(It.IsAny<string>()))
+            _service.Setup(x => x.GetAllCategories()).Returns(dataWords.GroupBy(x => x.Category).Select(x => x.Key));
+            _service.Setup(x => x.GetByCategory(It.IsAny<string>()))
                 .Returns<string>(str => data
                                         .Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) })
                                         .Where(x => x.Word.Category.Equals(str))
                                         .AsEnumerable());
-            _rep.Setup(x => x.GetTasks(It.IsAny<string>(), It.IsAny<int[]>()))
-                .Returns<string, int[]>((str, arr) => data
+            _service.Setup(x => x.GetTask(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns<string, string>((str, arr) => data
                                         .Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) })
-                                        .Where(x => x.Word.Category.Equals(str) && x.Id != arr[0])
-                                        .AsEnumerable());
-            service = new GuessesTheImageService(_rep.Object);
-            rep = _rep.Object;
+                                        .Where(x => x.Word.Category.Equals(str))
+                                        .AsEnumerable().FirstOrDefault());
+            controller = new GuessesTheImageController(_service.Object);
+            service = _service.Object;
         }
 
         private IQueryable<GuessesTheImage> GenerateData()
@@ -83,7 +85,7 @@ namespace EngManTests.Service
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_Add_valid()
+        public void GuessesTheImageControllerTest_Add()
         {
             var model = new GuessesTheImageToAdd
             {
@@ -95,44 +97,13 @@ namespace EngManTests.Service
                 },
                 WordId = 1
             };
-            var expected = rep.Add(model);
-            var actual = service.Add(model);
-            Assert.AreEqual(expected, actual);
+            var expected = service.Add(model);
+            var actual = controller.AddTask(model) as OkNegotiatedContentResult<bool>;
+            Assert.AreEqual(expected, actual.Content);
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_Add_invalid()
-        {
-            var model = new GuessesTheImageToAdd
-            {
-                Id = 10000,
-                Image = new Image
-                {
-                    Data = "asdfasdfsafasf",
-                    Name = "asdf.jpg"
-                },
-                WordId = 1
-            };
-            var expected = rep.Add(model);
-            var actual = service.Add(model);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void GuessesTheImageServiceTest_Add_nullException()
-        {
-            try
-            {
-                service.Add(null);
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Invalid model", e.Message);
-            }
-        }
-
-        [TestMethod]
-        public void GuessesTheImageServiceTest_Edit_valid()
+        public void GuessesTheImageControllerTest_Edit()
         {
             var model = new GuessesTheImageToAdd
             {
@@ -144,115 +115,62 @@ namespace EngManTests.Service
                 },
                 WordId = 1
             };
-            var expected = rep.Edit(model);
-            var actual = service.Edit(model);
+            var expected = service.Edit(model);
+            var actual = controller.EditTask(model) as OkNegotiatedContentResult<bool>;
+            Assert.AreEqual(expected, actual.Content);
+        }
+
+        [TestMethod]
+        public void GuessesTheImageControllerTest_GetAll()
+        {
+            var expected = service.GetAll().Count();
+            var result = controller.GetAllTasks() as OkNegotiatedContentResult<IEnumerable<GuessesTheImageToReturn>>;
+            var actual = result.Content.Count();
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_Edit_invalid()
+        public void GuessesTheImageControllerTest_GetById()
         {
-            var model = new GuessesTheImageToAdd
-            {
-                Id = 10000,
-                Image = new Image
-                {
-                    Data = "asdfasdfsafasf",
-                    Name = "asdf.jpg"
-                },
-                WordId = 1
-            };
-            var expected = rep.Edit(model);
-            var actual = service.Edit(model);
-            Assert.AreEqual(expected, actual);
+            var expected = service.Get(2);
+            var actual = controller.GetTaskById(2) as OkNegotiatedContentResult<GuessesTheImageToReturn>;
+            Assert.AreEqual(expected.Id, actual.Content.Id);
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_Edit_nullException()
+        public void GuessesTheImageControllerTest_Delete()
         {
-            try
-            {
-                service.Edit(null);
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Invalid model", e.Message);
-            }
+            var expected = "Delete completed successful";
+            var actual = controller.DeleteTask(2) as OkNegotiatedContentResult<string>;
+            Assert.AreEqual(expected, actual.Content);
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_GetAll_count()
+        public void GuessesTheImageControllerTest_GetAllCategories()
         {
-            var expected = rep.GetAll().Count();
-            var actual = service.GetAll().Count();
-            Assert.AreEqual(expected, actual);
+            var expected = service.GetAllCategories().Count();
+            var actual = controller.GetAllCategories() as OkNegotiatedContentResult<IEnumerable<string>>;
+            Assert.AreEqual(expected, actual.Content.Count());
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_GetById_valid()
+        public void GuessesTheImageControllerTest_GetByCategory()
         {
-            var expected = rep.Get(2);
-            var actual = service.Get(2);
-            Assert.AreEqual(expected.Id, actual.Id);
+            var expected = service.GetByCategory("Category2").Count();
+            var actual = controller.GetByCategory("Category2") as OkNegotiatedContentResult<IEnumerable<GuessesTheImageToReturn>>;
+            Assert.AreEqual(expected, actual.Content.Count());
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_GetById_invalid()
+        public void GuessesTheImageControllerTest_GetTask()
         {
-            try
-            {
-                service.Get(-1);
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Invalid model", e.Message);
-            }
+            var expected = service.GetTask("Category2", "");
+            var actual = controller.GetTask("Category2", "") as OkNegotiatedContentResult<GuessesTheImageToReturn>;
+            Assert.AreEqual(expected.Id, actual.Content.Id);
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_Delete_valid()
-        {
-            var expected = rep.Delete(2);
-            var actual = service.Delete(2);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void GuessesTheImageServiceTest_Delete_invalid()
-        {
-            try
-            {
-                service.Delete(-1);
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Invalid model", e.Message);
-            }
-        }
-
-        [TestMethod]
-        public void GuessesTheImageServiceTest_GetAllCategories_count()
-        {
-            var expected = rep.GetByCategory("Category2").Count();
-            var actual = service.GetByCategory("Category2").Count();
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void GuessesTheImageServiceTest_GetTask_invalid()
-        {
-            try
-            {
-                service.GetTask(null, null);
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Invalid model", e.Message);
-            }
-        }
-
-        [TestMethod]
-        public void GuessesTheImageServiceTest_VerificationCorrectness_valid()
+        public void GuessesTheImageControllerTest_VerificationCorrectness()
         {
             var model = new GuessesTheImageToReturn
             {
@@ -268,42 +186,8 @@ namespace EngManTests.Service
                 }
             };
             var expected = true;
-            var actual = service.VerificationCorrectness(model);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void GuessesTheImageServiceTest_VerificationCorrectness_invalid()
-        {
-            var model = new GuessesTheImageToReturn
-            {
-                Id = 1,
-                Path = "path1",
-                Word = new Word
-                {
-                    WordId = 1,
-                    Category = "Category" + 1,
-                    Original = "Original" + 1235,
-                    Translate = "Translate" + 1,
-                    Transcription = "Transcription" + 1
-                }
-            };
-            var expected = false;
-            var actual = service.VerificationCorrectness(model);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void GuessesTheImageServiceTest_VerificationCorrectness_nullException()
-        {
-            try
-            {
-                service.VerificationCorrectness(null);
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Invalid model", e.Message);
-            }
+            var actual = controller.VerificationCorrectness(model) as OkNegotiatedContentResult<bool>;
+            Assert.AreEqual(expected, actual.Content);
         }
     }
 }

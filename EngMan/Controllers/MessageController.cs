@@ -20,6 +20,10 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetAllMessages()
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
@@ -41,6 +45,10 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult SendMessage(Message mes)
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
@@ -58,6 +66,10 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult ReadMessages(IEnumerable<Message> mesgs)
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             try
             {
                 var result = service.ReadMessages(mesgs, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
@@ -76,11 +88,19 @@ namespace EngMan.Controllers
         [HttpDelete]
         public IHttpActionResult DeleteMessage(int id)
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
                 {
-                    return Ok(service.DeleteMessage(id, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                    var _id = service.DeleteMessage(id, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                    if (_id != -1)
+                    {
+                        return Ok("Delete completed successful");
+                    }
                 }
                 catch (HttpRequestException ex)
                 {

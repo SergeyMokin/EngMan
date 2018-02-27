@@ -102,6 +102,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\TestGuessesTheImageController.cs" />
+    <Compile Include="Controllers\TestMessageController.cs" />
+    <Compile Include="Controllers\TestRuleController.cs" />
+    <Compile Include="Controllers\TestSentenceTaskController.cs" />
+    <Compile Include="Controllers\TestAccountController.cs" />
+    <Compile Include="Controllers\TestWordController.cs" />
+    <Compile Include="Extensions\TestExtensions.cs" />
     <Compile Include="Repository\TestGuessesTheImageRepository.cs" />
     <Compile Include="Repository\TestMessageRepository.cs" />
     <Compile Include="Repository\TestRuleRepository.cs" />

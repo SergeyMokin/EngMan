@@ -146,7 +146,7 @@ namespace EngMan.Controllers
                 var _id = await service.Delete(id);
                 if (_id != -1)
                 {
-                    return Ok(_id);
+                    return Ok("Delete completed successful");
                 }
             }
             catch (HttpRequestException ex)

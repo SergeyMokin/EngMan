@@ -231,10 +231,18 @@ namespace EngManTests.Controllers
         }
 
         [TestMethod]
-        public void GuessesTheImageServiceTest_GetAllCategories_count()
+        public void GuessesTheImageServiceTest_GetByCategory_count()
         {
             var expected = rep.GetByCategory("Category2").Count();
             var actual = service.GetByCategory("Category2").Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void GuessesTheImageServiceTest_GetAllCategories_count()
+        {
+            var expected = rep.GetAllCategories().Count();
+            var actual = service.GetAllCategories().Count();
             Assert.AreEqual(expected, actual);
         }
 

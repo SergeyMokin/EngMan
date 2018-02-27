@@ -55,6 +55,10 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetAllCategoriesOfDictionary()
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
@@ -76,6 +80,10 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetByCategoryDictionary(string category)
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
@@ -97,6 +105,10 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetUserDictionary()
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
@@ -118,6 +130,10 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult AddWordToDictionary(UserWord word)
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
@@ -136,6 +152,10 @@ namespace EngMan.Controllers
         [HttpDelete]
         public IHttpActionResult DeleteWordFromDictionary(int id)
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
@@ -143,7 +163,7 @@ namespace EngMan.Controllers
                     var result = serviceDictionary.Delete(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), id);
                     if (result > 0)
                     {
-                        return Ok(result);
+                        return Ok("Delete completed successful");
                     }
                 }
                 catch (HttpRequestException ex)
@@ -157,6 +177,10 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetUserData()
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
@@ -216,7 +240,7 @@ namespace EngMan.Controllers
                 var _id = service.DeleteUser(id);
                 if (_id != -1)
                 {
-                    return Ok(_id);
+                    return Ok("Delete completed successful");
                 }
             }
             catch (HttpRequestException ex)
@@ -229,6 +253,10 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult LogOut()
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             try
             {
                 HttpContext.Current.GetOwinContext().Authentication.SignOut();
@@ -258,6 +286,10 @@ namespace EngMan.Controllers
         [HttpPut]
         public IHttpActionResult ChangePassword(string oldpassword, string newpassword)
         {
+            if (HttpContext.Current == null)
+            {
+                return BadRequest();
+            }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
                 try
