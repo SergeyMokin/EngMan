@@ -80,6 +80,7 @@ export default {
       api.getAllCategoriesRules()
       .then(res => 
       {
+          console.log(res)
           this.categories = res;
           this.inProgress = false;
       })

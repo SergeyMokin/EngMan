@@ -205,7 +205,7 @@ export default {
       });
     },
     wordComputedId(){
-        var index = this.words.indexOf(choosenWord);
+        var index = this.words.indexOf(this.choosenWord);
         return index > -1 ? this.words[index].WordId : 0;
     }
   },
