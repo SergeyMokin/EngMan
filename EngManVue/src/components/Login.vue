@@ -105,10 +105,15 @@ export default {
                 this.inprogress = false;
                 return;
             };
-            api.login(this.user)
+            api.login( 
+            {
+                Email: this.user.username,
+                Password: this.user.password
+            })
             .then(result =>{
                 if(result.userName)
                 {
+                    console.log(result);
                     this.$cookie.delete('user.login.token.localhost:8080');
                     this.$cookie.set('user.login.token.localhost:8080', result.access_token, 1);
                     api.getUserData()
@@ -128,6 +133,7 @@ export default {
                             this.inprogress = false;
                         }
                         else{
+                            console.log(result);
                             console.log('NotFound404');
                             this.inprogress = false;
                             this.badrequest = true;
@@ -135,6 +141,7 @@ export default {
                     })
                 }
                 else{
+                    console.log(result);
                     console.log('NotFound404');
                     this.inprogress = false;
                     this.badrequest = true;

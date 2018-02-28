@@ -2,6 +2,8 @@
 using EngMan.Service;
 using EngMan.Models;
 using System.Net.Http;
+using System;
+
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -14,6 +16,7 @@ namespace EngMan.Controllers
             service = _service;
         }
 
+        //GET api/GuessesTheImage/GetAllCategories
         [HttpGet]
         public IHttpActionResult GetAllCategories()
         {
@@ -25,13 +28,14 @@ namespace EngMan.Controllers
                     return Ok(categories);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/GuessesTheImage/GetByCategory
         [HttpGet]
         public IHttpActionResult GetByCategory(string category)
         {
@@ -43,13 +47,14 @@ namespace EngMan.Controllers
                     return Ok(task);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/GuessesTheImage/GetAllTasks
         [HttpGet]
         public IHttpActionResult GetAllTasks()
         {
@@ -61,13 +66,14 @@ namespace EngMan.Controllers
                     return Ok(tasks);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/GuessesTheImage/GetTaskById
         [HttpGet]
         public IHttpActionResult GetTaskById(int id)
         {
@@ -79,13 +85,14 @@ namespace EngMan.Controllers
                     return Ok(task);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //PUT api/GuessesTheImage/EditTask
         [Authorize(Roles = "admin")]
         [HttpPut]
         public IHttpActionResult EditTask(GuessesTheImageToAdd task)
@@ -95,12 +102,13 @@ namespace EngMan.Controllers
                 var _task = service.Edit(task);
                 return Ok(_task);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //POST api/GuessesTheImage/AddTask
         [Authorize(Roles = "admin")]
         [HttpPost]
         public IHttpActionResult AddTask(GuessesTheImageToAdd task)
@@ -110,12 +118,13 @@ namespace EngMan.Controllers
                 var _task = service.Add(task);
                 return Ok(_task);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //DELETE api/GuessesTheImage/DeleteTask
         [Authorize(Roles = "admin")]
         [HttpDelete]
         public IHttpActionResult DeleteTask(int id)
@@ -128,13 +137,14 @@ namespace EngMan.Controllers
                     return Ok("Delete completed successful");
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/GuessesTheImage/GetTask
         [HttpGet]
         public IHttpActionResult GetTask(string category, string indexes)
         {
@@ -146,13 +156,14 @@ namespace EngMan.Controllers
                     return Ok(task);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //POST api/GuessesTheImage/VerificationCorrectness
         [HttpPost]
         public IHttpActionResult VerificationCorrectness(GuessesTheImageToReturn img)
         {
@@ -161,7 +172,7 @@ namespace EngMan.Controllers
                 var task = service.VerificationCorrectness(img);
                 return Ok(task);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

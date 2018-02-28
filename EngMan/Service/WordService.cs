@@ -4,7 +4,7 @@ using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
 using EngMan.Extensions;
-using System.Net.Http;
+using System;
 using System.Text.RegularExpressions;
 
 namespace EngMan.Service
@@ -26,12 +26,12 @@ namespace EngMan.Service
                 {
                     return rep.GetByCategory(category);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public IEnumerable<string> GetAllCategories()
@@ -40,9 +40,9 @@ namespace EngMan.Service
             {
                 return rep.GetAllCategories();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -52,9 +52,9 @@ namespace EngMan.Service
             {
                 return rep.Words;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -66,12 +66,12 @@ namespace EngMan.Service
                 {
                     return rep.Words.FirstOrDefault(x => x.WordId == id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public async Task<bool> Edit(Word word)
@@ -82,12 +82,12 @@ namespace EngMan.Service
                 {
                     return await rep.SaveWord(word);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public bool Add(Word word)
@@ -98,12 +98,12 @@ namespace EngMan.Service
                 {
                     return rep.AddWord(word);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public async Task<int> Delete(int id)
@@ -114,12 +114,12 @@ namespace EngMan.Service
                 {
                     return await rep.DeleteWord(id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public MapWord GetTask(string category, string indexes)
@@ -152,7 +152,7 @@ namespace EngMan.Service
                     {
                         if (tasks.Count() >= (5 - ParsedIndexes.Count()))
                         {
-                            var rand = new System.Random();
+                            var rand = new Random();
                             var index = rand.Next(0, tasks.Count());
                             var indexesTranslate = new HashSet<int>()
                             {
@@ -181,15 +181,15 @@ namespace EngMan.Service
                         }
                         else
                         {
-                            throw new HttpRequestException("Few words");
+                            throw new Exception("Few words");
                         }
                     }
                 }
-                throw new HttpRequestException("Invalid model");
+                throw new Exception("Invalid model");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -209,13 +209,13 @@ namespace EngMan.Service
                         }
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
                 return false;
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
     }
 }

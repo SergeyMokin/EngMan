@@ -5,6 +5,7 @@ using System.Web;
 using System.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
+using System;
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -17,12 +18,13 @@ namespace EngMan.Controllers
             service = _service;
         }
 
+        //GET api/message/GetAllMessages
         [HttpGet]
         public IHttpActionResult GetAllMessages()
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -34,7 +36,7 @@ namespace EngMan.Controllers
                         return Ok(list);
                     }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -42,12 +44,13 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        //POST api/message/SendMessage
         [HttpPost]
         public IHttpActionResult SendMessage(Message mes)
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -55,7 +58,7 @@ namespace EngMan.Controllers
                 {
                     return Ok(service.SendMessage(mes, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -63,12 +66,13 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        //POST api/message/ReadMessages
         [HttpPost]
         public IHttpActionResult ReadMessages(IEnumerable<Message> mesgs)
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             try
             {
@@ -78,19 +82,20 @@ namespace EngMan.Controllers
                     return Ok(result);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //DELETE api/message/DeleteMessage
         [HttpDelete]
         public IHttpActionResult DeleteMessage(int id)
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -102,7 +107,7 @@ namespace EngMan.Controllers
                         return Ok("Delete completed successful");
                     }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }

@@ -28,14 +28,14 @@ namespace EngManTests.Controllers
         public void MessageControllerTest_SendMessage()
         {
             var actual = controller.SendMessage(null);
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void MessageControllerTest_GetMessages()
         {
             var actual = controller.GetAllMessages();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
 
@@ -43,14 +43,14 @@ namespace EngManTests.Controllers
         public void MessageControllerTest_ReadMessagess()
         {
             var actual = controller.ReadMessages(null);
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void MessageControllerTest_DeleteMessage()
         {
             var actual = controller.DeleteMessage(0);
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
     }
 }

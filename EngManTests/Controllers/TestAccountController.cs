@@ -67,64 +67,70 @@ namespace EngManTests.Controllers
         public void AccountControllerTest_GetAllCategoriesOfDictionary()
         {
             var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void AccountControllerTest_GetByCategoryDictionary()
         {
             var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void AccountControllerTest_GetUserDictionary()
         {
             var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void AccountControllerTest_AddWordToDictionary()
         {
             var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void AccountControllerTest_DeleteWordFromDictionary()
         {
             var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void AccountControllerTest_GetUserData()
         {
             var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void AccountControllerTest_LogOut()
         {
             var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void AccountControllerTest_ChangePassword()
         {
             var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestResult));
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]
         public void AccountControllerTest_Registration()
         {
-            var expected = serviceUser.Registration(new User { Id = 1 });
-            var actual = controller.Registration(new User { Id = 1 }) as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.Registration(null).Result;
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
+        }
+
+        [TestMethod]
+        public void AccountControllerTest_Login()
+        {
+            var actual = controller.Login(null).Result;
+            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 
         [TestMethod]

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
 using System.Net.Http;
+using System;
 
 namespace EngMan.Controllers
 {
@@ -16,6 +17,7 @@ namespace EngMan.Controllers
             service = _service;
         }
 
+        //GET api/rule/GetAllCategories
         [HttpGet]
         public IHttpActionResult GetAllCategories()
         {
@@ -27,13 +29,14 @@ namespace EngMan.Controllers
                     return Ok(result);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/rule/GetByCategory
         [HttpGet]
         public IHttpActionResult GetByCategory(string category)
         {
@@ -45,13 +48,14 @@ namespace EngMan.Controllers
                     return Ok(rules);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/rule/GetAllRules
         [HttpGet]
         public IHttpActionResult GetAllRules()
         {
@@ -63,13 +67,14 @@ namespace EngMan.Controllers
                     return Ok(rules);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/rule/GetRule
         [HttpGet]
         public IHttpActionResult GetRule(int id)
         {
@@ -81,13 +86,14 @@ namespace EngMan.Controllers
                     return Ok(rule);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //PUT api/rule/EditRule
         [HttpPut]
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> EditRule(RuleModel rule)
@@ -97,12 +103,13 @@ namespace EngMan.Controllers
                 var _rule = await service.Edit(rule);
                 return Ok(_rule);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //POST api/rule/AddRule
         [HttpPost]
         [Authorize(Roles = "admin")]
         public IHttpActionResult AddRule(RuleModel rule)
@@ -112,12 +119,13 @@ namespace EngMan.Controllers
                 var _rule = service.Add(rule);
                 return Ok(_rule);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //POST api/rule/AddImages
         [HttpPost]
         [Authorize(Roles = "admin")]
         public IHttpActionResult AddImages(Image[] images)
@@ -130,13 +138,14 @@ namespace EngMan.Controllers
                     return Ok(pathes);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //DELETE api/rule/DeleteRule
         [HttpDelete]
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> DeleteRule(int id)
@@ -149,7 +158,7 @@ namespace EngMan.Controllers
                     return Ok("Delete completed successful");
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

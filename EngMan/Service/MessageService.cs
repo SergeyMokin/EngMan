@@ -4,7 +4,7 @@ using EngMan.Repository;
 using System.Linq;
 using EngMan.Extensions;
 using System.Net.Http;
-
+using System;
 namespace EngMan.Service
 {
     public class MessageService: IMessageService
@@ -26,12 +26,12 @@ namespace EngMan.Service
                     var result = rep.SendMessage(mes, userId);
                     return result;
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public IEnumerable<ReturnMessage> GetMessages(int userId)
@@ -43,12 +43,12 @@ namespace EngMan.Service
                     var result = rep.GetMessages(userId);
                     return result;
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId)
@@ -61,7 +61,7 @@ namespace EngMan.Service
                     {
                         if (!el.Validate())
                         {
-                            throw new HttpRequestException("Invalid model");
+                            throw new Exception("Invalid model");
                         }
                     }
                 }
@@ -70,12 +70,12 @@ namespace EngMan.Service
                     var result = rep.ReadMessages(messages, userId);
                     return result;
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public int DeleteMessage(int mesId, int userId)
@@ -87,12 +87,12 @@ namespace EngMan.Service
                     var result = rep.DeleteMessage(mesId, userId);
                     return result;
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
     }
 }

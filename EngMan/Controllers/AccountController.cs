@@ -5,6 +5,11 @@ using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
 using System.Linq;
+using Microsoft.Owin.Testing;
+using System.Collections.Generic;
+using System.Dynamic;
+using System;
+
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -19,21 +24,65 @@ namespace EngMan.Controllers
             serviceDictionary = _serviceDictionary;
         }
 
+        //POST api/account/login
         [AllowAnonymous]
         [HttpPost]
-        public IHttpActionResult Registration(User user)
+        public async Task<IHttpActionResult> Login(UserLogin user)
         {
             try
             {
-                var _user = service.Registration(user);
-                return Ok(_user);
+                if (user == null)
+                {
+                    return BadRequest("Invalid user data");
+                }
+
+                //Get token
+                var testServer = TestServer.Create<Startup>();
+                var requestParams = new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("username", user.Email),
+                    new KeyValuePair<string, string>("password", user.Password)
+                };
+                var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
+                var tokenServiceResponse = await testServer.HttpClient.PostAsync(
+                    Startup.TokenPath, requestParamsFormUrlEncoded);
+
+                //Parse token
+                var data = await tokenServiceResponse.Content.ReadAsAsync<ExpandoObject>();
+                return Json(data);
             }
-            catch (HttpRequestException ex)
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //POST api/account/registration
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IHttpActionResult> Registration(User user)
+        {
+            if (user == null)
+            {
+                return BadRequest("Invalid user data");
+            }
+            try
+            {
+                var _user = service.Registration(user);
+                if (_user)
+                {
+                    return await Login(new UserLogin { Email = user.Email, Password = user.Password });
+                }
+                return BadRequest("Unsuccessful registration");
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
         
+        //GET api/account/GetAllUsers
         [HttpGet]
         public IHttpActionResult GetAllUsers()
         {
@@ -45,19 +94,20 @@ namespace EngMan.Controllers
                     return Ok(users);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/account/GetAllCategoriesOfDictionary
         [HttpGet]
         public IHttpActionResult GetAllCategoriesOfDictionary()
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -69,7 +119,7 @@ namespace EngMan.Controllers
                         return Ok(result);
                     }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -77,12 +127,13 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        //GET api/account/GetByCategoryDictionary
         [HttpGet]
         public IHttpActionResult GetByCategoryDictionary(string category)
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -94,7 +145,7 @@ namespace EngMan.Controllers
                         return Ok(result);
                     }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -102,12 +153,13 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        //GET api/account/GetUserDictionary
         [HttpGet]
         public IHttpActionResult GetUserDictionary()
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -119,7 +171,7 @@ namespace EngMan.Controllers
                         return Ok(result);
                     }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -127,12 +179,13 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        //POST api/account/AddWordToDictionary
         [HttpPost]
         public IHttpActionResult AddWordToDictionary(UserWord word)
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -141,7 +194,7 @@ namespace EngMan.Controllers
                     var result = serviceDictionary.Add(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), word);
                     return Ok(result);
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -149,12 +202,13 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        //DELETE api/account/DeleteWordFromDictionary
         [HttpDelete]
         public IHttpActionResult DeleteWordFromDictionary(int id)
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -166,7 +220,7 @@ namespace EngMan.Controllers
                         return Ok("Delete completed successful");
                     }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -174,12 +228,13 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        //GET api/account/GetUserData
         [HttpGet]
         public IHttpActionResult GetUserData()
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -191,7 +246,7 @@ namespace EngMan.Controllers
                         return Ok(user);
                     }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -199,6 +254,7 @@ namespace EngMan.Controllers
             return NotFound();
         }
 
+        //GET api/account/GetUserById
         [HttpGet]
         public IHttpActionResult GetUserById(int id)
         {
@@ -210,13 +266,14 @@ namespace EngMan.Controllers
                     return Ok(user);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
-        
+
+        //PUT api/account/EditUser
         [HttpPut]
         public async Task<IHttpActionResult> EditUser(UserView user)
         {
@@ -225,12 +282,13 @@ namespace EngMan.Controllers
                 var _user = await service.SaveUser(user);
                 return Ok(_user);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //DELETE api/account/DeleteUser
         [Authorize(Roles = "admin")]
         [HttpDelete]
         public IHttpActionResult DeleteUser(int id)
@@ -243,31 +301,33 @@ namespace EngMan.Controllers
                     return Ok("Delete completed successful");
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
         
+        //POST api/account/LogOut
         [HttpPost]
         public IHttpActionResult LogOut()
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             try
             {
                 HttpContext.Current.GetOwinContext().Authentication.SignOut();
-                return Ok();
+                return Ok("Successfully completed");
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //PUT api/account/ChangeRole
         [HttpPut]
         [Authorize(Roles = "admin")]
         public async Task<IHttpActionResult> ChangeRole(UserView user)
@@ -277,18 +337,19 @@ namespace EngMan.Controllers
                 var _user = await service.ChangeRole(user);
                 return Ok(_user);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //PUT api/account/ChangePassword
         [HttpPut]
         public IHttpActionResult ChangePassword(string oldpassword, string newpassword)
         {
             if (HttpContext.Current == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid user");
             }
             if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
             {
@@ -297,7 +358,7 @@ namespace EngMan.Controllers
                     var _user = service.ChangePassword(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), oldpassword, newpassword);
                     return Ok(_user);
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }

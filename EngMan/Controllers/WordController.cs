@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
 using System.Net.Http;
+using System;
 
 namespace EngMan.Controllers
 {
@@ -16,6 +17,7 @@ namespace EngMan.Controllers
             service = _service;
         }
 
+        //GET api/word/GetAllCategories
         [HttpGet]
         public IHttpActionResult GetAllCategories()
         {
@@ -27,13 +29,14 @@ namespace EngMan.Controllers
                     return Ok(tasks);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/word/GetByCategory
         [HttpGet]
         public IHttpActionResult GetByCategory(string category)
         {
@@ -45,13 +48,14 @@ namespace EngMan.Controllers
                     return Ok(tasks);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/word/GetAllWords
         [HttpGet]
         public IHttpActionResult GetAllWords()
         {
@@ -63,13 +67,14 @@ namespace EngMan.Controllers
                     return Ok(words);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/word/GetWordById
         [HttpGet]
         public IHttpActionResult GetWordById(int id)
         {
@@ -81,13 +86,14 @@ namespace EngMan.Controllers
                     return Ok(word);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //PUT api/word/EditWord
         [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<IHttpActionResult> EditWord(Word word)
@@ -97,12 +103,13 @@ namespace EngMan.Controllers
                 var _word = await service.Edit(word);
                 return Ok(_word);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //POST api/word/AddWord
         [Authorize(Roles = "admin")]
         [HttpPost]
         public IHttpActionResult AddWord(Word word)
@@ -112,12 +119,13 @@ namespace EngMan.Controllers
                 var _word = service.Add(word);
                 return Ok(_word);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //DELETE api/word/DeleteWord
         [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteWord(int id)
@@ -130,13 +138,14 @@ namespace EngMan.Controllers
                     return Ok("Delete completed successful");
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/word/GetWordMap
         [HttpGet]
         public IHttpActionResult GetWordMap(string category, string indexes)
         {
@@ -148,13 +157,14 @@ namespace EngMan.Controllers
                     return Ok(task);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //POST api/word/VerificationCorrectness
         [HttpPost]
         public IHttpActionResult VerificationCorrectness(Word word)
         {
@@ -163,7 +173,7 @@ namespace EngMan.Controllers
                 var task = service.VerificationCorrectness(word);
                 return Ok(task);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

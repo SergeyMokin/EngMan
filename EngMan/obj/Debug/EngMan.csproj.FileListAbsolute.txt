@@ -501,3 +501,7 @@ C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\System.Buffers.xml
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\System.Numerics.Vectors.xml
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\System.Text.Encodings.Web.xml
+C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngMan\bin\Microsoft.Owin.Hosting.dll
+C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngMan\bin\Microsoft.Owin.Testing.dll
+C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngMan\bin\Microsoft.Owin.Hosting.xml
+C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngMan\bin\Microsoft.Owin.Testing.xml

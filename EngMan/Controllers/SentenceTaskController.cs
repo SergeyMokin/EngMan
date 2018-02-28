@@ -3,6 +3,7 @@ using EngMan.Service;
 using EngMan.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System;
 
 namespace EngMan.Controllers
 {
@@ -16,6 +17,7 @@ namespace EngMan.Controllers
             service = _service;
         }
 
+        //GET api/SentenceTask/GetAllCategories
         [HttpGet]
         public IHttpActionResult GetAllCategories()
         {
@@ -27,13 +29,14 @@ namespace EngMan.Controllers
                     return Ok(tasks);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/SentenceTask/GetByCategory
         [HttpGet]
         public IHttpActionResult GetByCategory(string category)
         {
@@ -45,13 +48,14 @@ namespace EngMan.Controllers
                     return Ok(tasks);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/SentenceTask/GetAllTasks
         [HttpGet]
         public IHttpActionResult GetAllTasks()
         {
@@ -63,13 +67,14 @@ namespace EngMan.Controllers
                     return Ok(tasks);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/SentenceTask/GetTaskById
         [HttpGet]
         public IHttpActionResult GetTaskById(int id)
         {
@@ -81,13 +86,14 @@ namespace EngMan.Controllers
                     return Ok(task);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //PUT api/SentenceTask/EditTask
         [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<IHttpActionResult> EditTask(SentenceTask task)
@@ -97,12 +103,13 @@ namespace EngMan.Controllers
                 var _task = await service.Edit(task);
                 return Ok(_task);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //POST api/SentenceTask/AddTask
         [Authorize(Roles = "admin")]
         [HttpPost]
         public IHttpActionResult AddTask(SentenceTask task)
@@ -112,12 +119,13 @@ namespace EngMan.Controllers
                 var _task = service.Add(task);
                 return Ok(_task);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        //DELETE api/SentenceTask/DeleteTask
         [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteTask(int id)
@@ -130,13 +138,14 @@ namespace EngMan.Controllers
                     return Ok("Delete completed successful");
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //GET api/SentenceTask/GetTask
         [HttpGet]
         public IHttpActionResult GetTask(string category, string indexes)
         {
@@ -148,13 +157,14 @@ namespace EngMan.Controllers
                     return Ok(task);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return NotFound();
         }
 
+        //POST api/SentenceTask/VerificationCorrectness
         [HttpPost]
         public IHttpActionResult VerificationCorrectness(SentenceTask sentence)
         {
@@ -163,7 +173,7 @@ namespace EngMan.Controllers
                 var task = service.VerificationCorrectness(sentence);
                 return Ok(task);
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

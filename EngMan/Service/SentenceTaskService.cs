@@ -4,8 +4,8 @@ using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
 using EngMan.Extensions;
-using System.Net.Http;
 using System.Text.RegularExpressions;
+using System;
 namespace EngMan.Service
 {
     public class SentenceTaskService: ISentenceTaskService
@@ -23,9 +23,9 @@ namespace EngMan.Service
             {
                 return rep.GetAllCategories();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -37,12 +37,12 @@ namespace EngMan.Service
                 {
                     return rep.GetByCategory(category);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public IEnumerable<SentenceTask> Get()
@@ -51,9 +51,9 @@ namespace EngMan.Service
             {
                 return rep.SentenceTasks;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -65,12 +65,12 @@ namespace EngMan.Service
                 {
                     return rep.SentenceTasks.FirstOrDefault(x => x.SentenceTaskId == id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public async Task<bool> Edit(SentenceTask task)
@@ -81,12 +81,12 @@ namespace EngMan.Service
                 {
                     return await rep.SaveTask(task);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public bool Add(SentenceTask task)
@@ -97,12 +97,12 @@ namespace EngMan.Service
                 {
                     return rep.AddTask(task);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public async Task<int> Delete(int id)
@@ -113,12 +113,12 @@ namespace EngMan.Service
                 {
                     return await rep.DeleteTask(id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public SentenceTask GetTask(string category, string indexes)
@@ -151,7 +151,7 @@ namespace EngMan.Service
                     {
                         if (tasks.Count() >= (10 - ParsedIndexes.Count()))
                         {
-                            var rand = new System.Random();
+                            var rand = new Random();
                             var index = rand.Next(0, tasks.Count());
                             return tasks.Select(x =>
                             {
@@ -173,11 +173,11 @@ namespace EngMan.Service
                         }
                     }
                 }
-                throw new HttpRequestException("Invalid model");
+                throw new Exception("Invalid model");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -197,13 +197,13 @@ namespace EngMan.Service
                         }
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
                 return false;
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
     }
 }

@@ -2,7 +2,7 @@
 using EngMan.Repository;
 using System.Collections.Generic;
 using EngMan.Extensions;
-using System.Net.Http;
+using System;
 
 namespace EngMan.Service
 {
@@ -23,12 +23,12 @@ namespace EngMan.Service
                 {
                     return rep.GetUserDictionary(id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
         public bool Add(int id, UserWord word)
         {
@@ -38,12 +38,12 @@ namespace EngMan.Service
                 {
                     return rep.AddWordToDictionary(id, word);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
         public int Delete(int userId, int wordId)
         {
@@ -53,12 +53,12 @@ namespace EngMan.Service
                 {
                     return rep.DeleteWordFromDictionary(userId, wordId);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public IEnumerable<string> GetAllCategories(int id)
@@ -69,12 +69,12 @@ namespace EngMan.Service
                 {
                     return rep.GetAllCategories(id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public UserDictionary GetByCategory(int id, string category)
@@ -85,12 +85,12 @@ namespace EngMan.Service
                 {
                     return rep.GetByCategory(id, category);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
     }

@@ -4,8 +4,7 @@ using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
 using EngMan.Extensions;
-using System.Net.Http;
-
+using System;
 namespace EngMan.Service
 {
     public class RuleService: IRuleService
@@ -23,9 +22,9 @@ namespace EngMan.Service
             {
                 return rep.GetAllCategories();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -37,12 +36,12 @@ namespace EngMan.Service
                 {
                     return rep.GetByCategory(category);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public IEnumerable<RuleModel> Get()
@@ -51,9 +50,9 @@ namespace EngMan.Service
             {
                 return rep.Rules;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -65,12 +64,12 @@ namespace EngMan.Service
                 {
                     return rep.Rules.FirstOrDefault(x => x.RuleId == id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public async Task<bool> Edit(RuleModel rule)
@@ -81,12 +80,12 @@ namespace EngMan.Service
                 {
                     return await rep.SaveRule(rule);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public bool Add(RuleModel rule)
@@ -97,12 +96,12 @@ namespace EngMan.Service
                 {
                     return rep.AddRule(rule);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public async Task<int> Delete(int id)
@@ -113,12 +112,12 @@ namespace EngMan.Service
                 {
                     return await rep.DeleteRule(id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public List<string> AddImages(Image[] images)
@@ -137,12 +136,12 @@ namespace EngMan.Service
                     }
                     return pathes;
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
     }
 }

@@ -4,7 +4,7 @@ using EngMan.Models;
 using EngMan.Repository;
 using System.Threading.Tasks;
 using EngMan.Extensions;
-using System.Net.Http;
+using System;
 
 namespace EngMan.Service
 {
@@ -26,12 +26,12 @@ namespace EngMan.Service
                     var user = rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password));
                     return user;
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public UserView GetUser(int id)
@@ -42,12 +42,12 @@ namespace EngMan.Service
                 {
                     return GetUserList().Where(x => x.Id == id).FirstOrDefault();
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public bool Registration(User user)
@@ -58,12 +58,12 @@ namespace EngMan.Service
                 {
                     return rep.AddUser(user);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public async Task<bool> SaveUser(UserView user)
@@ -74,12 +74,12 @@ namespace EngMan.Service
                 {
                     return await rep.SaveUser(user);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public int DeleteUser(int id)
@@ -90,12 +90,12 @@ namespace EngMan.Service
                 {
                     return rep.DeleteUser(id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public List<UserView> GetUserList()
@@ -111,9 +111,9 @@ namespace EngMan.Service
                     Role = x.Role
                 }).ToList();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -125,12 +125,12 @@ namespace EngMan.Service
                 {
                     return rep.ChangePassword(id, oldpassword, newpassword);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public async Task<bool> ChangeRole(UserView user)
@@ -141,12 +141,12 @@ namespace EngMan.Service
                 {
                     return await rep.ChangeRole(user);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
     }
 }

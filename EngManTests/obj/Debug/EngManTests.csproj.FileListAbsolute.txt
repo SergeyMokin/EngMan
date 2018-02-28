@@ -158,3 +158,7 @@ C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngManTests\bin\Debug\EntityF
 C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngManTests\bin\Debug\Moq.pdb
 C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngManTests\bin\Debug\Moq.xml
 C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngManTests\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngManTests\bin\Debug\Microsoft.Owin.Testing.dll
+C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngManTests\bin\Debug\Microsoft.Owin.Hosting.dll
+C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngManTests\bin\Debug\Microsoft.Owin.Testing.xml
+C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngManTests\bin\Debug\Microsoft.Owin.Hosting.xml

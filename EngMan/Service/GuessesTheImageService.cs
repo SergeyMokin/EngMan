@@ -5,6 +5,7 @@ using EngMan.Extensions;
 using System.Net.Http;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System;
 
 namespace EngMan.Service
 {
@@ -26,12 +27,12 @@ namespace EngMan.Service
                     var result = rep.Add(image);
                     return result;
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public bool Edit(GuessesTheImageToAdd image)
@@ -43,12 +44,12 @@ namespace EngMan.Service
                     var result = rep.Edit(image);
                     return result;
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public IEnumerable<GuessesTheImageToReturn> GetAll()
@@ -57,9 +58,9 @@ namespace EngMan.Service
             {
                 return rep.GetAll();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -71,12 +72,12 @@ namespace EngMan.Service
                 {
                     return rep.Get(id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public int Delete(int id)
@@ -87,12 +88,12 @@ namespace EngMan.Service
                 {
                     return rep.Delete(id);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
 
@@ -102,9 +103,9 @@ namespace EngMan.Service
             {
                 return rep.GetAllCategories();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -116,12 +117,12 @@ namespace EngMan.Service
                 {
                     return rep.GetByCategory(category);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new HttpRequestException(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            throw new HttpRequestException("Invalid model");
+            throw new Exception("Invalid model");
         }
 
         public GuessesTheImageToReturn GetTask(string category, string indexes)
@@ -133,8 +134,7 @@ namespace EngMan.Service
                 {
                     foreach (var ch in indexes.Split(','))
                     {
-                        int i;
-                        if (int.TryParse(ch, out i))
+                        if (int.TryParse(ch, out int i))
                         {
                             ParsedIndexes.Add(i);
                         }
@@ -161,11 +161,11 @@ namespace EngMan.Service
                         }
                     }
                 }
-                throw new HttpRequestException("Invalid model");
+                throw new Exception("Invalid model");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
