@@ -10,7 +10,7 @@ export default {
     delete axios.defaults.headers.common['Authorization'];
   },
   login(model){
-    return axios.post('http://localhost:58099/token', require('querystring').stringify(model))
+    return axios.post(url + '/token', require('querystring').stringify(model))
     .then(response => {
       axios.defaults.headers.common['Authorization'] ='bearer ' + response.data.access_token;
       return response.data;

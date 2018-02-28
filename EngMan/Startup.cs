@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Cors;
 using Owin;
-using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace EngMan
 {

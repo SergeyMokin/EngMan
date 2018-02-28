@@ -8,15 +8,17 @@ namespace EngMan
 {
     public partial class Startup
     {
+        public const string TokenPath = "/api/token";
+
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
 
         static Startup()
         {
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
-                TokenEndpointPath = new PathString("/token"),
+                TokenEndpointPath = new PathString(TokenPath),
                 Provider = new OAuthProvider(),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 AllowInsecureHttp = true
             };
         }

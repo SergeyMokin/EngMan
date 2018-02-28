@@ -26,11 +26,9 @@ namespace EngMan.Models
     public class UserLogin
     {
         [DataMember]
-        public string grant_type { get; set; }
+        public string Email { get; set; }
         [DataMember]
-        public string username { get; set; }
-        [DataMember]
-        public string password { get; set; }
+        public string Password { get; set; }
     }
 
     [DataContract]
