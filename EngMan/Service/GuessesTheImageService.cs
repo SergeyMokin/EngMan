@@ -17,7 +17,7 @@ namespace EngMan.Service
         {
             rep = _rep;
         }
-
+        
         public bool Add(GuessesTheImageToAdd image)
         {
             if (image.Validate(true))

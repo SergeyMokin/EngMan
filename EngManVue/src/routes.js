@@ -12,9 +12,10 @@ import AdminUser from '../src/components/AdminUser'
 import AdminGuessesTheImage from '../src/components/AdminGuessesTheImage'
 import GuessesTheImages from '../src/components/GuessesTheImages'
 import UserDictionary from '../src/components/UserDictionary'
-
+import NetworkError from '../src/components/NetworkError'
 const routes = [
     { path: '/', component: Login }
+    , { path: '/networkerror', component: NetworkError }
     , { path: '/user', component: User }
     , { path: '/trainings', component: Trainings }
     , { path: '/grammar', component: Grammar }

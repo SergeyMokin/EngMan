@@ -1,7 +1,7 @@
 <template>
   <div class="header">
-    <img src = "../assets/logo.png" title="Ваш профиль" style = "margin: 5px; width: 70px; height: 70px;" v-on:click = "clickProfile">
-    <img title="Меню" v-if = "$store.state.user.Logined" src = "../assets/menu.png" style = "margin: 5px; width: 35px; height: 35px;" v-on:mouseover = "changeShow()" v-on:mouseout = "changeShow()">
+    <img src = "../assets/logo.png" title="Ваш профиль" style = "width: 70px; height: 70px;" v-on:click = "clickProfile">
+    <img title="Меню" v-if = "$store.state.user.Logined" src = "../assets/menu.png" style = "width: 35px; height: 35px;" v-on:mouseover = "changeShow()" v-on:mouseout = "changeShow()">
     <profile v-if = "displayProfile" v-on:closeform = "displayProfile = false" />
     <ol class="square" v-if = "hovermenu" v-on:mouseover = "changeShow()" v-on:mouseout = "changeShow()">
     <ul>

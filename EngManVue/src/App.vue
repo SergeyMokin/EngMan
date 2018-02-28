@@ -25,14 +25,23 @@ export default {
   },
   created(){
       if(this.inProgress) return;
-      var vue = this;
-      if(this.$cookie.get('user.login.token.localhost:8080'))
+      var token = this.$cookie.get('user.login.token.localhost:8080');
+      if(token)
       {
         this.inProgress = true;
-        api.addToken(this.$cookie.get('user.login.token.localhost:8080'));
+        api.addToken(token);
         api.getUserData()
         .then(res => {
-          if(res.Id)
+          if(res.message)
+          {
+            if(res.message == "Network Error")
+            {
+              this.inProgress = false;
+              this.$router.push('/networkerror');
+              return;
+            }
+          }
+          if(res.Email)
           {
             this.$store.dispatch('getMessages');
             this.$store.state.user.Logined = true;
@@ -45,21 +54,22 @@ export default {
             this.inProgress = false;
           }
           else{
-            console.log('NotFound404');
             api.deleteToken();
-            this.$cookie.delete('user.login.token.localhost:8080');
             this.inProgress = false;
+          }
+          if(!this.$store.state.user.Logined)
+          {
+            this.$router.push('/');
           }
         })
         .catch(e => {
-            console.log('NotFound404');
             api.deleteToken();
-            this.$cookie.delete('user.login.token.localhost:8080');
             this.inProgress = false;
+            this.$router.push('/networkerror');
+            return;
         })
-        return;
       }
-      if(!this.$store.state.user.Logined)
+      else
       {
         this.$router.push('/');
       }

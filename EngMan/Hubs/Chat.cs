@@ -8,7 +8,7 @@ namespace EngMan.Hubs
     {
         static List<UserConnect> Users = new List<UserConnect>();
 
-        // Уведомление о сообщении
+        //notification of a new message
         public void Send(Message mes)
         {
             var user = Users.FirstOrDefault(x => x.Id == mes.BeneficiaryId);
@@ -18,6 +18,7 @@ namespace EngMan.Hubs
             }
         }
         
+        //connecting the user to the server
         public void Connect(UserView user)
         {
             var id = Context.ConnectionId;
@@ -38,6 +39,7 @@ namespace EngMan.Hubs
             }
         }
 
+        //disconnecting the user from the server
         public void Disconnect()
         {
             OnDisconnected(true);

@@ -1,15 +1,13 @@
 html, body{
     height: 100% !important;
     background: #e6e6e6 !important;
+    margin: 0;
+    padding: 0; 
 }
 #app {
     font-family:'Times new roman', sans-serif;
     font-size: 18px;
     color: #32353a;
-}
-* {
-    margin: 0%;
-    padding: 0%;
 }
 a{
       outline: none;
@@ -21,6 +19,10 @@ span{
 }
 label{
     color: rgb(75, 75, 75);
+}
+.main-content-center{
+    margin: 1.5% 15% 3% 15%;
+    width: 70%;
 }
 .span-error-message{
     color: red;
@@ -54,7 +56,7 @@ label{
     height: 35px;
     border: none;
     outline:none;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .list--element.pointer{
     cursor: pointer;
@@ -99,13 +101,13 @@ label{
     background: rgb(248, 248, 248);
     border: none;
     outline:none;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .select-form{
     outline:none;
     background: rgb(248, 248, 248);
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     text-align: center;
     font-size: 16px;
     margin: auto;
@@ -131,6 +133,7 @@ label{
 .header{
     background-color: rgba(0,0,0,.1);
     display: flex;
+    flex-direction: row;    
     width: 100%;
 }
 .header-icons{
@@ -146,7 +149,9 @@ label{
     overflow: hidden;
 }
 .square {
-  margin-left: 120px;
+  padding: 0;
+  margin-left: 105px;
+  margin-top: 0;
   position: absolute;
   z-index: 999;
   counter-reset: li;
@@ -156,7 +161,7 @@ label{
 }
 .square li {
   position: relative;
-  margin: 0 0 10px 2em;
+  margin: 0 0 10px 0em;
   padding: 4px 8px;
   border-top: 2px solid rgb(17, 17, 17);
   transition: .3s linear;
@@ -200,7 +205,7 @@ label{
 .input-form{
     border: none;
     outline:none;
-    border-radius: 10px;
+    border-radius: 5px;
     width: 250px;
     height: 25px;
     text-align: center;
@@ -221,9 +226,9 @@ label{
     text-align: center;
     display: table;
     background: rgb(248, 248, 248);
-    border: solid 1px;
+    border: solid 1px rgb(182, 182, 182);
     outline:none;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .messages{
     margin: 0.5%;
@@ -257,7 +262,7 @@ label{
 }
 .label-form-mes{
     background: rgba(0,0,0,.15);
-    border-radius: 10px 10px 0 0;
+    border-radius: 5px 5px 0 0;
     text-align: left;
     padding: 0.5%;
     height: 25px;
@@ -301,7 +306,7 @@ label{
 .textarea-mes{
     width: 250px;
     height: 70px;
-    border-radius: 10px;
+    border-radius: 5px;
     border-style: solid;
     border-width: 1px;
     border-color:rgb(75, 75, 75);
@@ -315,7 +320,7 @@ label{
     outline:none;
     background: rgba(0,0,0,.1);
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     text-align: center;
     font-size: 16px;
     margin: 0.5%;
@@ -338,7 +343,7 @@ label{
     background:rgba(205, 205, 205, 0.9);
     width: 173px;
     left: 0;
-    top: 80px;
+    top: 70px;
     position: absolute;
     z-index: 99;
     text-align: center;
@@ -351,7 +356,7 @@ label{
     background: rgb(248, 248, 248);
     border: none;
     outline:none;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .sentence-input{
     resize: none;
@@ -362,7 +367,7 @@ label{
     background: rgb(248, 248, 248);
     border: none;
     outline:none;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .user-edit{
     resize: none;
@@ -373,7 +378,7 @@ label{
     background: rgb(248, 248, 248);
     border: none;
     outline:none;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .loading {
     position: fixed;

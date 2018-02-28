@@ -1,7 +1,6 @@
 <template>
-    <div class="view-list"><div class="loading" v-if = "inProgress">Loading&#8230;</div>
-    <div class = "icon-close"><router-link to="/"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-    <h1>Словарь</h1><br/>    
+    <div class="main-content-center"><div class="loading" v-if = "inProgress">Loading&#8230;</div>
+    <div class = "icon-close"><router-link to="/"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div> 
         <div class = "view-list">
             <input v-if = "!errorMessage" placeholder="Поиск..." type="text" class = "select-form" v-model = "keyWord" v-on:click = "keyWord = ''"/>
             <div v-if = "errorMessage" class = "span-error-message">{{errorMessage}}</div>
