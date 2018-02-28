@@ -1,25 +1,25 @@
 <template>
   <div class="tasks-align">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-      <h2>Составь предложение</h2><br/>
+      <span style = "font-size: 25px">Practice rules</span><br/><br/>
       <div v-if = "!show">
-        <div class = "icon-close"><router-link to="/grammar"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-        <div v-on:click = "downloadSentenceTask()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
-        <input placeholder="Выберите..." type="text" class = "select-form" list="task_sent_category" v-model = "category" v-on:click = "category = ''"/><br/>
+        <div class = "icon-close"><router-link to="/grammar"><img src = "../assets/arrow-up.png" title="Back" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
+        <div v-on:click = "downloadSentenceTask()"><img title="Start" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span>
-        <datalist id = "task_sent_category">
+        <select id = "task_sent_category" placeholder="Выберите..." class = "select-form-mes" v-model = "category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
-        </datalist>
+        </select>
       </div>
       <div v-if = "show">
-        <div class = "icon-close" v-on:click = "closeForm"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
-        <div v-on:click = "downloadSentenceTask()"><img title="Следующий" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/arrow-right.png"></div>
-        <div v-on:click = "verificationCorrectness()"><img title="Проверить" style = "width: 20px; height: auto; margin-right: 50px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
-        <span style = "font-size: larger;">{{sentence.Sentence}}</span>
-        <br/>
-        <input type = "text" v-model = "returnSentence.Sentence" class = "sentence-input"/>
+        <div class = "icon-close" v-on:click = "closeForm"><img src = "../assets/close-icon.png" title="End" style = "margin: 5px; width: 20px; height: 20px;"></div>
+        <div v-on:click = "downloadSentenceTask()"><img title="Next" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/arrow-right.png"></div>
+        <div v-on:click = "verificationCorrectness()"><img title="Verification" style = "width: 20px; height: auto; margin-right: 50px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
+        <div style = "display:inline; background: white; cursor:pointer; margin: 5px" v-for = "el in splitsentence" :key = "el" v-on:click="returnSentence.Sentence += el += ' '">
+            {{el}}
+        </div>
+        {{returnSentence.Sentence}}
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
@@ -43,6 +43,7 @@ export default {
         category: '',
         show: false,
         sentence: {},
+        splitsentence: [],
         returnSentence: {
             SentenceTaskId: -1,
             Sentence: '',
@@ -72,6 +73,7 @@ export default {
                         this.countOfSentences++;
                         this.indexes += result.SentenceTaskId + ',';
                         this.sentence = result;
+                        this.splitsentence = this.sentence.Sentence.split(" ");
                         this.returnSentence.SentenceTaskId = this.sentence.SentenceTaskId;
                         this.returnSentence.Category = this.sentence.Category;
                         this.returnSentence.Translate = this.sentence.Translate;

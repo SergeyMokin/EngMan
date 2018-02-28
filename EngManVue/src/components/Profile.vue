@@ -1,13 +1,13 @@
 <template>
   <div class="profile" id = "profile-form">
-      <div class="loading" v-if = "inprogress">Loading&#8230;</div>
+      <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div v-if = "!$store.state.user.Logined">
           <span>Вам необходимо войти в профиль</span>
       </div>
       <div v-if = "$store.state.user.Logined" style = "display: grid">
           <a style = "margin-bottom: 5px" v-if = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b></a>
-          <div class = "routes-admin" style = "padding: 5px; cursor: pointer" v-on:click = "toProfile()">Профиль</div>
-          <div class = "routes-admin" style = "padding: 5px; cursor: pointer" v-on:click = "logout()">Выйти</div>
+          <div class = "routes-admin" style = "padding: 5px; cursor: pointer" v-on:click = "toProfile()">Profile</div>
+          <div class = "routes-admin" style = "padding: 5px; cursor: pointer" v-on:click = "logout()">Logout</div>
       </div>
   </div>
 </template>
@@ -17,14 +17,14 @@ import api from '../api/api'
 export default {
     data(){
         return {
-            inprogress: false,
+            inProgress: false,
             clickAtForm: false
         }
     },
     methods: {
         logout(){
-            if(this.inprogress) return;
-            this.inprogress = true;
+            if(this.inProgress) return;
+            this.inProgress = true;
             var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
             proxy.invoke("Disconnect");
             api.signout()
@@ -36,20 +36,20 @@ export default {
                 this.$store.state.user.FirstName = '';
                 this.$store.state.user.LastName = '';
                 this.$store.state.user.Email = '';
-                this.inprogress = false;
+                this.inProgress = false;
                 this.$router.push('/'); 
                 this.$emit('closeform'); 
             })
             .catch(e => {
                 console.log(e);
-                this.inprogress = false;
+                this.inProgress = false;
             });
         },
         toProfile(){
-            if(this.inprogress) return;
-            this.inprogress = true;
+            if(this.inProgress) return;
+            this.inProgress = true;
             this.$router.push('/user');
-            this.inprogress = false; 
+            this.inProgress = false; 
             this.$emit('closeform');
         }
     },
@@ -72,3 +72,16 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .profile{
+        background:rgba(205, 205, 205, 0.9);
+        width: 173px;
+        left: 0;
+        top: 70px;
+        position: absolute;
+        z-index: 99;
+        text-align: center;
+        border: solid 1px rgb(19, 19, 19);
+    }
+</style>

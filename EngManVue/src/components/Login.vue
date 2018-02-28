@@ -1,59 +1,78 @@
 <template>
-  <div class="login" id = "login-form">
+  <div class="login" id = "login-form" v-bind:class = "{blackout: registration||authentification}">
       <div class="loading" v-if = "inprogress">Loading&#8230;</div>
       <div v-if = "!isLogined">
-        <span>Для доступа к контенту сайта вам необходимо войти в свой аккаунт или зарегистрироваться: </span><br/>
-            <div class = "routes-admin" style = "padding: 5px; cursor: pointer;" v-on:click = "authentification = !authentification; registration = false;">Войти в аккаунт</div>
-            <div class = "routes-admin" style = "padding: 5px; cursor: pointer;" v-on:click = "registration = !registration; authentification = false;">Регистрация</div>
-        <div class = "authentification-form form-border" v-if = "authentification">
+        <span style = "font-size: 25px">To access the content of the site you need to log in or register: </span><br/><br/>
+            <div class = "routes-admin" style = "padding: 15px; cursor: pointer; font-size:25px" v-on:click = "authentification = !authentification; registration = false;">Log in</div>
+            <div class = "routes-admin" style = "padding: 15px; cursor: pointer; font-size:25px" v-on:click = "registration = !registration; authentification = false;">Registration</div>
+        <div class = "blackout authentification-form" v-if = "authentification">
             <div class = "login-form">
-                <label for = "username-login">Мэил</label><br/>
+                <label for = "username-login">Email</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.user.username.$error}" class = "input-form" id = "username-login" type = 'text' v-model = "user.username"/><br/>
             </div>
             <div class = "login-form">
-                <label for = "password-login">Пароль</label><br/>
+                <label for = "password-login">Password</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.user.password.$error}" class = "input-form" id = "password-login" type = 'password' v-model = "user.password"/><br/>
             </div>
-            <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;width: 100px;" v-on:click = "login()">Войти</div><br/>
-            <span v-if = "$v.user.$error" class = "span-error-message">Мэил и пароль - обязательные поля для заполнения<br/></span>
-            <span v-if = "badrequest" class = "span-error-message">Мэил или пароль введены неверно<br/></span>
+            <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;width: 100px;" v-on:click = "login()">Login</div><br/>
+            <span v-if = "$v.user.$error" class = "span-error-message">Mail and password are required<br/></span>
+            <span v-if = "badrequest" class = "span-error-message">Incorrect email or password<br/></span>
         </div>
-        <div class = "registration-form form-border" v-if = "registration">
+        <div class = "authentification-form" v-if = "registration">
             <div class = "login-form">
-                <label for = "firstname-registration">Имя</label><br/>
+                <label for = "firstname-registration">First name</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.FirstName.$error}" class = "input-form" id = "firstname-registration" type = 'text' v-model = "registrationUser.FirstName"/><br/>
             </div>
             <div class = "login-form">
-                <label for = "lastname-registration">Фамилия</label><br/>
+                <label for = "lastname-registration">Last name</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.LastName.$error}" class = "input-form" id = "lastname-registration" type = 'text' v-model = "registrationUser.LastName"/><br/>
             </div>
             <div class = "login-form">
-                <label for = "email-registration">Мэил</label><br/>
+                <label for = "email-registration">Email</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.Email.$error}" class = "input-form" id = "email-registration" type = 'text' v-model = "registrationUser.Email"/><br/>
             </div>
             <div class = "login-form">
-                <label for = "password-registration">Пароль</label><br/>
+                <label for = "password-registration">Password</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.Password.$error}" class = "input-form" id = "password-registration" type = 'password' v-model = "registrationUser.Password"/><br/>
             </div>
             <div class = "login-form">
-                <label for = "confirmpassword-registration">Подтвердите пароль</label><br/>
+                <label for = "confirmpassword-registration">Confirm password</label><br/>
                 <input v-bind:class = "{'input-form--error': $v.registrationUser.confirmPassword.$error}" class = "input-form" id = "confirmpassword-registration" type = 'password' v-model = "registrationUser.confirmPassword"/><br/>
             </div>
-            <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;" v-on:click = "registrationUserReq()">Зарегистрироваться</div><br/>
-            <span v-if = "$v.registrationUser.$error" class = "span-error-message">Все поля должны быть заполнены<br/></span>
-            <span v-if = "badrequest" class = "span-error-message">Пользователь с таким мэилом уже существует<br/></span>
-            <span v-if = "$v.registrationUser.Email.$error" class = "span-error-message">Неверный мэил<br/></span>
-            <span v-if = "$v.registrationUser.Password.$error" class = "span-error-message">Пароль должен иметь длину не менее 8 символов<br/></span>
-            <span v-if = "$v.registrationUser.confirmPassword.$error" class = "span-error-message">Пароль и его подтверждение должны совпадать<br/></span>
+            <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;" v-on:click = "registrationUserReq()">Sign Up</div><br/>
+            <span v-if = "$v.registrationUser.$error" class = "span-error-message">All fields must be filled in<br/></span>
+            <span v-if = "badrequest" class = "span-error-message">A user with this email already exists<br/></span>
+            <span v-if = "$v.registrationUser.Email.$error" class = "span-error-message">Invalid Email<br/></span>
+            <span v-if = "$v.registrationUser.Password.$error" class = "span-error-message">The password must be at least 8 characters long, one big and small letter, one number<br/></span>
+            <span v-if = "$v.registrationUser.confirmPassword.$error" class = "span-error-message">The password and its confirmation must match<br/></span>
         </div>
       </div>
-      <div v-if = "isLogined">
-          <span>Добро пожаловать на сайт, наведите мышкой на меню и перейдите в нужную вкладку!</span><br/><br/><br/>
+      <div v-if = "isLogined" class = "home-page-info">
+          <span>Welcome to the site!</span><br/><br/>
+          <span>Here you can study the material about English and practice your knowledge.</span>
       </div>
   </div>
 </template>
 
-
+<style scoped>
+.home-page-info{
+    font-size: 25px;
+}
+.authentification-form {
+    width: 250px;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin: -125px 0 0 -125px;
+}
+.login-form{
+    margin-top: 2%;
+}
+.login{
+    margin: 5%;
+    text-align: center;
+}
+</style>
 
 <script>
 import api from '../api/api'

@@ -1,17 +1,14 @@
 <template>
   <div class="header">
-    <img src = "../assets/logo.png" title="Ваш профиль" style = "width: 70px; height: 70px;" v-on:click = "clickProfile">
-    <img title="Меню" v-if = "$store.state.user.Logined" src = "../assets/menu.png" style = "width: 35px; height: 35px;" v-on:mouseover = "changeShow()" v-on:mouseout = "changeShow()">
+    <img src = "../assets/account.png" title="Your profile" class = "icon-account" v-on:click = "clickProfile">
+    <div class = "navbar">
+      <router-link class = "routes-admin" title="Home" to="/"><img src = "../assets/home.png" class = "icon-navbar"></router-link>
+      <router-link v-if = "this.$store.state.user.Logined" class = "routes-admin" title="Grammar" to="/grammar"><img src = "../assets/grammar.png" class = "icon-navbar"></router-link>
+      <router-link v-if = "this.$store.state.user.Logined" class = "routes-admin" title="Trainings" to="/trainings"><img src = "../assets/training.png" class = "icon-navbar"></router-link>
+      <router-link v-if = "this.$store.state.user.Logined" class = "routes-admin" title="Dictionary" to="/dictionary"><img src = "../assets/dictionary.svg" class = "icon-navbar"></router-link>
+      <router-link v-if = "this.$store.state.user.Role == 'admin'" class = "routes-admin" title="Admin panel" to="/admin/rules"><img src = "../assets/adminpanel.png" class = "icon-navbar"></router-link>
+    </div>
     <profile v-if = "displayProfile" v-on:closeform = "displayProfile = false" />
-    <ol class="square" v-if = "hovermenu" v-on:mouseover = "changeShow()" v-on:mouseout = "changeShow()">
-    <ul>
-        <li><router-link to="/">Домой</router-link></li>
-        <li><router-link to="/grammar">Грамматика</router-link></li>
-        <li><router-link to="/trainings">Тренинги</router-link></li>
-        <li><router-link to="/dictionary">Ваш словарь</router-link></li>
-        <li v-if = "this.$store.state.user.Role == 'admin'"><router-link to="/admin/rules">Панель администратора</router-link></li>
-    </ul>
-    </ol>
   </div>
 </template>
 
@@ -43,3 +40,29 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.header img:hover{
+    cursor: pointer;
+}
+.header{
+    background-color: rgba(0,0,0,.1);
+    flex-direction: row;    
+    width: 100%;
+}
+.header-icons{
+    display: flex;
+    width: 10%;
+}
+.navbar{
+  text-align: center;
+}
+.icon-account{
+  position: absolute; 
+  width: 70px;
+  height:70px;
+}
+.icon-navbar{
+  width: 30px;
+}
+</style>

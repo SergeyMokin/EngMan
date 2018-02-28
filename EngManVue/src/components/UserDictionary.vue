@@ -6,7 +6,7 @@
             <div v-if = "errorMessage" class = "span-error-message">{{errorMessage}}</div>
             <div v-for = 'el in sortWords' :key = 'el.Id'>
                 <div class = "list--element" style = "cursor: default">
-                    <a>[{{el.Category}}]: {{el.Original}} - {{el.Translate}}</a>
+                    <a>{{el.Original}} - {{el.Translate}}</a>
                     <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteUserWord(el.WordId);"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
                 </div>
             </div>
