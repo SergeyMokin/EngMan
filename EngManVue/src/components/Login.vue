@@ -113,7 +113,6 @@ export default {
             .then(result =>{
                 if(result.userName)
                 {
-                    console.log(result);
                     this.$cookie.delete('user.login.token.localhost:8080');
                     this.$cookie.set('user.login.token.localhost:8080', result.access_token, 1);
                     api.getUserData()
