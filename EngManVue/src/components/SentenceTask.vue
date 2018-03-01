@@ -145,17 +145,17 @@ export default {
             this.completemessage = 'You have successfully completed! Correct answers: ' + this.goodAnswer + '/' + (this.countOfSentences-1);
         }
         alert(this.completemessage);
-        this.countOfSentences = 0,
-        this.completemessage = '',
-        this.indexes = '',
-        this.goodAnswer = 0,
-        this.attempt = 0,
-        this.inProgress = false,
-        this.errormessage = '',
-        this.category = '',
-        this.show = false,
-        this.sentence = {},
-        this.splitsentence = [],
+        this.countOfSentences = 0
+        this.completemessage = ''
+        this.indexes = ''
+        this.goodAnswer = 0
+        this.attempt = 0
+        this.inProgress = false
+        this.errormessage = ''
+        this.category = ''
+        this.show = false
+        this.sentence = {}
+        this.splitsentence = []
         this.returnSentence = {
             SentenceTaskId: -1,
             Sentence: '',

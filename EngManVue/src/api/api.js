@@ -138,7 +138,7 @@ export default {
     .catch(e => e);
   },
   verificationWordMap(wordmap, translate){
-    return axios.post(url + '/word/VerificationCorrectness', wordmap, translate)
+    return axios.post(url + '/word/VerificationCorrectness?translate=' + translate, wordmap)
   },
   getAllCategoriesSentences(){
     return axios.get(url + '/sentencetask/GetAllCategories')

@@ -3,7 +3,7 @@ import Rules from '../src/components/Rules'
 import Trainings from '../src/components/Trainings'
 import Grammar from '../src/components/Grammar'
 import SentenceTask from '../src/components/SentenceTask'
-import WordMapTask from '../src/components/WordMap'
+import WordTranslateTask from '../src/components/WordTranslateTask'
 import User from '../src/components/User'
 import AdminRule from '../src/components/AdminRule'
 import AdminSentence from '../src/components/AdminSentence'
@@ -22,7 +22,7 @@ const routes = [
     , { path: '/dictionary', component: UserDictionary }
     , { path: '/grammar/rules', component: Rules }
     , { path: '/grammar/sentencetask', component: SentenceTask }
-    , { path: '/trainings/wordmap', component: WordMapTask }
+    , { path: '/trainings/word_translate_task', component: WordTranslateTask }
     , { path: '/trainings/guessestheimages', component: GuessesTheImages }
     , { path: '/admin/rules', component: AdminRule }
     , { path: '/admin/sentences', component: AdminSentence }
