@@ -30,9 +30,9 @@
               </div>
           </div>
       </div>
-      <div class = "input-form-mes">
+      <div class = "input-form-mes" v-on:keyup.enter="sendMessage()">
             <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''"/>
-            <span style = "float: right; font-size:10px; cursor: pointer; margin-right: 15px; margin-top: 5px" v-on:click = "sendMessage();"><img title="Отправить" style = "width: 60px; height: auto" type = "img" src = "../assets/send-icon.png"></span>
+            <span style = "float: right; font-size: 10px; cursor: pointer; margin-right: 25px;" v-on:click = "sendMessage();"><img title="Отправить" style = "width: 30px; height: auto" type = "img" src = "../assets/send-icon.png"></span>
       </div>
   </div>
 </template>

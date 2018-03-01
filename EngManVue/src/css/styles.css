@@ -21,8 +21,9 @@ label{
     color: rgb(75, 75, 75);
 }
 .main-content-center{
-    margin: 1.5% 15% 3% 15%;
-    width: 70%;
+    margin: 2% 5% 3% 5%;
+    text-align: center;
+    width: 90%;
 }
 .span-error-message{
     color: red;
@@ -186,7 +187,7 @@ label{
     border: none;
     outline:none;
     border-radius: 5px;
-    width: 250px;
+    width: 300px;
     height: 25px;
     text-align: center;
     font-size: 16px;
@@ -206,14 +207,14 @@ label{
     text-align: center;
     display: table;
     background: rgb(248, 248, 248);
-    border: solid 1px rgb(182, 182, 182);
+    border-radius:5px;
+    box-shadow: 0px 0px 10px #000;
     outline:none;
-    border-radius: 5px;
 }
 .messages{
     margin: 0.5%;
     margin-left: 10px;
-    height: 245px;
+    height: 280px;
     overflow-y: scroll;
 }
 .select-form-mes.messages-input-choosen{
@@ -222,7 +223,7 @@ label{
 .new-mess-users-list{
     margin: 0.5%;
     margin-left: 10px;
-    height: 245px;
+    height: 280px;
     overflow-y: scroll;
 }
 .new-mess-users-element{
@@ -285,7 +286,7 @@ label{
 }
 .textarea-mes{
     width: 250px;
-    height: 70px;
+    height: 35px;
     border-radius: 5px;
     border-style: solid;
     border-width: 1px;
@@ -469,4 +470,32 @@ label{
       -o-transform: rotate(360deg);
       transform: rotate(360deg);
     }
+}
+.b-container{
+    width:200px;
+    height:150px;
+    background-color: #ccc;
+    margin:0px auto;
+    padding:10px;
+    font-size:30px;
+    color: #fff;
+}
+.b-popup{
+    width:100%;
+    min-height:100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow:hidden;
+    position:fixed;
+    top:0px;
+}
+.b-popup .b-popup-content{
+    top: 20%;
+    left: 50%;
+    width: 300px;
+    margin: auto auto auto -150px;
+    padding:10px;
+    background-color: #e6e6e6;
+    border-radius:5px;
+    box-shadow: 0px 0px 10px #000;
+    position: absolute;
 }

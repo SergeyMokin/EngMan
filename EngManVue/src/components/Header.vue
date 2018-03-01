@@ -55,7 +55,7 @@ export default {
     width: 10%;
 }
 .navbar{
-  text-align: center;
+  margin-left: 75px;
 }
 .icon-account{
   position: absolute; 

@@ -234,7 +234,6 @@ C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.AI.ServerTelemetryCha
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.AI.Web.xml
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.Cors.dll
-C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.dll
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.Security.dll
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.Security.OAuth.dll
 C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Owin.dll
@@ -505,3 +504,8 @@ C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngMan\bin\Microsoft.Owin.Hos
 C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngMan\bin\Microsoft.Owin.Testing.dll
 C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngMan\bin\Microsoft.Owin.Hosting.xml
 C:\Users\Siarhei_Mokin\Documents\git\myself\EngMan\EngMan\bin\Microsoft.Owin.Testing.xml
+C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.dll
+C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.Hosting.dll
+C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.Testing.dll
+C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.Hosting.xml
+C:\Users\limon\Documents\Tasks\EngMan\EngMan\bin\Microsoft.Owin.Testing.xml
