@@ -87,13 +87,18 @@ namespace EngMan.Repository
             var entity = context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
             if (entity == null)
             {
-                user.Password = Extensions.Extensions.HashPassword(user.Password);
-                user.Email = user.Email.ToLower();
-                user.FirstName = user.FirstName.Substring(0, 1).ToUpper() + user.FirstName.Remove(0, 1);
-                user.LastName = user.LastName.Substring(0, 1).ToUpper() + user.LastName.Remove(0, 1);
-                if (user.Id == 0)
+                User added = new User
                 {
-                    context.Users.Add(user);
+                    Id = user.Id,
+                    FirstName = user.FirstName.Substring(0, 1).ToUpper() + user.FirstName.Remove(0, 1),
+                    LastName = user.LastName.Substring(0, 1).ToUpper() + user.LastName.Remove(0, 1),
+                    Email = user.Email.ToLower(),
+                    Password = Extensions.Extensions.HashPassword(user.Password),
+                    Role = user.Role
+                };
+                if (added.Id == 0)
+                {
+                    context.Users.Add(added);
                     context.SaveChanges();
                     return true;
                 }

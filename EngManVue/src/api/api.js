@@ -12,22 +12,20 @@ export default {
   login(model){
     return axios.post(url + '/account/login', model)
     .then(response => {
-      axios.defaults.headers.common['Authorization'] ='bearer ' + response.data.access_token;
       return response.data;
     })
     .catch(e => e)
   },
   registration(model){
     return axios.post(url + '/account/registration', model)
-    .then(repsonse => response.data)
+    .then(res => res.data)
     .catch(e => e)
   },
   signout(){
     var vue = this;
     return axios.post(url + '/account/logout')
     .then(response => {
-      vue.deleteToken();
-      response.data
+      return response.data;
     })
     .catch(e => e);
   },
@@ -134,13 +132,13 @@ export default {
   verificationSentenceTask(sentence){
     return axios.post(url + '/sentencetask/verificationcorrectness', sentence)
   },
-  getWordMap(category, indexes){
-    return axios.get(url + '/word/getwordmap?category=' + category + '&indexes=' + indexes)
+  getWordMap(category, indexes, translate){
+    return axios.get(url + '/word/getwordmap?category=' + category + '&indexes=' + indexes + '&translate=' + translate)
     .then(response => response.data)
     .catch(e => e);
   },
-  verificationWordMap(wordmap){
-    return axios.post(url + '/word/VerificationCorrectness', wordmap)
+  verificationWordMap(wordmap, translate){
+    return axios.post(url + '/word/VerificationCorrectness', wordmap, translate)
   },
   getAllCategoriesSentences(){
     return axios.get(url + '/sentencetask/GetAllCategories')

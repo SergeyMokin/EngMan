@@ -37,9 +37,9 @@ namespace EngManTests.Controllers
             _service.Setup(x => x.GetAllCategories()).Returns(data.GroupBy(x => x.Category).Select(x => x.Key));
             _service.Setup(x => x.GetByCategory(It.IsAny<string>()))
                 .Returns<string>(str => data.Where(x => x.Category.Equals(str)));
-            _service.Setup(x => x.GetTask(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns<string, string>((str, arr) => new MapWord { WordId = 1 });
-            _service.Setup(x => x.VerificationCorrectness(It.IsAny<Word>()))
+            _service.Setup(x => x.GetTask(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Returns<string, string, bool>((str, arr, tr) => new MapWord { WordId = 1 });
+            _service.Setup(x => x.VerificationCorrectness(It.IsAny<Word>(), It.IsAny<bool>()))
                 .Returns(true);
             controller = new WordController(_service.Object);
             service = _service.Object;
@@ -120,16 +120,16 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void WordControllerTest_GetTask()
         {
-            var expected = service.GetTask("Category1", "1");
-            var actual = controller.GetWordMap("Category1", "1") as OkNegotiatedContentResult<MapWord>;
+            var expected = service.GetTask("Category1", "1", true);
+            var actual = controller.GetWordMap("Category1", "1", true) as OkNegotiatedContentResult<MapWord>;
             Assert.AreEqual(expected.WordId, actual.Content.WordId);
         }
 
         [TestMethod]
         public void WordControllerTest_VerificationCorrectness()
         {
-            var expected = service.VerificationCorrectness(new Word());
-            var actual = controller.VerificationCorrectness(new Word()) as OkNegotiatedContentResult<bool>;
+            var expected = service.VerificationCorrectness(new Word(), true);
+            var actual = controller.VerificationCorrectness(new Word(), true) as OkNegotiatedContentResult<bool>;
             Assert.AreEqual(expected, actual.Content);
         }
     }

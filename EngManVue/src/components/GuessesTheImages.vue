@@ -1,12 +1,13 @@
 <!--edit-->
 <template>
+<div>
+  <div class="loading" v-if = "inProgress">Loading&#8230;</div>
   <div class="tasks-align">
-      <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <h2>Угадай что на картинке</h2><br/>
       <div v-if = "!show">
         <div class = "icon-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
         <div v-on:click = "downloadTask()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
-        <select v-model = "category">
+        <select v-model = "category" class = "select-form">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
@@ -24,6 +25,7 @@
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
+</div>
 </template>
 
 <script>

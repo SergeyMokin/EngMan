@@ -25,9 +25,9 @@ namespace EngMan.Models
         [DataMember]
         public int WordId { get; set; }
         [DataMember]
-        public string Original { get; set; }
+        public string Word { get; set; }
         [DataMember]
-        public IEnumerable<string> Translate { get; set; }
+        public IEnumerable<string> Answers { get; set; }
         [DataMember]
         public string Category { get; set; }
     }

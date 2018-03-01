@@ -26,10 +26,12 @@ namespace EngMan.Service
         //get all categories of words
         IEnumerable<string> GetAllCategories();
 
+        //translate - return original and them translations, !translate - return translate and them origins
         //get WordMap task
-        MapWord GetTask(string category, string indexes);
+        MapWord GetTask(string category, string indexes, bool translate);
 
+        //translate - verification correctness of translate, !translate - verification correctness of original
         //verifivation correctness of the WordMap taks
-        bool VerificationCorrectness(Word task);
+        bool VerificationCorrectness(Word task, bool translate);
     }
 }

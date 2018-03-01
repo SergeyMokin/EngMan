@@ -149,7 +149,7 @@ namespace EngMan.Service
                     }
                     if (tasks != null)
                     {
-                        if (tasks.Count() >= (10 - ParsedIndexes.Count()))
+                        if (tasks.Count() >= 1)
                         {
                             var rand = new Random();
                             var index = rand.Next(0, tasks.Count());

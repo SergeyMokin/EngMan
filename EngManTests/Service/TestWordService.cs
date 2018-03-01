@@ -201,7 +201,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.GetTask(null, null);
+                service.GetTask(null, null, false);
             }
             catch (Exception e)
             {
@@ -221,7 +221,7 @@ namespace EngManTests.Service
                 Transcription = "Transcription" + 1
             };
             var expected = true;
-            var actual = service.VerificationCorrectness(model);
+            var actual = service.VerificationCorrectness(model, true);
             Assert.AreEqual(expected, actual);
         }
 
@@ -230,7 +230,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.VerificationCorrectness(null);
+                service.VerificationCorrectness(null, true);
             }
             catch (Exception e)
             {

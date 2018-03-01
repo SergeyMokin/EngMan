@@ -1,5 +1,5 @@
 <template>
-    <div class = "main-content-center">
+    <div class = "main-content">
         <div class = "error-header">Network error - can not connect to the server</div>
         <div class = "error-content">
             <b>Most likely causes:</b>

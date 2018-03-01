@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="loading" v-if = "inprogress">Loading&#8230;</div>
+    <div class="loading" v-if = "inProgress">Loading&#8230;</div>
     <div class = "b-popup" v-if = "authentification">
         <div class = "b-popup-content">
             <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeForm()"><img title="Close" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
             <div class = "login-form">
                 <label for = "username-login">Email</label><br/>
-                <input v-bind:class = "{'input-form--error': $v.user.username.$error}" class = "input-form" id = "username-login" type = 'text' v-model = "user.username"/><br/>
+                <input v-bind:class = "{'input-form--error': $v.user.Email.$error}" class = "input-form" id = "username-login" type = 'text' v-model = "user.Email"/><br/>
             </div>
             <div class = "login-form">
                 <label for = "password-login">Password</label><br/>
-                <input v-bind:class = "{'input-form--error': $v.user.password.$error}" class = "input-form" id = "password-login" type = 'password' v-model = "user.password"/><br/>
+                <input v-bind:class = "{'input-form--error': $v.user.Password.$error}" class = "input-form" id = "password-login" type = 'password' v-model = "user.Password"/><br/>
             </div>
             <div class = "routes-admin" style = "padding: 5px; cursor: pointer; margin: 5px;width: 100px; float: right;" v-on:click = "login()">Log In</div><br/>
             <span v-if = "$v.user.$error" class = "span-error-message">Mail and password are required<br/></span>
@@ -48,7 +48,7 @@
             <span v-if = "$v.registrationUser.confirmPassword.$error" class = "span-error-message">The password and its confirmation must match. </span>
         </div>
     </div>
-    <div class="main-content-center" id = "login-form">
+    <div class="main-content center-info" id = "login-form">
       <div v-if = "!isLogined">
         <span style = "font-size: 25px">To access the content of the site you need to log in or register: </span><br/><br/>
             <div class = "routes-admin" style = "padding: 15px; cursor: pointer; font-size:25px" v-on:click = "authentification = !authentification; registration = false;">Log in</div>
@@ -85,15 +85,14 @@ import { required, minLength, sameAs, email } from 'vuelidate/lib/validators'
 export default {
     data(){
         return {
-            inprogress: false,
+            inProgress: false,
             badrequest: false,
             authentification: false,
             registration: false,
             clickAtForm: true,
             user: {
-                grant_type: 'password'
-                , username: ''
-                , password: ''
+                Email: ''
+                , Password: ''
             },
             registrationUser: {
                 FirstName: '',
@@ -106,41 +105,45 @@ export default {
     },
     validations: {
             user: {
-                username: { required },
-                password: { required }
+                Email: { required },
+                Password: { required }
             },
             registrationUser: {
                 FirstName: { required },
                 LastName: { required },
                 Email: { required, email },
-                Password: { required, minLength: minLength(8) },
+                Password: { 
+                    required, 
+                    isPassword: function (val) {
+                        if (val === 'undefined' || val === null || val === '') return true;
+                        if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(val)) return true;
+                        return false;
+                    }
+                },
                 confirmPassword: { sameAsPassword: sameAs('Password') }
             },
     },
     methods: {
         login(){
-            if(this.inprogress) return;
-            this.inprogress = true;
+            if(this.inProgress) return;
+            this.inProgress = true;
             this.badrequest = false;
             this.$v.$touch();
             if(this.$v.user.$invalid) 
             {
-                this.inprogress = false;
+                this.inProgress = false;
                 return;
             };
-            api.login( 
-            {
-                Email: this.user.username,
-                Password: this.user.password
-            })
+            api.login(this.user)
             .then(result =>{
-                if(result.userName)
+                if(result.access_token)
                 {
                     this.$cookie.delete('user.login.token.localhost:8080');
                     this.$cookie.set('user.login.token.localhost:8080', result.access_token, 1);
+                    api.addToken(result.access_token);
                     api.getUserData()
                     .then(res => {
-                        if(res.Id)
+                        if(res.Email)
                         {
                             this.$store.state.user.Logined = true;
                             this.$store.state.user.Id = res.Id;
@@ -149,40 +152,56 @@ export default {
                             this.$store.state.user.LastName = res.LastName;
                             this.$store.state.user.Email = res.Email;
                             this.$store.dispatch('getMessages');
-                            this.$store.dispatch('getUsers');
                             this.$store.dispatch('connectToServ', this.$store.state.user);
                             this.clearLoginForm();
-                            this.inprogress = false;
+                            this.inProgress = false;
                         }
                         else{
-                            console.log(result);
-                            console.log('NotFound404');
-                            this.inprogress = false;
+                            if(result.response)
+                            {
+                                if(result.response.data.Message)
+                                {
+                                    this.inProgress = false;
+                                    this.badrequest = true;
+                                    console.log(result.response.data.Message);
+                                    return;
+                                }
+                            }
+                            console.log('Bad request 400');
+                            this.inProgress = false;
                             this.badrequest = true;
                         }
                     })
                 }
                 else{
-                    console.log(result);
-                    console.log('NotFound404');
-                    this.inprogress = false;
+                    if(result.response)
+                    {
+                        if(result.response.data.Message)
+                        {
+                            this.inProgress = false;
+                            console.log(result.response.data.Message);
+                            return;
+                        }
+                    }
+                    console.log('Bad request 400');
+                    this.inProgress = false;
                     this.badrequest = true;
                 }
             })
             .catch(e => {
-                console.log('NotFound404');
-                this.inprogress = false;
+                console.log('Bad request 400');
+                this.inProgress = false;
                 this.badrequest = true;
             })
         },
         registrationUserReq(){
-            if(this.inprogress) return;
-            this.inprogress = true;
+            if(this.inProgress) return;
+            this.inProgress = true;
             this.badrequest = false;
             this.$v.$touch();
             if(this.$v.registrationUser.$invalid) 
             {
-                this.inprogress = false;
+                this.inProgress = false;
                 return;
             };
             var user = {
@@ -194,20 +213,63 @@ export default {
                 Role: 'user'
             }
             api.registration(user)
-            .then(res => {
-                this.user.username = this.registrationUser.Email;
-                this.user.password = this.registrationUser.Password;
-                this.authentification = false;
-                this.registration = false;
-                this.showHelp = false;
-                this.inprogress = false;
-                this.login();
+            .then(result =>{
+                if(result.access_token)
+                {
+                    this.$cookie.delete('user.login.token.localhost:8080');
+                    this.$cookie.set('user.login.token.localhost:8080', result.access_token, 1);
+                    api.addToken(result.access_token);
+                    api.getUserData()
+                    .then(res => {
+                        if(res.Email)
+                        {
+                            this.$store.state.user.Logined = true;
+                            this.$store.state.user.Id = res.Id;
+                            this.$store.state.user.Role = res.Role;
+                            this.$store.state.user.FirstName = res.FirstName;
+                            this.$store.state.user.LastName = res.LastName;
+                            this.$store.state.user.Email = res.Email;
+                            this.$store.dispatch('getMessages');
+                            this.$store.dispatch('connectToServ', this.$store.state.user);
+                            this.clearLoginForm();
+                            this.inProgress = false;
+                        }
+                        else{
+                            if(result.response)
+                            {
+                                this.inProgress = false;
+                                this.badrequest = true;
+                                console.log(result.response.data.Message);
+                                return;
+                            }
+                            console.log('Bad request 400');
+                            this.inProgress = false;
+                            this.badrequest = true;
+                        }
+                    })
+                }
+                else{
+                    if(result.response)
+                    {
+                        this.inProgress = false;
+                        console.log(result.response.data.Message);
+                        return;
+                    }
+                    console.log('Bad request 400');
+                    this.inProgress = false;
+                    this.badrequest = true;
+                }
+            })
+            .catch(e => {
+                console.log('Bad request 400');
+                this.inProgress = false;
+                this.badrequest = true;
             })
         },
         closeForm()
         {
-            this.user.username = '';
-            this.user.password = '';
+            this.user.Email = '';
+            this.user.Password = '';
             this.registrationUser.FirstName = '';
             this.registrationUser.LastName = '';
             this.registrationUser.Email = '';
@@ -217,7 +279,7 @@ export default {
             this.registration = false;
             this.showHelp = false;
             this.badrequest = false;
-            this.inprogress = false;
+            this.inProgress = false;
             this.$v.$reset();
         },
         clearLoginForm(){
@@ -226,6 +288,7 @@ export default {
                 this.closeForm();
             }
             else{
+                this.inProgress = false;
                 this.badrequest = true;
             }
         },

@@ -147,11 +147,11 @@ namespace EngMan.Controllers
 
         //GET api/word/GetWordMap
         [HttpGet]
-        public IHttpActionResult GetWordMap(string category, string indexes)
+        public IHttpActionResult GetWordMap(string category, string indexes, bool translate) 
         {
             try
             {
-                var task = service.GetTask(category, indexes);
+                var task = service.GetTask(category, indexes, translate);
                 if (task != null)
                 {
                     return Ok(task);
@@ -166,11 +166,11 @@ namespace EngMan.Controllers
 
         //POST api/word/VerificationCorrectness
         [HttpPost]
-        public IHttpActionResult VerificationCorrectness(Word word)
+        public IHttpActionResult VerificationCorrectness(Word word, bool translate)
         {
             try
             {
-                var task = service.VerificationCorrectness(word);
+                var task = service.VerificationCorrectness(word, translate);
                 return Ok(task);
             }
             catch (Exception ex)

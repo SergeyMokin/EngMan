@@ -1,8 +1,9 @@
 <template>
+<div>
+  <div class="loading" v-if = "inProgress">Loading&#8230;</div>
   <div class="profile" id = "profile-form">
-      <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div v-if = "!$store.state.user.Logined">
-          <span>Вам необходимо войти в профиль</span>
+          <span>You need to be logged in.</span>
       </div>
       <div v-if = "$store.state.user.Logined" style = "display: grid">
           <a style = "margin-bottom: 5px" v-if = "$store.state.user.Logined"><b>{{$store.state.user.FirstName}}</b></a>
@@ -10,6 +11,7 @@
           <div class = "routes-admin" style = "padding: 5px; cursor: pointer" v-on:click = "logout()">Logout</div>
       </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -29,16 +31,24 @@ export default {
             proxy.invoke("Disconnect");
             api.signout()
             .then(res => {
-                this.$cookie.delete('user.login.token.localhost:8080');
-                this.$store.state.user.Logined = false;
-                this.$store.state.user.Id = '';
-                this.$store.state.user.Role = '';
-                this.$store.state.user.FirstName = '';
-                this.$store.state.user.LastName = '';
-                this.$store.state.user.Email = '';
-                this.inProgress = false;
-                this.$router.push('/'); 
-                this.$emit('closeform'); 
+                if(res == "Successfully completed")
+                {
+                    this.$cookie.delete('user.login.token.localhost:8080');
+                    this.$store.state.user.Logined = false;
+                    this.$store.state.user.Id = '';
+                    this.$store.state.user.Role = '';
+                    this.$store.state.user.FirstName = '';
+                    this.$store.state.user.LastName = '';
+                    this.$store.state.user.Email = '';
+                    this.inProgress = false;
+                    this.$router.push('/'); 
+                    this.$emit('closeform');
+                }
+                else
+                {
+                    console.log(res);
+                    this.inProgress = false;
+                } 
             })
             .catch(e => {
                 console.log(e);
@@ -82,6 +92,6 @@ export default {
         position: absolute;
         z-index: 99;
         text-align: center;
-        border: solid 1px rgb(19, 19, 19);
+        box-shadow: 3px 5px 15px 0px rgba(0, 0, 0, 0.5);
     }
 </style>

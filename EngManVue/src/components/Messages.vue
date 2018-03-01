@@ -1,21 +1,21 @@
 <template>
+<div>
+  <div class="loading" v-if = "inProgress">Loading&#8230;</div>
   <div id = "messages-view" class = 'messages-view'>
-      <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div class = "label-form-mes">
-            <span>Сообщения</span>
-            <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;"><img title="Закрыть окно" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+            <span>Chat</span>
+            <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;"><img title="Close" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
       </div>
-      <input :disabled = "chooseUser" v-bind:class = "{'messages-input-choosen': chooseUser}" placeholder="Поиск..." type="text" class = "select-form-mes" list="users_emails" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
-      <span v-if = "chooseUser" style = "float: left; font-size:10px; cursor: pointer" v-on:click = "activeInputChooseUser"><img title="Вернуть к выбору пользователя" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>
+      <input :disabled = "chooseUser" v-bind:class = "{'messages-input-choosen': chooseUser}" placeholder="Search..." type="text" class = "select-form-mes" list="users_emails" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
+      <span v-if = "chooseUser" style = "float: left; font-size:10px; cursor: pointer" v-on:click = "activeInputChooseUser"><img title="Return to user selection" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>
       <datalist id = "users_emails">
             <option v-for = "user in users" v-if = "user.Id != $store.state.user.Id" :key = "user.Id">
                 {{user.Email}}
             </option>
       </datalist>
-      <div v-if = "beneficiary == undefined && beneficiaryEmail == '' && $store.state.newmessUsers.length > 0" class = "new-mess-users-list">
-          <p><b>New messages:</b></p>
-          <div v-for = "el in $store.state.newmessUsers" :key = "el.Id" class = "new-mess-users-element" v-on:click = "beneficiaryEmail = el.Email;changeBeneficiary(beneficiaryEmail)">
-            {{el.Email}}
+      <div v-if = "beneficiary == undefined && beneficiaryEmail == ''" class = "new-mess-users-list" style = "height: 330px;">
+          <div v-for = "el in sortednewmessages" :key = "el.MessageId" class = "message-beneficiary pointer" style = "white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" v-on:click = "beneficiaryEmail = el.Sender.Email;changeBeneficiary(beneficiaryEmail)">
+            {{el.Sender.FirstName}}: {{el.Text}}
           </div>
       </div>
       <div v-else class = "messages">
@@ -30,11 +30,12 @@
               </div>
           </div>
       </div>
-      <div class = "input-form-mes" v-on:keyup.enter="sendMessage()">
+      <div v-if = "chooseUser" class = "input-form-mes" v-on:keyup.enter="sendMessage()">
             <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''"/>
-            <span style = "float: right; font-size: 10px; cursor: pointer; margin-right: 25px;" v-on:click = "sendMessage();"><img title="Отправить" style = "width: 30px; height: auto" type = "img" src = "../assets/send-icon.png"></span>
+            <span style = "float: right; font-size: 10px; cursor: pointer; margin-right: 25px;" v-on:click = "sendMessage();"><img title="Send" style = "width: 30px; height: auto" type = "img" src = "../assets/send-icon.png"></span>
       </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -71,18 +72,35 @@ export default {
       deleteMessage(id){
           if(this.inProgress) return;
           this.inProgress = true;
-          if(confirm("Вы уверены, что хотите удалить сообщение?") == true){
+          if(confirm("Are you sure you want to delete the message?") == true){
             api.deleteMessage(id)
             .then(result =>{
-                this.$store.dispatch('getMessages');
-                this.inProgress = false;
+                if(typeof(result) == typeof(int))
+                {
+                    this.$store.dispatch('getMessages');
+                    this.inProgress = false;
+                }
+                else
+                {
+                    if(result.response)
+                    {
+                        if(result.response.data.Message)
+                        {
+                            this.inProgress = false;
+                            console.log(result.response.data.Message);
+                            return;
+                        }
+                    }
+                    console.log('Bad request 400');
+                    this.inProgress = false;
+                }
             })
             .catch(e => {
-                alert('Ошибка удаления');
+                console.log(e);
                 this.inProgress = false;
             })
           } else{
-              alert("Вы отменили удаление!");
+              alert("You canceled the deletion!");
               this.inProgress = false;
           }
       },
@@ -123,9 +141,24 @@ export default {
                             {
                                 this.$store.dispatch('getMessages');
                             }
+                            else
+                            {
+                                if(res.response)
+                                {
+                                    if(res.response.data.Message)
+                                    {
+                                        this.inProgress = false;
+                                        console.log(res.response.data.Message);
+                                        return;
+                                    }
+                                }
+                                console.log('Bad request 400');
+                                this.inProgress = false;
+                            }
                         }
                     })
                     .catch(e => {
+                        console.log(e);
                         this.inProgress = false;
                     })
                 }
@@ -160,7 +193,7 @@ export default {
                 })
                 .then(res => 
                 {
-                    if(res.MessageId > 0)
+                    if(res === true)
                     {
                         var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
                         proxy.invoke("Send", {
@@ -173,6 +206,23 @@ export default {
                         });
                         this.$store.dispatch('getMessages')
                     }
+                    else
+                    {
+                        if(res.response)
+                        {
+                            if(res.response.data.Message)
+                            {
+                                this.inProgress = false;
+                                console.log(res.response.data.Message);
+                                return;
+                            }
+                        }
+                    }
+                })
+                .catch(e =>
+                {
+                    console.log(e);
+                    this.inProgress = false;
                 })
             }   
           }
@@ -183,7 +233,7 @@ export default {
                 var date = new Date(_date);
                 var hours = date.getHours() < 10 ? "0"+date.getHours() : date.getHours();
                 var minutes = date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes();
-                return date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() + ' - ' + hours + ":" + minutes;
+                return date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() + ' ' + hours + ":" + minutes;
       }
   },
   computed: {
@@ -197,6 +247,25 @@ export default {
           return this.$store.getters.messages.filter(function(mes){
               return mes.Beneficiary.Id == vue.beneficiary.Id || mes.Sender.Id == vue.beneficiary.Id
           });
+      },
+      sortednewmessages(){
+          var newmess = [];
+          for(var i = this.$store.state.newmessages.length-1; i >= 0; i--)
+          {
+              var contain = false;
+              for(var k = 0; k < newmess.length; k++)
+              {
+                  if(newmess[k].Sender.Id == this.$store.state.newmessages[i].Sender.Id)
+                  {
+                      contain = true;
+                  }
+              }
+              if(!contain)
+              {
+                  newmess.push(this.$store.state.newmessages[i]);
+              }
+          }
+          return newmess;
       }
   },
   created(){

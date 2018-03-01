@@ -1,7 +1,7 @@
 <template>
   <div v-if = "$store.state.user.Role == 'admin'">
+      <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div v-if = "!clickWord" class="view-list" >
-        <div class="loading" v-if = "inProgress">Loading&#8230;</div>
         <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
         <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>

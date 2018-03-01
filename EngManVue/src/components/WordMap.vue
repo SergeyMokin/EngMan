@@ -1,7 +1,8 @@
 <template>
+<div>
+  <div class="loading" v-if = "inProgress">Loading&#8230;</div>
   <div class="tasks-align">
-      <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-      <h2>Карты слов</h2><br/>
+      <h2>Word - translate</h2><br/>
       <div v-if = "!show">
         <div class = "icon-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
         <div v-on:click = "downloadWordMap()"><img title="Старт" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
@@ -23,9 +24,9 @@
         <div class = "icon-close" v-on:click = "closeForm()"><img src = "../assets/close-icon.png" title="Завершить" style = "margin: 5px; width: 20px; height: 20px;"></div>
         <div v-on:click = "downloadWordMap()"><img title="Следующий" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/arrow-right.png"></div>
         <div v-on:click = "verificationCorrectness()"><img title="Проверить" style = "width: 20px; height: auto; margin-right: 50px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
-        <span style = "font-size: larger;">{{word.Original}}</span>
+        <span style = "font-size: larger;">{{word.Word}}</span>
         <br/>
-        <div v-for = "el in word.Translate" :key = "el" v-on:click = "returnWord.Translate = el">
+        <div v-for = "el in word.Answers" :key = "el.WordId" v-on:click = "returnWord.Translate = el">
             <div v-bind:class = "{'selected-wordmap': el == returnWord.Translate}" class = "list--element pointer">
                 {{el}}
             </div>
@@ -33,6 +34,7 @@
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/>
       </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -97,15 +99,15 @@ export default {
           this.completemessage = '';
           if(this.categories.indexOf(this.category) != -1)
           {
-            api.getWordMap(this.category, this.indexes)
+            api.getWordMap(this.category, this.indexes, true)
             .then(result => {
-                    if(result.Original)
+                    if(result.Word)
                     {
                         this.countOfWords++;
                         this.indexes += result.WordId + ',';
                         this.word = result;
                         this.returnWord.WordId = this.word.WordId;
-                        this.returnWord.Original = this.word.Original;
+                        this.returnWord.Original = this.word.Word;
                         this.returnWord.Category = this.word.Category;
                         this.show = true;
                         this.inProgress = false;
@@ -128,7 +130,7 @@ export default {
           if(this.inProgress) return;
           this.inProgress = true;
           this.errormessage = '';
-          api.verificationWordMap(this.returnWord)
+          api.verificationWordMap(this.returnWord, true)
           .then(result =>
           {
               if(result.data){
