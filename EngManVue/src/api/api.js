@@ -75,12 +75,12 @@ export default {
     .catch(e => e);
   },
   getAllCategoriesOfUserDictionary(){
-    return axios.get(url + '/account/GetByCategoryDictionary')
+    return axios.get(url + '/account/GetAllCategoriesOfDictionary')
     .then(res => res.data)
     .catch(e => e)
   },
   getUserDictionaryByCategory(category) {
-    return axios.get(url + '/account/GetByCategory?category=' + category)
+    return axios.get(url + '/account/GetByCategoryDictionary?category=' + category)
     .then(response => response.data)
     .catch(e => e);
   },

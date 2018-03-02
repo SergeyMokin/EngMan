@@ -4,22 +4,24 @@
   <div v-if = "show" class = "b-popup">
       <div class = "b-popup-content">
         <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeForm(false)"><img title="End" style = "width: 20px; height: auto;" type = "img" src = "../assets/close-icon.png"></span>
-        <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "downloadWordMap()"><img title="Next" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-right.png"></span>
-        <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "verificationCorrectness()"><img title="Verification" style = "width: 20px; height: auto" type = "img" src = "../assets/start-icon.png"></span>
-        <div style = "font-size: larger; margin-left: 10px">{{word.Word}}</div>
-        <div title="Choose" v-for = "el in word.Answers" :key = "el.WordId" v-on:click = "returnWord.Original = el">
-            <div v-bind:class = "{'selected-wordmap': el == returnWord.Original}" class = "list--element pointer">
-                {{el}}
-            </div>
+        <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "nextWord()"><img title="Next" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-right.png"></span>
+        <br/><br/>
+        <div style = "font-size: larger; width: 70%; text-align: center; margin-left: 15%;">{{words[countOfWords].Original}}</div><br/>
+        <div style = "font-size: larger; width: 70%; text-align: center; margin-left: 15%;">{{words[countOfWords].Transcription}}</div><br/>
+        <div v-if = "clickIKnow || clickIDoNotKnow" style = "font-size: 17px; width: 70%; text-align: center; margin-left: 15%;">{{words[countOfWords].Translate}}</div><br/>
+        <div v-if = "!clickIKnow && !clickIDoNotKnow" style = "font-size: larger; width: 70%; text-align: center; margin-left: 15%;">
+            <span class = "routes-admin pointer" style = "font-size: 17px" v-on:click = "clickIDoNotKnow = true; addWordToDictionary(words[countOfWords]); badAnswer++">I don't know</span>
+            <span class = "routes-admin pointer" style = "font-size: 17px" v-on:click = "clickIKnow = true;">I know</span><br/>
         </div>
+        <div v-else style = "font-size: larger; width: 70%; text-align: center; margin-left: 15%;"><span class = "routes-admin pointer" style = "font-size: 17px" v-on:click = "nextWord()">Next</span></div><br/>
         <span v-if = "errormessage" class = "span-error-message">{{errormessage}}</span>
       </div>
   </div>
   <div class="tasks-align">
-      <span style = "font-size: 30px">Translate-word</span><br/>
+      <span style = "font-size: 30px">Word Cards</span><br/>
       <div>
         <div class = "icon-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Back" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-        <div v-on:click = "downloadWordMap()"><img title="Start" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
+        <div v-on:click = "show = true"><img title="Start" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
         <select id = "task_word_category" class = "select-form" style = "width: 250px !important;" v-model = "category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
@@ -41,27 +43,22 @@
 import api from '../api/api'
 
 export default {
-  name: 'Translate-word-task',
+  name: 'Word-cards-task',
   data () {
     return {
         choose: false,
         countOfWords: 0,
         completemessage: '',
         indexes: '',
-        goodAnswer: 0,
+        badAnswer: 0,
         attempt: 0,
         inProgress: false,
         errormessage: '',
         categories: [],
         category: '',
         show: false,
-        word: {},
-        returnWord: {
-            WordId: -1,
-            Original: '',
-            Translate: '',
-            Category: '',
-        }
+        clickIKnow: false,
+        clickIDoNotKnow: false
     }
   },
   methods:{
@@ -95,97 +92,36 @@ export default {
               alert('Server is not available');
           })
       },
-      downloadWordMap(){
-          if(this.inProgress) return;
-          this.inProgress = true;
-          this.attempt = 0;
-          this.inProgress = false;
-          this.returnWord.WordId = -1;
-          this.returnWord.Original = '';
-          this.returnWord.Translate = '';
-          this.returnWord.Category = '';
-          this.errormessage = '';
-          this.completemessage = '';
-          if(this.categories.indexOf(this.category) != -1)
-          {
-            api.getWordMap(this.category, this.indexes, false)
-            .then(result => {
-                    if(result.Word)
-                    {
-                        this.countOfWords++;
-                        this.indexes += result.WordId + ',';
-                        this.word = result;
-                        this.returnWord.WordId = this.word.WordId;
-                        this.returnWord.Translate = this.word.Word;
-                        this.returnWord.Category = this.word.Category;
-                        this.show = true;
-                        this.inProgress = false;
-                    }
-                    else{
-                        this.closeForm(true);
-                    }
-                })
-            .catch(e => {
-                this.inProgress = false;
-                this.errormessage = 'Server is not available';
-            });
-          }
-          else{
-              this.inProgress = false;
-              this.errormessage = 'Select a category';
-          }
-      },
-      verificationCorrectness(){
-          if(this.inProgress) return;
-          this.inProgress = true;
-          this.errormessage = '';
-          api.verificationWordMap(this.returnWord, false)
-          .then(result =>
-          {
-              if(result.data){
-                if(this.attempt == 0) this.goodAnswer++;
-                this.inProgress = false;
-                alert('Correct answer');
-                this.downloadWordMap();
-              }
-              else{
-                this.attempt++;
-                this.errormessage = 'Incorrect answer';
-                this.inProgress = false;
-              }
-          })
-          .catch(e => {
-              this.inProgress = false;
-              this.errormessage = 'Server is not available';
-          })
-      },
       closeForm(endoftasks){
-         if(endoftasks)
+        if(endoftasks)
         {
-            this.completemessage = 'You have successfully completed! Correct answers: ' + this.goodAnswer + '/' + this.countOfWords;
+            this.completemessage = 'Added: ' + this.badAnswer + ' words to your dictionary';
         }
         else
         {
-            this.completemessage = 'You have successfully completed! Correct answers: ' + this.goodAnswer + '/' + (this.countOfWords-1);
+            this.completemessage = 'Added: ' + this.badAnswer + ' words to your dictionary';
         }
         alert(this.completemessage);
         this.choose = false
         this.countOfWords = 0
         this.completemessage = ''
         this.indexes = ''
-        this.goodAnswer = 0
+        this.badAnswer = 0
         this.attempt = 0
         this.inProgress = false
         this.errormessage = ''
         this.category = ''
         this.show = false
-        this.word = {}
-        this.returnWord = {
-            WordId: -1,
-            Original: '',
-            Translate: '',
-            Category: '',
-        }
+      },
+      nextWord()
+      {
+          this.countOfWords++;
+          this.clickIKnow = false;
+          this.clickIDoNotKnow = false;
+          if(this.countOfWords >= this.words.length)
+          {
+              this.closeForm(true);
+          }
       }
   },
   created: function()

@@ -160,7 +160,7 @@ export default {
           })
       },
       closeForm(endoftasks){
-         if(endoftasks)
+        if(endoftasks)
         {
             this.completemessage = 'You have successfully completed! Correct answers: ' + this.goodAnswer + '/' + this.countOfWords;
         }
@@ -194,10 +194,31 @@ export default {
       this.inProgress = true;
       api.getAllCategoriesWords()
       .then(res => {
-          this.inProgress = false;
-          this.categories = res;
+          if(res.response)
+          {
+              if(res.response.data.Message)
+              {
+                  this.inProgress = false;
+                  this.errormessage = res.response.data.Message;
+                  return;
+              }
+          }
+          if(res.length > 0)
+          {
+            this.inProgress = false;
+            this.categories = res;
+          }
+          else
+          {
+              this.inProgress = false;
+              console.log(res);
+          }
       })
-      this.inProgress = false;
+      .catch(e => 
+      {
+          this.inProgress = false;
+          console.log(e);
+      })
       this.$store.dispatch('getWords');
   },
   computed:{

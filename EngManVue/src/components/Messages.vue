@@ -175,55 +175,58 @@ export default {
           this.inProgress = true;
           if(this.beneficiary != undefined)
           {
-            if(this.message != '')
+            if(this.message !== undefined && this.message !== null)
             {
-                var date = new Date(Date.now());
-                var hours = date.getHours() < 10 ? "0"+date.getHours() : date.getHours();
-                var minutes = date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes();
-                var seconds = date.getSeconds() < 10 ? "0"+date.getSeconds() : date.getSeconds();
-                var month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
-                var day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
-                api.sendMessage({
-                    MessageId: 0,
-                    SenderId: this.sender.Id,
-                    BeneficiaryId: this.beneficiary.Id,
-                    Text: this.message,
-                    Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
-                    CheckReadMes: 0
-                })
-                .then(res => 
+                if(this.message.match(/([A-Z]|[a-z]|[0-9]|[А-Я]|[а-я])/g))
                 {
-                    if(res === true)
+                    var date = new Date(Date.now());
+                    var hours = date.getHours() < 10 ? "0"+date.getHours() : date.getHours();
+                    var minutes = date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes();
+                    var seconds = date.getSeconds() < 10 ? "0"+date.getSeconds() : date.getSeconds();
+                    var month = (date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
+                    var day = date.getDate() < 10 ? "0"+date.getDate() : date.getDate();
+                    api.sendMessage({
+                        MessageId: 0,
+                        SenderId: this.sender.Id,
+                        BeneficiaryId: this.beneficiary.Id,
+                        Text: this.message,
+                        Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
+                        CheckReadMes: 0
+                    })
+                    .then(res => 
                     {
-                        var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
-                        proxy.invoke("Send", {
-                            MessageId: 0,
-                            SenderId: this.sender.Id,
-                            BeneficiaryId: this.beneficiary.Id,
-                            Text: this.message,
-                            Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
-                            CheckReadMes: 0
-                        });
-                        this.$store.dispatch('getMessages')
-                    }
-                    else
-                    {
-                        if(res.response)
+                        if(res === true)
                         {
-                            if(res.response.data.Message)
+                            var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
+                            proxy.invoke("Send", {
+                                MessageId: 0,
+                                SenderId: this.sender.Id,
+                                BeneficiaryId: this.beneficiary.Id,
+                                Text: this.message,
+                                Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
+                                CheckReadMes: 0
+                            });
+                            this.$store.dispatch('getMessages')
+                        }
+                        else
+                        {
+                            if(res.response)
                             {
-                                this.inProgress = false;
-                                console.log(res.response.data.Message);
-                                return;
+                                if(res.response.data.Message)
+                                {
+                                    this.inProgress = false;
+                                    console.log(res.response.data.Message);
+                                    return;
+                                }
                             }
                         }
-                    }
-                })
-                .catch(e =>
-                {
-                    console.log(e);
-                    this.inProgress = false;
-                })
+                    })
+                    .catch(e =>
+                    {
+                        console.log(e);
+                        this.inProgress = false;
+                    })
+                }
             }   
           }
           this.message = '';

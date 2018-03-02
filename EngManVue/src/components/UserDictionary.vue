@@ -2,9 +2,14 @@
 <div>
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
     <div class="main-content-center">
-    <div class = "icon-close"><router-link to="/"><img src = "../assets/arrow-up.png" title="Назад" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div> 
         <div class = "view-list">
-            <input v-if = "!errorMessage" placeholder="Поиск..." type="text" class = "select-form" v-model = "keyWord" v-on:click = "keyWord = ''"/>
+            <span style = "font-size: 30px">Dictionary</span><br/>
+            <select style = "width: 250px" v-model = "category" class = "select-form" v-on:change = "getWordsByCategory()">
+                <option v-for = "category in categories" :key = "category">
+                    {{category}}
+                </option>
+            </select><br/>
+            <input style = "width: 250px" v-if = "!errorMessage && category.length > 0" placeholder="Поиск..." type="text" class = "select-form" v-model = "keyWord" v-on:click = "keyWord = ''"/>
             <div v-if = "errorMessage" class = "span-error-message">{{errorMessage}}</div>
             <div v-for = 'el in sortWords' :key = 'el.Id'>
                 <div class = "list--element" style = "cursor: default">
@@ -24,6 +29,8 @@
             return {
                 inProgress: false,
                 dictionary: {},
+                category: '',
+                categories: [],
                 errorMessage: '',
                 keyWord: ''
             }
@@ -32,33 +39,19 @@
             deleteUserWord(id){
                 if(this.inProgress) return;
                 this.inProgress = true;
-                if(confirm("Вы уверены, что хотите удалить это слово?") == true){
+                if(confirm("Are you sure you want to delete this word?") == true){
                     api.deleteUserWord(id)
                     .then(res => {
-                        if(res > 0)
+                        if(res === "Delete completed successful")
                         {
-                            alert('Успешно удалён');
+                            alert('Delete completed successful');
                             this.inProgress = true;
-                            api.getUserDictionary()
-                            .then(res => {
-                                if(res.User)
-                                {
-                                    this.dictionary = res;
-                                }
-                                else
-                                {
-                                    this.errorMessage = 'Словарь пуст';
-                                }
-                                this.inProgress = false;
-                            })
-                            .catch(e => {
-                                this.errorMessage = 'Сервер недоступен';
-                                this.inProgress = false;
-                            })  
-                            }
-                            else
-                            {
-                                alert('В базе данных не существует такого слова, обновите страницу');
+                            this.getWordsByCategory();
+                        }
+                        else
+                        {
+                            alert('Delete canceled');
+                            this.inProgress = false;
                         }
                     })
                     .catch(e => {
@@ -66,15 +59,45 @@
                     })
                 }
                 else{
-                    alert('Удаление отменено');
+                    alert('Delete canceled');
                     this.inProgress = false;
                 }
             },
+            getWordsByCategory()
+            {
+                if(this.inProgress) return;
+                this.inProgress = true;
+                api.getUserDictionaryByCategory(this.category)
+                .then(res => {
+                    if(res.response)
+                    {
+                        if(res.response.data.Message)
+                        {
+                            this.inProgress = false;
+                            this.errorMessage = res.response.data.Message;
+                            return;
+                        }
+                    }
+                    if(res.Words.length > 0)
+                    {
+                        this.dictionary = res;
+                        this.inProgress = false;
+                        return;
+                    }
+                    else
+                    {
+                        this.inProgress = false;
+                        console.log(res);
+                    }
+                })
+                .catch(e => {
+                    this.inProgress = false;
+                    console.log(e);
+                })
+            }
         },
         computed: {
             sortWords(){
-                if(this.inProgress) return;
-                this.inProgress = true;
                 this.errorMessage = '';
                 if(this.dictionary.Words != undefined)
                 {
@@ -86,10 +109,8 @@
                     var vue = this;
                     if(this.keyWord == '')
                     {
-                        this.inProgress = false;
                         return this.dictionary.Words;
                     }
-                    this.inProgress = false;
                     return this.dictionary.Words.filter(function(word){
                         return word.Category.toLowerCase().indexOf(vue.keyWord.toLowerCase()) > -1 
                         || word.Original.toLowerCase().indexOf(vue.keyWord.toLowerCase()) > -1 
@@ -97,28 +118,43 @@
                     });
                 }
                 else{
-                    this.errorMessage = 'Словарь пуст';
-                    this.inProgress = false;
+                    if(this.category.length > 0)
+                    {
+                        this.errorMessage = 'Dictionary is empty';
+                    }
                 }
             }
         },
         created: function() {
             if(this.inProgress) return;
             this.inProgress = true;
-            api.getUserDictionary()
-            .then(res => {
-                if(res.User)
+            api.getAllCategoriesOfUserDictionary()
+            .then(res =>
+            {
+                if(res.response)
                 {
-                    this.dictionary = res;
+                    if(res.response.data.Message)
+                    {
+                        console.log(res.response.data.Message);
+                        this.inProgress = false;
+                        return;
+                    }
+                }
+                if(res.length > 0)
+                {
+                    this.inProgress = false;
+                    this.categories = res;
+                    return;
                 }
                 else
                 {
-                    this.errorMessage = 'Словарь пуст';
+                    console.log(res);
+                    this.inProgress = false;
                 }
-                this.inProgress = false;
             })
-            .catch(e => {
-                this.errorMessage = 'Сервер недоступен';
+            .catch(e => 
+            {
+                console.log(e);
                 this.inProgress = false;
             })
         }

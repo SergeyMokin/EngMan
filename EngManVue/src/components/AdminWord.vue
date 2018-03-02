@@ -2,39 +2,39 @@
   <div v-if = "$store.state.user.Role == 'admin'">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div v-if = "!clickWord" class="view-list" >
-        <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
-        <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
-        <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
-        <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
-        <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
-        <span style = "cursor: pointer;" v-on:click = "addWord()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
+        <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
+        <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
+        <router-link to="/admin/words" class = "routes-admin">Words </router-link>
+        <router-link to="/admin/users" class = "routes-admin">Users </router-link>
+        <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link><br/><br/>
+        <span style = "cursor: pointer;" v-on:click = "addWord()"><img title="Add" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
         <input placeholder="Выберите..." type="text" class = "select-form" list="word_category" v-model = "category" v-on:click = "category = ''"/>
         <datalist id = "word_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
         </datalist>
-        <div v-for = 'el in words' :key = 'el.WordId'>
+        <div v-if = "category.length > 0" v-for = 'el in words' :key = 'el.WordId'>
             <div class = "list--element">
                 <span class = "span--element">
                     {{el.Original}} {{el.Transcription}} - {{el.Translate}}
-                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteWord(el.WordId)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
-                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editWord(el.WordId)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
+                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteWord(el.WordId)"><img title="Delete" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editWord(el.WordId)"><img title="Change" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
                 </span>
             </div>
         </div>
       </div>
       <div v-if = "clickWord" style = "text-align: center">
           <br/><br/>
-          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
-          <span v-on:click = "saveWord(word)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
-          <span>Категория</span>
+          <span v-on:click = "closeEditForm()"><img title="Close" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "saveWord(word)"><img title="Save" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
+          <span>Category</span>
           <textarea type = "text" v-model = "word.Category" class = "admin-edit"/><br/>
-          <span>Оригинал на английском</span>
+          <span>English original</span>
           <textarea type = "text" v-model = "word.Original" class = "admin-edit"/><br/>
-          <span>Русский перевод</span>
+          <span>Russian translate</span>
           <textarea type = "text" v-model = "word.Translate" class = "admin-edit"/><br/>
-          <span>Транскрипция</span>
+          <span>Transcription</span>
           <textarea type = "text" v-model = "word.Transcription" class = "admin-edit"/><br/>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
       </div>
@@ -69,11 +69,31 @@ export default {
           this.inProgress = true;
           api.getWord(id)
           .then(result => {
-                this.inProgress = false;
-                this.word = result;
-                this.clickWord = true;
+                if(result.response)
+                {
+                    if(result.response.data.Message)
+                    {
+                        this.inProgress = false;
+                        console.log(result.response.data.Message);
+                        return;
+                    }
+                }
+                if(result.WordId)
+                {
+                    this.inProgress = false;
+                    this.word = result;
+                    this.clickWord = true;
+                }
+                else
+                {
+                    console.log(result);
+                    this.inProgress = false;
+                }
               })
-          .catch(e => this.inProgress = false);
+          .catch(e => {
+              this.inProgress = false;
+              console.log(e);
+          });
       },
       saveWord(word){
           if(this.inProgress) return;
@@ -81,29 +101,59 @@ export default {
           this.inProgress = true;
           if(this.word.Original.length == 0 || this.word.Translate.length == 0 || this.word.Category.length == 0 || this.word.Transcription.length == 0)
           {
-              this.errormessage = 'Заполните все поля';
+              this.errormessage = 'Fill in all the fields';
               this.inProgress = false;
               return;
           }
           if(!this.clickAddWord){
             api.editWord(word)
             .then(result => {
-                if(result.WordId > 0){
+                if(result.response)
+                {
+                    if(result.response.data.Message)
+                    {
+                        this.errormessage = result.response.data.Message;
+                        this.inProgress = false;
+                        return;
+                    }
+                }
+                if(result == true){
                     this.$store.dispatch('getWords');
                     this.closeEditForm();
                 }
+                else
+                {
+                    console.log(result);
+                    this.inProgress = false;
+                    this.errormessage = "The server is unavailable or you do not have the rights";
+                }
             })
             .catch(e => {
-                this.errormessage = 'Сервер недоступен или у вас нет прав';
+                this.errormessage = 'The server is unavailable or you do not have the rights';
                 this.inProgress = false;  
             })
           } else{
               api.createWord(word)
               .then(result =>{
-                  if(result.WordId > 0){
-                      this.$store.dispatch('getWords');
-                      this.closeEditForm();
-                  }
+                if(result.response)
+                {
+                    if(result.response.data.Message)
+                    {
+                        this.errormessage = result.response.data.Message;
+                        this.inProgress = false;
+                        return;
+                    }
+                }
+                if(result == true){
+                    this.$store.dispatch('getWords');
+                    this.closeEditForm();
+                }
+                else
+                {
+                    console.log(result);
+                    this.inProgress = false;
+                    this.errormessage = "The server is unavailable or you do not have the rights";
+                }
               })
               .catch(e => {
                   this.errormessage = 'Сервер недоступен или у вас нет прав';
@@ -117,14 +167,29 @@ export default {
           if(confirm("Вы уверены?") == true){
             api.deleteWord(id)
             .then(result =>{
-                this.inProgress = false;
-                this.$store.dispatch('getWords');
+                if(result.response){
+                    if(result.response.data.Message)
+                    {
+                        this.errormessage = result.response.data.Message;
+                        this.inProgress = false;
+                        return;
+                    }
+                }
+                if(result === "Delete completed successful")
+                {
+                    this.inProgress = false;
+                    this.$store.dispatch('getWords');
+                }
+                else
+                {
+                    console.log(result);
+                    this.inProgress = false;
+                }
             })
           } else{
               this.inProgress = false;
               alert("Вы отменили удаление!");
           }
-          this.inProgress = false;
       },
       addWord(){
           this.clickWord = true;
@@ -164,10 +229,32 @@ export default {
       this.inProgress = true;
       api.getAllCategoriesWords()
       .then(res => {
-          this.categories = res;
+        if(res.response)
+        {
+            if(res.response.data.Message)
+            {
+                this.errormessage = res.response.data.Message;
+                this.inProgress = false;
+                return;
+            }
+        }
+        if(res.length > 0)
+        {
+            this.categories = res;
+            this.inProgress = false;
+        }
+        else
+        {
+            this.inProgress = false;
+            console.log(res);
+        }
+      })
+      .catch(e => 
+      {
+          console.log(e);
+          this.inProgress = false;
       })
       this.$store.dispatch('getWords');
-      this.inProgress = false;
   }
 }
 </script>

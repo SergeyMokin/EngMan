@@ -2,12 +2,12 @@
 <div>
   <div class="loading" v-if = "inProgress">Loading&#8230;</div>
   <div v-if = "$store.state.user.Role == 'admin'" class = "view-list">
-        <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
-        <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
-        <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
-        <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
-        <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
-        <select class = "select-form" v-model = "role">
+      <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
+      <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
+      <router-link to="/admin/words" class = "routes-admin">Words </router-link>
+      <router-link to="/admin/users" class = "routes-admin">Users </router-link>
+      <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link><br/><br/>
+        <select style = "width:250px" class = "select-form" v-model = "role">
             <option selected>
                 user
             </option>
@@ -19,8 +19,8 @@
             <div class = "list--element">
                 <span class = "span--element">
                     {{el.FirstName}} {{el.LastName}} <b>[e-mail: {{el.Email}}]</b>  
-                    <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteUser(el.Id)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
-                    <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "changeRole(el)"><img title="Повысить" style = "margin-right: 5px; width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>
+                    <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteUser(el.Id)"><img title="Delete" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+                    <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "changeRole(el)"><img title="Improve" style = "margin-right: 5px; width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>
                 </span>
             </div>
         </div>
@@ -44,40 +44,76 @@ export default {
           if(this.inProgress) return;
           this.inProgress = true;
           if(this.role == 'user'){
-            if(confirm("Вы уверены, что хотите удалить пользователя?") == true){
+            if(confirm("Are you sure?") == true){
                 api.deleteUser(id)
                 .then(result =>{
-                    this.inProgress = false;
-                    this.$store.dispatch('getUsers');
-                    this.closeEditForm();
+                    if(result.response)
+                    {
+                        if(result.response.data.Message)
+                        {
+                            this.inProgress = false;
+                            console.log(result);
+                            return;
+                        }
+                    }
+                    if(result === "Delete completed successful")
+                    {
+                        this.inProgress = false;
+                        this.$store.dispatch('getUsers');
+                        this.closeEditForm();
+                        return;
+                    }
+                    else
+                    {
+                        this.inProgress = false;
+                        console.log(result);
+                        return;
+                    }
                 })
             } else{
                 this.inProgress = false;
-                alert("Вы отменили удаление!");
+                alert("You canceled the deletion!");
                 this.closeEditForm();
             }
           }
-          this.inProgress = false;
       },
       changeRole(user){
           if(this.inProgress) return;
           this.inProgress = true;
           if(this.role == 'user'){
-            if(confirm("Вы уверены, что хотите дать пользователю права администратора?") == true){
+            if(confirm("Are you sure you want to give the user administrative privileges?") == true){
                 user.Role = 'admin';
                 api.changeRole(user)
                 .then(result =>{
-                    this.inProgress = false;
-                    this.$store.dispatch('getUsers');
-                    this.closeEditForm();
+                    if(result.response)
+                    {
+                        if(result.response.data.Message)
+                        {
+                            this.inProgress = false;
+                            console.log(result.response.data.Message);
+                            return;
+                        }
+                    }
+                    if(result === true)
+                    {
+                        this.inProgress = false;
+                        this.$store.dispatch('getUsers');
+                        this.closeEditForm();
+                        return;
+                    }
+                    else
+                    {
+                        this.inProgress = false;
+                        console.log(result);
+                    }
                 })
             } else{
                 this.inProgress = false;
-                alert("Вы отменили повышение пользователя!");
+                alert("You canceled a user raise!");
                 this.closeEditForm();
+                return;
             }
           }
-          this.inProgress = false;
       },
       closeEditForm(){
         this.inProgress = false;
@@ -97,9 +133,7 @@ export default {
   created: function()
   {
       if(this.inProgress) return;
-      this.inProgress = true;
       this.$store.dispatch('getUsers');
-      this.inProgress = false;
   }
 }
 </script>

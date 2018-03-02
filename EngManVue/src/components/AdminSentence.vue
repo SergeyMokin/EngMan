@@ -2,37 +2,37 @@
   <div v-if = "$store.state.user.Role == 'admin'">
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div v-if = "!clickSentence" class = "view-list">
-        <router-link to="/admin/rules" class = "routes-admin">Правила </router-link>
-        <router-link to="/admin/sentences" class = "routes-admin">Предложения </router-link>
-        <router-link to="/admin/words" class = "routes-admin">Словарь </router-link>
-        <router-link to="/admin/users" class = "routes-admin">Пользователи </router-link>
-        <router-link to="/admin/guessestheimages" class = "routes-admin">Задания по картинкам</router-link><br/><br/>
-        <span style = "cursor: pointer;" v-on:click = "AddSentence()"><img title="Добавить" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-        <input placeholder="Выберите..." type="text" class = "select-form" list="sentence_category" v-model = "category" v-on:click = "category = ''"/>
+      <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
+      <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
+      <router-link to="/admin/words" class = "routes-admin">Words </router-link>
+      <router-link to="/admin/users" class = "routes-admin">Users </router-link>
+      <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link><br/><br/>
+        <span style = "cursor: pointer;" v-on:click = "AddSentence()"><img title="Add" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
+        <input placeholder="Choose..." type="text" class = "select-form" list="sentence_category" v-model = "category" v-on:click = "category = ''"/>
         <datalist id = "sentence_category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
         </datalist>
-        <div v-for = 'el in sentences' :key = 'el.SentenceTaskId'>
+        <div v-if = "category.length > 0" v-for = 'el in sentences' :key = 'el.SentenceTaskId'>
             <div class = "list--element">
                 <span class = "span--element">
                     {{el.Sentence}}
-                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteSentence(el.SentenceTaskId)"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
-                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editSentence(el.SentenceTaskId)"><img title="Изменить" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
+                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteSentence(el.SentenceTaskId)"><img title="Delete" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editSentence(el.SentenceTaskId)"><img title="Chenge" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
                 </span>
             </div>
         </div>
       </div>
       <div v-if = "clickSentence" style = "text-align: center">
           <br/><br/>
-          <span v-on:click = "closeEditForm()"><img title="Закрыть" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
-          <span v-on:click = "saveSentence(sentence)"><img title="Сохранить" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
-          <span>Категория</span>
+          <span v-on:click = "closeEditForm()"><img title="Close" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
+          <span v-on:click = "saveSentence(sentence)"><img title="Save" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
+          <span>Category</span>
           <textarea type = "text" v-model = "sentence.Category" class = "admin-edit"/><br/>
-          <span>Предложение на английском</span>
+          <span>English sentence</span>
           <textarea type = "text" v-model = "sentence.Sentence" class = "admin-edit"/><br/>
-          <span>Перевод на русском</span>
+          <span>Translate</span>
           <textarea type = "text" v-model = "sentence.Translate" class = "admin-edit"/><br/>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
       </div>
@@ -66,12 +66,33 @@ export default {
           this.inProgress = true;
           api.getSentence(id)
           .then(result => {
-                this.inProgress = false;
-                this.sentence = result;
-                this.clickSentence = true;
+                if(result.response)
+                {
+                    if(result.response.data.Message)
+                    {
+                        console.log(result.response.data.Message);
+                        this.inProgress = false;
+                        return;
+                    }
+                }
+                if(result.SentenceTaskId)
+                {
+                    this.inProgress = false;
+                    this.sentence = result;
+                    this.clickSentence = true;
+                    return;
+                }
+                else
+                {
+                    this.inProgress = false;
+                    console.log(result);
+                    return;
+                }
               })
           .catch(e => {
+              console.log(e);
               this.inProgress = false;
+              return;
           });
       },
       saveSentence(sentence){
@@ -80,33 +101,63 @@ export default {
           this.inProgress = true;
           if(this.sentence.Sentence.length == 0 || this.sentence.Category.length == 0 || this.sentence.Translate.length == 0)
           {
-              this.errormessage = 'Заполните все поля';
+              this.errormessage = 'Fill in all the fields';
               this.inProgress = false;
               return;
           }
           if(!this.clickAddSentence){
             api.editSentence(sentence)
             .then(result => {
-                if(result.SentenceTaskId > 0){
+                if(result.response)
+                {
+                    if(result.response.data.Message)
+                    {
+                        this.errormessage = result.response.data.Message;
+                        this.inProgress = false;
+                        return;
+                    }
+                }
+                if(result === true){
                     this.$store.dispatch('getSentences');
                     this.closeEditForm();
+                    return;
+                }
+                else{
+                    this.inProgress = false;
+                    console.log(result);
+                    return;
                 }
             })
             .catch(e => 
             {
-                this.errormessage = 'Сервер недоступен или у вас нет прав';
+                this.errormessage = 'The server is unavailable or you do not have the rights';
                 this.inProgress = false;                
             })
           } else{
               api.createSentence(sentence)
               .then(result =>{
-                  if(result.SentenceTaskId > 0){
+                  if(result.response)
+                  {
+                      if(result.response.data.Message)
+                      {
+                          this.inProgress = false;
+                          this.errormessage = result.response.data.Message;
+                          return;
+                      }
+                  }
+                  if(result === true){
                       this.$store.dispatch('getSentences');
                       this.closeEditForm();
+                      return;
+                  }
+                  else
+                  {
+                      this.inProgress = false;
+                      this.errormessage = 'The server is unavailable or you do not have the rights';  
                   }
               })
               .catch(e => {
-                  this.errormessage = 'Сервер недоступен или у вас нет прав';
+                  this.errormessage = 'The server is unavailable or you do not have the rights';
                   this.inProgress = false;
               })
           }
@@ -114,17 +165,31 @@ export default {
       deleteSentence(id){
           if(this.inProgress) return;
           this.inProgress = true;
-          if(confirm("Вы уверены?") == true){
+          if(confirm("Are you sure?") == true){
             api.deleteSentence(id)
             .then(result =>{
-                this.inProgress = false;
-                this.$store.dispatch('getSentences');
+                if(result.response)
+                {
+                    if(result.response.data.Message)
+                    {
+                        console.log(result.response.data.Message);
+                        this.inProgress = false;
+                    }
+                }
+                if(result === "Delete completed successful")
+                {
+                    this.inProgress = false;
+                    this.$store.dispatch('getSentences');
+                }
+                else{
+                    this.inProgress = false;
+                    console.log(result);
+                }
             })
           } else{
               this.inProgress = false;
-              alert("Вы отменили удаление!");
+              alert("You canceled the deletion!");
           }
-          this.inProgress = false;
       },
       AddSentence(){
           this.clickSentence = true;
@@ -163,10 +228,31 @@ export default {
       this.inProgress = true;
       api.getAllCategoriesSentences()
       .then(res => {
-          this.categories = res;
+          if(res.response)
+          {
+              if(res.response.data.Message)
+              {
+                  console.log(res.response.data.Message);
+                  this.inProgress = false;
+                  return;
+              }
+          }
+          if(res.length > 0)
+          {
+            this.categories = res;
+            this.inProgress = false;
+          }
+          else
+          {
+              console.log(res);
+              this.inProgress = false;
+          }
+      })
+      .catch(e => {
+          console.log(e);
+          this.inProgress = false;
       })
       this.$store.dispatch('getSentences');
-      this.inProgress = false;
   }
 }
 </script>
