@@ -4,6 +4,7 @@ import Trainings from '../src/components/Trainings'
 import Grammar from '../src/components/Grammar'
 import SentenceTask from '../src/components/SentenceTask'
 import WordTranslateTask from '../src/components/WordTranslateTask'
+import TranslateWordTask from '../src/components/TranslateWordTask'
 import User from '../src/components/User'
 import AdminRule from '../src/components/AdminRule'
 import AdminSentence from '../src/components/AdminSentence'
@@ -23,6 +24,7 @@ const routes = [
     , { path: '/grammar/rules', component: Rules }
     , { path: '/grammar/sentencetask', component: SentenceTask }
     , { path: '/trainings/word_translate_task', component: WordTranslateTask }
+    , { path: '/trainings/translate_word_task', component: TranslateWordTask }
     , { path: '/trainings/guessestheimages', component: GuessesTheImages }
     , { path: '/admin/rules', component: AdminRule }
     , { path: '/admin/sentences', component: AdminSentence }

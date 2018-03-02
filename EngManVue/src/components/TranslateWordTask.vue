@@ -7,8 +7,8 @@
         <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "downloadWordMap()"><img title="Next" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-right.png"></span>
         <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "verificationCorrectness()"><img title="Verification" style = "width: 20px; height: auto" type = "img" src = "../assets/start-icon.png"></span>
         <div style = "font-size: larger; margin-left: 10px">{{word.Word}}</div>
-        <div title="Choose" v-for = "el in word.Answers" :key = "el.WordId" v-on:click = "returnWord.Translate = el">
-            <div v-bind:class = "{'selected-wordmap': el == returnWord.Translate}" class = "list--element pointer">
+        <div title="Choose" v-for = "el in word.Answers" :key = "el.WordId" v-on:click = "returnWord.Original = el">
+            <div v-bind:class = "{'selected-wordmap': el == returnWord.Original}" class = "list--element pointer">
                 {{el}}
             </div>
         </div>
@@ -16,7 +16,7 @@
       </div>
   </div>
   <div class="tasks-align">
-      <span style = "font-size: 30px">Word-translate</span><br/>
+      <span style = "font-size: 30px">Translate-word</span><br/>
       <div>
         <div class = "icon-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Back" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
         <div v-on:click = "downloadWordMap()"><img title="Start" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
@@ -41,7 +41,7 @@
 import api from '../api/api'
 
 export default {
-  name: 'Word-translate-task',
+  name: 'Translate-word-task',
   data () {
     return {
         choose: false,
@@ -108,7 +108,7 @@ export default {
           this.completemessage = '';
           if(this.categories.indexOf(this.category) != -1)
           {
-            api.getWordMap(this.category, this.indexes, true)
+            api.getWordMap(this.category, this.indexes, false)
             .then(result => {
                     if(result.Word)
                     {
@@ -116,7 +116,7 @@ export default {
                         this.indexes += result.WordId + ',';
                         this.word = result;
                         this.returnWord.WordId = this.word.WordId;
-                        this.returnWord.Original = this.word.Word;
+                        this.returnWord.Translate = this.word.Word;
                         this.returnWord.Category = this.word.Category;
                         this.show = true;
                         this.inProgress = false;
@@ -139,7 +139,7 @@ export default {
           if(this.inProgress) return;
           this.inProgress = true;
           this.errormessage = '';
-          api.verificationWordMap(this.returnWord, true)
+          api.verificationWordMap(this.returnWord, false)
           .then(result =>
           {
               if(result.data){

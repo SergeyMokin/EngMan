@@ -75,7 +75,7 @@ export default {
           if(confirm("Are you sure you want to delete the message?") == true){
             api.deleteMessage(id)
             .then(result =>{
-                if(typeof(result) == typeof(int))
+                if(result === "Delete completed successful")
                 {
                     this.$store.dispatch('getMessages');
                     this.inProgress = false;
