@@ -2,12 +2,12 @@
 <template>
   <div v-if = "$store.state.user.Role == 'admin'">
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-    <div v-if = "!click" class="view-list">
+    <div class="view-list">
       <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
       <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
       <router-link to="/admin/words" class = "routes-admin">Words </router-link>
       <router-link to="/admin/users" class = "routes-admin">Users </router-link>
-      <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link><br/><br/>
+      <router-link to="/admin/guessestheimages" class = "routes-admin" style = "background-color: #ddd; cursor: default;">Guesses the images</router-link><br/><br/>
       <span style = "cursor: pointer;" v-on:click = "add()"><img title="Add" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
       <select class = "select-form" style = "width: 250px" v-model = "category">
           <option v-for = "category in categories" :key = "category">
@@ -36,13 +36,13 @@
             <option v-for = "el in wordcategories" :key = "el">
                 {{el}}
             </option>
-          </select><br/>
+          </select><br/><br/>
           <span>English word: </span>
           <select id = "guessestheimage_word" class = "select-form" style = "width: 250px" v-model = "choosenWord">
               <option v-for = "word in downloadwords" :key = "word.WordId">
                   {{word.Original}}
               </option>
-          </select><br/>
+          </select><br/><br/>
           </div>
           <div v-if = "clickAdd"><input type="file" accept="image/*" @change="onFileChange"><br/></div>
           <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
@@ -119,6 +119,7 @@ export default {
                     this.inProgress = false;
                     this.task = result;
                     this.click = true;
+                    document.body.style = "overflow: hidden";
                 }
                 else
                 {
@@ -247,10 +248,10 @@ export default {
       },
       closeEditForm(){
         this.inProgress = false;
+        document.body.style = "overflow: auto";
         this.searchKey = '';
         this.errormessage = '',
         this.wordcategory = '',
-        this.category = '',
         this.clickAdd = false,
         this.click = false,
         this.choosenWord = '',

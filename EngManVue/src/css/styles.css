@@ -52,10 +52,9 @@ label{
 .list--element{
     cursor: default;
     margin: 10px;
-    padding: 3px;
+    padding: 10px;
     text-align: left;
     background: rgb(248, 248, 248);
-    height: 35px;
     border: none;
     outline:none;
     border-radius: 5px;
@@ -495,8 +494,8 @@ label{
     top: 20%;
     left: 50%;
     width: 300px;
-    margin: auto auto auto -150px;
-    padding:10px;
+    margin: auto auto auto -170px;
+    padding:20px;
     background-color: #e6e6e6;
     border-radius:5px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);

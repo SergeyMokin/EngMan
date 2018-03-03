@@ -5,7 +5,7 @@
       <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
       <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
       <router-link to="/admin/words" class = "routes-admin">Words </router-link>
-      <router-link to="/admin/users" class = "routes-admin">Users </router-link>
+      <router-link to="/admin/users" class = "routes-admin" style = "background-color: #ddd; cursor: default;">Users </router-link>
       <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link><br/><br/>
         <select style = "width:250px" class = "select-form" v-model = "role">
             <option selected>
@@ -18,9 +18,9 @@
         <div v-for = 'el in users' :key = 'el.Id'>
             <div class = "list--element">
                 <span class = "span--element">
-                    {{el.FirstName}} {{el.LastName}} <b>[e-mail: {{el.Email}}]</b>  
                     <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteUser(el.Id)"><img title="Delete" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
                     <span v-if = "el.Role == 'user'" style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "changeRole(el)"><img title="Improve" style = "margin-right: 5px; width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>
+                    {{el.FirstName}} {{el.LastName}} <b>[e-mail: {{el.Email}}]</b>  
                 </span>
             </div>
         </div>
@@ -117,7 +117,6 @@ export default {
       },
       closeEditForm(){
         this.inProgress = false;
-        this.role = 'user';
       }
   },
   computed: 

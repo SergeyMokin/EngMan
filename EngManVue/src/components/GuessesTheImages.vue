@@ -5,14 +5,14 @@
   <div v-if = "show" class = "b-popup">
       <div class = "b-popup-content">
         <span class = "routes-admin pointer" v-if = "!showWordTranslate" style = "padding: 0px; font-size: 14px; width: 50%; margin-left: 25%;" v-on:click = "showWordTranslate = true" title = "Show translate of word">Show</span>
-        <span class = "routes-admin pointer" v-else style = "padding: 0px; font-size: 14px; width: 50%; margin-left: 25%;" v-on:click = "showWordTranslate = false" title = "Hide translate of word">Hide</span>
+        <span class = "routes-admin pointer" v-else style = "padding: 0px; font-size: 14px; width: 50%; margin-left: 25%;" v-on:click = "showWordTranslate = false" title = "Hide translate of word">{{task.Word.Translate}}</span>
         <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeForm(false); showWordTranslate = false;"><img title="End" style = "width: 20px; height: auto;" type = "img" src = "../assets/close-icon.png"></span>
         <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "downloadTask(); showWordTranslate = false"><img title="Next" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-right.png"></span>
         <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "verificationCorrectness(); showWordTranslate = false"><img title="Verification" style = "width: 20px; height: auto" type = "img" src = "../assets/start-icon.png"></span>
         <br/><br/>
-        <img title="Guess what's on the picture" :src = "task.Path" style = "width: 80%; margin-left: 10%;">
-        <div v-if = "showWordTranslate" style = "width: 50%; text-align: center; margin-left: 25%">{{task.Word.Translate}}</div>
-        <input style = "border: none; border-radius:5px;box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);" type = "text" v-model = "task.Word.Original" class = "sentence-input">
+        <img title="Guess what's on the picture" :src = "task.Path" style = "width: 80%; margin-left: 10%; margin-bottom: 5px;">
+        <!--div v-if = "showWordTranslate" style = "width: 50%; text-align: center; margin-left: 25%">{{task.Word.Translate}}</div>-->
+        <input style = "border: none; border-radius:5px;box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); margin-bottom: 5px" type = "text" v-model = "task.Word.Original" class = "sentence-input">
         <div style = "width: 50%; text-align: center; margin-left: 25%" v-if = "errormessage" class = "span-error-message">{{errormessage}}</div>
       </div>
   </div>

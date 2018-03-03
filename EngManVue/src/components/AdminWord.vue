@@ -4,16 +4,16 @@
       <div v-if = "!clickWord" class="view-list" >
         <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
         <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
-        <router-link to="/admin/words" class = "routes-admin">Words </router-link>
+        <router-link to="/admin/words" class = "routes-admin" style = "background-color: #ddd; cursor: default;">Words </router-link>
         <router-link to="/admin/users" class = "routes-admin">Users </router-link>
         <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link><br/><br/>
         <span style = "cursor: pointer;" v-on:click = "addWord()"><img title="Add" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-        <input placeholder="Выберите..." type="text" class = "select-form" list="word_category" v-model = "category" v-on:click = "category = ''"/>
-        <datalist id = "word_category">
+        <select id = "word_category" class = "select-form" style = "width: 250px" v-model = "category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
-        </datalist>
+        </select><br/>
+        <input style = "width: 250px" v-if = "category.length > 0" type = "text" v-model="searchKey" class = "select-form" placeholder = "Search..."><br/>
         <div v-if = "category.length > 0" v-for = 'el in words' :key = 'el.WordId'>
             <div class = "list--element">
                 <span class = "span--element">
@@ -50,6 +50,7 @@ export default {
     return {
         inProgress: false,
         errormessage: '',
+        searchKey: '',
         categories: [],
         category: '',
         clickAddWord: false,
@@ -198,7 +199,6 @@ export default {
       closeEditForm(){
         this.inProgress = false;
         this.errormessage = '';
-        this.category = '';
         this.clickAddWord = false;
         this.clickWord = false;
         this.word = {
@@ -218,8 +218,9 @@ export default {
       {
           return this.$store.getters.words;
       }
-      return this.$store.getters.words.filter(function(sentence){
-          return sentence.Category.toLowerCase().indexOf(vue.category.toLowerCase()) > -1;
+      return this.$store.getters.words.filter(function(word){
+          return (word.Original.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1 || word.Translate.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1)  
+          && word.Category.toLowerCase().indexOf(vue.category.toLowerCase()) > -1;
       });
     }
   },

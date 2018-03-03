@@ -3,17 +3,17 @@
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
       <div v-if = "!clickSentence" class = "view-list">
       <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
-      <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
+      <router-link to="/admin/sentences" class = "routes-admin" style = "background-color: #ddd; cursor: default;">Sentences </router-link>
       <router-link to="/admin/words" class = "routes-admin">Words </router-link>
       <router-link to="/admin/users" class = "routes-admin">Users </router-link>
       <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link><br/><br/>
         <span style = "cursor: pointer;" v-on:click = "AddSentence()"><img title="Add" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-        <input placeholder="Choose..." type="text" class = "select-form" list="sentence_category" v-model = "category" v-on:click = "category = ''"/>
-        <datalist id = "sentence_category">
+        <select class = "select-form" style = "width: 250px" id = "sentence_category" v-model = "category">
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
-        </datalist>
+        </select><br/>
+        <input style = "width: 250px" v-if = "category.length > 0" type = "text" v-model="searchKey" class = "select-form" placeholder = "Search..."><br/>
         <div v-if = "category.length > 0" v-for = 'el in sentences' :key = 'el.SentenceTaskId'>
             <div class = "list--element">
                 <span class = "span--element">
@@ -50,6 +50,7 @@ export default {
         errormessage: '',
         categories: [],
         category: '',
+        searchKey: '',
         clickAddSentence: false,
         clickSentence: false
         , sentence: {
@@ -198,7 +199,6 @@ export default {
       closeEditForm(){
         this.inProgress = false;
         this.errormessage = '';
-        this.category = '';
         this.clickAddSentence = false;
         this.clickSentence = false;
         this.sentence = {
@@ -218,7 +218,8 @@ export default {
           return this.$store.getters.sentences;
       }
       return this.$store.getters.sentences.filter(function(sentence){
-          return sentence.Category.toLowerCase().indexOf(vue.category.toLowerCase()) > -1;
+          return sentence.Sentence.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1  
+          && sentence.Category.toLowerCase().indexOf(vue.category.toLowerCase()) > -1;
       });
     }
   },

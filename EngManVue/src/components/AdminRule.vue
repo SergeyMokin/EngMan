@@ -2,7 +2,7 @@
   <div v-if = "$store.state.user.Role == 'admin'">
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
     <div v-if = "!clickRule" class="view-list">
-      <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
+      <router-link to="/admin/rules" class = "routes-admin" style = "background-color: #ddd; cursor: default;">Rules </router-link>
       <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
       <router-link to="/admin/words" class = "routes-admin">Words </router-link>
       <router-link to="/admin/users" class = "routes-admin">Users </router-link>

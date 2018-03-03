@@ -31,7 +31,7 @@
           </div>
       </div>
       <div v-if = "chooseUser" class = "input-form-mes" v-on:keyup.enter="sendMessage()">
-            <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''"/>
+            <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''" v-on:click = "readUnreadMessages()"/>
             <span style = "float: right; font-size: 10px; cursor: pointer; margin-right: 25px;" v-on:click = "sendMessage();"><img title="Send" style = "width: 30px; height: auto" type = "img" src = "../assets/send-icon.png"></span>
       </div>
   </div>
@@ -237,6 +237,60 @@ export default {
                 var hours = date.getHours() < 10 ? "0"+date.getHours() : date.getHours();
                 var minutes = date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes();
                 return date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() + ' ' + hours + ":" + minutes;
+      },
+      readUnreadMessages()
+      {
+          if(this.$store.state.newmess)
+          {
+              for(var i = 0; i < this.$store.state.newmessages.length; i++)
+              {
+                  if(!this.$store.state.newmessages[i].CheckReadMes)
+                  {
+                    if(this.beneficiary.Id === this.$store.state.newmessages[i].Sender.Id 
+                    || this.beneficiary.Id === this.$store.state.newmessages[i].Beneficiary.Id)
+                    {
+                        api.ReadMessages(this.$store.state.newmessages.map(function(item){
+                        return {
+                            MessageId: item.MessageId,
+                            SenderId: item.Sender.Id,
+                            BeneficiaryId: item.Beneficiary.Id,
+                            Text: item.Text,
+                            Time: item.Time,
+                            CheckReadMes: item.CheckReadMes
+                        }
+                        }))
+                        .then(res => {
+                            this.inProgress = false;
+                            if(res != undefined)
+                            {
+                                if(res.length > 0)
+                                {
+                                    this.$store.dispatch('getMessages');
+                                }
+                                else
+                                {
+                                    if(res.response)
+                                    {
+                                        if(res.response.data.Message)
+                                        {
+                                            this.inProgress = false;
+                                            console.log(res.response.data.Message);
+                                            return;
+                                        }
+                                    }
+                                    console.log('Bad request 400');
+                                    this.inProgress = false;
+                                }
+                            }
+                        })
+                        .catch(e => {
+                            console.log(e);
+                            this.inProgress = false;
+                        })
+                    }
+                  }
+              }
+          }
       }
   },
   computed: {
