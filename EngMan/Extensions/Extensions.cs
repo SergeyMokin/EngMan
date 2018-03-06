@@ -17,39 +17,43 @@ namespace EngMan.Extensions
             const int maxCountOfTasks = 10;
             return task != null && task.Count() <= maxCountOfTasks;
         }
+
         //Validate password
         public static bool IsCorrectPassword(this string password)
         {
             const int minLength = 8;
             const int maxLength = 25;
 
-            if (password == null) return false;
+            if (password == null)
+            {
+                return false;
+            }
+            if (password.Length < minLength && password.Length > maxLength)
+            {
+                return false;
+            }
 
-            bool meetsLengthRequirements = password.Length >= minLength && password.Length <= maxLength;
             bool hasUpperCaseLetter = false;
             bool hasLowerCaseLetter = false;
             bool hasDecimalDigit = false;
             bool hasNoSpace = true;
 
-            if (meetsLengthRequirements)
+            foreach (char c in password)
             {
-                foreach (char c in password)
-                {
-                    if (char.IsUpper(c)) hasUpperCaseLetter = true;
-                    else if (char.IsLower(c)) hasLowerCaseLetter = true;
-                    else if (char.IsDigit(c)) hasDecimalDigit = true;
-                    else if (char.IsWhiteSpace(c)) hasNoSpace = false;
-                }
+                if (char.IsUpper(c)) hasUpperCaseLetter = true;
+                else if (char.IsLower(c)) hasLowerCaseLetter = true;
+                else if (char.IsDigit(c)) hasDecimalDigit = true;
+                else if (char.IsWhiteSpace(c)) hasNoSpace = false;
             }
-
-            bool isValid = meetsLengthRequirements
-                        && hasUpperCaseLetter
+            bool isValid = hasUpperCaseLetter
                         && hasLowerCaseLetter
                         && hasDecimalDigit
                         && hasNoSpace
                         ;
+
             return isValid;
         }
+
         //Validate name
         public static bool IsName(this string name)
         {
@@ -68,6 +72,7 @@ namespace EngMan.Extensions
             }
             return true;
         }
+
         //Validate email
         public static bool IsEmail(this string email)
         {
@@ -153,6 +158,7 @@ namespace EngMan.Extensions
                 && task.Word.Validate(true)
                 && !String.IsNullOrEmpty(task.Path);
         }
+
         //Validate Word
         public static bool Validate(this Word task, bool checkTranscription)
         {
@@ -187,6 +193,7 @@ namespace EngMan.Extensions
             }
             return true;
         }
+
         //Validate GuessesTheImageToAdd, CheckTheImage -> (validate)/(not validate) image
         public static bool Validate(this GuessesTheImageToAdd task, bool ValidateTheImage)
         {
