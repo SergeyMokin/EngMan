@@ -15,7 +15,7 @@ namespace EngMan.Extensions
         public static bool IsCorrect(this IEnumerable<int> task)
         {
             const int maxCountOfTasks = 10;
-            return task != null && task.Count() <= maxCountOfTasks;
+            return task != null && task.Count() < maxCountOfTasks;
         }
 
         //Validate password
