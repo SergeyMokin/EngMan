@@ -180,17 +180,6 @@ namespace EngMan.Extensions
             return id >= 0;
         }
 
-        //Validate request string
-        public static bool Validate(this string str)
-        {
-            if (str == null
-                || !(str.Length > 0))
-            {
-                return false;
-            }
-            return true;
-        }
-
         //saving image to server
         public static string SaveImage(Image image)
         {
