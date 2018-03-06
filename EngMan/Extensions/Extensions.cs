@@ -149,61 +149,21 @@ namespace EngMan.Extensions
         //Validate Word
         public static bool Validate(this Word task, bool checkTranscription)
         {
-            if (checkTranscription)
-            {
-                if (task == null
-                        || task.WordId < 0
-                        || task.Original == null
-                        || task.Translate == null
-                        || task.Transcription == null
-                        || task.Category == null
-                        || !(task.Original.Length > 0)
-                        || !(task.Translate.Length > 0)
-                        || !(task.Transcription.Length > 0)
-                        || !(task.Category.Length > 0))
-                {
-                    return false;
-                }
-            }
-            else {
-                if (task == null
-                        || task.WordId < 0
-                        || task.Original == null
-                        || task.Translate == null
-                        || task.Category == null
-                        || !(task.Original.Length > 0)
-                        || !(task.Translate.Length > 0)
-                        || !(task.Category.Length > 0))
-                {
-                    return false;
-                }
-            }
-            return true;
+            return task != null
+                && task.WordId.Validate()
+                && !String.IsNullOrEmpty(task.Original)
+                && !String.IsNullOrEmpty(task.Translate)
+                && !String.IsNullOrEmpty(task.Category)
+                && (checkTranscription ? !String.IsNullOrEmpty(task.Transcription) : true);
         }
 
         //Validate GuessesTheImageToAdd, CheckTheImage -> (validate)/(not validate) image
         public static bool Validate(this GuessesTheImageToAdd task, bool ValidateTheImage)
         {
-            if (ValidateTheImage)
-            {
-                if (task == null
-                    || task.Id < 0
-                    || task.WordId < 0
-                    || !task.Image.Validate())
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (task == null
-                    || task.Id < 0
-                    || task.WordId < 0)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return task != null
+                && task.Id.Validate()
+                && task.WordId.Validate()
+                && (ValidateTheImage ? task.Image.Validate() : true);
         }
 
         //Validate image
