@@ -57,20 +57,7 @@ namespace EngMan.Extensions
         //Validate name
         public static bool IsName(this string name)
         {
-            bool isName = true;
-            name.Select(x =>
-            {
-                if (!char.IsLetter(x))
-                {
-                    isName = false;
-                }
-                return x;
-            }).ToList();
-            if (!isName)
-            {
-                return false;
-            }
-            return true;
+            return name.FirstOrDefault(x => !char.IsLetter(x)) == default(char) ? true : false;
         }
 
         //Validate email
