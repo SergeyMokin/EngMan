@@ -128,6 +128,7 @@ export default {
         }
         alert(this.completemessage);
         this.countOfTasks = 0;
+        this.indexes = '';
         this.id = 0;
         this.goodAnswer = 0;
         this.attempt = 0;
