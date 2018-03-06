@@ -14,12 +14,8 @@ namespace EngMan.Extensions
         //Validate indexes array
         public static bool IsCorrect(this IEnumerable<int> task)
         {
-            if (task == null
-                || task.Count() > 9)
-            {
-                return false;
-            }
-            return true;
+            const int maxCountOfTasks = 10;
+            return task != null && task.Count() <= maxCountOfTasks;
         }
         //Validate password
         public static bool IsCorrectPassword(this string password)
@@ -85,117 +81,77 @@ namespace EngMan.Extensions
                 return false;
             }
         }
+
         //Validate User
         public static bool Validate(this User task)
         {
-            if (task == null
-                || task.Id < 0
-                || task.FirstName == null
-                || task.LastName == null
-                || task.Email == null
-                || task.Password == null
-                || task.Role == null
-                || !(task.FirstName.Length > 0)
-                || !(task.LastName.Length > 0)
-                || !task.Email.IsEmail()
-                || !(task.Password.Length > 0)
-                || !(task.Role.Length > 0)
-                || !task.FirstName.IsName()
-                || !task.LastName.IsName())
-            {
-                return false;
-            }
-            return true;
+            return task != null
+                && task.Id.Validate()
+                && !String.IsNullOrEmpty(task.FirstName)
+                && !String.IsNullOrEmpty(task.LastName)
+                && task.Email.IsEmail()
+                && task.Password.IsCorrectPassword()
+                && !String.IsNullOrEmpty(task.Role);
         }
+
         //Validate UserView
         public static bool Validate(this UserView task)
         {
-            if (task == null
-                || task.Id < 0
-                || task.FirstName == null
-                || task.LastName == null
-                || task.Email == null
-                || task.Role == null
-                || !(task.FirstName.Length > 0)
-                || !(task.LastName.Length > 0)
-                || !task.Email.IsEmail()
-                || !(task.Role.Length > 0))
-            {
-                return false;
-            }
-            return true;
+            return task != null
+                && task.Id.Validate()
+                && !String.IsNullOrEmpty(task.FirstName)
+                && !String.IsNullOrEmpty(task.LastName)
+                && task.Email.IsEmail()
+                && !String.IsNullOrEmpty(task.Role);
         }
+
         //Validate UserWord
         public static bool Validate(this UserWord task)
         {
-            if (task == null
-                || task.Id < 0
-                || !(task.UserId > 0)
-                || !(task.WordId > 0))
-            {
-                return false;
-            }
-            return true;
+            return task != null
+                && task.Id.Validate()
+                && task.WordId.Validate()
+                && task.UserId.Validate();
         }
+
         //Validate SentenceTask
         public static bool Validate(this SentenceTask task)
         {
-            if (task == null
-                || task.SentenceTaskId < 0
-                || task.Sentence == null
-                || task.Translate == null
-                || task.Category == null
-                || !(task.Sentence.Length > 0)
-                || !(task.Translate.Length > 0)
-                || !(task.Category.Length > 0))
-            {
-                return false;
-            }
-            return true;
+            return task != null
+                && task.SentenceTaskId.Validate()
+                && !String.IsNullOrEmpty(task.Sentence)
+                && !String.IsNullOrEmpty(task.Translate)
+                && !String.IsNullOrEmpty(task.Category);
         }
+
         //Validate RuleModel
         public static bool Validate(this RuleModel task)
         {
-            if (task == null
-                || task.RuleId < 0
-                || task.Text == null
-                || task.Title == null
-                || task.Category == null
-                || !(task.Text.Length > 0)
-                || !(task.Title.Length > 0)
-                || !(task.Category.Length > 0))
-            {
-                return false;
-            }
-            return true;
+            return task != null
+                && task.RuleId.Validate()
+                && !String.IsNullOrEmpty(task.Text)
+                && !String.IsNullOrEmpty(task.Title)
+                && !String.IsNullOrEmpty(task.Category);
         }
+
         //Validate Message
         public static bool Validate(this Message task)
         {
-            if (task == null
-                    || task.MessageId < 0
-                    || !(task.SenderId > 0)
-                    || !(task.BeneficiaryId > 0)
-                    || task.Time == null
-                    || task.Text == null
-                    || !(task.Text.Length > 0))
-            {
-                return false;
-            }
-            return true;
+            return task != null
+                && task.MessageId.Validate()
+                && task.SenderId.Validate()
+                && task.BeneficiaryId.Validate()
+                && task.Time != null
+                && !String.IsNullOrEmpty(task.Text);
         }
+
         //Validate GuessesTheImageToReturn
         public static bool Validate(this GuessesTheImageToReturn task)
         {
-            if (task == null
-                    || task.Id < 0
-                    || !task.Word.Validate(true)
-                    || task.Path == null
-                    || !(task.Path.Length > 0))
-            {
-                return false;
-            }
-            return true;
+            return task != null
+                && task.Id.Validate()
+                && task.Word.Validate(true)
+                && !String.IsNullOrEmpty(task.Path);
         }
         //Validate Word
         public static bool Validate(this Word task, bool checkTranscription)
@@ -259,25 +215,15 @@ namespace EngMan.Extensions
         //Validate image
         public static bool Validate(this Image task)
         {
-            if(task == null
-                || task.Name == null
-                || task.Data == null
-                || !(task.Name.Length > 0)
-                || !(task.Data.Length > 0))
-            {
-                return false;
-            }
-            return true;
+            return task != null
+                && !String.IsNullOrEmpty(task.Name)
+                && !String.IsNullOrEmpty(task.Data);
         }
 
         //Validate id
         public static bool Validate(this int id)
         {
-            if (!(id > 0))
-            {
-                return false;
-            }
-            return true;
+            return id >= 0;
         }
 
         //Validate request string
