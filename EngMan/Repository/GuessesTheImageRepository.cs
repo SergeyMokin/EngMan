@@ -65,6 +65,8 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
+            var parameters = new object[indexes.Count() + 1];
+            parameters[0] = new SqlParameter("category", category);
             var query = @"SELECT [Id]
                     , [EngMan].[dbo].[GuessesTheImages].[WordId]
                     , [Original]
@@ -74,12 +76,13 @@ namespace EngMan.Repository
                     , [Path]
                     FROM [EngMan].[dbo].[GuessesTheImages]
                     JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
-                    WHERE LOWER([Category]) LIKE LOWER('" + category + "')";
-            foreach (var index in indexes)
+                    WHERE LOWER([Category]) LIKE LOWER(@category)";
+            for (var i = 0; i < indexes.Count(); i++)
             {
-                query += (" AND [Id]!=" + index);
+                query += (" AND [Id]!=@index" + i);
+                parameters[i + 1] = new SqlParameter(("index" + i), indexes.ElementAt(i));
             }
-            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(query)
+            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(query, parameters)
                 .Select(x => new GuessesTheImageToReturn
                 {
                     Id = x.Id,
@@ -133,7 +136,8 @@ namespace EngMan.Repository
                 ,[Path]
                 FROM [EngMan].[dbo].[GuessesTheImages]
                 JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
-                WHERE [EngMan].[dbo].[GuessesTheImages].[Id] = " + id
+                WHERE [EngMan].[dbo].[GuessesTheImages].[Id] = @id",
+                new SqlParameter("id", id)
             )
             .Select(x => new GuessesTheImageToReturn
             {

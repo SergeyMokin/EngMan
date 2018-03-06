@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Linq;
 using EngMan.Models;
+using System.Data.SqlClient;
+
 namespace EngMan.Repository
 {
     public class WordRepository : IWordRepository
@@ -93,23 +95,26 @@ namespace EngMan.Repository
 
         public IEnumerable<Word> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
         {
-            if (category != null)
+            if (category == null)
             {
-                var query = @"
+                throw new System.ArgumentNullException();
+            }
+            var parameters = new object[indexes.Count() + 1];
+            parameters[0] = new SqlParameter("category", category);
+            var query = @"
                     SELECT [WordId]
 						  ,[Original]
 						  ,[Translate]
 						  ,[Category]
 						  ,[Transcription]
 					FROM [dbo].[Words]
-                    WHERE LOWER([Category]) LIKE LOWER('" + category + "')";
-                foreach (var index in indexes)
-                {
-                    query += (" AND [WordId]!=" + index);
-                }
-                return context.Database.SqlQuery<Word>(query);
+                    WHERE LOWER([Category]) LIKE LOWER(@category)";
+            for (var i = 0; i < indexes.Count(); i++)
+            {
+                query += (" AND [WordId] != index" + i);
+                parameters[i + 1] = new SqlParameter(("index" + i), indexes.ElementAt(i));
             }
-            throw new System.ArgumentNullException();
+            return context.Database.SqlQuery<Word>(query, parameters);
         }
     }
 }

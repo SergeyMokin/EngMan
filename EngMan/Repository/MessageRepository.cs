@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using EngMan.Models;
 
@@ -71,8 +72,8 @@ namespace EngMan.Repository
                       FROM [EngMan].[dbo].[Messages]
                       JOIN [EngMan].[dbo].[Users] A ON A.[Id] = [EngMan].[dbo].[Messages].[BeneficiaryId]
                       JOIN [EngMan].[dbo].[Users] B ON B.[Id] = [EngMan].[dbo].[Messages].[SenderId]
-                      WHERE  [EngMan].[dbo].[Messages].[BeneficiaryId] = {0} OR [EngMan].[dbo].[Messages].[SenderId] = {0}
-                ", userId
+                      WHERE  [EngMan].[dbo].[Messages].[BeneficiaryId] = {0} OR [EngMan].[dbo].[Messages].[SenderId] = @userId",
+                    new SqlParameter("userId", userId)
                 )).Select(x => new ReturnMessage
                 {
                     MessageId = x.MessageId,

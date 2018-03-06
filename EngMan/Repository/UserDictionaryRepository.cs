@@ -1,6 +1,8 @@
 ﻿using EngMan.Models;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+
 namespace EngMan.Repository
 {
     public class UserDictionaryRepository : IUserDictionaryRepository
@@ -19,8 +21,8 @@ namespace EngMan.Repository
 	              FROM [EngMan].[dbo].[UserWords] uw
 	              JOIN [EngMan].[dbo].[Words] w ON w.WordId = uw.WordId
 	              JOIN [EngMan].[dbo].[Users] u ON u.Id = uw.UserId
-	              WHERE u.Id = " + id
-                  + @"GROUP BY w.Category").ToList();
+	              WHERE u.Id = @id
+                  GROUP BY w.Category", new SqlParameter("id", id)).ToList();
         }
 
         public UserDictionary GetByCategory(int id, string category)
@@ -44,33 +46,36 @@ namespace EngMan.Repository
 	              FROM [EngMan].[dbo].[UserWords] uw
 	              JOIN [EngMan].[dbo].[Words] w ON w.WordId = uw.WordId
 	              JOIN [EngMan].[dbo].[Users] u ON u.Id = uw.UserId
-	              WHERE u.Id = " + id
-                  + "AND w.Category LIKE '" + category + "'").ToList();
-            if (result != null)
+	              WHERE u.Id = @id
+                  AND w.Category LIKE @category", 
+                  new[] { new SqlParameter("category", category),
+                          new SqlParameter("id", id) } )
+                .ToList();
+            if (result == null)
             {
-                var user = result.Select(x => new UserView
-                {
-                    Id = x.UserId,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Email = x.Email,
-                    Role = x.Role
-                }).FirstOrDefault();
-                var dictionary = new UserDictionary
-                {
-                    User = user,
-                    Words = result.Select(x => new Word
-                    {
-                        WordId = x.WordId,
-                        Category = x.Category,
-                        Original = x.Original,
-                        Transcription = x.Transcription,
-                        Translate = x.Translate
-                    }).ToList()
-                };
-                return dictionary;
+                throw new System.Exception("Not found");
             }
-            throw new System.Exception("Not found");
+            var user = result.Select(x => new UserView
+            {
+                Id = x.UserId,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                Role = x.Role
+            }).FirstOrDefault();
+            var dictionary = new UserDictionary
+            {
+                User = user,
+                Words = result.Select(x => new Word
+                {
+                    WordId = x.WordId,
+                    Category = x.Category,
+                    Original = x.Original,
+                    Transcription = x.Transcription,
+                    Translate = x.Translate
+                }).ToList()
+            };
+            return dictionary;
         }
 
         public UserDictionary GetUserDictionary(int id)
@@ -90,32 +95,32 @@ namespace EngMan.Repository
 	              FROM [EngMan].[dbo].[UserWords] uw
 	              JOIN [EngMan].[dbo].[Words] w ON w.WordId = uw.WordId
 	              JOIN [EngMan].[dbo].[Users] u ON u.Id = uw.UserId
-	              WHERE u.Id = " + id).ToList();
-            if (result != null)
+	              WHERE u.Id = @id", new SqlParameter("id", id)).ToList();
+            if (result == null)
             {
-                var user = result.Select(x => new UserView
-                {
-                    Id = x.UserId,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Email = x.Email,
-                    Role = x.Role
-                }).FirstOrDefault();
-                var dictionary = new UserDictionary
-                {
-                    User = user,
-                    Words = result.Select(x => new Word
-                    {
-                        WordId = x.WordId,
-                        Category = x.Category,
-                        Original = x.Original,
-                        Transcription = x.Transcription,
-                        Translate = x.Translate
-                    }).ToList()
-                };
-                return dictionary;
+                throw new System.Exception("Not found");
             }
-            throw new System.Exception("Not found");
+            var user = result.Select(x => new UserView
+            {
+                Id = x.UserId,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                Role = x.Role
+            }).FirstOrDefault();
+            var dictionary = new UserDictionary
+            {
+                User = user,
+                Words = result.Select(x => new Word
+                {
+                    WordId = x.WordId,
+                    Category = x.Category,
+                    Original = x.Original,
+                    Transcription = x.Transcription,
+                    Translate = x.Translate
+                }).ToList()
+            };
+            return dictionary;
         }
 
         public bool AddWordToDictionary(int id, UserWord word)

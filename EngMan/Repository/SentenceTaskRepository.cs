@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Linq;
 using EngMan.Models;
+using System.Data.SqlClient;
+
 namespace EngMan.Repository
 {
     public class SentenceTaskRepository: ISentenceTaskRepository
@@ -83,18 +85,21 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
+            var parameters = new object[indexes.Count() + 1];
+            parameters[0] = new SqlParameter("category", category);
             var query = @"
                     SELECT [SentenceTaskId]
 						  ,[Sentence]
 						  ,[Category]
 						  ,[Translate]
 					FROM [dbo].[SentenceTasks]
-                    WHERE LOWER([Category]) LIKE LOWER('" + category + "')";
-            foreach (var index in indexes)
+                    WHERE LOWER([Category]) LIKE LOWER(@category)";
+            for (var i = 0; i < indexes.Count(); i++)
             {
-                query += (" AND [SentenceTaskId]!=" + index);
+                query += (" AND [SentenceTaskId] != @index" + i);
+                parameters[i + 1] = new SqlParameter(("index" + i), indexes.ElementAt(i));
             }
-            return context.Database.SqlQuery<SentenceTask>(query);
+            return context.Database.SqlQuery<SentenceTask>(query, parameters);
         }
     }
 }
