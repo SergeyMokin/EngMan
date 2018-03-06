@@ -183,24 +183,17 @@ namespace EngMan.Extensions
         //saving image to server
         public static string SaveImage(Image image)
         {
-            if (image.Validate())
+            if (!image.Validate()) throw new ArgumentException("Invalid model");
+            var bytearr = image.Data.Select(x => Convert.ToByte(x)).ToArray();
+            var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
+            //path to folder with project
+            var path = System.Web.Hosting.HostingEnvironment.MapPath(Path.Combine("~/uploads/", (time + image.Name)));
+            if (path == null)
             {
-                var bytearr = new List<byte>();
-                foreach (var ch in image.Data)
-                {
-                    bytearr.Add(Convert.ToByte(ch));
-                }
-                var time = DateTime.Now.Subtract(DateTime.MinValue).TotalSeconds;
-                //path to folder with project
-                var path = System.Web.Hosting.HostingEnvironment.MapPath(string.Format("~/uploads/" + time + image.Name));
-                if (path == null)
-                {
-                    return string.Format("Can not be written");
-                }
-                File.WriteAllBytes(path, bytearr.ToArray());
-                return string.Format("http://localhost:58099/uploads/" + time + image.Name);
+                return string.Format("Can not be written");
             }
-            throw new System.Net.Http.HttpRequestException("Invalid model");
+            File.WriteAllBytes(path, bytearr);
+            return string.Format("http://localhost:58099/uploads/" + time + image.Name);
         }
 
         //creating hashpassword
