@@ -307,7 +307,7 @@ export default {
       },
       sortednewmessages(){
           var newmess = [];
-          for(var i = this.$store.state.newmessages.length-1; i >= 0; i--)
+          for(var i = 0; i <= this.$store.state.newmessages.length-1; i++)
           {
               var contain = false;
               for(var k = 0; k < newmess.length; k++)

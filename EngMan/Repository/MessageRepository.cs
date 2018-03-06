@@ -54,7 +54,7 @@ namespace EngMan.Repository
 
         public IEnumerable<ReturnMessage> GetMessages(int userId)
         {
-            return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(string.Format(
+            return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(
                     @"SELECT [MessageId]
                           , B.[Id] [SenderId]
 	                      , B.[FirstName] [SenderFirstName]
@@ -72,9 +72,9 @@ namespace EngMan.Repository
                       FROM [EngMan].[dbo].[Messages]
                       JOIN [EngMan].[dbo].[Users] A ON A.[Id] = [EngMan].[dbo].[Messages].[BeneficiaryId]
                       JOIN [EngMan].[dbo].[Users] B ON B.[Id] = [EngMan].[dbo].[Messages].[SenderId]
-                      WHERE  [EngMan].[dbo].[Messages].[BeneficiaryId] = {0} OR [EngMan].[dbo].[Messages].[SenderId] = @userId",
-                    new SqlParameter("userId", userId)
-                )).Select(x => new ReturnMessage
+                      WHERE [EngMan].[dbo].[Messages].[BeneficiaryId] = @userId OR [EngMan].[dbo].[Messages].[SenderId] = @userId",
+                new SqlParameter("userId", userId))
+                .Select(x => new ReturnMessage
                 {
                     MessageId = x.MessageId,
                     CheckReadMes = x.CheckReadMes,
