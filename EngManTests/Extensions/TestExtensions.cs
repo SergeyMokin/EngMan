@@ -283,20 +283,9 @@ namespace EngManTests.Extensions
         public void ExtensionsTest_Validate_DatabaseId()
         {
             var good = 1;
-            var bad = 0;
+            var bad = -1;
             Assert.AreEqual(true, good.Validate());
             Assert.AreEqual(false, bad.Validate());
-        }
-
-        [TestMethod]
-        public void ExtensionsTest_Validate_StringForNull()
-        {
-            var good = "str";
-            var bad = "";
-            string nullcheck = null;
-            Assert.AreEqual(true, good.Validate());
-            Assert.AreEqual(false, bad.Validate());
-            Assert.AreEqual(false, nullcheck.Validate());
         }
     }
 }

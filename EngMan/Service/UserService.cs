@@ -119,7 +119,7 @@ namespace EngMan.Service
 
         public bool ChangePassword(int id, string oldpassword, string newpassword)
         {
-            if (id.Validate() && oldpassword.Validate() && newpassword.IsCorrectPassword())
+            if (id.Validate() && !String.IsNullOrEmpty(oldpassword) && newpassword.IsCorrectPassword())
             {
                 try
                 {

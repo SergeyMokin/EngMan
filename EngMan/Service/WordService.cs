@@ -20,7 +20,7 @@ namespace EngMan.Service
 
         public IEnumerable<Word> GetByCategory(string category)
         {
-            if (category.Validate())
+            if (!String.IsNullOrEmpty(category))
             {
                 try
                 {
@@ -127,7 +127,7 @@ namespace EngMan.Service
             try
             {
                 var ParsedIndexes = new List<int>();
-                if (indexes.Validate())
+                if (!String.IsNullOrEmpty(indexes))
                 {
                     foreach (var ch in indexes.Split(','))
                     {
@@ -137,7 +137,7 @@ namespace EngMan.Service
                         }
                     }
                 }
-                if (category.Validate())
+                if (!String.IsNullOrEmpty(category))
                 {
                     List<Word> tasks;
                     if (ParsedIndexes.IsCorrect())

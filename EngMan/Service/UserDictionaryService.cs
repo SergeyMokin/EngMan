@@ -79,7 +79,7 @@ namespace EngMan.Service
 
         public UserDictionary GetByCategory(int id, string category)
         {
-            if (id.Validate() && category.Validate())
+            if (id.Validate() && !String.IsNullOrEmpty(category))
             {
                 try
                 {

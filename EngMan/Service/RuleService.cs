@@ -30,7 +30,7 @@ namespace EngMan.Service
 
         public IEnumerable<RuleModel> GetByCategory(string category)
         {
-            if (category.Validate())
+            if (!String.IsNullOrEmpty(category))
             {
                 try
                 {
