@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using EngMan.Models;
 
@@ -40,7 +41,8 @@ namespace EngMan.Repository
                     , [Path]
                     FROM [EngMan].[dbo].[GuessesTheImages]
                     JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
-                    WHERE LOWER([Category]) LIKE LOWER('" + category + "')"
+                    WHERE LOWER([Category]) LIKE LOWER(@category)",
+                  new SqlParameter("category", category)
                 )
                 .Select(x => new GuessesTheImageToReturn
                 {
