@@ -105,24 +105,21 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetAllCategoriesOfDictionary()
         {
-            if (HttpContext.Current == null)
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
                 return BadRequest("Invalid user");
             }
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            try
             {
-                try
+                var result = serviceDictionary.GetAllCategories(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                if (result != null)
                 {
-                    var result = serviceDictionary.GetAllCategories(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                    if (result != null)
-                    {
-                        return Ok(result);
-                    }
+                    return Ok(result);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -131,24 +128,21 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetByCategoryDictionary(string category)
         {
-            if (HttpContext.Current == null)
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
                 return BadRequest("Invalid user");
             }
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            try
             {
-                try
+                var result = serviceDictionary.GetByCategory(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), category);
+                if (result != null)
                 {
-                    var result = serviceDictionary.GetByCategory(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), category);
-                    if (result != null)
-                    {
-                        return Ok(result);
-                    }
+                    return Ok(result);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -157,24 +151,21 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetUserDictionary()
         {
-            if (HttpContext.Current == null)
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
                 return BadRequest("Invalid user");
             }
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            try
             {
-                try
+                var result = serviceDictionary.Get(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                if (result != null)
                 {
-                    var result = serviceDictionary.Get(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                    if (result != null)
-                    {
-                        return Ok(result);
-                    }
+                    return Ok(result);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -183,47 +174,40 @@ namespace EngMan.Controllers
         [HttpPost]
         public IHttpActionResult AddWordToDictionary(UserWord word)
         {
-            if (HttpContext.Current == null)
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
                 return BadRequest("Invalid user");
             }
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            try
             {
-                try
-                {
-                    var result = serviceDictionary.Add(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), word);
-                    return Ok(result);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                var result = serviceDictionary.Add(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), word);
+                return Ok(result);
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //DELETE api/account/DeleteWordFromDictionary
         [HttpDelete]
         public IHttpActionResult DeleteWordFromDictionary(int id)
         {
-            if (HttpContext.Current == null)
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
                 return BadRequest("Invalid user");
             }
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            try
             {
-                try
+                var result = serviceDictionary.Delete(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), id);
+                if (result > 0)
                 {
-                    var result = serviceDictionary.Delete(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), id);
-                    if (result > 0)
-                    {
-                        return Ok("Delete completed successful");
-                    }
+                    return Ok("Delete completed successful");
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -232,24 +216,21 @@ namespace EngMan.Controllers
         [HttpGet]
         public IHttpActionResult GetUserData()
         {
-            if (HttpContext.Current == null)
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
                 return BadRequest("Invalid user");
             }
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            try
             {
-                try
+                var user = service.GetUser(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                if (user != null)
                 {
-                    var user = service.GetUser(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                    if (user != null)
-                    {
-                        return Ok(user);
-                    }
+                    return Ok(user);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
             return NotFound();
         }
@@ -347,25 +328,18 @@ namespace EngMan.Controllers
         [HttpPut]
         public IHttpActionResult ChangePassword(string oldpassword, string newpassword)
         {
-            if (HttpContext.Current == null)
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
                 return BadRequest("Invalid user");
             }
-            if (HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() > 0)
+            try
             {
-                try
-                {
-                    var _user = service.ChangePassword(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), oldpassword, newpassword);
-                    return Ok(_user);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                var _user = service.ChangePassword(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), oldpassword, newpassword);
+                return Ok(_user);
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
         }
     }
