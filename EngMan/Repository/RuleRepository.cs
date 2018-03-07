@@ -83,13 +83,14 @@ namespace EngMan.Repository
 
         public async Task<int> DeleteRule(int id)
         {
-            if (id > 0)
+            if (id < 1)
             {
-                var entity = await context.Rules.FindAsync(id);
-                if (entity != null)
-                {
-                    context.Rules.Remove(entity);
-                }
+                return -1;
+            }
+            var entity = await context.Rules.FindAsync(id);
+            if (entity != null)
+            {
+                context.Rules.Remove(entity);
                 context.SaveChanges();
                 return id;
             }

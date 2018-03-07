@@ -20,18 +20,18 @@ namespace EngMan.Service
 
         public IEnumerable<Word> GetByCategory(string category)
         {
-            if (!String.IsNullOrEmpty(category))
+            if (String.IsNullOrEmpty(category))
             {
-                try
-                {
-                    return rep.GetByCategory(category);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return rep.GetByCategory(category);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public IEnumerable<string> GetAllCategories()
@@ -60,66 +60,66 @@ namespace EngMan.Service
 
         public Word GetById(int id)
         {
-            if (id.Validate())
+            if (!id.Validate())
             {
-                try
-                {
-                    return rep.Words.FirstOrDefault(x => x.WordId == id);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return rep.Words.FirstOrDefault(x => x.WordId == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> Edit(Word word)
         {
-            if (word.Validate(true))
+            if (!word.Validate(true))
             {
-                try
-                {
-                    return await rep.SaveWord(word);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return await rep.SaveWord(word);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public bool Add(Word word)
         {
-            if (word.Validate(true))
+            if (!word.Validate(true))
             {
-                try
-                {
-                    return rep.AddWord(word);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return rep.AddWord(word);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<int> Delete(int id)
         {
-            if (id.Validate())
+            if (!id.Validate())
             {
-                try
-                {
-                    return await rep.DeleteWord(id);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return await rep.DeleteWord(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public MapWord GetTask(string category, string indexes, bool translate)
@@ -137,62 +137,61 @@ namespace EngMan.Service
                         }
                     }
                 }
-                if (!String.IsNullOrEmpty(category))
+                if (String.IsNullOrEmpty(category))
                 {
-                    List<Word> tasks;
-                    if (ParsedIndexes.IsCorrect())
-                    {
-                        tasks = rep.GetTasks(category, ParsedIndexes).ToList();
-                    }
-                    else
-                    {
-                        tasks = rep.GetTasks(category).ToList();
-                    }
-                    if (tasks != null)
-                    {
-                        if (tasks.Count() >= 5)
-                        {
-                            var rand = new Random();
-                            var index = rand.Next(0, tasks.Count());
-                            var indexesOfAnswers = new HashSet<int>()
+                    throw new Exception("Invalid model");
+                }
+                List<Word> tasks;
+                if (ParsedIndexes.IsCorrect())
+                {
+                    tasks = rep.GetTasks(category, ParsedIndexes).ToList();
+                }
+                else
+                {
+                    tasks = rep.GetTasks(category).ToList();
+                }
+                if (tasks == null)
+                {
+                    throw new Exception("Invalid model");
+                }
+                if (tasks.Count() < 5)
+                {
+                    throw new Exception("Few words");
+                }
+                var rand = new Random();
+                var index = rand.Next(0, tasks.Count());
+                var indexesOfAnswers = new HashSet<int>()
                             {
                                 index
                             };
-                            while (indexesOfAnswers.Count() != 5)
-                            {
-                                indexesOfAnswers.Add(rand.Next(0, tasks.Count()));
-                            }
-                            var word = tasks.ElementAt(index);
-                            var answers = new List<string>();
-                            foreach (var i in indexesOfAnswers)
-                            {
-                                if (translate)
-                                {
-                                    answers.Add(tasks.ElementAt(i).Translate);
-                                }
-                                else
-                                {
-                                    answers.Add(tasks.ElementAt(i).Original);
-                                }
-                            }
-                            if (word != null)
-                            {
-                                return new MapWord
-                                {
-                                    WordId = word.WordId,
-                                    Word = translate ? word.Original : word.Translate,
-                                    Answers = answers.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
-                                    Category = word.Category
-                                };
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Few words");
-                        }
+                while (indexesOfAnswers.Count() != 5)
+                {
+                    indexesOfAnswers.Add(rand.Next(0, tasks.Count()));
+                }
+                var word = tasks.ElementAt(index);
+                var answers = new List<string>();
+                foreach (var i in indexesOfAnswers)
+                {
+                    if (translate)
+                    {
+                        answers.Add(tasks.ElementAt(i).Translate);
+                    }
+                    else
+                    {
+                        answers.Add(tasks.ElementAt(i).Original);
                     }
                 }
-                throw new Exception("Invalid model");
+                if (word == null)
+                {
+                    throw new Exception("Invalid model");
+                }
+                return new MapWord
+                {
+                    WordId = word.WordId,
+                    Word = translate ? word.Original : word.Translate,
+                    Answers = answers.OrderBy(x => x.OrderBy(y => y).ToString()[x.Count() / 2 - 1]).ToList(),
+                    Category = word.Category
+                };
             }
             catch (Exception ex)
             {
@@ -202,37 +201,38 @@ namespace EngMan.Service
 
         public bool VerificationCorrectness(Word task, bool translate)
         {
-            if (task.Validate(false))
+            if (!task.Validate(false))
             {
-                try
+                throw new Exception("Invalid model");
+            }
+            try
+            {
+                var _task = GetById(task.WordId);
+                if (_task == null)
                 {
-                    var _task = GetById(task.WordId);
-                    if (_task != null)
+                    throw new Exception("Invalid model");
+                }
+                Regex rx = new Regex("[^a-zA-Zа-яА-Я0-9]");
+                if (translate)
+                {
+                    if (rx.Replace(task.Translate.ToLower(), "").Equals(rx.Replace(_task.Translate.ToLower(), "")))
                     {
-                        Regex rx = new Regex("[^a-zA-Zа-яА-Я0-9]");
-                        if (translate)
-                        {
-                            if (rx.Replace(task.Translate.ToLower(), "").Equals(rx.Replace(_task.Translate.ToLower(), "")))
-                            {
-                                return true;
-                            }
-                        }
-                        else
-                        {
-                            if (rx.Replace(task.Original.ToLower(), "").Equals(rx.Replace(_task.Original.ToLower(), "")))
-                            {
-                                return true;
-                            }
-                        }
+                        return true;
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    throw new Exception(ex.Message);
+                    if (rx.Replace(task.Original.ToLower(), "").Equals(rx.Replace(_task.Original.ToLower(), "")))
+                    {
+                        return true;
+                    }
                 }
-                return false;
             }
-            throw new Exception("Invalid model");
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return false;
         }
     }
 }

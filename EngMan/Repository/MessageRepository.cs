@@ -16,21 +16,22 @@ namespace EngMan.Repository
 
         public IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId)
         {
-            if (messages != null)
+            if (messages == null)
             {
-                foreach (var el in messages)
+                return GetMessages(userId);
+            }
+            foreach (var el in messages)
+            {
+                if (!el.CheckReadMes)
                 {
-                    if (!el.CheckReadMes)
+                    var entity = context.Messages.Find(el.MessageId);
+                    if (entity != null)
                     {
-                        var entity = context.Messages.Find(el.MessageId);
-                        if (entity != null)
-                        {
-                            entity.CheckReadMes = true;
-                        }
+                        entity.CheckReadMes = true;
                     }
                 }
-                context.SaveChanges();
             }
+            context.SaveChanges();
             return GetMessages(userId);
         }
 

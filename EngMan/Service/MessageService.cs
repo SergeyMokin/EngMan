@@ -19,80 +19,77 @@ namespace EngMan.Service
 
         public bool SendMessage(Message mes, int userId)
         {
-            if (mes.Validate() && userId.Validate())
+            if (!mes.Validate() && !userId.Validate())
             {
-                try
-                {
-                    var result = rep.SendMessage(mes, userId);
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                var result = rep.SendMessage(mes, userId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public IEnumerable<ReturnMessage> GetMessages(int userId)
         {
-            if (userId.Validate())
+            if (!userId.Validate())
             {
-                try
-                {
-                    var result = rep.GetMessages(userId);
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                var result = rep.GetMessages(userId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId)
         {
-            if (userId.Validate() && messages != null)
+            if (!userId.Validate() && messages == null)
             {
-                if (messages.Count() > 0)
+                throw new Exception("Invalid model");
+            }
+            foreach (var el in messages)
+            {
+                if (!el.Validate())
                 {
-                    foreach (var el in messages)
-                    {
-                        if (!el.Validate())
-                        {
-                            throw new Exception("Invalid model");
-                        }
-                    }
-                }
-                try
-                {
-                    var result = rep.ReadMessages(messages, userId);
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
+                    throw new Exception("Invalid model");
                 }
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                var result = rep.ReadMessages(messages, userId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public int DeleteMessage(int mesId, int userId)
         {
-            if (userId.Validate() && mesId.Validate())
+            if (!userId.Validate() && !mesId.Validate())
             {
-                try
-                {
-                    var result = rep.DeleteMessage(mesId, userId);
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                var result = rep.DeleteMessage(mesId, userId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

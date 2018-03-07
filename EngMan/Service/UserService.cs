@@ -19,83 +19,83 @@ namespace EngMan.Service
 
         public User ValidateUser(string email, string password)
         {
-            if (email.IsEmail())
+            if (!email.IsEmail())
             {
-                try
-                {
-                    var user = rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password));
-                    return user;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                var user = rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password));
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public UserView GetUser(int id)
         {
-            if (id.Validate())
+            if (!id.Validate())
             {
-                try
-                {
-                    return GetUserList().Where(x => x.Id == id).FirstOrDefault();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return GetUserList().Where(x => x.Id == id).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public bool Registration(User user)
         {
-            if (user.Validate())
+            if (!user.Validate())
             {
-                try
-                {
-                    return rep.AddUser(user);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return rep.AddUser(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> SaveUser(UserView user)
         {
-            if (user.Validate())
+            if (!user.Validate())
             {
-                try
-                {
-                    return await rep.SaveUser(user);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return await rep.SaveUser(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public int DeleteUser(int id)
         {
-            if (id.Validate())
+            if (!id.Validate())
             {
-                try
-                {
-                    return rep.DeleteUser(id);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return rep.DeleteUser(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public List<UserView> GetUserList()
@@ -119,34 +119,34 @@ namespace EngMan.Service
 
         public bool ChangePassword(int id, string oldpassword, string newpassword)
         {
-            if (id.Validate() && !String.IsNullOrEmpty(oldpassword) && newpassword.IsCorrectPassword())
+            if (!id.Validate() && String.IsNullOrEmpty(oldpassword) && !newpassword.IsCorrectPassword())
             {
-                try
-                {
-                    return rep.ChangePassword(id, oldpassword, newpassword);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return rep.ChangePassword(id, oldpassword, newpassword);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> ChangeRole(UserView user)
         {
-            if (user.Validate())
+            if (!user.Validate())
             {
-                try
-                {
-                    return await rep.ChangeRole(user);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                throw new Exception("Invalid model");
             }
-            throw new Exception("Invalid model");
+            try
+            {
+                return await rep.ChangeRole(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

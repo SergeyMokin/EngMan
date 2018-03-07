@@ -37,25 +37,19 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
-            if (word.WordId >= 1)
-            {
-                var entity = await context.Words.FindAsync(word.WordId);
-                if (entity != null)
-                {
-                    entity.Original = word.Original;
-                    entity.Translate = word.Translate;
-                    entity.Category = word.Category;
-                    entity.Transcription = word.Transcription;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
+            if (word.WordId < 1)
             {
                 return false;
             }
+            var entity = await context.Words.FindAsync(word.WordId);
+            if (entity == null)
+            {
+                return false;
+            }
+            entity.Original = word.Original;
+            entity.Translate = word.Translate;
+            entity.Category = word.Category;
+            entity.Transcription = word.Transcription;
             context.SaveChanges();
             return true;
         }
@@ -66,31 +60,29 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
-            if (word.WordId <= 0)
-            {
-                context.Words.Add(word);
-                context.SaveChanges();
-            }
-            else
+            if (word.WordId > 0)
             {
                 return false;
             }
+            context.Words.Add(word);
+            context.SaveChanges();
             return true;
         }
 
         public async Task<int> DeleteWord(int id)
         {
-            if (id > 0)
+            if (id < 1)
             {
-                var entity = await context.Words.FindAsync(id);
-                if (entity != null)
-                {
-                    context.Words.Remove(entity);
-                }
-                context.SaveChanges();
-                return id;
+                return -1;
             }
-            return -1;
+            var entity = await context.Words.FindAsync(id);
+            if (entity == null)
+            {
+                return -1;
+            }
+            context.Words.Remove(entity);
+            context.SaveChanges();
+            return id;
         }
 
         public IEnumerable<Word> GetTasks(string category, IEnumerable<int> indexes = default(int[]))

@@ -22,26 +22,28 @@ namespace EngMan.Providers
                 try
                 {
                     var user = userService.ValidateUser(userName, password);
-                    if (user != null)
+
+                    if (user == null)
                     {
-                        var claims = new List<Claim>()
+                        context.SetError("invalid_grant", "The user name or password is incorrect");
+                    }
+
+                    var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Sid, Convert.ToString(user.Id)),
                         new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, user.Role)
                     };
-                        ClaimsIdentity oAuthIdentity = new ClaimsIdentity(claims,
-                                    Startup.OAuthOptions.AuthenticationType);
 
-                        var properties = CreateProperties(user.FirstName + " " + user.LastName);
-                        var ticket = new AuthenticationTicket(oAuthIdentity, properties);
-                        context.Validated(ticket);
-                    }
-                    else
-                    {
-                        context.SetError("invalid_grant", "The user name or password is incorrect");
-                    }
+                    ClaimsIdentity oAuthIdentity = new ClaimsIdentity(claims,
+                                Startup.OAuthOptions.AuthenticationType);
+
+                    var properties = CreateProperties(user.FirstName + " " + user.LastName);
+
+                    var ticket = new AuthenticationTicket(oAuthIdentity, properties);
+
+                    context.Validated(ticket);
                 }
                 catch
                 {

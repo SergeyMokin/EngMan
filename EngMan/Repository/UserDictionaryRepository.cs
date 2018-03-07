@@ -129,17 +129,18 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
-            if (word.UserId == id)
+            if (word.UserId != id)
             {
-                var entity = context.UserWords.Where(x => x.WordId == word.WordId).FirstOrDefault();
-                if (entity == null)
-                {
-                    context.UserWords.Add(word);
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
+            }
+            var entity = context.UserWords.Where(x => x.WordId == word.WordId).FirstOrDefault();
+            if (entity == null)
+            {
+                context.UserWords.Add(word);
+            }
+            else
+            {
+                return false;
             }
             context.SaveChanges();
             return true;
@@ -147,17 +148,18 @@ namespace EngMan.Repository
 
         public int DeleteWordFromDictionary(int userId, int wordId)
         {
-            if (wordId > 0)
+            if (wordId < 1)
             {
-                var entity = context.UserWords.Where(x => x.WordId == wordId).FirstOrDefault();
-                if (entity != null && entity.UserId == userId)
-                {
-                    context.UserWords.Remove(entity);
-                }
-                context.SaveChanges();
-                return wordId;
+                return -1;
             }
-            return -1;
+            var entity = context.UserWords.Where(x => x.WordId == wordId).FirstOrDefault();
+            if (entity == null && entity.UserId != userId)
+            {
+                return -1;
+            }
+            context.UserWords.Remove(entity);
+            context.SaveChanges();
+            return wordId;
         }
     }
 }

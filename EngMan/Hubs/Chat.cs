@@ -23,20 +23,22 @@ namespace EngMan.Hubs
         {
             var id = Context.ConnectionId;
 
-
-            if (!Users.Any(x => x.ConnectionId == id) && !Users.Any(x => x.Id == user.Id))
+            if (Users.Any(x => x.ConnectionId == id) && Users.Any(x => x.Id == user.Id))
             {
-                var usr = new UserConnect
-                {
-                    ConnectionId = id,
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    Role = user.Role
-                };
-                Users.Add(usr);
+                return;
             }
+
+            var usr = new UserConnect
+            {
+                ConnectionId = id,
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role
+            };
+
+            Users.Add(usr);
         }
 
         //disconnecting the user from the server

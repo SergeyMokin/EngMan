@@ -202,13 +202,14 @@ namespace EngMan.Repository
 
         public int Delete(int id)
         {
-            if (id > 0)
+            if (id < 0)
             {
-                var entity = context.GuessesTheImages.Find(id);
-                if (entity != null)
-                {
-                    context.GuessesTheImages.Remove(entity);
-                }
+                return -1;
+            }
+            var entity = context.GuessesTheImages.Find(id);
+            if (entity != null)
+            {
+                context.GuessesTheImages.Remove(entity);
                 context.SaveChanges();
                 return id;
             }

@@ -46,20 +46,18 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
-            if (id > 0)
+            if (id < 1)
             {
-                var entity = context.Users.Find(id);
-                if (entity != null)
-                {
-                    if (entity.Password.VerifyHashedPassword(oldpassword))
-                    {
-                        entity.Password = newpassword.HashPassword();
-                        context.SaveChanges();
-                        return true;
-                    }
-                }
+                return false;
             }
-            return false;
+            var entity = context.Users.Find(id);
+            if (entity == null || !entity.Password.VerifyHashedPassword(oldpassword))
+            {
+                return false;
+            }
+            entity.Password = newpassword.HashPassword();
+            context.SaveChanges();
+            return true;
         }
 
         public async Task<bool> ChangeRole(UserView user)
@@ -69,13 +67,13 @@ namespace EngMan.Repository
                 throw new System.ArgumentNullException();
             }
             var entity = await context.Users.FindAsync(user.Id);
-            if (entity != null)
+            if (entity == null)
             {
-                entity.Role = user.Role;
-                context.SaveChanges();
-                return true;
+                return false;
             }
-            return false;
+            entity.Role = user.Role;
+            context.SaveChanges();
+            return true;
         }
 
         public bool AddUser(User user)
@@ -85,40 +83,38 @@ namespace EngMan.Repository
                 throw new System.ArgumentNullException();
             }
             var entity = context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
-            if (entity == null)
+            if (entity != null || user.Id != 0)
             {
-                User added = new User
-                {
-                    Id = user.Id,
-                    FirstName = user.FirstName.Substring(0, 1).ToUpper() + user.FirstName.Remove(0, 1),
-                    LastName = user.LastName.Substring(0, 1).ToUpper() + user.LastName.Remove(0, 1),
-                    Email = user.Email.ToLower(),
-                    Password = Extensions.Extensions.HashPassword(user.Password),
-                    Role = user.Role
-                };
-                if (added.Id == 0)
-                {
-                    context.Users.Add(added);
-                    context.SaveChanges();
-                    return true;
-                }
+                return false;
             }
-            return false;
+            User added = new User
+            {
+                Id = user.Id,
+                FirstName = user.FirstName.Substring(0, 1).ToUpper() + user.FirstName.Remove(0, 1),
+                LastName = user.LastName.Substring(0, 1).ToUpper() + user.LastName.Remove(0, 1),
+                Email = user.Email.ToLower(),
+                Password = Extensions.Extensions.HashPassword(user.Password),
+                Role = user.Role
+            };
+            context.Users.Add(added);
+            context.SaveChanges();
+            return true;
         }
 
         public int DeleteUser(int id)
         {
-            if (id > 0)
+            if (id < 1)
             {
-                var entity = context.Users.Find(id);
-                if (entity != null)
-                {
-                    context.Users.Remove(entity);
-                }
-                context.SaveChanges();
-                return entity.Id;
+                return -1;
             }
-            return -1;
+            var entity = context.Users.Find(id);
+            if (entity == null)
+            {
+                return -1;
+            }
+            context.Users.Remove(entity);
+            context.SaveChanges();
+            return entity.Id;
         }
     }
 }
