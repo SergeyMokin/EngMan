@@ -111,7 +111,7 @@ namespace EngMan.Repository
                     WHERE LOWER([Category]) LIKE LOWER(@category)";
             for (var i = 0; i < indexes.Count(); i++)
             {
-                query += (" AND [WordId] != index" + i);
+                query += (" AND [WordId] != @index" + i);
                 parameters[i + 1] = new SqlParameter(("index" + i), indexes.ElementAt(i));
             }
             return context.Database.SqlQuery<Word>(query, parameters);
