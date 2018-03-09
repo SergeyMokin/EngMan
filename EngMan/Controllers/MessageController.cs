@@ -43,6 +43,54 @@ namespace EngMan.Controllers
             }
         }
 
+        //GET api/message/GetMesagesByUserId
+        [HttpGet]
+        public IHttpActionResult GetMessagesByUserId(int otherUserId)
+        {
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
+            {
+                return BadRequest("Invalid user");
+            }
+            try
+            {
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var list = service.GetMessagesByUserId(currentUserId, otherUserId);
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //GET api/message/GetNewMessages
+        [HttpGet]
+        public IHttpActionResult GetNewMessages()
+        {
+            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
+            {
+                return BadRequest("Invalid user");
+            }
+            try
+            {
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var list = service.GetNewMessages(currentUserId);
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         //POST api/message/SendMessage
         [HttpPost]
         public IHttpActionResult SendMessage(Message mes)
@@ -64,7 +112,7 @@ namespace EngMan.Controllers
 
         //POST api/message/ReadMessages
         [HttpPost]
-        public IHttpActionResult ReadMessages(IEnumerable<Message> mesgs)
+        public IHttpActionResult ReadMessages(int senderId)
         {
             if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
@@ -73,7 +121,7 @@ namespace EngMan.Controllers
             try
             {
                 currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
-                var result = service.ReadMessages(mesgs, currentUserId);
+                var result = service.ReadMessages(senderId, currentUserId);
                 if (result == null)
                 {
                     return NotFound();

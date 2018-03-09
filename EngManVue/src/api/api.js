@@ -210,13 +210,23 @@ export default {
     .then(response => response.data)
     .catch(e => e);
   },
-  ReadMessages(messages){
-    return axios.post(url + '/message/readmessages/', messages)
+  ReadMessages(senderId){
+    return axios.post(url + '/message/readmessages?senderId=' + senderId)
     .then(response => response.data)
     .catch(e => e)
   },
   getMessages(){
     return axios.get(url + '/message/getallmessages/')
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  getNewMessages(){
+    return axios.get(url + '/message/getnewmessages/')
+    .then(response => response.data)
+    .catch(e => e);
+  },
+  getMessagesByUserId(otherUserId){
+    return axios.get(url + '/message/getmessagesbyuserid?otherUserId=' + otherUserId)
     .then(response => response.data)
     .catch(e => e);
   },

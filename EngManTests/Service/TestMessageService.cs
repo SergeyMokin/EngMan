@@ -28,8 +28,12 @@ namespace EngManTests.Service
                 .Returns<int, int>((id, userid) => id);
             _rep.Setup(x => x.GetMessages(It.IsAny<int>()))
                 .Returns<int>(x => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
-            _rep.Setup(x => x.ReadMessages(It.IsAny<IEnumerable<Message>>(), It.IsAny<int>()))
-                .Returns<IEnumerable<Message>, int>((messages, x) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x)
+            _rep.Setup(x => x.GetNewMessages(It.IsAny<int>()))
+                .Returns<int>(x => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
+            _rep.Setup(x => x.GetMessagesByUserId(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns<int, int>((x,y) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
+            _rep.Setup(x => x.ReadMessages(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns<int, int>((messages, x) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x)
                 .Select(mes => new ReturnMessage {
                     MessageId = mes.MessageId,
                     Sender = mes.Sender,
@@ -137,10 +141,52 @@ namespace EngManTests.Service
         }
 
         [TestMethod]
+        public void MessageServiceTest_GetNewMessages_valid()
+        {
+            var expected = rep.GetNewMessages(1).Count();
+            var actual = service.GetNewMessages(1).Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_GetNewMessages_invalid()
+        {
+            try
+            {
+                service.GetNewMessages(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_GetMessagesByUserId_valid()
+        {
+            var expected = rep.GetMessagesByUserId(1,1).Count();
+            var actual = service.GetMessagesByUserId(1,1).Count();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void MessageServiceTest_GetMessagesByUserId_invalid()
+        {
+            try
+            {
+                service.GetMessagesByUserId(-1, -1);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Invalid model", e.Message);
+            }
+        }
+
+        [TestMethod]
         public void MessageServiceTest_ReadMessagess_valid()
         {
-            var expected = rep.ReadMessages(new List<Message>(), 1).Count();
-            var actual = service.ReadMessages(new List<Message>(), 1).Count();
+            var expected = rep.ReadMessages(1, 1).Count();
+            var actual = service.ReadMessages(1, 1).Count();
             Assert.AreEqual(expected, actual);
         }
 
@@ -149,7 +195,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.ReadMessages(null, -1);
+                service.ReadMessages(-1, -1);
             }
             catch (Exception e)
             {

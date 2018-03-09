@@ -14,7 +14,7 @@
             </option>
       </datalist>
       <div v-if = "beneficiary == undefined && beneficiaryEmail == ''" class = "new-mess-users-list" style = "height: 330px;">
-          <div v-for = "el in sortednewmessages" :key = "el.MessageId" class = "message-beneficiary pointer" style = "white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" v-on:click = "beneficiaryEmail = el.Sender.Email;changeBeneficiary(beneficiaryEmail)">
+          <div v-for = "el in $store.state.newmessages" :key = "el.MessageId" class = "message-beneficiary pointer" style = "white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" v-on:click = "beneficiaryEmail = el.Sender.Email;changeBeneficiary(beneficiaryEmail)">
             {{el.Sender.FirstName}}: {{el.Text}}
           </div>
       </div>
@@ -77,7 +77,7 @@ export default {
             .then(result =>{
                 if(result === "Delete completed successful")
                 {
-                    this.$store.dispatch('getMessages');
+                    this.$store.dispatch('getMessagesByUserId', this.beneficiary.Id);
                     this.inProgress = false;
                 }
                 else
@@ -117,57 +117,8 @@ export default {
           this.beneficiary = this.$store.getters.users.filter(function(user){
               return user.Email == email;
           })[0];
-          if(this.$store.state.newmess)
-          {
-            for(var i = 0; i < this.sortedmessages.length; i++)
-            {
-                if(!this.sortedmessages[i].CheckReadMes)
-                {
-                    api.ReadMessages(this.sortedmessages.map(function(item){
-                        return {
-                            MessageId: item.MessageId,
-                            SenderId: item.Sender.Id,
-                            BeneficiaryId: item.Beneficiary.Id,
-                            Text: item.Text,
-                            Time: item.Time,
-                            CheckReadMes: item.CheckReadMes
-                        }
-                    }))
-                    .then(res => {
-                        this.inProgress = false;
-                        if(res != undefined)
-                        {
-                            if(res.length > 0)
-                            {
-                                this.$store.dispatch('getMessages');
-                            }
-                            else
-                            {
-                                if(res.response)
-                                {
-                                    if(res.response.data.Message)
-                                    {
-                                        this.inProgress = false;
-                                        console.log(res.response.data.Message);
-                                        return;
-                                    }
-                                }
-                                console.log('Bad request 400');
-                                this.inProgress = false;
-                            }
-                        }
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        this.inProgress = false;
-                    })
-                }
-            }
-            this.inProgress = false;
-          }
-          else{
-            this.inProgress = false;
-          }
+          this.$store.dispatch("getMessagesByUserId", this.beneficiary.Id);
+          this.inProgress = false;
           this.chooseUser = true;
       },
       sendMessage(){
@@ -206,7 +157,7 @@ export default {
                                 Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
                                 CheckReadMes: 0
                             });
-                            this.$store.dispatch('getMessages')
+                            this.$store.dispatch('getMessagesByUserId', this.beneficiary.Id)
                         }
                         else
                         {
@@ -249,23 +200,15 @@ export default {
                     if(this.beneficiary.Id === this.$store.state.newmessages[i].Sender.Id 
                     || this.beneficiary.Id === this.$store.state.newmessages[i].Beneficiary.Id)
                     {
-                        api.ReadMessages(this.$store.state.newmessages.map(function(item){
-                        return {
-                            MessageId: item.MessageId,
-                            SenderId: item.Sender.Id,
-                            BeneficiaryId: item.Beneficiary.Id,
-                            Text: item.Text,
-                            Time: item.Time,
-                            CheckReadMes: item.CheckReadMes
-                        }
-                        }))
+                        api.ReadMessages(this.beneficiary.Id)
                         .then(res => {
                             this.inProgress = false;
                             if(res != undefined)
                             {
                                 if(res.length > 0)
                                 {
-                                    this.$store.dispatch('getMessages');
+                                    this.$store.dispatch('getMessagesByUserId', this.beneficiary.Id);
+                                    this.$store.dispatch('getNewMessages');
                                 }
                                 else
                                 {
@@ -304,29 +247,10 @@ export default {
           return this.$store.getters.messages.filter(function(mes){
               return mes.Beneficiary.Id == vue.beneficiary.Id || mes.Sender.Id == vue.beneficiary.Id
           });
-      },
-      sortednewmessages(){
-          var newmess = [];
-          for(var i = 0; i <= this.$store.state.newmessages.length-1; i++)
-          {
-              var contain = false;
-              for(var k = 0; k < newmess.length; k++)
-              {
-                  if(newmess[k].Sender.Id == this.$store.state.newmessages[i].Sender.Id)
-                  {
-                      contain = true;
-                  }
-              }
-              if(!contain)
-              {
-                  newmess.push(this.$store.state.newmessages[i]);
-              }
-          }
-          return newmess;
       }
   },
   created(){
-      this.$store.dispatch('getMessages');
+      this.$store.dispatch('getNewMessages');
       this.$store.dispatch('getUsers');
       this.sender = this.$store.state.user;
   },

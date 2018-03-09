@@ -43,7 +43,7 @@ export default {
           }
           if(res.Email)
           {
-            this.$store.dispatch('getMessages');
+            this.$store.dispatch('getNewMessages');
             this.$store.state.user.Logined = true;
             this.$store.state.user.Id = res.Id;
             this.$store.state.user.Role = res.Role;

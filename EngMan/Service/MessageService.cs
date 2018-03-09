@@ -49,22 +49,48 @@ namespace EngMan.Service
             }
         }
 
-        public IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId)
+
+        public IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId)
         {
-            if (!userId.Validate() && messages == null)
+            if (!currentUserId.Validate() || !otherUserId.Validate())
             {
                 throw new Exception("Invalid model");
             }
-            foreach (var el in messages)
+            try
             {
-                if (!el.Validate())
-                {
-                    throw new Exception("Invalid model");
-                }
+                return rep.GetMessagesByUserId(currentUserId, otherUserId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<ReturnMessage> GetNewMessages(int userId)
+        {
+            if (!userId.Validate())
+            {
+                throw new Exception("Invalid model");
             }
             try
             {
-                return rep.ReadMessages(messages, userId);
+                return rep.GetNewMessages(userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<ReturnMessage> ReadMessages(int senderId, int beneficiaryId)
+        {
+            if (!senderId.Validate() && !beneficiaryId.Validate())
+            {
+                throw new Exception("Invalid model");
+            }
+            try
+            {
+                return rep.ReadMessages(senderId, beneficiaryId);
             }
             catch (Exception ex)
             {

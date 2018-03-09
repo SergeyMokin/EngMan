@@ -40,18 +40,21 @@ const getters = {
 const mutations = {
     getMessages(state, result)
     {
+        state.messages = result;
+    },
+    getNewMessages(state, result)
+    {
         state.newmessages = [];
         state.newmess = false;
-        state.messages = result;
-        state.messages = state.messages.reverse();
-        for(var i = 0; i < state.messages.length; i++)
+        if(result.length > 0)
         {
-            if(!state.messages[i].CheckReadMes && state.messages[i].Sender.Id != state.user.Id)
-            {
-                state.newmess = true;
-                state.newmessages.push(state.messages[i]);
-            }
+            state.newmessages = result;
+            state.newmess = true;
         }
+    },
+    getMessagesByUserId(state, result)
+    {
+        state.messages = result;
     },
     getGuessesTheImages(state, result)
     {
@@ -100,6 +103,20 @@ const actions = {
         api.getMessages()
         .then(res => {
             commit('getMessages', res)
+        })
+        .catch(e => console.log(e));
+    },
+    getNewMessages: ({ commit }) => {
+        api.getNewMessages()
+        .then(res => {
+            commit('getNewMessages', res)
+        })
+        .catch(e => console.log(e));
+    },
+    getMessagesByUserId: ({ commit }, otherUserId) => {
+        api.getMessagesByUserId(otherUserId)
+        .then(res => {
+            commit('getMessagesByUserId', res)
         })
         .catch(e => console.log(e));
     },
@@ -160,7 +177,7 @@ const actions = {
         var connection = $.hubConnection('http://localhost:58099'); 
         var proxy = connection.createHubProxy('chat');
         proxy.on('onUpdateMessages', function(){
-          dispatch('getMessages');
+          dispatch('getNewMessages');
         })
         connection.start()
         .done(() => 

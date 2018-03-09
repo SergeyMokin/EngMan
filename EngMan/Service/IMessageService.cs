@@ -14,6 +14,12 @@ namespace EngMan.Service
         int DeleteMessage(int mesId, int userId);
 
         //read unread messages (bool CheckReadMessage = true)
-        IEnumerable<ReturnMessage> ReadMessages(IEnumerable<Message> messages, int userId);
+        IEnumerable<ReturnMessage> ReadMessages(int senderId, int beneficiaryId);
+
+        //get messages with current user and other user
+        IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId);
+
+        //get new messages
+        IEnumerable<ReturnMessage> GetNewMessages(int userId);
     }
 }
