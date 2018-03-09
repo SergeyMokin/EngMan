@@ -134,14 +134,11 @@ namespace EngMan.Repository
                 return false;
             }
             var entity = context.UserWords.Where(x => x.WordId == word.WordId).FirstOrDefault();
-            if (entity == null)
-            {
-                context.UserWords.Add(word);
-            }
-            else
+            if (entity != null)
             {
                 return false;
             }
+            context.UserWords.Add(word);
             context.SaveChanges();
             return true;
         }

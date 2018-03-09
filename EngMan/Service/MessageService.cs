@@ -25,8 +25,7 @@ namespace EngMan.Service
             }
             try
             {
-                var result = rep.SendMessage(mes, userId);
-                return result;
+                return rep.SendMessage(mes, userId);
             }
             catch (Exception ex)
             {
@@ -42,8 +41,7 @@ namespace EngMan.Service
             }
             try
             {
-                var result = rep.GetMessages(userId);
-                return result;
+                return rep.GetMessages(userId);
             }
             catch (Exception ex)
             {
@@ -66,8 +64,7 @@ namespace EngMan.Service
             }
             try
             {
-                var result = rep.ReadMessages(messages, userId);
-                return result;
+                return rep.ReadMessages(messages, userId);
             }
             catch (Exception ex)
             {
@@ -83,8 +80,7 @@ namespace EngMan.Service
             }
             try
             {
-                var result = rep.DeleteMessage(mesId, userId);
-                return result;
+                return rep.DeleteMessage(mesId, userId);
             }
             catch (Exception ex)
             {

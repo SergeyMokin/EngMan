@@ -24,16 +24,16 @@ namespace EngMan.Controllers
             try
             {
                 var tasks = service.GetAllCategories();
-                if (tasks != null)
+                if (tasks == null)
                 {
-                    return Ok(tasks);
+                    return NotFound();
                 }
+                return Ok(tasks);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/SentenceTask/GetByCategory
@@ -43,16 +43,16 @@ namespace EngMan.Controllers
             try
             {
                 var tasks = service.GetByCategory(category);
-                if (tasks != null)
+                if (tasks == null)
                 {
-                    return Ok(tasks);
+                    return NotFound();
                 }
+                return Ok(tasks);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/SentenceTask/GetAllTasks
@@ -62,16 +62,16 @@ namespace EngMan.Controllers
             try
             {
                 var tasks = service.Get();
-                if (tasks != null)
+                if (tasks == null)
                 {
-                    return Ok(tasks);
+                    return NotFound();
                 }
+                return Ok(tasks);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/SentenceTask/GetTaskById
@@ -81,16 +81,16 @@ namespace EngMan.Controllers
             try
             {
                 var task = service.GetById(id);
-                if (task != null)
+                if (task == null)
                 {
-                    return Ok(task);
+                    return NotFound();
                 }
+                return Ok(task);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //PUT api/SentenceTask/EditTask
@@ -100,8 +100,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _task = await service.Edit(task);
-                return Ok(_task);
+                return Ok(await service.Edit(task));
             }
             catch (Exception ex)
             {
@@ -116,8 +115,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _task = service.Add(task);
-                return Ok(_task);
+                return Ok(service.Add(task));
             }
             catch (Exception ex)
             {
@@ -137,12 +135,12 @@ namespace EngMan.Controllers
                 {
                     return Ok("Delete completed successful");
                 }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/SentenceTask/GetTask
@@ -152,16 +150,16 @@ namespace EngMan.Controllers
             try
             {
                 var task = service.GetTask(category, indexes);
-                if (task != null)
+                if (task == null)
                 {
-                    return Ok(task);
+                    return NotFound();
                 }
+                return Ok(task);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //POST api/SentenceTask/VerificationCorrectness
@@ -170,8 +168,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var task = service.VerificationCorrectness(sentence);
-                return Ok(task);
+                return Ok(service.VerificationCorrectness(sentence));
             }
             catch (Exception ex)
             {

@@ -41,16 +41,16 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
-            if (mes.SenderId == userId)
+            if (mes.SenderId != userId)
             {
-                mes.CheckReadMes = false;
-                mes.Time = System.DateTime.Now;
-                mes.SenderId = userId;
-                context.Messages.Add(mes);
-                context.SaveChanges();
-                return true;
+                return false;
             }
-            return false;
+            mes.CheckReadMes = false;
+            mes.Time = System.DateTime.Now;
+            mes.SenderId = userId;
+            context.Messages.Add(mes);
+            context.SaveChanges();
+            return true;
         }
 
         public IEnumerable<ReturnMessage> GetMessages(int userId)
@@ -103,15 +103,12 @@ namespace EngMan.Repository
         public int DeleteMessage(int mesId, int userId)
         {
             var entity = context.Messages.Where(x => x.MessageId == mesId && (x.SenderId == userId || x.BeneficiaryId == userId)).FirstOrDefault();
-            if (entity != null)
-            {
-                context.Messages.Remove(entity);
-                context.SaveChanges();
-            }
-            else
+            if (entity == null)
             {
                 return -1;
             }
+            context.Messages.Remove(entity);
+            context.SaveChanges();
             return mesId;
         }
     }

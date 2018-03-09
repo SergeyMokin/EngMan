@@ -41,24 +41,18 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
-            if (rule.RuleId >= 1)
-            {
-                var entity = await context.Rules.FindAsync(rule.RuleId);
-                if (entity != null)
-                {
-                    entity.Title = rule.Title;
-                    entity.Text = rule.Text;
-                    entity.Category = rule.Category;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
+            if (rule.RuleId < 1)
             {
                 return false;
             }
+            var entity = await context.Rules.FindAsync(rule.RuleId);
+            if (entity == null)
+            {
+                return false;
+            }
+            entity.Title = rule.Title;
+            entity.Text = rule.Text;
+            entity.Category = rule.Category;
             context.SaveChanges();
             return true;
         }
@@ -69,15 +63,12 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
-            if (rule.RuleId <= 0)
-            {
-                context.Rules.Add(rule);
-                context.SaveChanges();
-            }
-            else
+            if (rule.RuleId > 0)
             {
                 return false;
             }
+            context.Rules.Add(rule);
+            context.SaveChanges();
             return true;
         }
 
@@ -88,13 +79,13 @@ namespace EngMan.Repository
                 return -1;
             }
             var entity = await context.Rules.FindAsync(id);
-            if (entity != null)
+            if (entity == null)
             {
-                context.Rules.Remove(entity);
-                context.SaveChanges();
-                return id;
+                return -1;
             }
-            return -1;
+            context.Rules.Remove(entity);
+            context.SaveChanges();
+            return id;
         }
 
     }

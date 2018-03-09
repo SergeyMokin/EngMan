@@ -161,20 +161,20 @@ namespace EngMan.Repository
                 throw new System.ArgumentNullException();
             }
             GuessesTheImage returnimg = new GuessesTheImage();
-            if (image.Image != null)
+            if (image.Image == null)
             {
-                var path = Extensions.Extensions.SaveImage(image.Image);
-                returnimg = new GuessesTheImage
-                {
-                    Id = image.Id,
-                    WordId = image.WordId,
-                    Path = path
-                };
-                context.GuessesTheImages.Add(returnimg);
-                context.SaveChanges();
-                return true;
+                return false;
             }
-            return false;
+            var path = Extensions.Extensions.SaveImage(image.Image);
+            returnimg = new GuessesTheImage
+            {
+                Id = image.Id,
+                WordId = image.WordId,
+                Path = path
+            };
+            context.GuessesTheImages.Add(returnimg);
+            context.SaveChanges();
+            return true;
         }
 
         public bool Edit(GuessesTheImageToAdd image)
@@ -184,20 +184,20 @@ namespace EngMan.Repository
                 throw new System.ArgumentNullException();
             }
             var entity = context.GuessesTheImages.Find(image.Id);
-            if (entity != null)
+            if (entity == null)
             {
-                entity.WordId = image.WordId;
-                if (image.Image != null)
-                {
-                    if (image.Image.Data != null && image.Image.Name != null)
-                    {
-                        entity.Path = Extensions.Extensions.SaveImage(image.Image);
-                    }
-                }
-                context.SaveChanges();
-                return true;
+                return false;
             }
-            return false;
+            entity.WordId = image.WordId;
+            if (image.Image != null)
+            {
+                if (image.Image.Data != null && image.Image.Name != null)
+                {
+                    entity.Path = Extensions.Extensions.SaveImage(image.Image);
+                }
+            }
+            context.SaveChanges();
+            return true;
         }
 
         public int Delete(int id)
@@ -207,13 +207,13 @@ namespace EngMan.Repository
                 return -1;
             }
             var entity = context.GuessesTheImages.Find(id);
-            if (entity != null)
+            if (entity == null)
             {
-                context.GuessesTheImages.Remove(entity);
-                context.SaveChanges();
-                return id;
+                return -1;
             }
-            return -1;
+            context.GuessesTheImages.Remove(entity);
+            context.SaveChanges();
+            return id;
         }
     }
 }

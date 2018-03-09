@@ -24,16 +24,16 @@ namespace EngMan.Controllers
             try
             {
                 var tasks = service.GetAllCategories();
-                if (tasks != null)
+                if (tasks == null)
                 {
-                    return Ok(tasks);
+                    return NotFound();
                 }
+                return Ok(tasks);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/word/GetByCategory
@@ -43,16 +43,16 @@ namespace EngMan.Controllers
             try
             {
                 var tasks = service.GetByCategory(category);
-                if (tasks != null)
+                if (tasks == null)
                 {
-                    return Ok(tasks);
+                    return NotFound();
                 }
+                return Ok(tasks);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/word/GetAllWords
@@ -62,16 +62,16 @@ namespace EngMan.Controllers
             try
             {
                 var words = service.Get();
-                if (words != null)
+                if (words == null)
                 {
-                    return Ok(words);
+                    return NotFound();
                 }
+                return Ok(words);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/word/GetWordById
@@ -81,16 +81,16 @@ namespace EngMan.Controllers
             try
             {
                 var word = service.GetById(id);
-                if (word != null)
+                if (word == null)
                 {
-                    return Ok(word);
+                    return NotFound();
                 }
+                return Ok(word);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //PUT api/word/EditWord
@@ -100,8 +100,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _word = await service.Edit(word);
-                return Ok(_word);
+                return Ok(await service.Edit(word));
             }
             catch (Exception ex)
             {
@@ -116,8 +115,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _word = service.Add(word);
-                return Ok(_word);
+                return Ok(service.Add(word));
             }
             catch (Exception ex)
             {
@@ -137,12 +135,12 @@ namespace EngMan.Controllers
                 {
                     return Ok("Delete completed successful");
                 }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/word/GetWordMap
@@ -152,16 +150,16 @@ namespace EngMan.Controllers
             try
             {
                 var task = service.GetTask(category, indexes, translate);
-                if (task != null)
+                if (task == null)
                 {
-                    return Ok(task);
+                    return NotFound();
                 }
+                return Ok(task);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //POST api/word/VerificationCorrectness
@@ -170,8 +168,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var task = service.VerificationCorrectness(word, translate);
-                return Ok(task);
+                return Ok(service.VerificationCorrectness(word, translate));
             }
             catch (Exception ex)
             {

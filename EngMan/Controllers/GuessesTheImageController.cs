@@ -23,16 +23,16 @@ namespace EngMan.Controllers
             try
             {
                 var categories = service.GetAllCategories();
-                if (categories != null)
+                if (categories == null)
                 {
-                    return Ok(categories);
+                    return NotFound();
                 }
+                return Ok(categories);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/GuessesTheImage/GetByCategory
@@ -42,16 +42,16 @@ namespace EngMan.Controllers
             try
             {
                 var task = service.GetByCategory(category);
-                if (task != null)
+                if (task == null)
                 {
-                    return Ok(task);
+                    return NotFound();
                 }
+                return Ok(task);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/GuessesTheImage/GetAllTasks
@@ -61,16 +61,16 @@ namespace EngMan.Controllers
             try
             {
                 var tasks = service.GetAll();
-                if (tasks != null)
+                if (tasks == null)
                 {
-                    return Ok(tasks);
+                    return NotFound();
                 }
+                return Ok(tasks);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/GuessesTheImage/GetTaskById
@@ -80,16 +80,16 @@ namespace EngMan.Controllers
             try
             {
                 var task = service.Get(id);
-                if (task != null)
+                if (task == null)
                 {
-                    return Ok(task);
+                    return NotFound();
                 }
+                return Ok(task);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //PUT api/GuessesTheImage/EditTask
@@ -99,8 +99,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _task = service.Edit(task);
-                return Ok(_task);
+                return Ok(service.Edit(task));
             }
             catch (Exception ex)
             {
@@ -115,8 +114,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _task = service.Add(task);
-                return Ok(_task);
+                return Ok(service.Add(task));
             }
             catch (Exception ex)
             {
@@ -136,12 +134,12 @@ namespace EngMan.Controllers
                 {
                     return Ok("Delete completed successful");
                 }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/GuessesTheImage/GetTask
@@ -151,16 +149,16 @@ namespace EngMan.Controllers
             try
             {
                 var task = service.GetTask(category, indexes);
-                if (task != null)
+                if (task == null)
                 {
-                    return Ok(task);
+                    return NotFound();
                 }
+                return Ok(task);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //POST api/GuessesTheImage/VerificationCorrectness
@@ -169,8 +167,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var task = service.VerificationCorrectness(img);
-                return Ok(task);
+                return Ok(service.VerificationCorrectness(img));
             }
             catch (Exception ex)
             {

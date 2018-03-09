@@ -29,15 +29,15 @@ namespace EngMan.Repository
                 throw new System.ArgumentNullException();
             }
             var entity = await context.Users.FindAsync(user.Id);
-            if (entity != null)
+            if (entity == null)
             {
-                entity.FirstName = user.FirstName;
-                entity.LastName = user.LastName;
-                entity.Email = user.Email;
-                context.SaveChanges();
-                return true;
+                return false;
             }
-            return false;
+            entity.FirstName = user.FirstName;
+            entity.LastName = user.LastName;
+            entity.Email = user.Email;
+            context.SaveChanges();
+            return true;
         }
         
         public bool ChangePassword(int id, string oldpassword, string newpassword)

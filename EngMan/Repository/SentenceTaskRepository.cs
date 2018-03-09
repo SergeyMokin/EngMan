@@ -38,15 +38,15 @@ namespace EngMan.Repository
                 throw new System.ArgumentNullException();
             }
             var entity = await context.SentenceTasks.FindAsync(task.SentenceTaskId);
-            if (entity != null)
+            if (entity == null)
             {
-                entity.Sentence = task.Sentence;
-                entity.Category = task.Category;
-                entity.Translate = task.Translate;
-                context.SaveChanges();
-                return true;
+                return false;
             }
-            return false;
+            entity.Sentence = task.Sentence;
+            entity.Category = task.Category;
+            entity.Translate = task.Translate;
+            context.SaveChanges();
+            return true;
         }
 
         public bool AddTask(SentenceTask task)
@@ -55,28 +55,29 @@ namespace EngMan.Repository
             {
                 throw new System.ArgumentNullException();
             }
-            if (task.SentenceTaskId == 0)
+            if (task.SentenceTaskId > 0)
             {
-                context.SentenceTasks.Add(task);
-                context.SaveChanges();
-                return true;
+                return false;
             }
-            return false;
+            context.SentenceTasks.Add(task);
+            context.SaveChanges();
+            return true;
         }
 
         public async Task<int> DeleteTask(int id)
         {
-            if (id > 0)
+            if (id <= 0)
             {
-                var entity = await context.SentenceTasks.FindAsync(id);
-                if (entity != null)
-                {
-                    context.SentenceTasks.Remove(entity);
-                }
-                context.SaveChanges();
-                return id;
+                return -1;
             }
-            return -1;
+            var entity = await context.SentenceTasks.FindAsync(id);
+            if (entity == null)
+            {
+                return -1;
+            }
+            context.SentenceTasks.Remove(entity);
+            context.SaveChanges();
+            return id;
         }
 
         public IEnumerable<SentenceTask> GetTasks(string category, IEnumerable<int> indexes = default(int[]))

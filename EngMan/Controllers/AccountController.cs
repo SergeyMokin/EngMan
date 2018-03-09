@@ -17,6 +17,7 @@ namespace EngMan.Controllers
     {
         private readonly IUserService service;
         private readonly IUserDictionaryService serviceDictionary;
+        private int currentUserId;
 
         public AccountController(IUserService _service, IUserDictionaryService _serviceDictionary)
         {
@@ -89,16 +90,16 @@ namespace EngMan.Controllers
             try
             {
                 var users = service.GetUserList();
-                if (users != null)
+                if (users == null)
                 {
-                    return Ok(users);
+                    return NotFound();
                 }
+                return Ok(users);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/account/GetAllCategoriesOfDictionary
@@ -111,17 +112,18 @@ namespace EngMan.Controllers
             }
             try
             {
-                var result = serviceDictionary.GetAllCategories(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                if (result != null)
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var result = serviceDictionary.GetAllCategories(currentUserId);
+                if (result == null)
                 {
-                    return Ok(result);
+                    return NotFound();
                 }
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/account/GetByCategoryDictionary
@@ -134,17 +136,18 @@ namespace EngMan.Controllers
             }
             try
             {
-                var result = serviceDictionary.GetByCategory(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), category);
-                if (result != null)
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var result = serviceDictionary.GetByCategory(currentUserId, category);
+                if (result == null)
                 {
-                    return Ok(result);
+                    return NotFound();
                 }
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/account/GetUserDictionary
@@ -157,17 +160,18 @@ namespace EngMan.Controllers
             }
             try
             {
-                var result = serviceDictionary.Get(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                if (result != null)
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var result = serviceDictionary.Get(currentUserId);
+                if (result == null)
                 {
-                    return Ok(result);
+                    return NotFound();
                 }
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //POST api/account/AddWordToDictionary
@@ -180,8 +184,8 @@ namespace EngMan.Controllers
             }
             try
             {
-                var result = serviceDictionary.Add(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), word);
-                return Ok(result);
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                return Ok(serviceDictionary.Add(currentUserId, word));
             }
             catch (Exception ex)
             {
@@ -199,17 +203,18 @@ namespace EngMan.Controllers
             }
             try
             {
-                var result = serviceDictionary.Delete(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), id);
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var result = serviceDictionary.Delete(currentUserId, id);
                 if (result > 0)
                 {
                     return Ok("Delete completed successful");
                 }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/account/GetUserData
@@ -222,7 +227,8 @@ namespace EngMan.Controllers
             }
             try
             {
-                var user = service.GetUser(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var user = service.GetUser(currentUserId);
                 if (user != null)
                 {
                     return Ok(user);
@@ -315,8 +321,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _user = await service.ChangeRole(user);
-                return Ok(_user);
+                return Ok(await service.ChangeRole(user));
             }
             catch (Exception ex)
             {
@@ -334,7 +339,8 @@ namespace EngMan.Controllers
             }
             try
             {
-                var _user = service.ChangePassword(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value), oldpassword, newpassword);
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var _user = service.ChangePassword(currentUserId, oldpassword, newpassword);
                 return Ok(_user);
             }
             catch (Exception ex)

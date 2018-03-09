@@ -26,8 +26,7 @@ namespace EngMan.Service
             }
             try
             {
-                var result = rep.Add(image);
-                return result;
+                return rep.Add(image);
             }
             catch (Exception ex)
             {
@@ -43,8 +42,7 @@ namespace EngMan.Service
             }
             try
             {
-                var result = rep.Edit(image);
-                return result;
+                return rep.Edit(image);
             }
             catch (Exception ex)
             {
@@ -185,12 +183,12 @@ namespace EngMan.Service
                 {
                     return true;
                 }
+                return false;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 throw new HttpRequestException(ex.Message);
             }
-            return false;
         }
     }
 }

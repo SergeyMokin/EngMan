@@ -12,6 +12,7 @@ namespace EngMan.Controllers
     public class MessageController : ApiController
     {
         private IMessageService service;
+        private int currentUserId;
 
         public MessageController(IMessageService _service)
         {
@@ -28,17 +29,18 @@ namespace EngMan.Controllers
             }
             try
             {
-                var list = service.GetMessages(int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                if (list != null)
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var list = service.GetMessages(currentUserId);
+                if (list == null)
                 {
-                    return Ok(list);
+                    return NotFound();
                 }
+                return Ok(list);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //POST api/message/SendMessage
@@ -51,7 +53,8 @@ namespace EngMan.Controllers
             }
             try
             {
-                return Ok(service.SendMessage(mes, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value)));
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                return Ok(service.SendMessage(mes, currentUserId));
             }
             catch (Exception ex)
             {
@@ -69,17 +72,18 @@ namespace EngMan.Controllers
             }
             try
             {
-                var result = service.ReadMessages(mesgs, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
-                if (result != null)
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var result = service.ReadMessages(mesgs, currentUserId);
+                if (result == null)
                 {
-                    return Ok(result);
+                    return NotFound();
                 }
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //DELETE api/message/DeleteMessage
@@ -92,17 +96,18 @@ namespace EngMan.Controllers
             }
             try
             {
-                var _id = service.DeleteMessage(id, int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value));
+                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+                var _id = service.DeleteMessage(id, currentUserId);
                 if (_id != -1)
                 {
                     return Ok("Delete completed successful");
                 }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
     }
 }

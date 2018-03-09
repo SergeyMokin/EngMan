@@ -24,16 +24,16 @@ namespace EngMan.Controllers
             try
             {
                 var result = service.GetAllCategories();
-                if (result != null)
+                if (result == null)
                 {
-                    return Ok(result);
+                    return NotFound();
                 }
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/rule/GetByCategory
@@ -43,16 +43,16 @@ namespace EngMan.Controllers
             try
             {
                 var rules = service.GetByCategory(category);
-                if (rules != null)
+                if (rules == null)
                 {
-                    return Ok(rules);
+                    return NotFound();
                 }
+                return Ok(rules);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/rule/GetAllRules
@@ -62,16 +62,16 @@ namespace EngMan.Controllers
             try
             {
                 var rules = service.Get();
-                if (rules != null)
+                if (rules == null)
                 {
-                    return Ok(rules);
+                    return NotFound();
                 }
+                return Ok(rules);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //GET api/rule/GetRule
@@ -81,16 +81,16 @@ namespace EngMan.Controllers
             try
             {
                 var rule = service.GetById(id);
-                if (rule != null)
+                if (rule == null)
                 {
-                    return Ok(rule);
+                    return NotFound();
                 }
+                return Ok(rule);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //PUT api/rule/EditRule
@@ -100,8 +100,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _rule = await service.Edit(rule);
-                return Ok(_rule);
+                return Ok(await service.Edit(rule));
             }
             catch (Exception ex)
             {
@@ -116,8 +115,7 @@ namespace EngMan.Controllers
         {
             try
             {
-                var _rule = service.Add(rule);
-                return Ok(_rule);
+                return Ok(service.Add(rule));
             }
             catch (Exception ex)
             {
@@ -133,16 +131,16 @@ namespace EngMan.Controllers
             try
             {
                 var pathes = service.AddImages(images);
-                if (pathes != null)
+                if (pathes == null)
                 {
-                    return Ok(pathes);
+                    return NotFound();
                 }
+                return Ok(pathes);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
         //DELETE api/rule/DeleteRule
@@ -157,12 +155,12 @@ namespace EngMan.Controllers
                 {
                     return Ok("Delete completed successful");
                 }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
     }
