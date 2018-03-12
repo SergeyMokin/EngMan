@@ -50,7 +50,7 @@ namespace EngMan.Service
         }
 
 
-        public IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId)
+        public IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId)
         {
             if (!currentUserId.Validate() || !otherUserId.Validate())
             {
@@ -58,7 +58,7 @@ namespace EngMan.Service
             }
             try
             {
-                return rep.GetMessagesByUserId(currentUserId, otherUserId);
+                return rep.GetMessagesByUserId(currentUserId, otherUserId, lastReceivedMessageId);
             }
             catch (Exception ex)
             {

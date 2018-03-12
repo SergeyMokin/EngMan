@@ -45,7 +45,7 @@ namespace EngMan.Controllers
 
         //GET api/message/GetMesagesByUserId
         [HttpGet]
-        public IHttpActionResult GetMessagesByUserId(int otherUserId)
+        public IHttpActionResult GetMessagesByUserId(int otherUserId, int lastReceivedMessageId)
         {
             if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
             {
@@ -54,7 +54,7 @@ namespace EngMan.Controllers
             try
             {
                 currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
-                var list = service.GetMessagesByUserId(currentUserId, otherUserId);
+                var list = service.GetMessagesByUserId(currentUserId, otherUserId, lastReceivedMessageId);
                 if (list == null)
                 {
                     return NotFound();

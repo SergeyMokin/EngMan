@@ -225,8 +225,8 @@ export default {
     .then(response => response.data)
     .catch(e => e);
   },
-  getMessagesByUserId(otherUserId){
-    return axios.get(url + '/message/getmessagesbyuserid?otherUserId=' + otherUserId)
+  getMessagesByUserId(otherUserId, lastReceivedMessageId){
+    return axios.get(url + '/message/getmessagesbyuserid?otherUserId=' + otherUserId + '&lastReceivedMessageId=' + lastReceivedMessageId)
     .then(response => response.data)
     .catch(e => e);
   },

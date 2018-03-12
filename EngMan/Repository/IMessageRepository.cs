@@ -12,7 +12,7 @@ namespace EngMan.Repository
 
         IEnumerable<ReturnMessage> ReadMessages(int senderId, int beneficiaryId);
 
-        IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId);
+        IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId);
 
         IEnumerable<ReturnMessage> GetNewMessages(int userId);
     }

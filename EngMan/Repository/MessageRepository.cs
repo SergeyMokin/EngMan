@@ -145,10 +145,10 @@ namespace EngMan.Repository
                 });
         }
 
-        public IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId)
+        public IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId)
         {
-            return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(
-                    @"SELECT TOP 150 [MessageId]
+            const int minRecivedId = 1;
+            var sqlQuery = @"SELECT TOP 100 [MessageId]
                        , B.[Id][SenderId]
                        , B.[FirstName][SenderFirstName]
                        , B.[LastName][SenderLastName]
@@ -166,9 +166,16 @@ namespace EngMan.Repository
                     JOIN[EngMan].[dbo].[Users] A ON A.[Id] = [EngMan].[dbo].[Messages].[BeneficiaryId]
                     JOIN[EngMan].[dbo].[Users] B ON B.[Id] = [EngMan].[dbo].[Messages].[SenderId]
                     WHERE([EngMan].[dbo].[Messages].[BeneficiaryId] = @currentUserId OR[EngMan].[dbo].[Messages].[SenderId] = @currentUserId)
-                    AND([EngMan].[dbo].[Messages].[BeneficiaryId] = @otherUserId OR[EngMan].[dbo].[Messages].[SenderId] = @otherUserId)
-                    ORDER BY [MessageId] DESC",
-                new[] { new SqlParameter("currentUserId", currentUserId), new SqlParameter("otherUserId", otherUserId) })
+                    AND([EngMan].[dbo].[Messages].[BeneficiaryId] = @otherUserId OR[EngMan].[dbo].[Messages].[SenderId] = @otherUserId)";
+            var parameters = new[] { new SqlParameter("currentUserId", currentUserId),
+                    new SqlParameter("otherUserId", otherUserId),
+                    new SqlParameter("lastReceivedMessageId", lastReceivedMessageId) };
+            if (lastReceivedMessageId > minRecivedId)
+            {
+                sqlQuery += " AND [MessageId] < @lastReceivedMessageId";
+            }
+            sqlQuery += " ORDER BY[MessageId] DESC";
+            return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(sqlQuery, parameters)
                 .Select(x => new ReturnMessage
                 {
                     MessageId = x.MessageId,

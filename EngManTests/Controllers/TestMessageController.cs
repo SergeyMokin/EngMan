@@ -48,7 +48,7 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void MessageControllerTest_GetMessagesByUserId()
         {
-            var actual = controller.GetMessagesByUserId(1);
+            var actual = controller.GetMessagesByUserId(1, 1);
             Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
         }
 

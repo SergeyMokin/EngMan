@@ -19,7 +19,7 @@
           </div>
       </div>
       <div v-else class = "messages">
-          <div v-for = "el in sortedmessages" :key = "el.MessageId">
+          <div v-for = "el in $store.getters.messages" :key = "el.MessageId">
               <div v-if = "el.Sender.Id == sender.Id" class = "label-sender"><span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span> <span style = "font-size: 10px">{{dateTime(el.Time)}}</span> You</div>
               <div v-if = "el.Sender.Id == sender.Id" class = "message-sender">
                   {{el.Text}}
@@ -29,6 +29,10 @@
                   {{el.Text}}
               </div>
           </div>
+            <a v-if = "canDownloadMore" v-on:click="loadingMessages"
+               style = "-moz-user-select: none;-khtml-user-select: none; user-select: none; cursor:pointer;">
+                    more...
+            </a>
       </div>
       <div v-if = "chooseUser" class = "input-form-mes" v-on:keyup.enter="sendMessage()">
             <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''" v-on:click = "readUnreadMessages()"/>
@@ -56,10 +60,16 @@ export default {
       }
   },
   methods: {
+      loadingMessages(){
+        this.$store.dispatch("getMessagesByUserId", { otherUserId: this.beneficiary.Id, lastReceivedMessageId: this.$store.getters.messages[this.$store.getters.messages.length-1].MessageId }); 
+      },
       activeInputChooseUser(){
           this.chooseUser = false;
           this.beneficiary = undefined;
           this.beneficiaryEmail = '';
+          this.$store.state.messages = [];
+          this.$store.state.endOfMessages = false;
+          this.message = '';
       },
       closeform(){
           this.inProgress = false;
@@ -67,6 +77,8 @@ export default {
           this.beneficiary = undefined;
           this.beneficiaryEmail = 'none';
           this.sender = '';
+          this.$store.state.messages = [];
+          this.$store.state.endOfMessages = false;
           this.$emit('closeMessages');
       },
       deleteMessage(id){
@@ -77,7 +89,7 @@ export default {
             .then(result =>{
                 if(result === "Delete completed successful")
                 {
-                    this.$store.dispatch('getMessagesByUserId', this.beneficiary.Id);
+                    this.$store.dispatch('getMessagesByUserId', { otherUserId: this.beneficiary.Id, lastReceivedMessageId: 0 });
                     this.inProgress = false;
                 }
                 else
@@ -117,7 +129,7 @@ export default {
           this.beneficiary = this.$store.getters.users.filter(function(user){
               return user.Email == email;
           })[0];
-          this.$store.dispatch("getMessagesByUserId", this.beneficiary.Id);
+          this.$store.dispatch("getMessagesByUserId", { otherUserId: this.beneficiary.Id, lastReceivedMessageId: 0 });
           this.inProgress = false;
           this.chooseUser = true;
       },
@@ -157,7 +169,7 @@ export default {
                                 Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
                                 CheckReadMes: 0
                             });
-                            this.$store.dispatch('getMessagesByUserId', this.beneficiary.Id)
+                            this.$store.dispatch('getMessagesByUserId', { otherUserId: this.beneficiary.Id, lastReceivedMessageId: 0 })
                         }
                         else
                         {
@@ -207,7 +219,7 @@ export default {
                             {
                                 if(res.length > 0)
                                 {
-                                    this.$store.dispatch('getMessagesByUserId', this.beneficiary.Id);
+                                    this.$store.dispatch('getMessagesByUserId', { otherUserId: this.beneficiary.Id, lastReceivedMessageId: 0 });
                                     this.$store.dispatch('getNewMessages');
                                 }
                                 else
@@ -240,14 +252,12 @@ export default {
       users(){
           return this.$store.getters.users;
       },
-      sortedmessages(){
-          this.sender = this.$store.state.user;
-          var vue = this;
-          if(this.beneficiary != undefined && this.beneficiaryEmail != '')
-          return this.$store.getters.messages.filter(function(mes){
-              return mes.Beneficiary.Id == vue.beneficiary.Id || mes.Sender.Id == vue.beneficiary.Id
-          });
-      }
+      canDownloadMore()
+      {
+          return this.$store.getters.messages.length > 0 
+          && this.$store.getters.messages.length % 100 == 0
+          && !this.$store.state.endOfMessages;
+      }  
   },
   created(){
       this.$store.dispatch('getNewMessages');

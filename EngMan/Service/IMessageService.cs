@@ -17,7 +17,7 @@ namespace EngMan.Service
         IEnumerable<ReturnMessage> ReadMessages(int senderId, int beneficiaryId);
 
         //get messages with current user and other user
-        IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId);
+        IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId);
 
         //get new messages
         IEnumerable<ReturnMessage> GetNewMessages(int userId);

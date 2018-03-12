@@ -14,6 +14,7 @@ const state = {
     , users: []
     , messages: []
     , newmess: false
+    , endOfMessages: false
     , newmessages: []
     , guessestheimages: []
     , connectionSignalR: {}
@@ -54,7 +55,12 @@ const mutations = {
     },
     getMessagesByUserId(state, result)
     {
-        state.messages = result;
+        state.endOfMessages = false;
+        if(result.length == 0)
+        {
+            state.endOfMessages = true;
+        }
+        state.messages = state.messages.concat(result)
     },
     getGuessesTheImages(state, result)
     {
@@ -113,8 +119,8 @@ const actions = {
         })
         .catch(e => console.log(e));
     },
-    getMessagesByUserId: ({ commit }, otherUserId) => {
-        api.getMessagesByUserId(otherUserId)
+    getMessagesByUserId: ({ commit }, params) => {
+        api.getMessagesByUserId(params.otherUserId, params.lastReceivedMessageId)
         .then(res => {
             commit('getMessagesByUserId', res)
         })

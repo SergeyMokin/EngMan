@@ -30,8 +30,8 @@ namespace EngManTests.Service
                 .Returns<int>(x => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
             _rep.Setup(x => x.GetNewMessages(It.IsAny<int>()))
                 .Returns<int>(x => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
-            _rep.Setup(x => x.GetMessagesByUserId(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns<int, int>((x,y) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
+            _rep.Setup(x => x.GetMessagesByUserId(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns<int, int, int>((x,y,z) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
             _rep.Setup(x => x.ReadMessages(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns<int, int>((messages, x) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x)
                 .Select(mes => new ReturnMessage {
@@ -164,8 +164,8 @@ namespace EngManTests.Service
         [TestMethod]
         public void MessageServiceTest_GetMessagesByUserId_valid()
         {
-            var expected = rep.GetMessagesByUserId(1,1).Count();
-            var actual = service.GetMessagesByUserId(1,1).Count();
+            var expected = rep.GetMessagesByUserId(1,1,1).Count();
+            var actual = service.GetMessagesByUserId(1,1,1).Count();
             Assert.AreEqual(expected, actual);
         }
 
@@ -174,7 +174,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.GetMessagesByUserId(-1, -1);
+                service.GetMessagesByUserId(-1, -1, -1);
             }
             catch (Exception e)
             {
