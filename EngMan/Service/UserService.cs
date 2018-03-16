@@ -58,7 +58,7 @@ namespace EngMan.Service
             }
             try
             {
-                return rep.AddUser(user);
+                return rep.AddUser(user) ? true : throw new Exception("This user is alredy exists");
             }
             catch (Exception ex)
             {
