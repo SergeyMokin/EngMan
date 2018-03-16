@@ -268,11 +268,17 @@ export default {
                                 Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
                                 CheckReadMes: 0
                             });
-                            this.$store.dispatch('getMessagesByUserId', 
-                            { 
-                                otherUserId: this.beneficiary.Id, 
-                                lastReceivedMessageId: 0 
-                            })
+                            this.$store.state.messages.unshift(
+                                {
+                                    MessageId: this.$store.state.messages[0].MessageId + 1,
+                                    Sender: this.sender,
+                                    Beneficiary: this.beneficiary,
+                                    Text: this.message,
+                                    Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
+                                    CheckReadMes: 0
+                                }
+                            );
+                            this.message = '';
                         }
                         else
                         {
@@ -295,7 +301,6 @@ export default {
                 }
             }   
           }
-          this.message = '';
           this.inProgress = false;
       },
       dateTime(_date){
