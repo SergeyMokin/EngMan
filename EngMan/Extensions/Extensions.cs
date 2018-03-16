@@ -14,8 +14,8 @@ namespace EngMan.Extensions
         //Validate indexes array
         public static bool IsCorrect(this IEnumerable<int> task)
         {
-            const int maxCountOfTasks = 10;
-            return task != null && task.Count() < maxCountOfTasks;
+            const int maxCountOfGettingTasks = 9;
+            return task != null && task.Count() < maxCountOfGettingTasks;
         }
 
         //Validate password
