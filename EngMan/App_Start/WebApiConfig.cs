@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using System.Web.Http.Cors;
+using EngMan.Filters;
 namespace EngMan
 {
     public static class WebApiConfig
@@ -10,6 +11,9 @@ namespace EngMan
             var json = config.Formatters.JsonFormatter;
             json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
             config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Filters.Add(new NotFoundExceptionFilterAttribute());
+            config.Filters.Add(new CheckModelForNullAttribute());
+            config.Filters.Add(new CheckResultForNullAttribute());
             config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
             // Web API routes
             config.MapHttpAttributeRoutes();
