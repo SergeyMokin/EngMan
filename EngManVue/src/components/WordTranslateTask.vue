@@ -121,7 +121,7 @@ export default {
         choose: false,
         countOfWords: 0,
         completeMessage: '',
-        indexes: '',
+        indexes: '_',
         goodAnswer: 0,
         attempt: 0,
         inProgress: false,
@@ -246,7 +246,7 @@ export default {
         this.choose = false
         this.countOfWords = 0
         this.completeMessage = ''
-        this.indexes = ''
+        this.indexes = '_'
         this.goodAnswer = 0
         this.attempt = 0
         this.inProgress = false

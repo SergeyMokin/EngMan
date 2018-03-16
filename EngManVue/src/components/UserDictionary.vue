@@ -77,7 +77,7 @@
                         if(res === "Delete completed successful")
                         {
                             alert('Delete completed successful');
-                            this.inProgress = true;
+                            this.inProgress = false;
                             this.getWordsByCategory();
                         }
                         else

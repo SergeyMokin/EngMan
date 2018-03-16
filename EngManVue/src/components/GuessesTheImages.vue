@@ -121,7 +121,7 @@ export default {
   name: 'guessestheimages-task',
   data () {
     return {
-        indexes: '',
+        indexes: '_',
         countOfTasks: 0,
         completeMessage: '',
         goodAnswer: 0,
@@ -209,7 +209,7 @@ export default {
         }
         alert(this.completeMessage);
         this.countOfTasks = 0;
-        this.indexes = '';
+        this.indexes = '_';
         this.id = 0;
         this.goodAnswer = 0;
         this.attempt = 0;

@@ -94,6 +94,11 @@
           </span>
           
           <div>
+            <img 
+                title="Selected task image" 
+                :src = "task.Path" 
+                style = "width: 80%; margin-bottom: 5px;">
+            
             <span>Category: </span>
 
             <select 
@@ -125,7 +130,7 @@
           </div>
           <span v-if = "errorMessage" class = "span-error-message">
               {{errorMessage}}<br/>
-          </span><br/><br/>
+          </span>
 
       </div>
   </div>

@@ -322,6 +322,7 @@ export default {
                         if(result.response.data.Message)
                         {
                             this.inProgress = false;
+                            this.badRequest = true;
                             console.log(result.response.data.Message);
                             return;
                         }

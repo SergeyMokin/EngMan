@@ -117,7 +117,7 @@ export default {
     return {
         countOfSentences: 0,
         completeMessage: '',
-        indexes: '',
+        indexes: '_',
         goodAnswer: 0,
         attempt: 0,
         inProgress: false,
@@ -224,7 +224,7 @@ export default {
         alert(this.completeMessage);
         this.countOfSentences = 0
         this.completeMessage = ''
-        this.indexes = ''
+        this.indexes = '_'
         this.goodAnswer = 0
         this.attempt = 0
         this.inProgress = false

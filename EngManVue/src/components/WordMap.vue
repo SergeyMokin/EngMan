@@ -145,7 +145,6 @@ export default {
         choose: false,
         countOfWords: 0,
         completeMessage: '',
-        indexes: '',
         badAnswer: 0,
         attempt: 0,
         inProgress: false,
@@ -201,7 +200,6 @@ export default {
         this.choose = false
         this.countOfWords = 0
         this.completeMessage = ''
-        this.indexes = ''
         this.badAnswer = 0
         this.attempt = 0
         this.inProgress = false
