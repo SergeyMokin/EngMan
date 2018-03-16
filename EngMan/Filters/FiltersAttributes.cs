@@ -46,6 +46,10 @@ namespace EngMan.Filters
     {
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
+            if (actionExecutedContext.Exception != null)
+            {
+                return;
+            }
             actionExecutedContext.Response.TryGetContentValue(out object objValue);
             if (objValue == null)
             {
