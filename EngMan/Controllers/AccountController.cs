@@ -129,110 +129,50 @@ namespace EngMan.Controllers
 
         //GET api/account/GetUserById
         [HttpGet]
-        public IHttpActionResult GetUserById(int id)
+        public UserView GetUserById(int id)
         {
-            try
-            {
-                var user = service.GetUser(id);
-                if (user != null)
-                {
-                    return Ok(user);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return NotFound();
+            return service.GetUser(id);
         }
 
         //PUT api/account/EditUser
         [HttpPut]
-        public async Task<IHttpActionResult> EditUser(UserView user)
+        public async Task<bool> EditUser(UserView user)
         {
-            try
-            {
-                var _user = await service.SaveUser(user);
-                return Ok(_user);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await service.SaveUser(user);
         }
 
         //DELETE api/account/DeleteUser
+        //todo: edit delete to int?
         [Authorize(Roles = "admin")]
         [HttpDelete]
-        public IHttpActionResult DeleteUser(int id)
+        public string DeleteUser(int id)
         {
-            try
-            {
-                var _id = service.DeleteUser(id);
-                if (_id != -1)
-                {
-                    return Ok("Delete completed successful");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return NotFound();
+            var _id = service.DeleteUser(id);
+            return "Delete completed successful";
         }
         
         //POST api/account/LogOut
         [HttpPost]
-        public IHttpActionResult LogOut()
+        public string LogOut()
         {
-            if (HttpContext.Current == null)
-            {
-                return BadRequest("Invalid user");
-            }
-            try
-            {
-                HttpContext.Current.GetOwinContext().Authentication.SignOut();
-                return Ok("Successfully completed");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            HttpContext.Current.GetOwinContext().Authentication.SignOut();
+            return "Successfully completed";
         }
 
         //PUT api/account/ChangeRole
         [HttpPut]
         [Authorize(Roles = "admin")]
-        public async Task<IHttpActionResult> ChangeRole(UserView user)
+        public async Task<bool> ChangeRole(UserView user)
         {
-            try
-            {
-                return Ok(await service.ChangeRole(user));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await service.ChangeRole(user);
         }
 
         //PUT api/account/ChangePassword
         [HttpPut]
-        public IHttpActionResult ChangePassword(string oldpassword, string newpassword)
+        public bool ChangePassword(string oldpassword, string newpassword)
         {
-            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
-            {
-                return BadRequest("Invalid user");
-            }
-            try
-            {
-                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
-                var _user = service.ChangePassword(currentUserId, oldpassword, newpassword);
-                return Ok(_user);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+            return service.ChangePassword(currentUserId, oldpassword, newpassword);
         }
     }
 }
