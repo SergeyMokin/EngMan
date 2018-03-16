@@ -28,193 +28,79 @@ namespace EngMan.Controllers
         //POST api/account/login
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IHttpActionResult> Login(UserLogin user)
+        public async Task<ExpandoObject> Login(UserLogin user)
         {
-            try
-            {
-                if (user == null)
-                {
-                    return BadRequest("Invalid user data");
-                }
-
-                //Get token
-                var testServer = TestServer.Create<Startup>();
-                var requestParams = new List<KeyValuePair<string, string>>
+            //Get token
+            var testServer = TestServer.Create<Startup>();
+            var requestParams = new List<KeyValuePair<string, string>>
                 {
                     new KeyValuePair<string, string>("grant_type", "password"),
                     new KeyValuePair<string, string>("username", user.Email),
                     new KeyValuePair<string, string>("password", user.Password)
                 };
-                var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
-                var tokenServiceResponse = await testServer.HttpClient.PostAsync(
-                    Startup.TokenPath, requestParamsFormUrlEncoded);
-
-                //Parse token
-                var data = await tokenServiceResponse.Content.ReadAsAsync<ExpandoObject>();
-                return Json(data);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
+            var tokenServiceResponse = await testServer.HttpClient.PostAsync(
+                Startup.TokenPath, requestParamsFormUrlEncoded);
+            return await tokenServiceResponse.Content.ReadAsAsync<ExpandoObject>();
         }
 
         //POST api/account/registration
+        //todo: edit registration
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IHttpActionResult> Registration(User user)
+        public async Task<ExpandoObject> Registration(User user)
         {
-            if (user == null)
-            {
-                return BadRequest("Invalid user data");
-            }
-            try
-            {
-                var _user = service.Registration(user);
-                if (_user)
-                {
-                    return await Login(new UserLogin { Email = user.Email, Password = user.Password });
-                }
-                return BadRequest("Unsuccessful registration");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var _user = service.Registration(user);
+            return await Login(new UserLogin { Email = user.Email, Password = user.Password });
         }
         
         //GET api/account/GetAllUsers
         [HttpGet]
-        public IHttpActionResult GetAllUsers()
+        public List<UserView> GetAllUsers()
         {
-            try
-            {
-                var users = service.GetUserList();
-                if (users == null)
-                {
-                    return NotFound();
-                }
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetUserList();
         }
 
         //GET api/account/GetAllCategoriesOfDictionary
         [HttpGet]
-        public IHttpActionResult GetAllCategoriesOfDictionary()
+        public IEnumerable<string> GetAllCategoriesOfDictionary()
         {
-            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
-            {
-                return BadRequest("Invalid user");
-            }
-            try
-            {
-                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
-                var result = serviceDictionary.GetAllCategories(currentUserId);
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+            return serviceDictionary.GetAllCategories(currentUserId);
         }
 
         //GET api/account/GetByCategoryDictionary
         [HttpGet]
-        public IHttpActionResult GetByCategoryDictionary(string category)
+        public UserDictionary GetByCategoryDictionary(string category)
         {
-            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
-            {
-                return BadRequest("Invalid user");
-            }
-            try
-            {
-                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
-                var result = serviceDictionary.GetByCategory(currentUserId, category);
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+            return serviceDictionary.GetByCategory(currentUserId, category);
         }
 
         //GET api/account/GetUserDictionary
         [HttpGet]
-        public IHttpActionResult GetUserDictionary()
+        public UserDictionary GetUserDictionary()
         {
-            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
-            {
-                return BadRequest("Invalid user");
-            }
-            try
-            {
-                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
-                var result = serviceDictionary.Get(currentUserId);
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+            return serviceDictionary.Get(currentUserId);
         }
 
         //POST api/account/AddWordToDictionary
         [HttpPost]
-        public IHttpActionResult AddWordToDictionary(UserWord word)
+        public bool AddWordToDictionary(UserWord word)
         {
-            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
-            {
-                return BadRequest("Invalid user");
-            }
-            try
-            {
-                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
-                return Ok(serviceDictionary.Add(currentUserId, word));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+            return serviceDictionary.Add(currentUserId, word);
         }
 
         //DELETE api/account/DeleteWordFromDictionary
+        //todo: edit delete to int?
         [HttpDelete]
-        public IHttpActionResult DeleteWordFromDictionary(int id)
+        public string DeleteWordFromDictionary(int id)
         {
-            if (HttpContext.Current == null || HttpContext.Current.GetOwinContext().Authentication.User.Claims.Count() == 0)
-            {
-                return BadRequest("Invalid user");
-            }
-            try
-            {
-                currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
-                var result = serviceDictionary.Delete(currentUserId, id);
-                if (result > 0)
-                {
-                    return Ok("Delete completed successful");
-                }
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            currentUserId = int.Parse(HttpContext.Current.GetOwinContext().Authentication.User.Claims.Select(x => x).ElementAt(0).Value);
+            var result = serviceDictionary.Delete(currentUserId, id);
+            return "Delete completed successful";
         }
 
         //GET api/account/GetUserData
