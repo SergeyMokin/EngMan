@@ -1,41 +1,126 @@
 <template>
   <div v-if = "$store.state.user.Role == 'admin'">
+
       <div class="loading" v-if = "inProgress">Loading&#8230;</div>
+      
       <div v-if = "!clickSentence" class = "view-list">
-      <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
-      <router-link to="/admin/sentences" class = "routes-admin" style = "background-color: #ddd; cursor: default;">Sentences </router-link>
-      <router-link to="/admin/words" class = "routes-admin">Words </router-link>
-      <router-link to="/admin/users" class = "routes-admin">Users </router-link>
-      <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link><br/><br/>
-        <span style = "cursor: pointer;" v-on:click = "AddSentence()"><img title="Add" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
-        <select class = "select-form" style = "width: 250px" id = "sentence_category" v-model = "category">
+
+        <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
+
+        <router-link 
+            to="/admin/sentences" 
+            class = "routes-admin" 
+            style = "background-color: #ddd; cursor: default;">
+                Sentences 
+        </router-link>
+
+        <router-link to="/admin/words" class = "routes-admin">Words </router-link>
+
+        <router-link to="/admin/users" class = "routes-admin">Users </router-link>
+        
+        <router-link to="/admin/guessestheimages" class = "routes-admin">Guesses the images</router-link>
+        
+        <br/><br/>
+
+        <span 
+            style = "cursor: pointer;" 
+            v-on:click = "AddSentence()">
+                <img 
+                    title="Add" 
+                    style = "width: 30px; height: auto" 
+                    type = "img" 
+                    src = "../assets/add-icon.png">
+        </span>
+        <br/><br/>
+        
+        <select 
+            class = "select-form" 
+            style = "width: 250px" 
+            id = "sentence_category" 
+            v-model = "category">
+
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
+
         </select><br/>
-        <input style = "width: 250px" v-if = "category.length > 0" type = "text" v-model="searchKey" class = "select-form" placeholder = "Search..."><br/>
+        
+        <input 
+            style = "width: 250px" 
+            v-if = "category.length > 0" 
+            type = "text" 
+            v-model="searchKey" 
+            class = "select-form" 
+            placeholder = "Search...">
+        <br/>
+        
         <div v-if = "category.length > 0" v-for = 'el in sentences' :key = 'el.SentenceTaskId'>
             <div class = "list--element">
                 <span class = "span--element">
                     {{el.Sentence}}
-                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteSentence(el.SentenceTaskId)"><img title="Delete" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
-                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "editSentence(el.SentenceTaskId)"><img title="Chenge" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
+
+                    <span 
+                        style = "float: right; font-size:10px; cursor: pointer;" 
+                        v-on:click = "deleteSentence(el.SentenceTaskId)">
+                            <img 
+                                title="Delete" 
+                                style = "width: 20px; height: auto" 
+                                type = "img" 
+                                src = "../assets/close-icon.png">
+                    </span>
+                    
+                    <span 
+                        style = "float: right; font-size:10px; cursor: pointer;" 
+                        v-on:click = "editSentence(el.SentenceTaskId)">
+                            <img 
+                                title="Chenge" 
+                                style = "margin-right: 5px; width: 18px; height: auto" 
+                                type = "img" 
+                                src = "../assets/edit-icon.png">
+                    </span>
                 </span>
             </div>
         </div>
+      
       </div>
+
       <div v-if = "clickSentence" style = "text-align: center">
           <br/><br/>
-          <span v-on:click = "closeEditForm()"><img title="Close" style = "width: 20px; height: auto;" class = "icon-close" type = "img" src = "../assets/close-icon.png"></span>
-          <span v-on:click = "saveSentence(sentence)"><img title="Save" style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" class = "icon-close" type = "img" src = "../assets/save-icon.png"></span>
+          <span v-on:click = "closeEditForm()">
+              <img 
+                title="Close" 
+                style = "width: 20px; height: auto;" 
+                class = "icon-close" 
+                type = "img" 
+                src = "../assets/close-icon.png">
+          </span>
+
+          <span v-on:click = "saveSentence(sentence)">
+              <img 
+                title="Save" 
+                style = "width: 18px; height: auto; margin-right: 30px; margin-top: 2px" 
+                class = "icon-close" 
+                type = "img" 
+                src = "../assets/save-icon.png">
+          </span>
+          
           <span>Category</span>
+          
           <textarea type = "text" v-model = "sentence.Category" class = "admin-edit"/><br/>
+          
           <span>English sentence</span>
+          
           <textarea type = "text" v-model = "sentence.Sentence" class = "admin-edit"/><br/>
+          
           <span>Translate</span>
+          
           <textarea type = "text" v-model = "sentence.Translate" class = "admin-edit"/><br/>
-          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
+          
+          <span v-if = "errorMessage" class = "span-error-message">{{errorMessage}}<br/></span>
+          <br/><br/>
+
       </div>
+
   </div>
 </template>
 
@@ -47,7 +132,7 @@ export default {
   data () {
     return {
         inProgress: false,
-        errormessage: '',
+        errorMessage: '',
         categories: [],
         category: '',
         searchKey: '',
@@ -98,11 +183,13 @@ export default {
       },
       saveSentence(sentence){
           if(this.inProgress) return;
-          this.errormessage = '';
+          this.errorMessage = '';
           this.inProgress = true;
-          if(this.sentence.Sentence.length == 0 || this.sentence.Category.length == 0 || this.sentence.Translate.length == 0)
+          if(this.sentence.Sentence.length == 0 
+            || this.sentence.Category.length == 0 
+            || this.sentence.Translate.length == 0)
           {
-              this.errormessage = 'Fill in all the fields';
+              this.errorMessage = 'Fill in all the fields';
               this.inProgress = false;
               return;
           }
@@ -113,7 +200,7 @@ export default {
                 {
                     if(result.response.data.Message)
                     {
-                        this.errormessage = result.response.data.Message;
+                        this.errorMessage = result.response.data.Message;
                         this.inProgress = false;
                         return;
                     }
@@ -131,7 +218,7 @@ export default {
             })
             .catch(e => 
             {
-                this.errormessage = 'The server is unavailable or you do not have the rights';
+                this.errorMessage = 'The server is unavailable or you do not have the rights';
                 this.inProgress = false;                
             })
           } else{
@@ -142,7 +229,7 @@ export default {
                       if(result.response.data.Message)
                       {
                           this.inProgress = false;
-                          this.errormessage = result.response.data.Message;
+                          this.errorMessage = result.response.data.Message;
                           return;
                       }
                   }
@@ -154,11 +241,11 @@ export default {
                   else
                   {
                       this.inProgress = false;
-                      this.errormessage = 'The server is unavailable or you do not have the rights';  
+                      this.errorMessage = 'The server is unavailable or you do not have the rights';  
                   }
               })
               .catch(e => {
-                  this.errormessage = 'The server is unavailable or you do not have the rights';
+                  this.errorMessage = 'The server is unavailable or you do not have the rights';
                   this.inProgress = false;
               })
           }
@@ -198,7 +285,7 @@ export default {
       },
       closeEditForm(){
         this.inProgress = false;
-        this.errormessage = '';
+        this.errorMessage = '';
         this.clickAddSentence = false;
         this.clickSentence = false;
         this.sentence = {

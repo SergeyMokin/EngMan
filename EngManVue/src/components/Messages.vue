@@ -1,45 +1,132 @@
 <template>
-<div>
-  <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-  <div id = "messages-view" class = 'messages-view'>
-      <div class = "label-form-mes">
-            <span>Chat</span>
-            <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeform(); clickCloseButton = true;"><img title="Close" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
-      </div>
-      <input :disabled = "chooseUser" v-bind:class = "{'messages-input-choosen': chooseUser}" placeholder="Search..." type="text" class = "select-form-mes" list="users_emails" v-model = "beneficiaryEmail" v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
-      <span v-if = "chooseUser" style = "float: left; font-size:10px; cursor: pointer" v-on:click = "activeInputChooseUser"><img title="Return to user selection" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-up.png"></span>
-      <datalist id = "users_emails">
-            <option v-for = "user in users" v-if = "user.Id != $store.state.user.Id" :key = "user.Id">
-                {{user.Email}}
-            </option>
-      </datalist>
-      <div v-if = "beneficiary == undefined && beneficiaryEmail == ''" class = "new-mess-users-list" style = "height: 330px;">
-          <div v-for = "el in $store.state.newmessages" :key = "el.MessageId" class = "message-beneficiary pointer" style = "white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" v-on:click = "beneficiaryEmail = el.Sender.Email;changeBeneficiary(beneficiaryEmail)">
-            {{el.Sender.FirstName}}: {{el.Text}}
-          </div>
-      </div>
-      <div v-else class = "messages">
-          <div v-for = "el in $store.getters.messages" :key = "el.MessageId">
-              <div v-if = "el.Sender.Id == sender.Id" class = "label-sender"><span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span> <span style = "font-size: 10px">{{dateTime(el.Time)}}</span> You</div>
-              <div v-if = "el.Sender.Id == sender.Id" class = "message-sender">
-                  {{el.Text}}
-              </div>
-              <div v-if = "el.Sender.Id != sender.Id" class = "label-beneficiary">{{el.Sender.FirstName}} <span style = "font-size: 10px">{{dateTime(el.Time)}}</span> <span style = "font-size: 10px; cursor: pointer" v-on:click = "deleteMessage(el.MessageId)">delete</span></div>
-              <div v-if = "el.Sender.Id != sender.Id" class = "message-beneficiary">
-                  {{el.Text}}
-              </div>
-          </div>
-            <a v-if = "canDownloadMore" v-on:click="loadingMessages"
-               style = "-moz-user-select: none;-khtml-user-select: none; user-select: none; cursor:pointer;">
-                    more...
-            </a>
-      </div>
-      <div v-if = "chooseUser" class = "input-form-mes" v-on:keyup.enter="sendMessage()">
-            <textarea placeholder = "Type a message" class = "textarea-mes" type = "text" v-model = "message" :disabled = "beneficiaryEmail == ''" v-on:click = "readUnreadMessages()"/>
-            <span style = "float: right; font-size: 10px; cursor: pointer; margin-right: 25px;" v-on:click = "sendMessage();"><img title="Send" style = "width: 30px; height: auto" type = "img" src = "../assets/send-icon.png"></span>
-      </div>
-  </div>
-</div>
+    <div>
+        <div class="loading" v-if = "inProgress">Loading&#8230;</div>
+
+        <div id = "messages-view" class = 'messages-view'>
+            <div class = "label-form-mes">
+                    <span>Chat</span>
+                    
+                    <span 
+                        style = "float: right; font-size:10px; cursor: pointer" 
+                        v-on:click = "closeform(); clickCloseButton = true;">
+                            <img 
+                                title="Close" 
+                                style = "width: 20px; height: auto" 
+                                type = "img" 
+                                src = "../assets/close-icon.png">
+                    </span>
+            </div>
+
+            <input 
+                :disabled = "chooseUser" 
+                v-bind:class = "{'messages-input-choosen': chooseUser}" 
+                placeholder="Search..." 
+                type="text" 
+                class = "select-form-mes" 
+                list="users_emails" 
+                v-model = "beneficiaryEmail" 
+                v-on:change = "changeBeneficiary(beneficiaryEmail)"/>
+            
+            <span 
+                v-if = "chooseUser" 
+                style = "float: left; font-size:10px; cursor: pointer" 
+                v-on:click = "activeInputChooseUser">
+                    <img 
+                        title="Return to user selection" 
+                        style = "width: 20px; height: auto" 
+                        type = "img" 
+                        src = "../assets/arrow-up.png">
+            </span>
+            
+            <datalist id = "users_emails">
+                    <option 
+                        v-for = "user in users" 
+                        v-if = "user.Id != $store.state.user.Id" 
+                        :key = "user.Id">
+                        {{user.Email}}
+                    </option>
+            </datalist>
+            
+            <div 
+                v-if = "beneficiary == undefined && beneficiaryEmail == ''" 
+                class = "new-mess-users-list" 
+                style = "height: 330px;">
+                <div 
+                    v-for = "el in $store.state.newmessages" 
+                    :key = "el.MessageId" 
+                    class = "message-beneficiary pointer" 
+                    style = "white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" 
+                    v-on:click = "beneficiaryEmail = el.Sender.Email;changeBeneficiary(beneficiaryEmail)">
+                    {{el.Sender.FirstName}}: {{el.Text}}
+                </div>
+            </div>
+            
+            <div v-else class = "messages">
+                <div v-for = "el in $store.getters.messages" :key = "el.MessageId">
+                    <div 
+                        v-if = "el.Sender.Id == sender.Id" 
+                        class = "label-sender">
+                            <span 
+                                style = "font-size: 10px; cursor: pointer" 
+                                v-on:click = "deleteMessage(el.MessageId)">
+                                delete
+                            </span> 
+                            
+                            <span style = "font-size: 10px">
+                                {{dateTime(el.Time)}}
+                            </span> 
+                             You
+                    </div>
+                    <div v-if = "el.Sender.Id == sender.Id" class = "message-sender">
+                        {{el.Text}}
+                    </div>
+                    <div 
+                        v-if = "el.Sender.Id != sender.Id" 
+                        class = "label-beneficiary">
+                        {{el.Sender.FirstName}} 
+                        <span style = "font-size: 10px">
+                            {{dateTime(el.Time)}}
+                        </span> 
+                        <span 
+                            style = "font-size: 10px; cursor: pointer" 
+                            v-on:click = "deleteMessage(el.MessageId)">
+                            delete
+                            </span>
+                    </div>
+                    <div v-if = "el.Sender.Id != sender.Id" class = "message-beneficiary">
+                        {{el.Text}}
+                    </div>
+                </div>
+                    <a v-if = "canDownloadMore" v-on:click="loadingMessages"
+                    style = "-moz-user-select: none;-khtml-user-select: none; user-select: none; cursor:pointer;">
+                            more...
+                    </a>
+            </div>
+            
+            <div 
+                v-if = "chooseUser" 
+                class = "input-form-mes" 
+                v-on:keyup.enter="sendMessage()">
+                    <textarea 
+                        placeholder = "Type a message" 
+                        class = "textarea-mes" 
+                        type = "text" 
+                        v-model = "message" 
+                        :disabled = "beneficiaryEmail == ''" 
+                        v-on:click = "readUnreadMessages()"/>
+                    <span 
+                        style = "float: right; font-size: 10px; cursor: pointer; margin-right: 25px;" 
+                        v-on:click = "sendMessage();">
+                            <img 
+                                title="Send" 
+                                style = "width: 30px; height: auto" 
+                                type = "img" 
+                                src = "../assets/send-icon.png">
+                    </span>
+            </div>
+        </div>
+
+    </div>
 </template>
 
 <script>
@@ -61,7 +148,11 @@ export default {
   },
   methods: {
       loadingMessages(){
-        this.$store.dispatch("getMessagesByUserId", { otherUserId: this.beneficiary.Id, lastReceivedMessageId: this.$store.getters.messages[this.$store.getters.messages.length-1].MessageId }); 
+        this.$store.dispatch("getMessagesByUserId", 
+        { 
+            otherUserId: this.beneficiary.Id, 
+            lastReceivedMessageId: this.$store.getters.messages[this.$store.getters.messages.length-1].MessageId 
+        }); 
       },
       activeInputChooseUser(){
           this.chooseUser = false;
@@ -89,7 +180,11 @@ export default {
             .then(result =>{
                 if(result === "Delete completed successful")
                 {
-                    this.$store.dispatch('getMessagesByUserId', { otherUserId: this.beneficiary.Id, lastReceivedMessageId: 0 });
+                    this.$store.dispatch('getMessagesByUserId', 
+                    { 
+                        otherUserId: this.beneficiary.Id, 
+                        lastReceivedMessageId: 0 
+                    });
                     this.inProgress = false;
                 }
                 else
@@ -129,7 +224,11 @@ export default {
           this.beneficiary = this.$store.getters.users.filter(function(user){
               return user.Email == email;
           })[0];
-          this.$store.dispatch("getMessagesByUserId", { otherUserId: this.beneficiary.Id, lastReceivedMessageId: 0 });
+          this.$store.dispatch("getMessagesByUserId", 
+          { 
+              otherUserId: this.beneficiary.Id, 
+              lastReceivedMessageId: 0 
+          });
           this.inProgress = false;
           this.chooseUser = true;
       },
@@ -169,7 +268,11 @@ export default {
                                 Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
                                 CheckReadMes: 0
                             });
-                            this.$store.dispatch('getMessagesByUserId', { otherUserId: this.beneficiary.Id, lastReceivedMessageId: 0 })
+                            this.$store.dispatch('getMessagesByUserId', 
+                            { 
+                                otherUserId: this.beneficiary.Id, 
+                                lastReceivedMessageId: 0 
+                            })
                         }
                         else
                         {
@@ -207,9 +310,7 @@ export default {
           {
               for(var i = 0; i < this.$store.state.newmessages.length; i++)
               {
-                  if(!this.$store.state.newmessages[i].CheckReadMes)
-                  {
-                    if(this.beneficiary.Id === this.$store.state.newmessages[i].Sender.Id 
+                  if(this.beneficiary.Id === this.$store.state.newmessages[i].Sender.Id 
                     || this.beneficiary.Id === this.$store.state.newmessages[i].Beneficiary.Id)
                     {
                         api.ReadMessages(this.beneficiary.Id)
@@ -243,7 +344,6 @@ export default {
                             this.inProgress = false;
                         })
                     }
-                  }
               }
           }
       }

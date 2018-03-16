@@ -1,17 +1,37 @@
 <template>
-<div>
-  <div class="loading" v-if = "inProgress">Loading&#8230;</div>
-  <div v-if = "clickRule">
-        <rule :rule.sync = 'rule' v-on:close-rule = "clickRule = false"/>
-  </div>
-  <div class="view-list">
-      <div v-if = "!clickRule" class = "icon-close"><router-link to="/grammar"><img src = "../assets/arrow-up.png" title="Back" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-      <span style = "font-size: 30px" v-if = "!clickRule">Rules</span><br/>
-      <div title = "Open" class = "list--element pointer" v-for = 'el in rules' :key = 'el.id' v-if = "!clickRule" v-on:click = "openRule(el.RuleId); scrollToTop()">
-          <span class = "span--element">{{el.Title}}</span> 
-      </div>
-  </div>
-</div>
+    <div>
+        <div class="loading" v-if = "inProgress">Loading&#8230;</div>
+
+        <div v-if = "clickRule">
+                <rule :rule.sync = 'rule' v-on:close-rule = "clickRule = false"/>
+        </div>
+
+        <div class="view-list">
+            <div 
+                v-if = "!clickRule" 
+                class = "icon-close">
+                    <router-link to="/grammar">
+                        <img 
+                            src = "../assets/arrow-up.png" 
+                            title="Back" 
+                            style = "margin: 5px; width: 20px; height: 20px;">
+                    </router-link>
+            </div>
+            
+            <span style = "font-size: 30px" v-if = "!clickRule">Rules</span>
+            <br/>
+
+            <div 
+                title = "Open" 
+                class = "list--element pointer" 
+                v-for = 'el in rules' 
+                :key = 'el.id' 
+                v-if = "!clickRule" 
+                v-on:click = "openRule(el.RuleId); scrollToTop()">
+                <span class = "span--element">{{el.Title}}</span> 
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -53,7 +73,8 @@ export default {
           });
       },
       scrollToTop(){
-            if (document.body.scrollTop!=0 || document.documentElement.scrollTop!=0){
+            if (document.body.scrollTop!=0 
+                || document.documentElement.scrollTop!=0){
                 window.scrollBy(0,-50);
                 this.timeOut=setTimeout(this.scrollToTop(),10);
             }

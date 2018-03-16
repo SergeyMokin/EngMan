@@ -1,24 +1,56 @@
 <template>
 <div>
+
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
+
     <div class="main-content-center">
         <div class = "view-list">
+            
             <span style = "font-size: 30px">Dictionary</span><br/>
-            <select style = "width: 250px" v-model = "category" class = "select-form" v-on:change = "getWordsByCategory()">
+            
+            <select 
+                style = "width: 250px" 
+                v-model = "category" 
+                class = "select-form" 
+                v-on:change = "getWordsByCategory()">
                 <option v-for = "category in categories" :key = "category">
                     {{category}}
                 </option>
-            </select><br/>
-            <input style = "width: 250px" v-if = "!errorMessage && category.length > 0" placeholder="Поиск..." type="text" class = "select-form" v-model = "keyWord" v-on:click = "keyWord = ''"/>
-            <div v-if = "errorMessage" class = "span-error-message">{{errorMessage}}</div>
+            </select>
+            <br/>
+            
+            <input 
+                style = "width: 250px" 
+                v-if = "!errorMessage && category.length > 0" 
+                placeholder="Поиск..." 
+                type="text" 
+                class = "select-form" 
+                v-model = "keyWord" 
+                v-on:click = "keyWord = ''"/>
+            
+            <div 
+                v-if = "errorMessage" 
+                class = "span-error-message">
+                {{errorMessage}}
+            </div>
+            
             <div v-for = 'el in sortWords' :key = 'el.Id'>
                 <div class = "list--element" style = "cursor: default">
                     <a>{{el.Original}} - {{el.Translate}}</a>
-                    <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deleteUserWord(el.WordId);"><img title="Удалить" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
+                    <span 
+                        style = "float: right; font-size:10px; cursor: pointer;" 
+                        v-on:click = "deleteUserWord(el.WordId);">
+                            <img 
+                                title="Удалить" 
+                                style = "width: 20px; height: auto" 
+                                type = "img" 
+                                src = "../assets/close-icon.png">
+                    </span>
                 </div>
             </div>
         </div>
     </div>
+    
 </div>
 </template>
 

@@ -1,54 +1,135 @@
-<!--edit-->
 <template>
-  <div v-if = "$store.state.user.Role == 'admin'">
-    <div class="loading" v-if = "inProgress">Loading&#8230;</div>
+<div v-if = "$store.state.user.Role == 'admin'">
+    <div class="loading" v-if = "inProgress">
+            Loading&#8230;
+    </div>
     <div class="view-list">
+
       <router-link to="/admin/rules" class = "routes-admin">Rules </router-link>
+
       <router-link to="/admin/sentences" class = "routes-admin">Sentences </router-link>
+
       <router-link to="/admin/words" class = "routes-admin">Words </router-link>
+
       <router-link to="/admin/users" class = "routes-admin">Users </router-link>
-      <router-link to="/admin/guessestheimages" class = "routes-admin" style = "background-color: #ddd; cursor: default;">Guesses the images</router-link><br/><br/>
-      <span style = "cursor: pointer;" v-on:click = "add()"><img title="Add" style = "width: 30px; height: auto" type = "img" src = "../assets/add-icon.png"></span><br/><br/>
+
+      <router-link to="/admin/guessestheimages" class = "routes-admin" 
+        style = "background-color: #ddd; cursor: default;">
+        Guesses the images
+      </router-link><br/><br/>
+
+      <span 
+        style = "cursor: pointer;" 
+        v-on:click = "add()">
+            <img 
+                title="Add" 
+                style = "width: 30px; height: auto" 
+                type = "img" 
+                src = "../assets/add-icon.png">
+      </span><br/><br/>
+
       <select class = "select-form" style = "width: 250px" v-model = "category">
           <option v-for = "category in categories" :key = "category">
               {{category}}
           </option>
       </select><br/>
-      <input style = "width: 250px" v-if = "category.length > 0" type = "text" v-model="searchKey" class = "select-form" placeholder = "Search..."><br/>
+
+      <input 
+        style = "width: 250px" 
+        v-if = "category.length > 0" 
+        type = "text" v-model="searchKey" 
+        class = "select-form" 
+        placeholder = "Search...">
+      <br/>
+
       <div v-if = "category.length > 0" v-for = 'el in tasks' :key = 'el.Id'>
+
       <div class = "list--element">
         <span class = "span--element">
+            
             {{el.Word.Original}}
-            <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "deletetask(el.Id)"><img title="Delete" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
-            <span style = "float: right; font-size:10px; cursor: pointer;" v-on:click = "edit(el.Id)"><img title="Change" style = "margin-right: 5px; width: 18px; height: auto" type = "img" src = "../assets/edit-icon.png"></span>
+
+            <span 
+                style = "float: right; font-size:10px; cursor: pointer;" 
+                v-on:click = "deletetask(el.Id)">
+                    <img 
+                        title="Delete" 
+                        style = "width: 20px; height: auto" 
+                        type = "img" 
+                        src = "../assets/close-icon.png">
+            </span>
+
+            <span 
+                style = "float: right; font-size:10px; cursor: pointer;" 
+                v-on:click = "edit(el.Id)">
+                    <img title="Change" 
+                    style = "margin-right: 5px; width: 18px; height: auto" 
+                    type = "img" 
+                    src = "../assets/edit-icon.png">
+            </span>
+
         </span>
       </div>
     </div>
   </div>
   <div v-if = "click" class = "b-popup">
       <div class = "b-popup-content">
-          <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeEditForm()"><img title="Close" style = "width: 20px; height: auto;" type = "img" src = "../assets/close-icon.png"></span>
-          <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "save()"><img title="Save" style = "margin-top: 2px; width: 16px; height: auto" type = "img" src = "../assets/save-icon.png"></span>
+          <span 
+            style = "float: right; font-size:10px; cursor: pointer" 
+            v-on:click = "closeEditForm()">
+                <img 
+                    title="Close" 
+                    style = "width: 20px; height: auto;" 
+                    type = "img" 
+                    src = "../assets/close-icon.png">
+          </span>
+
+          <span 
+            style = "float: right; font-size:10px; cursor: pointer" 
+            v-on:click = "save()">
+                <img title="Save" 
+                    style = "margin-top: 2px; width: 16px; height: auto" 
+                    type = "img" 
+                    src = "../assets/save-icon.png">
+          </span>
           
           <div>
-          <span>Category: </span>
-          <select style = "width: 250px" id = "guessestheimage_category" class = "select-form" v-model = "wordcategory" v-on:change = "downloadWordsByCategory()">
-            <option v-for = "el in wordcategories" :key = "el">
-                {{el}}
-            </option>
-          </select><br/><br/>
-          <span>English word: </span>
-          <select id = "guessestheimage_word" class = "select-form" style = "width: 250px" v-model = "choosenWord">
-              <option v-for = "word in downloadwords" :key = "word.WordId">
-                  {{word.Original}}
-              </option>
-          </select><br/><br/>
+            <span>Category: </span>
+
+            <select 
+                style = "width: 250px"
+                id = "guessestheimage_category" 
+                class = "select-form" 
+                v-model = "wordCategory" 
+                v-on:change = "downloadWordsByCategory()">
+                    <option v-for = "el in wordCategories" :key = "el">
+                        {{el}}
+                    </option>
+            </select><br/><br/>
+            
+            <span>English word: </span>
+
+            <select 
+                id = "guessestheimage_word" 
+                class = "select-form" 
+                style = "width: 250px" 
+                v-model = "choosenWord">
+                    <option v-for = "word in downloadWords" :key = "word.WordId">
+                        {{word.Original}}
+                    </option>
+            </select><br/><br/>
+
           </div>
-          <div v-if = "clickAdd"><input type="file" accept="image/*" @change="onFileChange"><br/></div>
-          <span v-if = "errormessage" class = "span-error-message">{{errormessage}}<br/></span><br/><br/>
+          <div v-if = "clickAdd">
+              <input type="file" accept="image/*" @change="onFileChange"><br/>
+          </div>
+          <span v-if = "errorMessage" class = "span-error-message">
+              {{errorMessage}}<br/>
+          </span><br/><br/>
+
       </div>
   </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -60,12 +141,12 @@ export default {
     return {
         inProgress: false,
         searchKey: '',
-        errormessage: '',
-        wordcategory: '',
-        wordcategories: [],
+        errorMessage: '',
+        wordCategory: '',
+        wordCategories: [],
         categories: [],
         category: '',
-        downloadwords: [],
+        downloadWords: [],
         clickAdd: false,
         click: false,
         choosenWord: '',
@@ -83,14 +164,15 @@ export default {
   methods:{
       onFileChange(e) {
         var arr = e.target.files || e.dataTransfer.files;
-        if (!arr.length)
-            return;
+        if (!arr.length) return;
         var vue = this;
-        this.image = {
+        this.image = 
+        {
             Name: arr[0].name,
             Data: ''
         }
-        var load = (e) => {
+        var load = (e) => 
+        {
             vue.image.Data = e.target.result;
         };
         for(var i = 0; i < arr.length; i++)
@@ -104,7 +186,8 @@ export default {
         if(this.inProgress) return;
         this.inProgress = true;
         api.getGuessesTheImageById(id)
-        .then(result => {
+        .then(result => 
+        {
                 if(result.response)
                 {
                     if(result.response.data.Message)
@@ -136,22 +219,22 @@ export default {
       save(task){
           if(this.inProgress) return;
           this.inProgress = true;
-          this.errormessage = '';
+          this.errorMessage = '';
           if(this.image.Data.length == 0 && this.clickAdd){
-              this.errormessage = 'Select an image';
+              this.errorMessage = 'Select an image';
               this.inProgress = false;
               return;
           }
           if(this.choosenWord.length == 0)
           {
-              this.errormessage = 'Choose the word';
+              this.errorMessage = 'Choose the word';
               this.inProgress = false;
               return;
           }
           this.task.WordId = this.getWordIdFromChoosenWord();
           if(this.task.WordId == 0)
           {
-              this.errormessage = 'Unreal word';
+              this.errorMessage = 'Unreal word';
               this.inProgress = false;
               return;
           }
@@ -163,7 +246,7 @@ export default {
                     if(result.response.data.Message)
                     {
                         this.inProgress = false;
-                        this.errormessage = result.response.data.Message;
+                        this.errorMessage = result.response.data.Message;
                         return;
                     }
                 }
@@ -179,7 +262,7 @@ export default {
             })
             .catch(e => {
                 this.inProgress = false;
-                this.errormessage = 'The server is unavailable or you do not have the rights';
+                this.errorMessage = 'The server is unavailable or you do not have the rights';
             })
           } else{
               api.addGuessesTheImage({
@@ -192,7 +275,7 @@ export default {
                   {
                       if(result.response.data.Message)
                       {
-                          this.errormessage = result.response.data.Message;
+                          this.errorMessage = result.response.data.Message;
                           this.inProgress = false;
                           return;
                       }
@@ -205,13 +288,13 @@ export default {
                   }
                   else
                   {
-                    this.errormessage = 'The server is unavailable or you do not have the rights';
+                    this.errorMessage = 'The server is unavailable or you do not have the rights';
                     this.inProgress = false;
                   }
               })
               .catch(e => {
                   this.inProgress = false;
-                  this.errormessage = 'The server is unavailable or you do not have the rights';
+                  this.errorMessage = 'The server is unavailable or you do not have the rights';
               })
           }
       },
@@ -250,8 +333,8 @@ export default {
         this.inProgress = false;
         document.body.style = "overflow: auto";
         this.searchKey = '';
-        this.errormessage = '',
-        this.wordcategory = '',
+        this.errorMessage = '',
+        this.wordCategory = '',
         this.clickAdd = false,
         this.click = false,
         this.choosenWord = '',
@@ -269,7 +352,7 @@ export default {
       {
           if(this.inProgress) return;
           this.inProgress = true;
-          api.getWordsByCategory(this.wordcategory)
+          api.getWordsByCategory(this.wordCategory)
           .then(result =>
           {
               if(result.response)
@@ -283,7 +366,7 @@ export default {
               }
               if(result.length > 0)
                 {
-                    this.downloadwords = result;
+                    this.downloadWords = result;
                     this.inProgress = false;
                     return;
                 }
@@ -303,7 +386,7 @@ export default {
       getWordIdFromChoosenWord()
       {
         var vue = this;
-        var word = this.downloadwords.filter(function(word){
+        var word = this.downloadWords.filter(function(word){
             return word.Original.toLowerCase() === vue.choosenWord.toLowerCase();
         });
         return word[0].WordId;
@@ -338,7 +421,7 @@ export default {
           }
           if(res.length > 0)
           {
-            this.wordcategories = res;
+            this.wordCategories = res;
             this.inProgress = false;
             return;
           }

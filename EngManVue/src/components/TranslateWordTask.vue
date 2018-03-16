@@ -1,32 +1,96 @@
 <template>
 <div>
   <div class="loading" v-if = "inProgress">Loading&#8230;</div>
+  
   <div v-if = "show" class = "b-popup">
       <div class = "b-popup-content">
-        <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeForm(false)"><img title="End" style = "width: 20px; height: auto;" type = "img" src = "../assets/close-icon.png"></span>
-        <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "downloadWordMap()"><img title="Next" style = "width: 20px; height: auto" type = "img" src = "../assets/arrow-right.png"></span>
-        <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "verificationCorrectness()"><img title="Verification" style = "width: 20px; height: auto" type = "img" src = "../assets/start-icon.png"></span>
-        <div style = "font-size: larger; margin-left: 10px">{{word.Word}}</div>
-        <div title="Choose" v-for = "el in word.Answers" :key = "el.WordId" v-on:click = "returnWord.Original = el">
-            <div v-bind:class = "{'selected-wordmap': el == returnWord.Original}" class = "list--element pointer">
+        <span 
+            style = "float: right; font-size:10px; cursor: pointer" 
+            v-on:click = "closeForm(false)">
+            <img 
+                title="End" 
+                style = "width: 20px; height: auto;" 
+                type = "img" 
+                src = "../assets/close-icon.png">
+        </span>
+        
+        <span 
+            style = "float: right; font-size:10px; cursor: pointer" 
+            v-on:click = "downloadWordMap()">
+            <img 
+                title="Next" 
+                style = "width: 20px; height: auto" 
+                type = "img" 
+                src = "../assets/arrow-right.png">
+        </span>
+        
+        <span 
+            style = "float: right; font-size:10px; cursor: pointer" 
+            v-on:click = "verificationCorrectness()">
+            <img 
+                title="Verification" 
+                style = "width: 20px; height: auto" 
+                type = "img" 
+                src = "../assets/start-icon.png">
+        </span>
+        
+        <div style = "font-size: larger; margin-left: 10px">
+            {{word.Word}}
+        </div>
+        
+        <div 
+            title="Choose" 
+            v-for = "el in word.Answers" 
+            :key = "el.WordId" 
+            v-on:click = "returnWord.Original = el">
+            <div 
+                v-bind:class = "{'selected-wordmap': el == returnWord.Original}" 
+                class = "list--element pointer">
                 {{el}}
             </div>
         </div>
-        <span v-if = "errormessage" class = "span-error-message">{{errormessage}}</span>
+        
+        <span v-if = "errorMessage" class = "span-error-message">{{errorMessage}}</span>
       </div>
   </div>
+  
   <div class="tasks-align">
       <span style = "font-size: 30px">Translate-word</span><br/>
       <div>
-        <div class = "icon-close"><router-link to="/trainings"><img src = "../assets/arrow-up.png" title="Back" style = "margin: 5px; width: 20px; height: 20px;"></router-link></div>
-        <div v-on:click = "downloadWordMap()"><img title="Start" style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" class = "icon-close" type = "img" src = "../assets/start-icon.png"></div>
-        <select id = "task_word_category" class = "select-form" style = "width: 250px !important;" v-model = "category">
+        <div class = "icon-close">
+            <router-link to="/trainings">
+                <img 
+                    src = "../assets/arrow-up.png" 
+                    title="Back" 
+                    style = "margin: 5px; width: 20px; height: 20px;">
+            </router-link>
+        </div>
+        
+        <div v-on:click = "downloadWordMap()">
+            <img 
+                title="Start" 
+                style = "width: 20px; height: auto; margin-right: 35px; margin-top: 5px" 
+                class = "icon-close" 
+                type = "img" 
+                src = "../assets/start-icon.png">
+        </div>
+        
+        <select 
+            id = "task_word_category" 
+            class = "select-form" 
+            style = "width: 250px !important;" 
+            v-model = "category">
+            
             <option v-for = "category in categories" :key = "category">
                 {{category}}
             </option>
-        </select><br/>
-        <span v-if = "errormessage && !show" class = "span-error-message">{{errormessage}}<br/></span>
+        
+        </select>
         <br/>
+        
+        <span v-if = "errorMessage && !show" class = "span-error-message">{{errorMessage}}<br/></span>
+        <br/>
+        
         <div v-if = "!show" v-for = 'el in words' :key = 'el.WordId'>
             <div title = "Add to dictionary" class = "list--element pointer" v-on:click = "addWordToDictionary(el)">
                 <a>{{el.Original}} {{el.Transcription}} - {{el.Translate}}</a>
@@ -34,6 +98,7 @@
         </div>
       </div>
   </div>
+
 </div>
 </template>
 
@@ -46,12 +111,12 @@ export default {
     return {
         choose: false,
         countOfWords: 0,
-        completemessage: '',
+        completeMessage: '',
         indexes: '',
         goodAnswer: 0,
         attempt: 0,
         inProgress: false,
-        errormessage: '',
+        errorMessage: '',
         categories: [],
         category: '',
         show: false,
@@ -104,8 +169,8 @@ export default {
           this.returnWord.Original = '';
           this.returnWord.Translate = '';
           this.returnWord.Category = '';
-          this.errormessage = '';
-          this.completemessage = '';
+          this.errorMessage = '';
+          this.completeMessage = '';
           if(this.categories.indexOf(this.category) != -1)
           {
             api.getWordMap(this.category, this.indexes, false)
@@ -127,18 +192,18 @@ export default {
                 })
             .catch(e => {
                 this.inProgress = false;
-                this.errormessage = 'Server is not available';
+                this.errorMessage = 'Server is not available';
             });
           }
           else{
               this.inProgress = false;
-              this.errormessage = 'Select a category';
+              this.errorMessage = 'Select a category';
           }
       },
       verificationCorrectness(){
           if(this.inProgress) return;
           this.inProgress = true;
-          this.errormessage = '';
+          this.errorMessage = '';
           api.verificationWordMap(this.returnWord, false)
           .then(result =>
           {
@@ -150,33 +215,33 @@ export default {
               }
               else{
                 this.attempt++;
-                this.errormessage = 'Incorrect answer';
+                this.errorMessage = 'Incorrect answer';
                 this.inProgress = false;
               }
           })
           .catch(e => {
               this.inProgress = false;
-              this.errormessage = 'Server is not available';
+              this.errorMessage = 'Server is not available';
           })
       },
       closeForm(endoftasks){
          if(endoftasks)
         {
-            this.completemessage = 'You have successfully completed! Correct answers: ' + this.goodAnswer + '/' + this.countOfWords;
+            this.completeMessage = 'You have successfully completed! Correct answers: ' + this.goodAnswer + '/' + this.countOfWords;
         }
         else
         {
-            this.completemessage = 'You have successfully completed! Correct answers: ' + this.goodAnswer + '/' + (this.countOfWords-1);
+            this.completeMessage = 'You have successfully completed! Correct answers: ' + this.goodAnswer + '/' + (this.countOfWords-1);
         }
-        alert(this.completemessage);
+        alert(this.completeMessage);
         this.choose = false
         this.countOfWords = 0
-        this.completemessage = ''
+        this.completeMessage = ''
         this.indexes = ''
         this.goodAnswer = 0
         this.attempt = 0
         this.inProgress = false
-        this.errormessage = ''
+        this.errorMessage = ''
         this.category = ''
         this.show = false
         this.word = {}
@@ -199,7 +264,7 @@ export default {
               if(res.response.data.Message)
               {
                   this.inProgress = false;
-                  this.errormessage = res.response.data.Message;
+                  this.errorMessage = res.response.data.Message;
                   return;
               }
           }

@@ -1,14 +1,50 @@
 <template>
   <div class="header">
-    <img src = "../assets/account.png" title="Your profile" class = "icon-account" v-on:click = "clickProfile">
-    <div class = "navbar">
-      <router-link class = "routes-admin" title="Home" to="/"><img src = "../assets/home.png" class = "icon-navbar"></router-link>
-      <router-link v-if = "this.$store.state.user.Logined" class = "routes-admin" title="Grammar" to="/grammar"><img src = "../assets/grammar.png" class = "icon-navbar"></router-link>
-      <router-link v-if = "this.$store.state.user.Logined" class = "routes-admin" title="Trainings" to="/trainings"><img src = "../assets/training.png" class = "icon-navbar"></router-link>
-      <router-link v-if = "this.$store.state.user.Logined" class = "routes-admin" title="Dictionary" to="/dictionary"><img src = "../assets/dictionary.svg" class = "icon-navbar"></router-link>
-      <router-link v-if = "this.$store.state.user.Role == 'admin'" class = "routes-admin" title="Admin panel" to="/admin/rules"><img src = "../assets/adminpanel.png" class = "icon-navbar"></router-link>
-    </div>
-    <profile v-if = "displayProfile" v-on:closeform = "displayProfile = false" />
+
+      <img src = "../assets/account.png" title="Your profile" class = "icon-account" v-on:click = "clickProfile">
+
+      <div class = "navbar">
+        <router-link 
+          class = "routes-admin" 
+          title="Home" 
+          to="/">
+            <img src = "../assets/home.png" class = "icon-navbar">
+        </router-link>
+
+        <router-link 
+          v-if = "this.$store.state.user.Logined" 
+          class = "routes-admin" 
+          title="Grammar" 
+          to="/grammar">
+            <img src = "../assets/grammar.png" class = "icon-navbar">
+        </router-link>
+
+        <router-link 
+          v-if = "this.$store.state.user.Logined" 
+          class = "routes-admin" 
+          title="Trainings" 
+          to="/trainings">
+            <img src = "../assets/training.png" class = "icon-navbar">
+        </router-link>
+
+        <router-link 
+          v-if = "this.$store.state.user.Logined" 
+          class = "routes-admin" 
+          title="Dictionary" 
+          to="/dictionary">
+            <img src = "../assets/dictionary.svg" class = "icon-navbar">
+        </router-link>
+        
+        <router-link 
+          v-if = "this.$store.state.user.Role == 'admin'" 
+          class = "routes-admin" 
+          title="Admin panel" 
+          to="/admin/rules">
+            <img src = "../assets/adminpanel.png" class = "icon-navbar">
+        </router-link>
+      </div>
+      <profile v-if = "displayProfile" v-on:closeform = "displayProfile = false" />
+
   </div>
 </template>
 
@@ -21,13 +57,13 @@ export default {
   },
   data () {
     return {
-      hovermenu: false
+      hoverMenu: false
       , displayProfile: false
     }
   },
   methods: {
     changeShow(){
-      this.hovermenu = !this.hovermenu;
+      this.hoverMenu = !this.hoverMenu;
     },
     clickProfile(){
       if(this.$store.state.user.Logined)

@@ -1,6 +1,7 @@
 <template>
 <div>
   <div class="loading" v-if = "inProgress">Loading&#8230;</div>
+
   <div class="profile" id = "profile-form">
       <div v-if = "!$store.state.user.Logined">
           <span>You need to be logged in.</span>
@@ -11,6 +12,7 @@
           <div class = "routes-admin" style = "padding: 5px; cursor: pointer" v-on:click = "logout()">Logout</div>
       </div>
   </div>
+  
 </div>
 </template>
 

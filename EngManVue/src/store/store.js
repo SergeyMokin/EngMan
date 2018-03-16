@@ -39,11 +39,11 @@ const getters = {
 
 
 const mutations = {
-    getMessages(state, result)
+    SET_MESSAGES(state, result)
     {
         state.messages = result;
     },
-    getNewMessages(state, result)
+    SET_NEW_MESSAGES(state, result)
     {
         state.newmessages = [];
         state.newmess = false;
@@ -53,7 +53,7 @@ const mutations = {
             state.newmess = true;
         }
     },
-    getMessagesByUserId(state, result)
+    SET_MESSAGES_BY_USER_ID(state, result)
     {
         state.endOfMessages = false;
         if(result.length == 0)
@@ -62,43 +62,27 @@ const mutations = {
         }
         state.messages = state.messages.concat(result)
     },
-    getGuessesTheImages(state, result)
+    SET_GUESSES_THE_IMAGES(state, result)
     {
         state.guessestheimages = result;
     },
-    createGuessesTheImage(state, result)
-    {
-        state.guessestheimages.unshift(result);
-    },
-    getRules(state, result)
+    SET_RULES(state, result)
     {
         state.rules = result;
-    }
-    , createRule(state, result)
-    {
-        state.posts.unshift(result);
-    }
-    , getSentences(state, result)
+    },
+    SET_SENTENCES(state, result)
     {
         state.sentences = result;
-    }
-    , createSentence(state, result)
-    {
-        state.sentences.unshift(result);
-    }
-    , getWords(state, result)
+    },
+    SET_WORDS(state, result)
     {
         state.words = result;
-    }
-    , createWord(state, result)
-    {
-        state.words.unshift(result);
-    }
-    , getUsers(state, result)
+    },
+    SET_USERS(state, result)
     {
         state.users = result;
-    }
-    , connectToServ(state, con)
+    },
+    SET_CONNECTONS(state, con)
     {
         state.connectionSignalR = con;
     }
@@ -108,88 +92,68 @@ const actions = {
     getMessages: ({ commit }) => {
         api.getMessages()
         .then(res => {
-            commit('getMessages', res)
+            commit('SET_MESSAGES', res)
         })
         .catch(e => console.log(e));
     },
     getNewMessages: ({ commit }) => {
         api.getNewMessages()
         .then(res => {
-            commit('getNewMessages', res)
+            commit('SET_NEW_MESSAGES', res)
         })
         .catch(e => console.log(e));
     },
     getMessagesByUserId: ({ commit }, params) => {
         api.getMessagesByUserId(params.otherUserId, params.lastReceivedMessageId)
         .then(res => {
-            commit('getMessagesByUserId', res)
+            commit('SET_MESSAGES_BY_USER_ID', res)
         })
         .catch(e => console.log(e));
     },
     getGuessesTheImages: ({ commit }) => {
       api.getGuessesTheImages()
       .then(rules => {
-        commit('getGuessesTheImages', rules);
+        commit('SET_GUESSES_THE_IMAGES', rules);
       })
       .catch(e => {console.log(e)});
-    }
-    , createGuessesTheImage: ({ commit }, rule) => {
-      api.addGuessesTheImage(rule)
-      .then(data => commit('createGuessesTheImage', data))
-      .catch(e => console.log(e));
     },
     getRules: ({ commit }) => {
       api.getRules()
       .then(rules => {
-        commit('getRules', rules);
+        commit('SET_RULES', rules);
       })
       .catch(e => {console.log(e)});
-    }
-    , createRule: ({ commit }, rule) => {
-      api.createRule(rule)
-      .then(data => commit('createRule', data))
-      .catch(e => console.log(e));
     }
     , getSentences: ({ commit }) => {
         api.getSentences()
         .then(sentences => {
-          commit('getSentences', sentences);
+          commit('SET_SENTENCES', sentences);
         })
         .catch(e => {console.log(e)});
     }
-    , createSentence: ({ commit }, sentence) => {
-        api.createRule(rule)
-        .then(data => commit('createSentence', data))
-        .catch(e => console.log(e));
-      }
     , getWords: ({ commit }) => {
         api.getWords()
         .then(words => {
-          commit('getWords', words);
+          commit('SET_WORDS', words);
         })
-        .catch(e => console.log(e));
-    }
-    , createWord: ({ commit }, word) => {
-        api.createWord(word)
-        .then(data => commit('createWord', data))
         .catch(e => console.log(e));
     }
     , getUsers: ({commit}) => {
         api.getUsers()
-        .then(res => commit('getUsers', res))
+        .then(res => commit('SET_USERS', res))
         .catch(e => console.log(e))
     }
     , connectToServ: ( {dispatch, commit}, userview ) => {
         var connection = $.hubConnection('http://localhost:58099'); 
         var proxy = connection.createHubProxy('chat');
         proxy.on('onUpdateMessages', function(){
-          dispatch('getNewMessages');
+          dispatch('SET_NEW_MESSAGES');
         })
         connection.start()
         .done(() => 
         {
             proxy.invoke('Connect', userview);
-            commit('connectToServ', connection)
+            commit('SET_CONNECTONS', connection)
         })
         .fail(() => console.log('Невозможно подключиться к серверу'));
     }

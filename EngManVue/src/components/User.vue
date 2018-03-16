@@ -1,55 +1,180 @@
 <template>
   <div>
     <div class="loading" v-if = "inProgress">Loading&#8230;</div>
+
     <div class = "main-content">
-        <span style = "float: right; margin-right: 10px" v-on:click = "clickChangePassword = true"><img title="Change password" style = "cursor: pointer; width: 30px; height: auto;" type = "img" src = "../assets/security-icon.png"></span>
-        <span style = "float: right; margin-top: 5px" v-on:click = "clickEdit = true; fname = user.FirstName; lname = user.LastName; email = user.Email;"><img title="Edit profile" style = "cursor: pointer; width: 20px; height: auto;" type = "img" src = "../assets/edit-icon.png"></span>
+        <span 
+            style = "float: right; margin-right: 10px" 
+            v-on:click = "clickChangePassword = true">
+                <img 
+                    title="Change password" 
+                    style = "cursor: pointer; width: 30px; height: auto;" 
+                    type = "img" 
+                    src = "../assets/security-icon.png">
+        </span>
+        
+        <span 
+            style = "float: right; margin-top: 5px" 
+            v-on:click = "clickEdit = true; fname = user.FirstName; lname = user.LastName; email = user.Email;">
+                <img 
+                    title="Edit profile" 
+                    style = "cursor: pointer; width: 20px; height: auto;" 
+                    type = "img" 
+                    src = "../assets/edit-icon.png">
+        </span>
         <br/><br/>
-         <div>
+        
+        <div>
             <div class = "list--element">
                 <a><b>First name:</b> {{user.FirstName}}</a>
             </div>
+            
             <div class = "list--element">
                 <a><b>Last name:</b> {{user.LastName}}</a>
             </div>
+            
             <div class = "list--element">
                 <a><b>Email:</b> {{user.Email}}</a>
             </div>
         </div>
         <br/><br/>
     </div>
+    
     <div v-if = "clickEdit" class = "b-popup">
         <div class = "b-popup-content">
           <div>
-            <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeEditForm()"><img title="Close" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
-            <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "saveUser()"><img title="Save" style = "width: 16px; height: auto; margin-top:2px;" type = "img" src = "../assets/save-icon.png"></span>
+            <span 
+                style = "float: right; font-size:10px; cursor: pointer" 
+                v-on:click = "closeEditForm()">
+                    <img 
+                        title="Close" 
+                        style = "width: 20px; height: auto" 
+                        type = "img" 
+                        src = "../assets/close-icon.png">
+            </span>
+            
+            <span 
+                style = "float: right; font-size:10px; cursor: pointer" 
+                v-on:click = "saveUser()">
+                    <img 
+                        title="Save" 
+                        style = "width: 16px; height: auto; margin-top:2px;" 
+                        type = "img" 
+                        src = "../assets/save-icon.png">
+            </span>
+            
             <span>First name</span>
-            <input  v-bind:class = "{'input-form--error': $v.fname.$error}" class = "input-form" type = "text" v-model = "fname"/><br/>
+            
+            <input 
+                v-bind:class = "{'input-form--error': $v.fname.$error}" 
+                class = "input-form" 
+                type = "text" 
+                v-model = "fname"/>
+            <br/>
+            
             <span>Last name</span>
-            <input v-bind:class = "{'input-form--error': $v.lname.$error}" class = "input-form" type = "text" v-model = "lname"/><br/>
+            
+            <input 
+                v-bind:class = "{'input-form--error': $v.lname.$error}" 
+                class = "input-form" 
+                type = "text" 
+                v-model = "lname"/>
+            <br/>
+            
             <span>Email</span>
-            <input v-bind:class = "{'input-form--error': $v.email.$error}" class = "input-form" type = "text" v-model = "email"/><br/>
-            <span v-if = "errormessage" class = "span-error-message">{{errormessage}}. </span>
-            <span v-if = "!$v.fname.required || !$v.lname.required || !$v.email.required" class = "span-error-message">All fields must be filled in. </span>
-            <span v-if = "!$v.email.email" class = "span-error-message">Invalid Email. </span>
+            
+            <input 
+                v-bind:class = "{'input-form--error': $v.email.$error}" 
+                class = "input-form" 
+                type = "text" 
+                v-model = "email"/>
+            <br/>
+            
+            <span 
+                v-if = "errorMessage" 
+                class = "span-error-message">
+                {{errorMessage}}. 
+            </span>
+            
+            <span 
+                v-if = "!$v.fname.required || !$v.lname.required || !$v.email.required" 
+                class = "span-error-message">
+                All fields must be filled in. 
+            </span>
+            
+            <span 
+                v-if = "!$v.email.email" 
+                class = "span-error-message">
+                Invalid Email. 
+            </span>
           </div>
         </div>
     </div>
+    
     <div v-if = "clickChangePassword" class = "b-popup">
         <div class = "b-popup-content">
           <div class = "form-border">
-            <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "closeEditForm()"><img title="Close" style = "width: 20px; height: auto" type = "img" src = "../assets/close-icon.png"></span>
-            <span style = "float: right; font-size:10px; cursor: pointer" v-on:click = "changePassword()"><img title="Change password" style = "width: 16px; height: auto; margin-top:2px;" type = "img" src = "../assets/save-icon.png"></span>
+            <span 
+                style = "float: right; font-size:10px; cursor: pointer" 
+                v-on:click = "closeEditForm()">
+                    <img 
+                        title="Close" 
+                        style = "width: 20px; height: auto" 
+                        type = "img" 
+                        src = "../assets/close-icon.png">
+            </span>
+            
+            <span 
+                style = "float: right; font-size:10px; cursor: pointer" 
+                v-on:click = "changePassword()">
+                    <img 
+                        title="Change password" 
+                        style = "width: 16px; height: auto; margin-top:2px;" 
+                        type = "img" 
+                        src = "../assets/save-icon.png">
+            </span>
+            
             <span>Old password</span>
-            <input v-bind:class = "{'input-form--error': $v.oldpassword.$error}" class = "input-form" type = "password" v-model = "oldpassword" style = "height: 30px; text-align: center;"/><br/>
+            
+            <input 
+                v-bind:class = "{'input-form--error': $v.oldPassword.$error}" 
+                class = "input-form" 
+                type = "password" 
+                v-model = "oldPassword" 
+                style = "height: 30px; text-align: center;"/>
+            <br/>
+            
             <span>New password</span>
-            <input v-bind:class = "{'input-form--error': $v.newpassword.$error}" class = "input-form" type = "password" v-model = "newpassword" style = "height: 30px; text-align: center;"/><br/>
-            <span v-if = "errormessage" class = "span-error-message">{{errormessage}}. </span>
-            <span v-if = "(!$v.oldpassword.required || !$v.newpassword.required) && ($v.oldpassword.$error || $v.newpassword.$error)" class = "span-error-message">All fields must be filled in. </span>
-            <span v-if = "!$v.newpassword.minlength && $v.newpassword.$error" class = "span-error-message">The password must be at least 8 characters long, one big and small letter, one number.</span>
+            
+            <input 
+                v-bind:class = "{'input-form--error': $v.newPassword.$error}" 
+                class = "input-form" 
+                type = "password" 
+                v-model = "newPassword" 
+                style = "height: 30px; text-align: center;"/>
+            <br/>
+            
+            <span 
+                v-if = "errorMessage" 
+                class = "span-error-message">
+                {{errorMessage}}. 
+            </span>
+            
+            <span 
+                v-if = "(!$v.oldPassword.required || !$v.newPassword.required) && ($v.oldPassword.$error || $v.newPassword.$error)" 
+                class = "span-error-message">
+                All fields must be filled in. 
+            </span>
+            
+            <span 
+                v-if = "!$v.newPassword.minlength && $v.newPassword.$error" 
+                class = "span-error-message">
+                The password must be at least 8 characters long, one big and small letter, one number.
+            </span>
           </div>
         </div>
     </div>
+  
   </div>
 </template>
 
@@ -65,11 +190,11 @@ export default {
         fname: '',
         lname: '',
         email: '',
-        errormessage: '',
+        errorMessage: '',
         clickEdit: false,
         clickChangePassword: false,
-        oldpassword: '',
-        newpassword: '',
+        oldPassword: '',
+        newPassword: '',
         user: {
             Id: 0,
             FirstName: '',
@@ -83,8 +208,8 @@ export default {
             fname: { required },
             lname: { required },
             email: { required, email },
-            oldpassword: { required },
-            newpassword: 
+            oldPassword: { required },
+            newPassword: 
             { 
                 required,
                 isPassword: function (val) {
@@ -98,7 +223,7 @@ export default {
       saveUser(){
           if(this.inProgress) return;
           this.inProgress = true;
-          this.errormessage = '';
+          this.errorMessage = '';
           this.$v.$touch();
           if(this.$v.fname.$invalid || this.$v.lname.$invalid || this.$v.email.$invalid)
           {
@@ -127,31 +252,31 @@ export default {
                       if(res.response.data.Message)
                       {
                         this.inProgress = false;
-                        this.errormessage = result.response.data.Message;
+                        this.errorMessage = result.response.data.Message;
                         return;
                       }
                   }
                   this.inProgress = false;
-                  this.errormessage = 'The server is unavailable or you do not have the rights';
+                  this.errorMessage = 'The server is unavailable or you do not have the rights';
               }
           })
           .catch(e => {
               this.inProgress = false;
-              this.errormessage = 'The server is unavailable or you do not have the rights';
+              this.errorMessage = 'The server is unavailable or you do not have the rights';
           })
           this.inProgress = false;
       },
       changePassword(){
           if(this.inProgress) return;
           this.inProgress = true;
-          this.errormessage = '';
+          this.errorMessage = '';
           this.$v.$touch();
-          if(this.$v.oldpassword.$invalid || this.$v.newpassword.$invalid)
+          if(this.$v.oldPassword.$invalid || this.$v.newPassword.$invalid)
           {
               this.inProgress = false;
               return;
           }
-          api.changePassword(this.user.Id, this.oldpassword, this.newpassword)
+          api.changePassword(this.user.Id, this.oldPassword, this.newPassword)
           .then(result => {
               if(result === true){
                     this.inProgress = false;
@@ -164,33 +289,33 @@ export default {
                         if(res.response.data.Message)
                         {
                             this.inProgress = false;
-                            this.errormessage = result.response.data.Message;
+                            this.errorMessage = result.response.data.Message;
                             return;
                         }
                     }
                     if(result === false)
                     {
                         this.inProgress = false;
-                        this.errormessage = 'Incorrect old password';
+                        this.errorMessage = 'Incorrect old password';
                         return;
                     }
                     this.inProgress = false;
-                    this.errormessage = 'The server is unavailable or you do not have the rights';
+                    this.errorMessage = 'The server is unavailable or you do not have the rights';
               }
           })
           .catch(e => {
               this.inProgress = false;
-              this.errormessage = 'The server is unavailable or you do not have the rights';
+              this.errorMessage = 'The server is unavailable or you do not have the rights';
           })
           this.inProgress = false;
       },
       closeEditForm(){
         this.inProgress = false;
-        this.errormessage = '';
+        this.errorMessage = '';
         this.clickEdit = false;
         this.clickChangePassword = false;
-        this.oldpassword = '';
-        this.newpassword = '';
+        this.oldPassword = '';
+        this.newPassword = '';
         this.$v.$reset();
       }
   },
