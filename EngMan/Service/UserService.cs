@@ -5,6 +5,9 @@ using EngMan.Repository;
 using System.Threading.Tasks;
 using EngMan.Extensions;
 using System;
+using System.Dynamic;
+using Microsoft.Owin.Testing;
+using System.Net.Http;
 
 namespace EngMan.Service
 {
@@ -17,6 +20,24 @@ namespace EngMan.Service
             rep = _rep;
         }
 
+        public async Task<ExpandoObject> Login(UserLogin user)
+        {
+            var testServer = TestServer.Create<Startup>();
+            var requestParams = new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("username", user.Email),
+                    new KeyValuePair<string, string>("password", user.Password)
+                };
+            var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
+            //Get token
+            var tokenServiceResponse = await testServer.HttpClient.PostAsync(
+                Startup.TokenPath, requestParamsFormUrlEncoded);
+            //Read getting info to ExpandoObject
+            var _user = await tokenServiceResponse.Content.ReadAsAsync<ExpandoObject>();
+            return _user;
+        }
+
         public User ValidateUser(string email, string password)
         {
             if (!email.IsEmail())
@@ -25,8 +46,8 @@ namespace EngMan.Service
             }
             try
             {
-                var user = rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password));
-                return user;
+                return rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password)) 
+                    ?? throw new Exception("User is not registered");
             }
             catch (Exception ex)
             {
@@ -50,7 +71,7 @@ namespace EngMan.Service
             }
         }
 
-        public bool Registration(User user)
+        public async Task<ExpandoObject> Registration(User user)
         {
             if (!user.Validate())
             {
@@ -58,7 +79,9 @@ namespace EngMan.Service
             }
             try
             {
-                return rep.AddUser(user) ? true : throw new Exception("This user is alredy exists");
+                return rep.AddUser(user) 
+                    ? await Login(new UserLogin { Email = user.Email, Password = user.Password })
+                    : throw new Exception("This user is alredy exists");
             }
             catch (Exception ex)
             {
@@ -82,7 +105,7 @@ namespace EngMan.Service
             }
         }
 
-        public int DeleteUser(int id)
+        public string DeleteUser(int id)
         {
             if (!id.Validate())
             {
@@ -90,7 +113,9 @@ namespace EngMan.Service
             }
             try
             {
-                return rep.DeleteUser(id);
+                return rep.DeleteUser(id) > 0 
+                    ? "Delete completed successful"
+                    : null;
             }
             catch (Exception ex)
             {
