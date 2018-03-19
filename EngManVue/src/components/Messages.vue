@@ -148,7 +148,7 @@ export default {
   },
   methods: {
       loadingMessages(){
-        this.$store.dispatch("getMessagesByUserId", 
+        this.$store.dispatch("loadMessagesByUserId", 
         { 
             otherUserId: this.beneficiary.Id, 
             lastReceivedMessageId: this.$store.getters.messages[this.$store.getters.messages.length-1].MessageId 
@@ -323,9 +323,8 @@ export default {
                             this.inProgress = false;
                             if(res != undefined)
                             {
-                                if(res.length > 0)
+                                if(res === true)
                                 {
-                                    this.$store.dispatch('getMessagesByUserId', { otherUserId: this.beneficiary.Id, lastReceivedMessageId: 0 });
                                     this.$store.dispatch('getNewMessages');
                                 }
                                 else

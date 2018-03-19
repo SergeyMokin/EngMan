@@ -53,14 +53,18 @@ const mutations = {
             state.newmess = true;
         }
     },
-    SET_MESSAGES_BY_USER_ID(state, result)
+    LOAD_MESSAGES_BY_USER_ID(state, result)
     {
         state.endOfMessages = false;
         if(result.length == 0)
         {
             state.endOfMessages = true;
         }
-        state.messages = state.messages.concat(result)
+        state.messages = state.messages.concat(result);
+    },
+    SET_MESSAGES_BY_USER_ID(state, result)
+    {
+        state.messages = result;
     },
     SET_GUESSES_THE_IMAGES(state, result)
     {
@@ -100,6 +104,13 @@ const actions = {
         api.getNewMessages()
         .then(res => {
             commit('SET_NEW_MESSAGES', res)
+        })
+        .catch(e => console.log(e));
+    },
+    loadMessagesByUserId: ({ commit }, params) => {
+        api.getMessagesByUserId(params.otherUserId, params.lastReceivedMessageId)
+        .then(res => {
+            commit('LOAD_MESSAGES_BY_USER_ID', res)
         })
         .catch(e => console.log(e));
     },
@@ -148,6 +159,7 @@ const actions = {
         var proxy = connection.createHubProxy('chat');
         proxy.on('onUpdateMessages', function(){
           dispatch('getNewMessages');
+          dispatch('getMessagesByUserId', { otherUserId: userview.Id, lastReceivedMessageId: 0 });
         })
         connection.start()
         .done(() => 
