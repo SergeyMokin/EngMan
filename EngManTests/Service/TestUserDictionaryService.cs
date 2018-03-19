@@ -162,7 +162,7 @@ namespace EngManTests.Service
         [TestMethod]
         public void UserDictionaryServiceTest_Delete_valid()
         {
-            var expected = rep.DeleteWordFromDictionary(1, 1);
+            var expected = "Delete completed successful";
             var actual = service.Delete(1, 1);
             Assert.AreEqual(expected, actual);
         }

@@ -27,7 +27,7 @@ namespace EngManTests.Controllers
             _service.Setup(x => x.Add(It.IsAny<Word>()))
                 .Returns(true);
             _service.Setup(x => x.Delete(It.IsAny<int>()))
-                .Returns<int>(x => Task.FromResult(x));
+                .Returns<int>(x => Task.FromResult("Delete completed successful"));
             _service.Setup(x => x.Edit(It.IsAny<Word>()))
                 .Returns(Task.FromResult(true));
             _service.Setup(x => x.Get())
@@ -66,71 +66,71 @@ namespace EngManTests.Controllers
         public void WordControllerTest_GetAllCategories()
         {
             var expected = service.GetAllCategories();
-            var actual = controller.GetAllCategories() as OkNegotiatedContentResult<IEnumerable<string>>;
-            Assert.AreEqual(expected.Count(), actual.Content.Count());
+            var actual = controller.GetAllCategories();
+            Assert.AreEqual(expected.Count(), actual.Count());
         }
 
         [TestMethod]
         public void WordControllerTest_GetAllTasks()
         {
             var expected = service.Get();
-            var actual = controller.GetAllWords() as OkNegotiatedContentResult<IEnumerable<Word>>;
-            Assert.AreEqual(expected.Count(), actual.Content.Count());
+            var actual = controller.GetAllWords();
+            Assert.AreEqual(expected.Count(), actual.Count());
         }
 
         [TestMethod]
         public void WordControllerTest_GetByCategory()
         {
             var expected = service.GetByCategory("Category1");
-            var actual = controller.GetByCategory("Category1") as OkNegotiatedContentResult<IEnumerable<Word>>;
-            Assert.AreEqual(expected.Count(), actual.Content.Count());
+            var actual = controller.GetByCategory("Category1");
+            Assert.AreEqual(expected.Count(), actual.Count());
         }
 
         [TestMethod]
         public void WordControllerTest_GetTaskById()
         {
             var expected = service.GetById(1);
-            var actual = controller.GetWordById(1) as OkNegotiatedContentResult<Word>;
-            Assert.AreEqual(expected.WordId, actual.Content.WordId);
+            var actual = controller.GetWordById(1);
+            Assert.AreEqual(expected.WordId, actual.WordId);
         }
 
         [TestMethod]
         public void WordControllerTest_EditTask()
         {
             var expected = service.Edit(new Word()).Result;
-            var actual = controller.EditWord(new Word()).Result as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.EditWord(new Word()).Result;
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void WordControllerTest_AddTask()
         {
             var expected = service.Add(new Word());
-            var actual = controller.AddWord(new Word()) as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.AddWord(new Word());
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void WordControllerTest_DeleteTask()
         {
-            var actual = controller.DeleteWord(1).Result as OkNegotiatedContentResult<string>;
-            Assert.AreEqual("Delete completed successful", actual.Content);
+            var actual = controller.DeleteWord(1).Result;
+            Assert.AreEqual("Delete completed successful", actual);
         }
 
         [TestMethod]
         public void WordControllerTest_GetTask()
         {
             var expected = service.GetTask("Category1", "1", true);
-            var actual = controller.GetWordMap("Category1", "1", true) as OkNegotiatedContentResult<MapWord>;
-            Assert.AreEqual(expected.WordId, actual.Content.WordId);
+            var actual = controller.GetWordMap("Category1", "1", true);
+            Assert.AreEqual(expected.WordId, actual.WordId);
         }
 
         [TestMethod]
         public void WordControllerTest_VerificationCorrectness()
         {
             var expected = service.VerificationCorrectness(new Word(), true);
-            var actual = controller.VerificationCorrectness(new Word(), true) as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.VerificationCorrectness(new Word(), true);
+            Assert.AreEqual(expected, actual);
         }
     }
 }

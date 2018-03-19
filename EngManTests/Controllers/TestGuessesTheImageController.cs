@@ -30,7 +30,7 @@ namespace EngManTests.Service
             _service.Setup(x => x.Add(It.IsAny<GuessesTheImageToAdd>()))
                 .Returns(true);
             _service.Setup(x => x.Delete(It.IsAny<int>()))
-                .Returns<int>(x => x);
+                .Returns<int>(x => "Delete completed successful");
             _service.Setup(x => x.Edit(It.IsAny<GuessesTheImageToAdd>()))
                 .Returns(true);
             _service.Setup(x => x.GetAll())
@@ -98,8 +98,8 @@ namespace EngManTests.Service
                 WordId = 1
             };
             var expected = service.Add(model);
-            var actual = controller.AddTask(model) as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.AddTask(model);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -116,16 +116,16 @@ namespace EngManTests.Service
                 WordId = 1
             };
             var expected = service.Edit(model);
-            var actual = controller.EditTask(model) as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.EditTask(model);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void GuessesTheImageControllerTest_GetAll()
         {
             var expected = service.GetAll().Count();
-            var result = controller.GetAllTasks() as OkNegotiatedContentResult<IEnumerable<GuessesTheImageToReturn>>;
-            var actual = result.Content.Count();
+            var result = controller.GetAllTasks();
+            var actual = result.Count();
             Assert.AreEqual(expected, actual);
         }
 
@@ -133,40 +133,40 @@ namespace EngManTests.Service
         public void GuessesTheImageControllerTest_GetById()
         {
             var expected = service.Get(2);
-            var actual = controller.GetTaskById(2) as OkNegotiatedContentResult<GuessesTheImageToReturn>;
-            Assert.AreEqual(expected.Id, actual.Content.Id);
+            var actual = controller.GetTaskById(2);
+            Assert.AreEqual(expected.Id, actual.Id);
         }
 
         [TestMethod]
         public void GuessesTheImageControllerTest_Delete()
         {
             var expected = "Delete completed successful";
-            var actual = controller.DeleteTask(2) as OkNegotiatedContentResult<string>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.DeleteTask(2);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void GuessesTheImageControllerTest_GetAllCategories()
         {
             var expected = service.GetAllCategories().Count();
-            var actual = controller.GetAllCategories() as OkNegotiatedContentResult<IEnumerable<string>>;
-            Assert.AreEqual(expected, actual.Content.Count());
+            var actual = controller.GetAllCategories();
+            Assert.AreEqual(expected, actual.Count());
         }
 
         [TestMethod]
         public void GuessesTheImageControllerTest_GetByCategory()
         {
             var expected = service.GetByCategory("Category2").Count();
-            var actual = controller.GetByCategory("Category2") as OkNegotiatedContentResult<IEnumerable<GuessesTheImageToReturn>>;
-            Assert.AreEqual(expected, actual.Content.Count());
+            var actual = controller.GetByCategory("Category2");
+            Assert.AreEqual(expected, actual.Count());
         }
 
         [TestMethod]
         public void GuessesTheImageControllerTest_GetTask()
         {
             var expected = service.GetTask("Category2", "");
-            var actual = controller.GetTask("Category2", "") as OkNegotiatedContentResult<GuessesTheImageToReturn>;
-            Assert.AreEqual(expected.Id, actual.Content.Id);
+            var actual = controller.GetTask("Category2", "");
+            Assert.AreEqual(expected.Id, actual.Id);
         }
 
         [TestMethod]
@@ -186,8 +186,8 @@ namespace EngManTests.Service
                 }
             };
             var expected = true;
-            var actual = controller.VerificationCorrectness(model) as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.VerificationCorrectness(model);
+            Assert.AreEqual(expected, actual);
         }
     }
 }

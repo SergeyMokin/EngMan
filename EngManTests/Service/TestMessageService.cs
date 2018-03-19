@@ -206,7 +206,7 @@ namespace EngManTests.Service
         [TestMethod]
         public void MessageServiceTest_DeleteMessage_valid()
         {
-            var expected = rep.DeleteMessage(1, 1);
+            var expected = "Delete completed successful";
             var actual = service.DeleteMessage(1, 1);
             Assert.AreEqual(expected, actual);
         }

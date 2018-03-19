@@ -27,7 +27,7 @@ namespace EngManTests.Controllers
             _service.Setup(x => x.Add(It.IsAny<SentenceTask>()))
                 .Returns(true);
             _service.Setup(x => x.Delete(It.IsAny<int>()))
-                .Returns<int>(x => Task.FromResult(x));
+                .Returns<int>(x => Task.FromResult("Delete completed successful"));
             _service.Setup(x => x.Edit(It.IsAny<SentenceTask>()))
                 .Returns(Task.FromResult(true));
             _service.Setup(x => x.Get())
@@ -65,71 +65,71 @@ namespace EngManTests.Controllers
         public void SentenceTaskControllerTest_GetAllCategories()
         {
             var expected = service.GetAllCategories();
-            var actual = controller.GetAllCategories() as OkNegotiatedContentResult<IEnumerable<string>>;
-            Assert.AreEqual(expected.Count(), actual.Content.Count());
+            var actual = controller.GetAllCategories();
+            Assert.AreEqual(expected.Count(), actual.Count());
         }
 
         [TestMethod]
         public void SentenceTaskControllerTest_GetAllTasks()
         {
             var expected = service.Get();
-            var actual = controller.GetAllTasks() as OkNegotiatedContentResult<IEnumerable<SentenceTask>>;
-            Assert.AreEqual(expected.Count(), actual.Content.Count());
+            var actual = controller.GetAllTasks();
+            Assert.AreEqual(expected.Count(), actual.Count());
         }
 
         [TestMethod]
         public void SentenceTaskControllerTest_GetByCategory()
         {
             var expected = service.GetByCategory("Category1");
-            var actual = controller.GetByCategory("Category1") as OkNegotiatedContentResult<IEnumerable<SentenceTask>>;
-            Assert.AreEqual(expected.Count(), actual.Content.Count());
+            var actual = controller.GetByCategory("Category1");
+            Assert.AreEqual(expected.Count(), actual.Count());
         }
 
         [TestMethod]
         public void SentenceTaskControllerTest_GetTaskById()
         {
             var expected = service.GetById(1);
-            var actual = controller.GetTaskById(1) as OkNegotiatedContentResult<SentenceTask>;
-            Assert.AreEqual(expected.SentenceTaskId, actual.Content.SentenceTaskId);
+            var actual = controller.GetTaskById(1);
+            Assert.AreEqual(expected.SentenceTaskId, actual.SentenceTaskId);
         }
 
         [TestMethod]
         public void SentenceTaskControllerTest_EditTask()
         {
             var expected = service.Edit(new SentenceTask()).Result;
-            var actual = controller.EditTask(new SentenceTask()).Result as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.EditTask(new SentenceTask()).Result;
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void SentenceTaskControllerTest_AddTask()
         {
             var expected = service.Add(new SentenceTask());
-            var actual = controller.AddTask(new SentenceTask()) as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.AddTask(new SentenceTask());
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void SentenceTaskControllerTest_DeleteTask()
         {
-            var actual = controller.DeleteTask(1).Result as OkNegotiatedContentResult<string>;
-            Assert.AreEqual("Delete completed successful", actual.Content);
+            var actual = controller.DeleteTask(1).Result;
+            Assert.AreEqual("Delete completed successful", actual);
         }
 
         [TestMethod]
         public void SentenceTaskControllerTest_GetTask()
         {
             var expected = service.GetTask("Category1", "1");
-            var actual = controller.GetTask("Category1", "1") as OkNegotiatedContentResult<SentenceTask>;
-            Assert.AreEqual(expected.SentenceTaskId, actual.Content.SentenceTaskId);
+            var actual = controller.GetTask("Category1", "1");
+            Assert.AreEqual(expected.SentenceTaskId, actual.SentenceTaskId);
         }
 
         [TestMethod]
         public void SentenceTaskControllerTest_VerificationCorrectness()
         {
             var expected = service.VerificationCorrectness(new SentenceTask());
-            var actual = controller.VerificationCorrectness(new SentenceTask()) as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.VerificationCorrectness(new SentenceTask());
+            Assert.AreEqual(expected, actual);
         }
     }
 }

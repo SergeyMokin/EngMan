@@ -212,7 +212,7 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void GuessesTheImageServiceTest_Delete_valid()
         {
-            var expected = rep.Delete(2);
+            var expected = "Delete completed successful";
             var actual = service.Delete(2);
             Assert.AreEqual(expected, actual);
         }

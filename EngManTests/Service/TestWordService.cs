@@ -178,7 +178,7 @@ namespace EngManTests.Service
         [TestMethod]
         public void WordServiceTest_Delete_valid()
         {
-            var expected = rep.DeleteWord(1).Result;
+            var expected = "Delete completed successful";
             var actual = service.Delete(1).Result;
             Assert.AreEqual(expected, actual);
         }

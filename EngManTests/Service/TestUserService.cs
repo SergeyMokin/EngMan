@@ -111,9 +111,8 @@ namespace EngManTests.Service
                 Password = "Password9856",
                 Role = "user"
             };
-            var expected = true;
             var actual = service.Registration(model);
-            Assert.AreEqual(expected, actual);
+            Assert.AreNotEqual(actual, null);
         }
 
         [TestMethod]
@@ -161,7 +160,7 @@ namespace EngManTests.Service
         [TestMethod]
         public void UserServiceTest_DeleteUser_valid()
         {
-            var expected = rep.DeleteUser(1);
+            var expected = "Delete completed successful";
             var actual = service.DeleteUser(1);
             Assert.AreEqual(expected, actual);
         }

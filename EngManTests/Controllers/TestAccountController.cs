@@ -7,6 +7,8 @@ using System.Linq;
 using Moq;
 using System.Web.Http.Results;
 using System.Threading.Tasks;
+using System.Dynamic;
+
 namespace EngManTests.Controllers
 {
     [TestClass]
@@ -26,13 +28,13 @@ namespace EngManTests.Controllers
             var data = GenerateData();
             var _service = new Mock<IUserService>();
             _service.Setup(x => x.Registration(It.IsAny<User>()))
-                .Returns(true);
+                .Returns(Task.FromResult(new ExpandoObject()));
             _service.Setup(x => x.ChangePassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(true);
             _service.Setup(x => x.ChangeRole(It.IsAny<UserView>()))
                 .Returns(Task.FromResult(true));
             _service.Setup(x => x.DeleteUser(It.IsAny<int>()))
-                .Returns<int>(x => x);
+                .Returns<int>(x => "Delete completed successful");
             _service.Setup(x => x.SaveUser(It.IsAny<UserView>())).Returns(Task.FromResult(true));
             _service.Setup(x => x.GetUserList())
                 .Returns(data.Select(x => new UserView { Id = x.Id }).ToList());
@@ -62,114 +64,44 @@ namespace EngManTests.Controllers
             }
             return lst.AsQueryable();
         }
-        
-        [TestMethod]
-        public void AccountControllerTest_GetAllCategoriesOfDictionary()
-        {
-            var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_GetByCategoryDictionary()
-        {
-            var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_GetUserDictionary()
-        {
-            var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_AddWordToDictionary()
-        {
-            var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_DeleteWordFromDictionary()
-        {
-            var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_GetUserData()
-        {
-            var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_LogOut()
-        {
-            var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_ChangePassword()
-        {
-            var actual = controller.GetAllCategoriesOfDictionary();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_Registration()
-        {
-            var actual = controller.Registration(null).Result;
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void AccountControllerTest_Login()
-        {
-            var actual = controller.Login(null).Result;
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
 
         [TestMethod]
         public void AccountControllerTest_GetAllUsers()
         {
             var expected = serviceUser.GetUserList();
-            var actual = controller.GetAllUsers() as OkNegotiatedContentResult<List<UserView>>;
-            Assert.AreEqual(expected.Count(), actual.Content.Count());
+            var actual = controller.GetAllUsers();
+            Assert.AreEqual(expected.Count(), actual.Count());
         }
 
         [TestMethod]
         public void AccountControllerTest_GetUserById()
         {
             var expected = serviceUser.GetUser(1);
-            var actual = controller.GetUserById(1) as OkNegotiatedContentResult<UserView>;
-            Assert.AreEqual(expected.Id, actual.Content.Id);
+            var actual = controller.GetUserById(1);
+            Assert.AreEqual(expected.Id, actual.Id);
         }
 
         [TestMethod]
         public void AccountControllerTest_EditUser()
         {
             var expected = serviceUser.SaveUser(new UserView { Id = 1 }).Result;
-            var actual = controller.EditUser(new UserView { Id = 1 }).Result as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.EditUser(new UserView { Id = 1 }).Result;
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void AccountControllerTest_DeleteUser()
         {
-            var actual = controller.DeleteUser(1) as OkNegotiatedContentResult<string>;
-            Assert.AreEqual("Delete completed successful", actual.Content);
+            var actual = controller.DeleteUser(1);
+            Assert.AreEqual("Delete completed successful", actual);
         }
 
         [TestMethod]
         public void AccountControllerTest_ChangeRole()
         {
             var expected = serviceUser.ChangeRole(new UserView { Id = 1 }).Result;
-            var actual = controller.ChangeRole(new UserView { Id = 1 }).Result as OkNegotiatedContentResult<bool>;
-            Assert.AreEqual(expected, actual.Content);
+            var actual = controller.ChangeRole(new UserView { Id = 1 }).Result;
+            Assert.AreEqual(expected, actual);
         }
     }
 }

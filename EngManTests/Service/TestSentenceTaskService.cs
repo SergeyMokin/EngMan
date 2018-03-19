@@ -174,7 +174,7 @@ namespace EngManTests.Service
         [TestMethod]
         public void SentenceTaskServiceTest_Delete_valid()
         {
-            var expected = rep.DeleteTask(1).Result;
+            var expected = "Delete completed successful";
             var actual = service.Delete(1).Result;
             Assert.AreEqual(expected, actual);
         }

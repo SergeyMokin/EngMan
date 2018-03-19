@@ -23,47 +23,5 @@ namespace EngManTests.Controllers
             controller = new MessageController(_service.Object);
             service = _service.Object;
         }
-
-        [TestMethod]
-        public void MessageControllerTest_SendMessage()
-        {
-            var actual = controller.SendMessage(null);
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void MessageControllerTest_GetMessages()
-        {
-            var actual = controller.GetAllMessages();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void MessageControllerTest_GetNewMessages()
-        {
-            var actual = controller.GetNewMessages();
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void MessageControllerTest_GetMessagesByUserId()
-        {
-            var actual = controller.GetMessagesByUserId(1, 1);
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void MessageControllerTest_ReadMessagess()
-        {
-            var actual = controller.ReadMessages(1);
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
-
-        [TestMethod]
-        public void MessageControllerTest_DeleteMessage()
-        {
-            var actual = controller.DeleteMessage(0);
-            Assert.IsInstanceOfType(actual, typeof(BadRequestErrorMessageResult));
-        }
     }
 }

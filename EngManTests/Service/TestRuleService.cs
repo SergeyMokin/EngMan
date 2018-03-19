@@ -172,7 +172,7 @@ namespace EngManTests.Service
         [TestMethod]
         public void RuleServiceTest_Delete_valid()
         {
-            var expected = rep.DeleteRule(1).Result;
+            var expected = "Delete completed successful";
             var actual = service.Delete(1).Result;
             Assert.AreEqual(expected, actual);
         }
