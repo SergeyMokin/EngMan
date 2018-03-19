@@ -147,7 +147,7 @@ const actions = {
         var connection = $.hubConnection('http://localhost:58099'); 
         var proxy = connection.createHubProxy('chat');
         proxy.on('onUpdateMessages', function(){
-          dispatch('SET_NEW_MESSAGES');
+          dispatch('getNewMessages');
         })
         connection.start()
         .done(() => 
