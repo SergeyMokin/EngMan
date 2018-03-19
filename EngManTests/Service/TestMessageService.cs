@@ -33,15 +33,7 @@ namespace EngManTests.Service
             _rep.Setup(x => x.GetMessagesByUserId(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns<int, int, int>((x,y,z) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x));
             _rep.Setup(x => x.ReadMessages(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns<int, int>((messages, x) => dataToReturn.Where(mes => mes.Sender.Id == x || mes.Beneficiary.Id == x)
-                .Select(mes => new ReturnMessage {
-                    MessageId = mes.MessageId,
-                    Sender = mes.Sender,
-                    Beneficiary = mes.Beneficiary,
-                    Text = mes.Text,
-                    CheckReadMes = true,
-                    Time = mes.Time
-                }));
+                .Returns<int, int>((messages, x) => 1);
             _rep.Setup(x => x.SendMessage(It.IsAny<Message>(), It.IsAny<int>()))
                 .Returns(true);
             service = new MessageService(_rep.Object);
@@ -185,8 +177,8 @@ namespace EngManTests.Service
         [TestMethod]
         public void MessageServiceTest_ReadMessagess_valid()
         {
-            var expected = rep.ReadMessages(1, 1).Count();
-            var actual = service.ReadMessages(1, 1).Count();
+            var expected = true;
+            var actual = service.ReadMessages(1, 1);
             Assert.AreEqual(expected, actual);
         }
 
