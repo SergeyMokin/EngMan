@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
-using System.Net.Http;
-using System;
+using System.Collections.Generic;
 
 namespace EngMan.Controllers
 {
@@ -19,161 +18,68 @@ namespace EngMan.Controllers
 
         //GET api/word/GetAllCategories
         [HttpGet]
-        public IHttpActionResult GetAllCategories()
+        public IEnumerable<string> GetAllCategories()
         {
-            try
-            {
-                var tasks = service.GetAllCategories();
-                if (tasks == null)
-                {
-                    return NotFound();
-                }
-                return Ok(tasks);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetAllCategories();
         }
 
         //GET api/word/GetByCategory
         [HttpGet]
-        public IHttpActionResult GetByCategory(string category)
+        public IEnumerable<Word> GetByCategory(string category)
         {
-            try
-            {
-                var tasks = service.GetByCategory(category);
-                if (tasks == null)
-                {
-                    return NotFound();
-                }
-                return Ok(tasks);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetByCategory(category);
         }
 
         //GET api/word/GetAllWords
         [HttpGet]
-        public IHttpActionResult GetAllWords()
+        public IEnumerable<Word> GetAllWords()
         {
-            try
-            {
-                var words = service.Get();
-                if (words == null)
-                {
-                    return NotFound();
-                }
-                return Ok(words);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.Get();
         }
 
         //GET api/word/GetWordById
         [HttpGet]
-        public IHttpActionResult GetWordById(int id)
+        public Word GetWordById(int id)
         {
-            try
-            {
-                var word = service.GetById(id);
-                if (word == null)
-                {
-                    return NotFound();
-                }
-                return Ok(word);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetById(id);
         }
 
         //PUT api/word/EditWord
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<IHttpActionResult> EditWord(Word word)
+        public async Task<bool> EditWord(Word word)
         {
-            try
-            {
-                return Ok(await service.Edit(word));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await service.Edit(word);
         }
 
         //POST api/word/AddWord
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public IHttpActionResult AddWord(Word word)
+        public bool AddWord(Word word)
         {
-            try
-            {
-                return Ok(service.Add(word));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.Add(word);
         }
 
         //DELETE api/word/DeleteWord
         [Authorize(Roles = "admin")]
         [HttpDelete]
-        public async Task<IHttpActionResult> DeleteWord(int id)
+        public async Task<string> DeleteWord(int id)
         {
-            try
-            {
-                var _id = await service.Delete(id);
-                if (_id != -1)
-                {
-                    return Ok("Delete completed successful");
-                }
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await service.Delete(id);
         }
 
         //GET api/word/GetWordMap
         [HttpGet]
-        public IHttpActionResult GetWordMap(string category, string indexes, bool translate) 
+        public MapWord GetWordMap(string category, string indexes, bool translate) 
         {
-            try
-            {
-                var task = service.GetTask(category, indexes, translate);
-                if (task == null)
-                {
-                    return NotFound();
-                }
-                return Ok(task);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetTask(category, indexes, translate);
         }
 
         //POST api/word/VerificationCorrectness
         [HttpPost]
-        public IHttpActionResult VerificationCorrectness(Word word, bool translate)
+        public bool VerificationCorrectness(Word word, bool translate)
         {
-            try
-            {
-                return Ok(service.VerificationCorrectness(word, translate));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.VerificationCorrectness(word, translate);
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System;
+using System.Collections.Generic;
 
 namespace EngMan.Controllers
 {
@@ -19,161 +18,68 @@ namespace EngMan.Controllers
 
         //GET api/SentenceTask/GetAllCategories
         [HttpGet]
-        public IHttpActionResult GetAllCategories()
+        public IEnumerable<string> GetAllCategories()
         {
-            try
-            {
-                var tasks = service.GetAllCategories();
-                if (tasks == null)
-                {
-                    return NotFound();
-                }
-                return Ok(tasks);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetAllCategories();
         }
 
         //GET api/SentenceTask/GetByCategory
         [HttpGet]
-        public IHttpActionResult GetByCategory(string category)
+        public IEnumerable<SentenceTask> GetByCategory(string category)
         {
-            try
-            {
-                var tasks = service.GetByCategory(category);
-                if (tasks == null)
-                {
-                    return NotFound();
-                }
-                return Ok(tasks);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetByCategory(category);
         }
 
         //GET api/SentenceTask/GetAllTasks
         [HttpGet]
-        public IHttpActionResult GetAllTasks()
+        public IEnumerable<SentenceTask> GetAllTasks()
         {
-            try
-            {
-                var tasks = service.Get();
-                if (tasks == null)
-                {
-                    return NotFound();
-                }
-                return Ok(tasks);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.Get();
         }
 
         //GET api/SentenceTask/GetTaskById
         [HttpGet]
-        public IHttpActionResult GetTaskById(int id)
+        public SentenceTask GetTaskById(int id)
         {
-            try
-            {
-                var task = service.GetById(id);
-                if (task == null)
-                {
-                    return NotFound();
-                }
-                return Ok(task);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetById(id);
         }
 
         //PUT api/SentenceTask/EditTask
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<IHttpActionResult> EditTask(SentenceTask task)
+        public async Task<bool> EditTask(SentenceTask task)
         {
-            try
-            {
-                return Ok(await service.Edit(task));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await service.Edit(task);
         }
 
         //POST api/SentenceTask/AddTask
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public IHttpActionResult AddTask(SentenceTask task)
+        public bool AddTask(SentenceTask task)
         {
-            try
-            {
-                return Ok(service.Add(task));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.Add(task);
         }
 
         //DELETE api/SentenceTask/DeleteTask
         [Authorize(Roles = "admin")]
         [HttpDelete]
-        public async Task<IHttpActionResult> DeleteTask(int id)
+        public async Task<string> DeleteTask(int id)
         {
-            try
-            {
-                var _id = await service.Delete(id);
-                if (_id != -1)
-                {
-                    return Ok("Delete completed successful");
-                }
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await service.Delete(id);
         }
 
         //GET api/SentenceTask/GetTask
         [HttpGet]
-        public IHttpActionResult GetTask(string category, string indexes)
+        public SentenceTask GetTask(string category, string indexes)
         {
-            try
-            {
-                var task = service.GetTask(category, indexes);
-                if (task == null)
-                {
-                    return NotFound();
-                }
-                return Ok(task);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.GetTask(category, indexes);
         }
 
         //POST api/SentenceTask/VerificationCorrectness
         [HttpPost]
-        public IHttpActionResult VerificationCorrectness(SentenceTask sentence)
+        public bool VerificationCorrectness(SentenceTask sentence)
         {
-            try
-            {
-                return Ok(service.VerificationCorrectness(sentence));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return service.VerificationCorrectness(sentence);
         }
     }
 }
