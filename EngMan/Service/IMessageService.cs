@@ -13,8 +13,8 @@ namespace EngMan.Service
         //delete message of user from db
         string DeleteMessage(int mesId, int userId);
 
-        //read unread messages (bool CheckReadMessage = true)
-        IEnumerable<ReturnMessage> ReadMessages(int senderId, int beneficiaryId);
+        //read unread messages
+        bool ReadMessages(int senderId, int beneficiaryId);
 
         //get messages with current user and other user
         IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId);

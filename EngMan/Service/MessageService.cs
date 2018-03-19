@@ -82,7 +82,7 @@ namespace EngMan.Service
             }
         }
 
-        public IEnumerable<ReturnMessage> ReadMessages(int senderId, int beneficiaryId)
+        public bool ReadMessages(int senderId, int beneficiaryId)
         {
             if (!senderId.Validate() && !beneficiaryId.Validate())
             {
@@ -90,7 +90,9 @@ namespace EngMan.Service
             }
             try
             {
-                return rep.ReadMessages(senderId, beneficiaryId);
+                return rep.ReadMessages(senderId, beneficiaryId) > 0
+                    ? true
+                    : false;
             }
             catch (Exception ex)
             {

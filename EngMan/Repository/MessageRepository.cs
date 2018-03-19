@@ -14,16 +14,15 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public IEnumerable<ReturnMessage> ReadMessages(int senderId, int beneficiaryId)
+        public int ReadMessages(int senderId, int beneficiaryId)
         {
-            context.Database.ExecuteSqlCommand(
+            return context.Database.ExecuteSqlCommand(
                 @"UPDATE[EngMan].[dbo].[Messages]
                   SET[EngMan].[dbo].[Messages].[CheckReadMes] = 1
                   WHERE[EngMan].[dbo].[Messages].[CheckReadMes] = 0 
                   AND [EngMan].[dbo].[Messages].[BeneficiaryId] = @beneficiaryId 
                   AND [EngMan].[dbo].[Messages].[SenderId] = @senderId",
                 new[] { new SqlParameter("beneficiaryId", beneficiaryId), new SqlParameter("senderId", senderId) });
-            return GetMessages(beneficiaryId);
         }
 
         public bool SendMessage(Message mes, int userId)
@@ -117,7 +116,7 @@ namespace EngMan.Repository
                     AND[MessageId] IN (
 						SELECT MAX([MessageId])
 						FROM[EngMan].[dbo].[Messages]
-						GROUP BY [BeneficiaryId]
+						GROUP BY [SenderId]
 					)",
                 new SqlParameter("userId", userId))
                 .Select(x => new ReturnMessage

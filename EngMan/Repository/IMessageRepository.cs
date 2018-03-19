@@ -10,7 +10,7 @@ namespace EngMan.Repository
 
         int DeleteMessage(int mesId, int userId);
 
-        IEnumerable<ReturnMessage> ReadMessages(int senderId, int beneficiaryId);
+        int ReadMessages(int senderId, int beneficiaryId);
 
         IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId);
 

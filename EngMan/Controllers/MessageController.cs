@@ -47,7 +47,7 @@ namespace EngMan.Controllers
 
         //POST api/message/ReadMessages
         [HttpPost]
-        public IEnumerable<ReturnMessage> ReadMessages(int senderId)
+        public bool ReadMessages(int senderId)
         {
             return service.ReadMessages(senderId, GetCurrentUserId());
         }
