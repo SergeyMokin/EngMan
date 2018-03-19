@@ -17,7 +17,7 @@ namespace EngMan.Service
         GuessesTheImageToReturn Get(int id);
 
         //delete GuessesTheImage from db
-        int Delete(int id);
+        string Delete(int id);
 
         //get all categories of GuessesTheImages
         IEnumerable<string> GetAllCategories();

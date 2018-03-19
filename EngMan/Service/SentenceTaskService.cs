@@ -105,7 +105,7 @@ namespace EngMan.Service
             }
         }
 
-        public async Task<int> Delete(int id)
+        public async Task<string> Delete(int id)
         {
             if (!id.Validate())
             {
@@ -113,7 +113,9 @@ namespace EngMan.Service
             }
             try
             {
-                return await rep.DeleteTask(id);
+                return await rep.DeleteTask(id) > 0
+                    ? "Delete completed successful"
+                    : null;
             }
             catch (Exception ex)
             {

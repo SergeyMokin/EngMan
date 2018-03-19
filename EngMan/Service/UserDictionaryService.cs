@@ -45,7 +45,7 @@ namespace EngMan.Service
                 throw new Exception(ex.Message);
             }
         }
-        public int Delete(int userId, int wordId)
+        public string Delete(int userId, int wordId)
         {
             if (!userId.Validate() && !wordId.Validate())
             {
@@ -53,7 +53,9 @@ namespace EngMan.Service
             }
             try
             {
-                return rep.DeleteWordFromDictionary(userId, wordId);
+                return rep.DeleteWordFromDictionary(userId, wordId) > 0
+                    ? "Delete completed successful"
+                    : null;
             }
             catch (Exception ex)
             {

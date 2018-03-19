@@ -11,7 +11,7 @@ namespace EngMan.Service
         bool Add(int id, UserWord word);
 
         //delete word from dictionary of user
-        int Delete(int userId, int wordId);
+        string Delete(int userId, int wordId);
 
         //get all categories of user's words
         IEnumerable<string> GetAllCategories(int id);

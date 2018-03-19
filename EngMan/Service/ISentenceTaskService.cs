@@ -18,7 +18,7 @@ namespace EngMan.Service
         bool Add(SentenceTask task);
 
         //delete sentence from db
-        Task<int> Delete(int id);
+        Task<string> Delete(int id);
 
         //get all categories of sentences
         IEnumerable<string> GetAllCategories();

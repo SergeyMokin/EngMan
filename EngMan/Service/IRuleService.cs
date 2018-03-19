@@ -18,7 +18,7 @@ namespace EngMan.Service
         bool Add(RuleModel rule);
 
         //delete rule from db
-        Task<int> Delete(int id);
+        Task<string> Delete(int id);
 
         //add images to server
         List<string> AddImages(Image[] images);

@@ -106,7 +106,7 @@ namespace EngMan.Service
             }
         }
 
-        public async Task<int> Delete(int id)
+        public async Task<string> Delete(int id)
         {
             if (!id.Validate())
             {
@@ -114,7 +114,9 @@ namespace EngMan.Service
             }
             try
             {
-                return await rep.DeleteWord(id);
+                return await rep.DeleteWord(id) > 0
+                    ? "Delete completed successful"
+                    : null;
             }
             catch (Exception ex)
             {
@@ -210,7 +212,7 @@ namespace EngMan.Service
                 var _task = GetById(task.WordId);
                 if (_task == null)
                 {
-                    throw new Exception("Invalid model");
+                    throw new Exception("Task not found");
                 }
                 Regex rx = new Regex("[^a-zA-Zа-яА-Я0-9]");
                 if (translate)

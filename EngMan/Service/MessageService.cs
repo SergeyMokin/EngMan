@@ -98,7 +98,7 @@ namespace EngMan.Service
             }
         }
 
-        public int DeleteMessage(int mesId, int userId)
+        public string DeleteMessage(int mesId, int userId)
         {
             if (!userId.Validate() && !mesId.Validate())
             {
@@ -106,7 +106,9 @@ namespace EngMan.Service
             }
             try
             {
-                return rep.DeleteMessage(mesId, userId);
+                return rep.DeleteMessage(mesId, userId) > 0
+                    ? "Delete completed successful"
+                    : null; ;
             }
             catch (Exception ex)
             {

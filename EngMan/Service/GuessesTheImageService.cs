@@ -78,7 +78,7 @@ namespace EngMan.Service
             }
         }
 
-        public int Delete(int id)
+        public string Delete(int id)
         {
             if (!id.Validate())
             {
@@ -86,7 +86,9 @@ namespace EngMan.Service
             }
             try
             {
-                return rep.Delete(id);
+                return rep.Delete(id) > 0
+                    ? "Delete completed successful"
+                    : null; ;
             }
             catch (Exception ex)
             {

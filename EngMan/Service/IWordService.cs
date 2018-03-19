@@ -18,7 +18,7 @@ namespace EngMan.Service
         bool Add(Word word);
 
         //delete word from db
-        Task<int> Delete(int id);
+        Task<string> Delete(int id);
 
         //get word by category
         IEnumerable<Word> GetByCategory(string category);
