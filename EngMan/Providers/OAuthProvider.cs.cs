@@ -47,7 +47,7 @@ namespace EngMan.Providers
                 }
                 catch
                 {
-                    context.SetError("invalid_grant", "The user name or password is incorrect");
+                    throw new Exception("The user name or password is incorrect");
                 }
             });
         }
