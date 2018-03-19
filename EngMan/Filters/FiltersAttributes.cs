@@ -36,6 +36,10 @@ namespace EngMan.Filters
         {
             if (_validate(actionContext.ActionArguments))
             {
+                if (actionContext == null)
+                {
+                    throw new Exception("Action context is null");
+                }
                 actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
                     "The argument cannot be null");
             }
@@ -46,7 +50,11 @@ namespace EngMan.Filters
     {
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            if (actionExecutedContext.Exception != null)
+            if (actionExecutedContext == null)
+            {
+                throw new Exception("Action executed context is null");
+            }
+            else if (actionExecutedContext.Exception != null)
             {
                 return;
             }
