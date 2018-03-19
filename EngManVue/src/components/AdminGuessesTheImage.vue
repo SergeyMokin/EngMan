@@ -313,7 +313,7 @@ export default {
                 {
                     if(result.response.data.Message)
                     {
-                        console.log(result.response.data.Message);
+                        alert(result.response.data.Message);
                         this.inProgress = false;
                         return;
                     }
@@ -324,6 +324,9 @@ export default {
                     this.$store.dispatch('getGuessesTheImages');
                     return;
                 }
+                alert(result);
+                this.inProgress = false;
+                return;
             })
           } else{
               this.inProgress = false;

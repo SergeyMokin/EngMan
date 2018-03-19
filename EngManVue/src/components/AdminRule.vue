@@ -333,7 +333,7 @@ export default {
                     if(result.response.data.Message)
                     {
                         this.inProgress = false;
-                        this.errorMessage = result.response.data.Message;
+                        alert(result.response.data.Message);
                         return;
                     }
                 }
@@ -346,13 +346,13 @@ export default {
                 else
                 {
                     this.inProgress = false;
-                    console.log(result);
+                    alert(result);
                     return;
                 }
             })
             .catch(e =>
             {
-                console.log(e);
+                alert(e);
                 this.inProgress = false;
             })
           } else{

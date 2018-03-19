@@ -93,7 +93,7 @@ export default {
                         if(result.response.data.Message)
                         {
                             this.inProgress = false;
-                            console.log(result);
+                            alert(result);
                             return;
                         }
                     }
@@ -107,7 +107,7 @@ export default {
                     else
                     {
                         this.inProgress = false;
-                        console.log(result);
+                        alert(result);
                         return;
                     }
                 })

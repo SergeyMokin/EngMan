@@ -48,8 +48,8 @@
             </div>
             <br/>
 
-            <span v-if = "$v.user.$error" class = "span-error-message">Mail and password are required<br/></span>
-            <span v-if = "badRequest" class = "span-error-message">Incorrect email or password<br/></span>
+            <span v-if = "$v.user.$error" class = "span-error-message">Mail and password are required. </span>
+            <span v-if = "badRequest" class = "span-error-message">{{errorMessage}}<br/></span>
         </div>
     </div>
 
@@ -141,12 +141,6 @@
             </span>
             
             <span 
-                v-if = "badRequest" 
-                class = "span-error-message">
-                A user with this email already exists. 
-            </span>
-            
-            <span 
                 v-if = "$v.registrationUser.Email.$error" 
                 class = "span-error-message">
                 Invalid Email. 
@@ -163,6 +157,8 @@
                 class = "span-error-message">
                 The password and its confirmation must match. 
             </span>
+
+            <span v-if = "badRequest" class = "span-error-message">{{errorMessage}}<br/></span>
         </div>
     </div>
 
@@ -227,6 +223,7 @@ export default {
             authentification: false,
             registration: false,
             clickAtForm: true,
+            errorMessage: '',
             user: {
                 Email: ''
                 , Password: ''
@@ -271,6 +268,7 @@ export default {
             if(this.inProgress) return;
             this.inProgress = true;
             this.badRequest = false;
+            this.errorMessage = '';
             this.$v.$touch();
             if(this.$v.user.$invalid) 
             {
@@ -279,6 +277,7 @@ export default {
             };
             api.login(this.user)
             .then(result =>{
+                console.log(result)
                 if(result.access_token)
                 {
                     this.$cookie.delete('user.login.token.localhost:8080');
@@ -306,11 +305,11 @@ export default {
                                 {
                                     this.inProgress = false;
                                     this.badRequest = true;
-                                    console.log(result.response.data.Message);
+                                    this.errorMessage += result.response.data.Message;
                                     return;
                                 }
                             }
-                            console.log('Bad request 400');
+                            this.errorMessage += 'Bad request 400';
                             this.inProgress = false;
                             this.badRequest = true;
                         }
@@ -323,17 +322,17 @@ export default {
                         {
                             this.inProgress = false;
                             this.badRequest = true;
-                            console.log(result.response.data.Message);
+                            this.errorMessage += result.response.data.Message;
                             return;
                         }
                     }
-                    console.log('Bad request 400');
+                    this.errorMessage += 'Bad request 400';
                     this.inProgress = false;
                     this.badRequest = true;
                 }
             })
             .catch(e => {
-                console.log('Bad request 400');
+                this.errorMessage += 'Bad request 400';
                 this.inProgress = false;
                 this.badRequest = true;
             })
@@ -342,6 +341,7 @@ export default {
             if(this.inProgress) return;
             this.inProgress = true;
             this.badRequest = false;
+            this.errorMessage = '';
             this.$v.$touch();
             if(this.$v.registrationUser.$invalid) 
             {
@@ -383,10 +383,10 @@ export default {
                             {
                                 this.inProgress = false;
                                 this.badRequest = true;
-                                console.log(result.response.data.Message);
+                                this.errorMessage += result.response.data.Message;
                                 return;
                             }
-                            console.log('Bad request 400');
+                            this.errorMessage += 'Bad request 400';
                             this.inProgress = false;
                             this.badRequest = true;
                         }
@@ -396,16 +396,17 @@ export default {
                     if(result.response)
                     {
                         this.inProgress = false;
-                        console.log(result.response.data.Message);
+                        this.badRequest = true;
+                        this.errorMessage += result.response.data.Message;
                         return;
                     }
-                    console.log('Bad request 400');
+                    this.errorMessage += 'Bad request 400';
                     this.inProgress = false;
                     this.badRequest = true;
                 }
             })
             .catch(e => {
-                console.log('Bad request 400');
+                this.errorMessage += 'Bad request 400';
                 this.inProgress = false;
                 this.badRequest = true;
             })
@@ -423,6 +424,7 @@ export default {
             this.registration = false;
             this.showHelp = false;
             this.badRequest = false;
+            this.errorMessage = '';
             this.inProgress = false;
             this.$v.$reset();
         },
@@ -433,6 +435,7 @@ export default {
             }
             else{
                 this.inProgress = false;
+                this.errorMessage += 'Invalid user';
                 this.badRequest = true;
             }
         },

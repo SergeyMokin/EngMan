@@ -255,7 +255,7 @@ export default {
                 if(result.response){
                     if(result.response.data.Message)
                     {
-                        this.errorMessage = result.response.data.Message;
+                        alert(result.response.data.Message);
                         this.inProgress = false;
                         return;
                     }
@@ -267,7 +267,7 @@ export default {
                 }
                 else
                 {
-                    console.log(result);
+                    alert(result);
                     this.inProgress = false;
                 }
             })

@@ -260,7 +260,7 @@ export default {
                 {
                     if(result.response.data.Message)
                     {
-                        console.log(result.response.data.Message);
+                        alert(result.response.data.Message);
                         this.inProgress = false;
                     }
                 }
@@ -271,7 +271,7 @@ export default {
                 }
                 else{
                     this.inProgress = false;
-                    console.log(result);
+                    alert(result);
                 }
             })
           } else{
