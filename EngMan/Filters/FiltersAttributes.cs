@@ -19,15 +19,15 @@ namespace EngMan.Filters
                 actionExecutedContext.Exception.Message);
         }
     }
-
-    public class CheckModelForNullAttribute : ActionFilterAttribute
+    
+    public class CheckParametersForNullAttribute : ActionFilterAttribute
     {
         private readonly Func<Dictionary<string, object>, bool> _validate;
 
-        public CheckModelForNullAttribute() : this(arguments => arguments.ContainsValue(null))
+        public CheckParametersForNullAttribute() : this(arguments => arguments.ContainsValue(null))
         { }
 
-        public CheckModelForNullAttribute(Func<Dictionary<string, object>, bool> checkCondition)
+        public CheckParametersForNullAttribute(Func<Dictionary<string, object>, bool> checkCondition)
         {
             _validate = checkCondition;
         }
