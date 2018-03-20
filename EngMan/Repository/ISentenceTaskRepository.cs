@@ -1,22 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using EngMan.Models;
 namespace EngMan.Repository
 {
-    public interface ISentenceTaskRepository
+    public interface ISentenceTaskRepository: IRepository<SentenceTask, SentenceTask>
     {
-        IEnumerable<SentenceTask> SentenceTasks { get; }
-
-        Task<bool> SaveTask(SentenceTask task);
-
-        bool AddTask(SentenceTask task);
-
-        Task<int> DeleteTask(int id);
-
-        IEnumerable<string> GetAllCategories();
-
-        IEnumerable<SentenceTask> GetByCategory(string category);
-
-        IEnumerable<SentenceTask> GetTasks(string category, IEnumerable<int> indexes = default(int[]));
+        IQueryable<SentenceTask> GetTasks(string category, IEnumerable<int> indexes = default(int[]));
     }
 }

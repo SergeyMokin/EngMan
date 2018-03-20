@@ -1,24 +1,10 @@
 ﻿using System.Collections.Generic;
 using EngMan.Models;
+using System.Linq;
 namespace EngMan.Repository
 {
-    public interface IGuessesTheImageRepository
+    public interface IGuessesTheImageRepository: IRepository<GuessesTheImageToReturn, GuessesTheImageToAdd>
     {
-        bool Add(GuessesTheImageToAdd image);
-
-        bool Edit(GuessesTheImageToAdd image);
-
-        IEnumerable<GuessesTheImageToReturn> GetAll();
-
-        GuessesTheImageToReturn Get(int id);
-
-        int Delete(int id);
-
-        IEnumerable<string> GetAllCategories();
-
-        IEnumerable<GuessesTheImageToReturn> GetByCategory(string category);
-
-        IEnumerable<GuessesTheImageToReturn> GetTasks(string category, IEnumerable<int> indexes = default(int[]));
-
+        IQueryable<GuessesTheImageToReturn> GetTasks(string category, IEnumerable<int> indexes = default(int[]));
     }
 }

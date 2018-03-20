@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EngMan.Models;
+using System.Linq;
+using System.Collections.Generic;
+
 namespace EngMan.Repository
 {
     public interface IUserRepository

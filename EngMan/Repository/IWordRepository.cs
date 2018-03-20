@@ -1,23 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using EngMan.Models;
 namespace EngMan.Repository
 {
-    public interface IWordRepository
+    public interface IWordRepository: IRepository<Word, Word>
     {
-        IEnumerable<Word> Words { get; }
-
-        Task<bool> SaveWord(Word word);
-
-        bool AddWord(Word word);
-
-        Task<int> DeleteWord(int id);
-
-        IEnumerable<Word> GetByCategory(string category);
-
-        IEnumerable<string> GetAllCategories();
-
-        IEnumerable<Word> GetTasks(string category, IEnumerable<int> indexes = default(int[]));
-
+        IQueryable<Word> GetTasks(string category, IEnumerable<int> indexes = default(int[]));
     }
 }
