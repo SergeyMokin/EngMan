@@ -33,7 +33,7 @@ namespace EngMan.Service
 
         public IEnumerable<SentenceTask> Get()
         {
-            return rep.SentenceTasks;
+            return rep.GetAll();
         }
 
         public SentenceTask GetById(int id)
@@ -42,7 +42,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.SentenceTasks.FirstOrDefault(x => x.SentenceTaskId == id);
+            return rep.Get(id);
         }
 
         public async Task<bool> Edit(SentenceTask task)
@@ -51,7 +51,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return await rep.SaveTask(task);
+            return rep.Edit(task);
         }
 
         public bool Add(SentenceTask task)
@@ -60,7 +60,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.AddTask(task);
+            return rep.Add(task);
         }
 
         public async Task<string> Delete(int id)
@@ -69,7 +69,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return await rep.DeleteTask(id) > 0
+            return rep.Delete(id) > 0
                     ? "Delete completed successful"
                     : null;
         }

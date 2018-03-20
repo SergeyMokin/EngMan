@@ -44,8 +44,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password))
-                    ?? throw new Exception("User is not registered");
+            return rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password));
         }
 
         public UserView GetUser(int id)

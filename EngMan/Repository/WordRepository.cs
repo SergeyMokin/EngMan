@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
 using EngMan.Models;
-using System.Data.SqlClient;
 
 namespace EngMan.Repository
 {
     public class WordRepository : IWordRepository
     {
-        public IEnumerable<Word> Words { get { return context.Words; } }
-
         private EFDbContext context;
 
         public WordRepository(EFDbContext _context)
@@ -17,44 +13,17 @@ namespace EngMan.Repository
             context = _context;
         }
 
-        public IEnumerable<Word> GetByCategory(string category)
+        public IQueryable<Word> GetAll()
         {
-            if (category == null)
-            {
-                throw new System.ArgumentNullException();
-            }
-            return context.Words.Where(x => x.Category.ToLower().Equals(category.ToLower()));
+            return context.Words;
         }
 
-        public IEnumerable<string> GetAllCategories()
+        public Word Get(int id)
         {
-            return context.Words.GroupBy(x => x.Category).Select(x => x.Key);
+            return GetAll().FirstOrDefault(x => x.WordId == id);
         }
 
-        public async Task<bool> SaveWord(Word word)
-        {
-            if (word == null)
-            {
-                throw new System.ArgumentNullException();
-            }
-            if (word.WordId < 1)
-            {
-                return false;
-            }
-            var entity = await context.Words.FindAsync(word.WordId);
-            if (entity == null)
-            {
-                return false;
-            }
-            entity.Original = word.Original;
-            entity.Translate = word.Translate;
-            entity.Category = word.Category;
-            entity.Transcription = word.Transcription;
-            context.SaveChanges();
-            return true;
-        }
-
-        public bool AddWord(Word word)
+        public bool Add(Word word)
         {
             if (word == null)
             {
@@ -69,13 +38,36 @@ namespace EngMan.Repository
             return true;
         }
 
-        public async Task<int> DeleteWord(int id)
+        public bool Edit(Word word)
+        {
+            if (word == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+            if (word.WordId < 1)
+            {
+                return false;
+            }
+            var entity = context.Words.Find(word.WordId);
+            if (entity == null)
+            {
+                return false;
+            }
+            entity.Original = word.Original;
+            entity.Translate = word.Translate;
+            entity.Category = word.Category;
+            entity.Transcription = word.Transcription;
+            context.SaveChanges();
+            return true;
+        }
+
+        public int Delete(int id)
         {
             if (id < 1)
             {
                 return -1;
             }
-            var entity = await context.Words.FindAsync(id);
+            var entity = context.Words.Find(id);
             if (entity == null)
             {
                 return -1;
@@ -85,28 +77,35 @@ namespace EngMan.Repository
             return id;
         }
 
-        public IEnumerable<Word> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
+        public IQueryable<Word> GetByCategory(string category)
         {
             if (category == null)
             {
                 throw new System.ArgumentNullException();
             }
-            var parameters = new object[indexes.Count() + 1];
-            parameters[0] = new SqlParameter("category", category);
-            var query = @"
-                    SELECT [WordId]
-						  ,[Original]
-						  ,[Translate]
-						  ,[Category]
-						  ,[Transcription]
-					FROM [dbo].[Words]
-                    WHERE LOWER([Category]) LIKE LOWER(@category)";
-            for (var i = 0; i < indexes.Count(); i++)
+            return GetAll().Where(x => x.Category.ToLower().Equals(category.ToLower()));
+        }
+
+        public IQueryable<string> GetAllCategories()
+        {
+            return GetAll().GroupBy(x => x.Category).Select(x => x.Key);
+        }
+
+        public IQueryable<Word> GetTasks(string category, IEnumerable<int> indexes = null)
+        {
+            if (category == null)
             {
-                query += (" AND [WordId] != @index" + i);
-                parameters[i + 1] = new SqlParameter(("index" + i), indexes.ElementAt(i));
+                throw new System.ArgumentNullException();
             }
-            return context.Database.SqlQuery<Word>(query, parameters);
+
+            var query = GetByCategory(category);
+            var length = indexes == null ? 0 : indexes.Count();
+
+            for (var i = 0; i < length; i++)
+            {
+                query = query.Where(x => x.WordId != indexes.ElementAt(i));
+            }
+            return query;
         }
     }
 }

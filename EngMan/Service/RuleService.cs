@@ -32,7 +32,7 @@ namespace EngMan.Service
 
         public IEnumerable<RuleModel> Get()
         {
-            return rep.Rules;
+            return rep.GetAll();
         }
 
         public RuleModel GetById(int id)
@@ -41,7 +41,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.Rules.FirstOrDefault(x => x.RuleId == id);
+            return rep.Get(id);
         }
 
         public async Task<bool> Edit(RuleModel rule)
@@ -50,7 +50,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return await rep.SaveRule(rule);
+            return rep.Edit(rule);
         }
 
         public bool Add(RuleModel rule)
@@ -59,7 +59,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.AddRule(rule);
+            return rep.Add(rule);
         }
 
         public async Task<string> Delete(int id)
@@ -68,7 +68,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return await rep.DeleteRule(id) > 0
+            return rep.Delete(id) > 0
                     ? "Delete completed successful"
                     : null;
         }

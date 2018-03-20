@@ -13,145 +13,25 @@ namespace EngMan.Repository
         {
             context = _context;
         }
-
-        public IEnumerable<string> GetAllCategories()
+        
+        public IQueryable<GuessesTheImageToReturn> GetAll()
         {
-            return context.Database.SqlQuery<string>(
-              @"SELECT [Category]
-                FROM [EngMan].[dbo].[GuessesTheImages]
-                JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
-                GROUP BY [Category]"
-            );
-        }
-
-        public IEnumerable<GuessesTheImageToReturn> GetByCategory(string category)
-        {
-            if (category == null)
-            {
-                throw new System.ArgumentNullException();
-            }
-            category = category.ToLower();
-            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
-                  @"SELECT [Id]
-                    , [EngMan].[dbo].[GuessesTheImages].[WordId]
-                    , [Original]
-                    , [Translate]
-                    , [Category]
-                    , [Transcription]
-                    , [Path]
-                    FROM [EngMan].[dbo].[GuessesTheImages]
-                    JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
-                    WHERE LOWER([Category]) LIKE LOWER(@category)",
-                  new SqlParameter("category", category)
-                )
+            return context.GuessesTheImages
+                .Join(context.Words,
+                GTI => GTI.WordId,
+                word => word.WordId,
+                (GTI, word) => new { GuessesTheImage = GTI, Word = word })
                 .Select(x => new GuessesTheImageToReturn
                 {
-                    Id = x.Id,
-                    Word = new Word
-                    {
-                        WordId = x.WordId,
-                        Category = x.Category,
-                        Original = x.Original,
-                        Transcription = x.Transcription,
-                        Translate = x.Translate
-                    },
-                    Path = x.Path
-                });
-        }
-
-        public IEnumerable<GuessesTheImageToReturn> GetTasks(string category, IEnumerable<int> indexes = default(int[]))
-        {
-            if (category == null)
-            {
-                throw new System.ArgumentNullException();
-            }
-            var parameters = new object[indexes.Count() + 1];
-            parameters[0] = new SqlParameter("category", category);
-            var query = @"SELECT [Id]
-                    , [EngMan].[dbo].[GuessesTheImages].[WordId]
-                    , [Original]
-                    , [Translate]
-                    , [Category]
-                    , [Transcription]
-                    , [Path]
-                    FROM [EngMan].[dbo].[GuessesTheImages]
-                    JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
-                    WHERE LOWER([Category]) LIKE LOWER(@category)";
-            for (var i = 0; i < indexes.Count(); i++)
-            {
-                query += (" AND [Id]!=@index" + i);
-                parameters[i + 1] = new SqlParameter(("index" + i), indexes.ElementAt(i));
-            }
-            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(query, parameters)
-                .Select(x => new GuessesTheImageToReturn
-                {
-                    Id = x.Id,
-                    Word = new Word
-                    {
-                        WordId = x.WordId,
-                        Category = x.Category,
-                        Original = x.Original,
-                        Transcription = x.Transcription,
-                        Translate = x.Translate
-                    },
-                    Path = x.Path
-                });
-        }
-
-        public IEnumerable<GuessesTheImageToReturn> GetAll()
-        {
-            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
-                  @"SELECT [Id]
-                    , [EngMan].[dbo].[GuessesTheImages].[WordId]
-                    , [Original]
-                    , [Translate]
-                    , [Category]
-                    , [Transcription]
-                    , [Path]
-                    FROM [EngMan].[dbo].[GuessesTheImages]
-                    JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]"
-                )
-                .Select(x => new GuessesTheImageToReturn {
-                    Id = x.Id,
-                    Word = new Word {
-                        WordId = x.WordId,
-                        Category = x.Category,
-                        Original = x.Original,
-                        Transcription = x.Transcription,
-                        Translate = x.Translate
-                    },
-                    Path = x.Path
+                    Id = x.GuessesTheImage.Id,
+                    Word = x.Word,
+                    Path = x.GuessesTheImage.Path
                 });
         }
 
         public GuessesTheImageToReturn Get(int id)
         {
-            return context.Database.SqlQuery<GuessesTheImageWithTheQueryBD>(
-                @"SELECT [Id]
-                ,[EngMan].[dbo].[GuessesTheImages].[WordId]
-                ,[Original]
-                ,[Translate]
-                ,[Category]
-                ,[Transcription]
-                ,[Path]
-                FROM [EngMan].[dbo].[GuessesTheImages]
-                JOIN [EngMan].[dbo].[Words] ON [EngMan].[dbo].[Words].[WordId] = [EngMan].[dbo].[GuessesTheImages].[WordId]
-                WHERE [EngMan].[dbo].[GuessesTheImages].[Id] = @id",
-                new SqlParameter("id", id)
-            )
-            .Select(x => new GuessesTheImageToReturn
-            {
-                Id = x.Id,
-                Word = new Word
-                {
-                    WordId = x.WordId,
-                    Category = x.Category,
-                    Original = x.Original,
-                    Transcription = x.Transcription,
-                    Translate = x.Translate
-                },
-                Path = x.Path
-            }).FirstOrDefault();
+            return GetAll().FirstOrDefault(x => x.Id == id);
         }
 
         public bool Add(GuessesTheImageToAdd image)
@@ -214,6 +94,39 @@ namespace EngMan.Repository
             context.GuessesTheImages.Remove(entity);
             context.SaveChanges();
             return id;
+        }
+
+        public IQueryable<string> GetAllCategories()
+        {
+            return GetAll().GroupBy(x => x.Word.Category).Select(x => x.Key);
+        }
+
+        public IQueryable<GuessesTheImageToReturn> GetByCategory(string category)
+        {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+
+            return GetAll().Where(x => x.Word.Category.ToLower().Equals(category.ToLower()));
+        }
+
+        public IQueryable<GuessesTheImageToReturn> GetTasks(string category, IEnumerable<int> indexes = null)
+        {
+            if (category == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+
+            var query = GetByCategory(category);
+            var length = indexes == null ? 0 : indexes.Count();
+
+            for (var i = 0; i < length; i++)
+            {
+                query = query.Where(x => x.Id != indexes.ElementAt(i));
+            }
+
+            return query;
         }
     }
 }

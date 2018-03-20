@@ -34,7 +34,7 @@ namespace EngMan.Service
 
         public IEnumerable<Word> Get()
         {
-            return rep.Words;
+            return rep.GetAll();
         }
 
         public Word GetById(int id)
@@ -43,7 +43,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.Words.FirstOrDefault(x => x.WordId == id);
+            return rep.Get(id);
         }
 
         public async Task<bool> Edit(Word word)
@@ -52,7 +52,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return await rep.SaveWord(word);
+            return rep.Edit(word);
         }
 
         public bool Add(Word word)
@@ -61,7 +61,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.AddWord(word);
+            return rep.Add(word);
         }
 
         public async Task<string> Delete(int id)
@@ -70,7 +70,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return await rep.DeleteWord(id) > 0
+            return rep.Delete(id) > 0
                     ? "Delete completed successful"
                     : null;
         }
