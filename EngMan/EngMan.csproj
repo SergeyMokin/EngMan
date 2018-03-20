@@ -284,6 +284,7 @@
     <Compile Include="Repository\GuessesTheImageRepository.cs" />
     <Compile Include="Repository\IGuessesTheImageRepository.cs" />
     <Compile Include="Repository\IMessageRepository.cs" />
+    <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\IUserDictionaryRepository.cs" />
     <Compile Include="Repository\IUserRepository.cs" />
     <Compile Include="Repository\MessageRepository.cs" />
