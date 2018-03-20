@@ -18,14 +18,7 @@ namespace EngMan.Service
 
         public IEnumerable<string> GetAllCategories()
         {
-            try
-            {
-                return rep.GetAllCategories();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetAllCategories();
         }
 
         public IEnumerable<RuleModel> GetByCategory(string category)
@@ -34,26 +27,12 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetByCategory(category);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetByCategory(category);
         }
 
         public IEnumerable<RuleModel> Get()
         {
-            try
-            {
-                return rep.Rules;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.Rules;
         }
 
         public RuleModel GetById(int id)
@@ -62,14 +41,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.Rules.FirstOrDefault(x => x.RuleId == id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.Rules.FirstOrDefault(x => x.RuleId == id);
         }
 
         public async Task<bool> Edit(RuleModel rule)
@@ -78,14 +50,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return await rep.SaveRule(rule);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return await rep.SaveRule(rule);
         }
 
         public bool Add(RuleModel rule)
@@ -94,14 +59,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.AddRule(rule);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.AddRule(rule);
         }
 
         public async Task<string> Delete(int id)
@@ -110,16 +68,9 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return await rep.DeleteRule(id) > 0
+            return await rep.DeleteRule(id) > 0
                     ? "Delete completed successful"
                     : null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         public List<string> AddImages(Image[] images)
@@ -128,22 +79,15 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
+            var pathes = new List<string>();
+            foreach (var img in images)
             {
-                var pathes = new List<string>();
-                foreach (var img in images)
+                if (img.Validate())
                 {
-                    if (img.Validate())
-                    {
-                        pathes.Add(Extensions.Extensions.SaveImage(img));
-                    }
+                    pathes.Add(Extensions.Extensions.SaveImage(img));
                 }
-                return pathes;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return pathes;
         }
     }
 }

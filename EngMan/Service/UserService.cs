@@ -44,15 +44,8 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password)) 
+            return rep.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower() && x.Password.VerifyHashedPassword(password))
                     ?? throw new Exception("User is not registered");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         public UserView GetUser(int id)
@@ -61,14 +54,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return GetUserList().Where(x => x.Id == id).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return GetUserList().Where(x => x.Id == id).FirstOrDefault();
         }
 
         public async Task<ExpandoObject> Registration(User user)
@@ -77,16 +63,9 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.AddUser(user) 
+            return rep.AddUser(user)
                     ? await Login(new UserLogin { Email = user.Email, Password = user.Password })
                     : throw new Exception("This user is alredy exists");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         public async Task<bool> SaveUser(UserView user)
@@ -95,14 +74,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return await rep.SaveUser(user);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return await rep.SaveUser(user);
         }
 
         public string DeleteUser(int id)
@@ -111,35 +83,21 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.DeleteUser(id) > 0 
+            return rep.DeleteUser(id) > 0
                     ? "Delete completed successful"
                     : null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         public List<UserView> GetUserList()
         {
-            try
+            return rep.Users.Select(x => new UserView
             {
-                return rep.Users.Select(x => new UserView
-                {
-                    Id = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Email = x.Email,
-                    Role = x.Role
-                }).ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                Role = x.Role
+            }).ToList();
         }
 
         public bool ChangePassword(int id, string oldpassword, string newpassword)
@@ -148,14 +106,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.ChangePassword(id, oldpassword, newpassword);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.ChangePassword(id, oldpassword, newpassword);
         }
 
         public async Task<bool> ChangeRole(UserView user)
@@ -164,14 +115,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return await rep.ChangeRole(user);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return await rep.ChangeRole(user);
         }
     }
 }

@@ -24,14 +24,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.Add(image);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.Add(image);
         }
 
         public bool Edit(GuessesTheImageToAdd image)
@@ -40,26 +33,12 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.Edit(image);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.Edit(image);
         }
 
         public IEnumerable<GuessesTheImageToReturn> GetAll()
         {
-            try
-            {
-                return rep.GetAll();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetAll();
         }
 
         public GuessesTheImageToReturn Get(int id)
@@ -68,14 +47,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.Get(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.Get(id);
         }
 
         public string Delete(int id)
@@ -84,29 +56,15 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.Delete(id) > 0
+            return rep.Delete(id) > 0
                     ? "Delete completed successful"
                     : null; ;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
 
         public IEnumerable<string> GetAllCategories()
         {
-            try
-            {
-                return rep.GetAllCategories();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetAllCategories();
         }
 
         public IEnumerable<GuessesTheImageToReturn> GetByCategory(string category)
@@ -115,82 +73,69 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetByCategory(category);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetByCategory(category);
         }
 
         public GuessesTheImageToReturn GetTask(string category, string indexes)
         {
-            try
+            List<GuessesTheImageToReturn> tasks;
+            var ParsedIndexes = new List<int>();
+            var rand = new System.Random();
+
+            if (!String.IsNullOrEmpty(indexes))
             {
-                var ParsedIndexes = new List<int>();
-                if (!String.IsNullOrEmpty(indexes))
+                foreach (var ch in indexes.Split(','))
                 {
-                    foreach (var ch in indexes.Split(','))
+                    if (int.TryParse(ch, out int i))
                     {
-                        if (int.TryParse(ch, out int i))
-                        {
-                            ParsedIndexes.Add(i);
-                        }
+                        ParsedIndexes.Add(i);
                     }
                 }
-                if (String.IsNullOrEmpty(category))
-                {
-                    throw new Exception("Invalid model");
-                }
-                List<GuessesTheImageToReturn> tasks;
-                if (ParsedIndexes.IsCorrect())
-                {
-                    tasks = rep.GetTasks(category, ParsedIndexes).ToList();
-                }
-                else
-                {
-                    tasks = rep.GetTasks(category).ToList();
-                }
-                if (tasks == null || tasks.Count() < 1)
-                {
-                    throw new Exception("Invalid model");
-                }
-                var rand = new System.Random();
-                var index = rand.Next(0, tasks.Count());
-                return tasks.ElementAt(index);
             }
-            catch (Exception ex)
+
+            if (String.IsNullOrEmpty(category))
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Invalid model");
             }
+
+            if (ParsedIndexes.IsCorrect())
+            {
+                tasks = rep.GetTasks(category, ParsedIndexes).ToList();
+            }
+            else
+            {
+                tasks = rep.GetTasks(category).ToList();
+            }
+
+            if (tasks == null || tasks.Count() < 1)
+            {
+                throw new Exception("Invalid model");
+            }
+
+            var index = rand.Next(0, tasks.Count());
+
+            return tasks.ElementAt(index);
         }
 
         public bool VerificationCorrectness(GuessesTheImageToReturn img)
         {
+            const string lettersAndNumbers = "[^a-zA-Zа-яА-Я0-9]";
+
+            Regex rx = new Regex(lettersAndNumbers);
+
             if (!img.Validate())
             {
                 throw new HttpRequestException("Invalid model");
             }
-            try
+
+            var task = rep.Get(img.Id);
+
+            if (task == null)
             {
-                var task = rep.Get(img.Id);
-                if (task == null)
-                {
-                    return false;
-                }
-                Regex rx = new Regex("[^a-zA-Zа-яА-Я0-9]");
-                if (rx.Replace(task.Word.Original.ToLower(), "").Equals(rx.Replace(img.Word.Original.ToLower(), "")))
-                {
-                    return true;
-                }
                 return false;
             }
-            catch (Exception ex)
-            {
-                throw new HttpRequestException(ex.Message);
-            }
+
+            return rx.Replace(task.Word.Original.ToLower(), "").Equals(rx.Replace(img.Word.Original.ToLower(), ""));
         }
     }
 }

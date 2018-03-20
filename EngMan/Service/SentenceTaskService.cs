@@ -19,14 +19,7 @@ namespace EngMan.Service
 
         public IEnumerable<string> GetAllCategories()
         {
-            try
-            {
-                return rep.GetAllCategories();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetAllCategories();
         }
 
         public IEnumerable<SentenceTask> GetByCategory(string category)
@@ -35,26 +28,12 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetByCategory(category);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetByCategory(category);
         }
 
         public IEnumerable<SentenceTask> Get()
         {
-            try
-            {
-                return rep.SentenceTasks;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.SentenceTasks;
         }
 
         public SentenceTask GetById(int id)
@@ -63,14 +42,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.SentenceTasks.FirstOrDefault(x => x.SentenceTaskId == id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.SentenceTasks.FirstOrDefault(x => x.SentenceTaskId == id);
         }
 
         public async Task<bool> Edit(SentenceTask task)
@@ -79,14 +51,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return await rep.SaveTask(task);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return await rep.SaveTask(task);
         }
 
         public bool Add(SentenceTask task)
@@ -95,14 +60,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.AddTask(task);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.AddTask(task);
         }
 
         public async Task<string> Delete(int id)
@@ -111,104 +69,92 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return await rep.DeleteTask(id) > 0
+            return await rep.DeleteTask(id) > 0
                     ? "Delete completed successful"
                     : null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         public SentenceTask GetTask(string category, string indexes)
         {
-            try
+            var ParsedIndexes = new List<int>();
+            List<SentenceTask> tasks;
+            var rand = new Random();
+
+            if (!String.IsNullOrEmpty(indexes))
             {
-                var ParsedIndexes = new List<int>();
-                if (!String.IsNullOrEmpty(indexes))
+                foreach (var ch in indexes.Split(','))
                 {
-                    foreach (var ch in indexes.Split(','))
+                    if (int.TryParse(ch, out int i))
                     {
-                        if (int.TryParse(ch, out int i))
-                        {
-                            ParsedIndexes.Add(i);
-                        }
+                        ParsedIndexes.Add(i);
                     }
                 }
-                if (String.IsNullOrEmpty(category))
-                {
-                    throw new Exception("Invalid model");
-                }
-                List<SentenceTask> tasks;
-                if (ParsedIndexes.IsCorrect())
-                {
-                    tasks = rep.GetTasks(category, ParsedIndexes).ToList();
-                }
-                else
-                {
-                    tasks = rep.GetTasks(category).ToList();
-                }
-                if (tasks == null)
-                {
-                    throw new Exception("Has no tasks");
-                }
-                if (tasks.Count() == 0)
-                {
-                    throw new Exception("Has no tasks");
-                }
-                var rand = new Random();
-                var index = rand.Next(0, tasks.Count());
-                return tasks.Select(x =>
-                {
-                    var arr = x.Sentence.Split(new[] { ' ' });
-                    var set = new HashSet<int>();
-                    while (set.Count() != arr.Length)
-                    {
-                        set.Add(rand.Next(0, arr.Length));
-                    }
-                    var returnArr = new string[arr.Length];
-                    var i = 0;
-                    foreach (var ind in set)
-                    {
-                        returnArr[i] = arr[ind];
-                        i++;
-                    }
-                    return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category, Translate = x.Translate };
-                }).ElementAt(index);
             }
-            catch (Exception ex)
+
+            if (String.IsNullOrEmpty(category))
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Invalid model");
             }
+
+            if (ParsedIndexes.IsCorrect())
+            {
+                tasks = rep.GetTasks(category, ParsedIndexes).ToList();
+            }
+            else
+            {
+                tasks = rep.GetTasks(category).ToList();
+            }
+
+            if (tasks == null)
+            {
+                throw new Exception("Has no tasks");
+            }
+
+            if (tasks.Count() == 0)
+            {
+                throw new Exception("Has no tasks");
+            }
+
+            var index = rand.Next(0, tasks.Count());
+
+            return tasks.Select(x =>
+            {
+                var arr = x.Sentence.Split(new[] { ' ' });
+                var set = new HashSet<int>();
+                while (set.Count() != arr.Length)
+                {
+                    set.Add(rand.Next(0, arr.Length));
+                }
+                var returnArr = new string[arr.Length];
+                var i = 0;
+                foreach (var ind in set)
+                {
+                    returnArr[i] = arr[ind];
+                    i++;
+                }
+                return new SentenceTask { SentenceTaskId = x.SentenceTaskId, Sentence = string.Join(" ", returnArr), Category = x.Category, Translate = x.Translate };
+            }).ElementAt(index);
         }
 
         public bool VerificationCorrectness(SentenceTask task)
         {
+            const string lettersAndNumbers = "[^a-zA-Zа-яА-Я0-9]";
+
+            Regex rx = new Regex(lettersAndNumbers);
+
             if (!task.Validate())
             {
                 throw new Exception("Invalid model");
             }
-            try
+
+            var _task = GetById(task.SentenceTaskId);
+
+            if (_task == null)
             {
-                var _task = GetById(task.SentenceTaskId);
-                if (_task == null)
-                {
-                    throw new Exception("Invalid model");
-                }
-                Regex rx = new Regex("[^a-zA-Zа-яА-Я0-9]");
-                if (rx.Replace(task.Sentence.ToLower(), "").Equals(rx.Replace(_task.Sentence.ToLower(), "")))
-                {
-                    return true;
-                }
-                return false;
+                throw new Exception("Invalid model");
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return rx.Replace(task.Sentence.ToLower(), "").Equals(rx.Replace(_task.Sentence.ToLower(), ""));
         }
     }
 }

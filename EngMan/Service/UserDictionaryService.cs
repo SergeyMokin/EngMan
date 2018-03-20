@@ -21,14 +21,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetUserDictionary(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetUserDictionary(id);
         }
         public bool Add(int id, UserWord word)
         {
@@ -36,14 +29,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.AddWordToDictionary(id, word);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.AddWordToDictionary(id, word);
         }
         public string Delete(int userId, int wordId)
         {
@@ -51,16 +37,9 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.DeleteWordFromDictionary(userId, wordId) > 0
+            return rep.DeleteWordFromDictionary(userId, wordId) > 0
                     ? "Delete completed successful"
                     : null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         public IEnumerable<string> GetAllCategories(int id)
@@ -69,14 +48,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetAllCategories(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetAllCategories(id);
         }
 
         public UserDictionary GetByCategory(int id, string category)
@@ -85,14 +57,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetByCategory(id, category);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetByCategory(id, category);
         }
 
     }

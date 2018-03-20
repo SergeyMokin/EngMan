@@ -23,14 +23,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.SendMessage(mes, userId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.SendMessage(mes, userId);
         }
 
         public IEnumerable<ReturnMessage> GetMessages(int userId)
@@ -39,14 +32,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetMessages(userId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetMessages(userId);
         }
 
 
@@ -56,14 +42,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetMessagesByUserId(currentUserId, otherUserId, lastReceivedMessageId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetMessagesByUserId(currentUserId, otherUserId, lastReceivedMessageId);
         }
 
         public IEnumerable<ReturnMessage> GetNewMessages(int userId)
@@ -72,14 +51,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.GetNewMessages(userId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return rep.GetNewMessages(userId);
         }
 
         public bool ReadMessages(int senderId, int beneficiaryId)
@@ -88,16 +60,9 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.ReadMessages(senderId, beneficiaryId) > 0
+            return rep.ReadMessages(senderId, beneficiaryId) > 0
                     ? true
                     : false;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         public string DeleteMessage(int mesId, int userId)
@@ -106,16 +71,9 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            try
-            {
-                return rep.DeleteMessage(mesId, userId) > 0
+            return rep.DeleteMessage(mesId, userId) > 0
                     ? "Delete completed successful"
                     : null; ;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
     }
 }
