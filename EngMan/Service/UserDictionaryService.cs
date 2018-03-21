@@ -1,8 +1,8 @@
 ﻿using EngMan.Models;
 using EngMan.Repository;
-using System.Collections.Generic;
 using EngMan.Extensions;
 using System;
+using System.Linq;
 
 namespace EngMan.Service
 {
@@ -29,7 +29,7 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.AddWordToDictionary(id, word);
+            return rep.Add(id, word);
         }
         public string Delete(int userId, int wordId)
         {
@@ -37,12 +37,12 @@ namespace EngMan.Service
             {
                 throw new Exception("Invalid model");
             }
-            return rep.DeleteWordFromDictionary(userId, wordId) > 0
+            return rep.Delete(userId, wordId) > 0
                     ? "Delete completed successful"
                     : null;
         }
 
-        public IEnumerable<string> GetAllCategories(int id)
+        public IQueryable<string> GetAllCategories(int id)
         {
             if (!id.Validate())
             {

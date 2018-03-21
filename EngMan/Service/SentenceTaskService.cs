@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
 using EngMan.Extensions;
 using System.Text.RegularExpressions;
 using System;
+
 namespace EngMan.Service
 {
     public class SentenceTaskService: ISentenceTaskService
@@ -17,12 +17,12 @@ namespace EngMan.Service
             rep = _rep;
         }
 
-        public IEnumerable<string> GetAllCategories()
+        public IQueryable<string> GetAllCategories()
         {
             return rep.GetAllCategories();
         }
 
-        public IEnumerable<SentenceTask> GetByCategory(string category)
+        public IQueryable<SentenceTask> GetByCategory(string category)
         {
             if (String.IsNullOrEmpty(category))
             {
@@ -31,12 +31,12 @@ namespace EngMan.Service
             return rep.GetByCategory(category);
         }
 
-        public IEnumerable<SentenceTask> Get()
+        public IQueryable<SentenceTask> GetAll()
         {
             return rep.GetAll();
         }
 
-        public SentenceTask GetById(int id)
+        public SentenceTask Get(int id)
         {
             if (!id.Validate())
             {
@@ -45,7 +45,7 @@ namespace EngMan.Service
             return rep.Get(id);
         }
 
-        public async Task<bool> Edit(SentenceTask task)
+        public bool Edit(SentenceTask task)
         {
             if (!task.Validate())
             {
@@ -63,7 +63,7 @@ namespace EngMan.Service
             return rep.Add(task);
         }
 
-        public async Task<string> Delete(int id)
+        public string Delete(int id)
         {
             if (!id.Validate())
             {
@@ -96,14 +96,12 @@ namespace EngMan.Service
                 throw new Exception("Invalid model");
             }
 
-            if (ParsedIndexes.IsCorrect())
+            if (!ParsedIndexes.IsCorrect())
             {
-                tasks = rep.GetTasks(category, ParsedIndexes).ToList();
+                throw new Exception("End of tasks");
             }
-            else
-            {
-                tasks = rep.GetTasks(category).ToList();
-            }
+
+            tasks = rep.GetTasks(category, ParsedIndexes).ToList();
 
             if (tasks == null)
             {
@@ -147,7 +145,7 @@ namespace EngMan.Service
                 throw new Exception("Invalid model");
             }
 
-            var _task = GetById(task.SentenceTaskId);
+            var _task = Get(task.SentenceTaskId);
 
             if (_task == null)
             {

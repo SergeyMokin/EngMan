@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using EngMan.Models;
+﻿using EngMan.Models;
 using EngMan.Repository;
 using System.Linq;
 using EngMan.Extensions;
-using System.Net.Http;
 using System;
+
 namespace EngMan.Service
 {
     public class MessageService: IMessageService
@@ -26,7 +25,7 @@ namespace EngMan.Service
             return rep.SendMessage(mes, userId);
         }
 
-        public IEnumerable<ReturnMessage> GetMessages(int userId)
+        public IQueryable<ReturnMessage> GetMessages(int userId)
         {
             if (!userId.Validate())
             {
@@ -36,7 +35,7 @@ namespace EngMan.Service
         }
 
 
-        public IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId)
+        public IQueryable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId)
         {
             if (!currentUserId.Validate() || !otherUserId.Validate())
             {
@@ -45,7 +44,7 @@ namespace EngMan.Service
             return rep.GetMessagesByUserId(currentUserId, otherUserId, lastReceivedMessageId);
         }
 
-        public IEnumerable<ReturnMessage> GetNewMessages(int userId)
+        public IQueryable<ReturnMessage> GetNewMessages(int userId)
         {
             if (!userId.Validate())
             {

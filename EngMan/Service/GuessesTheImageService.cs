@@ -36,7 +36,7 @@ namespace EngMan.Service
             return rep.Edit(image);
         }
 
-        public IEnumerable<GuessesTheImageToReturn> GetAll()
+        public IQueryable<GuessesTheImageToReturn> GetAll()
         {
             return rep.GetAll();
         }
@@ -62,12 +62,12 @@ namespace EngMan.Service
         }
 
 
-        public IEnumerable<string> GetAllCategories()
+        public IQueryable<string> GetAllCategories()
         {
             return rep.GetAllCategories();
         }
 
-        public IEnumerable<GuessesTheImageToReturn> GetByCategory(string category)
+        public IQueryable<GuessesTheImageToReturn> GetByCategory(string category)
         {
             if (String.IsNullOrEmpty(category))
             {
@@ -98,14 +98,12 @@ namespace EngMan.Service
                 throw new Exception("Invalid model");
             }
 
-            if (ParsedIndexes.IsCorrect())
+            if (!ParsedIndexes.IsCorrect())
             {
-                tasks = rep.GetTasks(category, ParsedIndexes).ToList();
+                throw new Exception("End of tasks");
             }
-            else
-            {
-                tasks = rep.GetTasks(category).ToList();
-            }
+
+            tasks = rep.GetTasks(category, ParsedIndexes).ToList();
 
             if (tasks == null || tasks.Count() < 1)
             {

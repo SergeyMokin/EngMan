@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using EngMan.Repository;
-using System.Linq;
 using EngMan.Models;
 using EngMan.Extensions;
 using System;
+using System.Linq;
+
 namespace EngMan.Service
 {
     public class RuleService: IRuleService
@@ -16,12 +16,12 @@ namespace EngMan.Service
             rep = _rep;
         }
 
-        public IEnumerable<string> GetAllCategories()
+        public IQueryable<string> GetAllCategories()
         {
             return rep.GetAllCategories();
         }
 
-        public IEnumerable<RuleModel> GetByCategory(string category)
+        public IQueryable<RuleModel> GetByCategory(string category)
         {
             if (String.IsNullOrEmpty(category))
             {
@@ -30,12 +30,12 @@ namespace EngMan.Service
             return rep.GetByCategory(category);
         }
 
-        public IEnumerable<RuleModel> Get()
+        public IQueryable<RuleModel> GetAll()
         {
             return rep.GetAll();
         }
 
-        public RuleModel GetById(int id)
+        public RuleModel Get(int id)
         {
             if (!id.Validate())
             {
@@ -44,7 +44,7 @@ namespace EngMan.Service
             return rep.Get(id);
         }
 
-        public async Task<bool> Edit(RuleModel rule)
+        public bool Edit(RuleModel rule)
         {
             if (!rule.Validate())
             {
@@ -62,7 +62,7 @@ namespace EngMan.Service
             return rep.Add(rule);
         }
 
-        public async Task<string> Delete(int id)
+        public string Delete(int id)
         {
             if (!id.Validate())
             {

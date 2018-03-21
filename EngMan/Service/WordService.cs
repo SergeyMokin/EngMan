@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using EngMan.Repository;
 using System.Linq;
 using EngMan.Models;
@@ -18,7 +17,7 @@ namespace EngMan.Service
             rep = _rep;
         }
 
-        public IEnumerable<Word> GetByCategory(string category)
+        public IQueryable<Word> GetByCategory(string category)
         {
             if (String.IsNullOrEmpty(category))
             {
@@ -27,17 +26,17 @@ namespace EngMan.Service
             return rep.GetByCategory(category);
         }
 
-        public IEnumerable<string> GetAllCategories()
+        public IQueryable<string> GetAllCategories()
         {
             return rep.GetAllCategories();
         }
 
-        public IEnumerable<Word> Get()
+        public IQueryable<Word> GetAll()
         {
             return rep.GetAll();
         }
 
-        public Word GetById(int id)
+        public Word Get(int id)
         {
             if (!id.Validate())
             {
@@ -46,7 +45,7 @@ namespace EngMan.Service
             return rep.Get(id);
         }
 
-        public async Task<bool> Edit(Word word)
+        public bool Edit(Word word)
         {
             if (!word.Validate(true))
             {
@@ -64,7 +63,7 @@ namespace EngMan.Service
             return rep.Add(word);
         }
 
-        public async Task<string> Delete(int id)
+        public string Delete(int id)
         {
             if (!id.Validate())
             {
@@ -97,14 +96,12 @@ namespace EngMan.Service
                 throw new Exception("Invalid model");
             }
 
-            if (ParsedIndexes.IsCorrect())
+            if (!ParsedIndexes.IsCorrect())
             {
-                tasks = rep.GetTasks(category, ParsedIndexes).ToList();
+                throw new Exception("End of tasks");
             }
-            else
-            {
-                tasks = rep.GetTasks(category).ToList();
-            }
+
+            tasks = rep.GetTasks(category, ParsedIndexes).ToList();
 
             if (tasks == null)
             {
@@ -169,7 +166,7 @@ namespace EngMan.Service
                 throw new Exception("Invalid model");
             }
 
-            var _task = GetById(task.WordId);
+            var _task = Get(task.WordId);
 
             if (_task == null)
             {
