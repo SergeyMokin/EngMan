@@ -66,7 +66,7 @@ namespace EngManTests.Repository
         [TestMethod]
         public void UserTest_Users_getAllUsers_count()
         {
-            var result = rep.Users.Count();
+            var result = rep.GetAll().Count();
             Assert.AreEqual(context.Object.Users.Count(), result, string.Format("result != expected"));
         }
 
@@ -81,7 +81,7 @@ namespace EngManTests.Repository
                 LastName = "lname",
                 Role = "user"
             };
-            var result = rep.SaveUser(model).Result;
+            var result = rep.Edit(new User(model));
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -96,7 +96,7 @@ namespace EngManTests.Repository
                 LastName = "lname",
                 Role = "user"
             };
-            var result = rep.SaveUser(model).Result;
+            var result = rep.Edit(new User(model));
             Assert.AreNotEqual(true, result, string.Format("result != expected"));
         }
 
@@ -105,7 +105,7 @@ namespace EngManTests.Repository
         {
             try
             {
-                rep.SaveUser(null);
+                rep.Edit(null);
             }
             catch (Exception e)
             {
@@ -151,7 +151,7 @@ namespace EngManTests.Repository
                 LastName = "lname",
                 Role = "admin"
             };
-            var result = rep.ChangeRole(model).Result;
+            var result = rep.ChangeRole(model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -166,7 +166,7 @@ namespace EngManTests.Repository
                 LastName = "lname",
                 Role = "admin"
             };
-            var result = rep.ChangeRole(model).Result;
+            var result = rep.ChangeRole(model);
             Assert.AreEqual(false, result, string.Format("result != expected"));
         }
 
@@ -195,7 +195,7 @@ namespace EngManTests.Repository
                 Role = "admin",
                 Password = "password"
             };
-            var result = rep.AddUser(model);
+            var result = rep.Add(model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -211,7 +211,7 @@ namespace EngManTests.Repository
                 Role = "admin",
                 Password = "password"
             };
-            var result = rep.AddUser(model);
+            var result = rep.Add(model);
             Assert.AreNotEqual(true, result, string.Format("result != expected"));
         }
 
@@ -220,7 +220,7 @@ namespace EngManTests.Repository
         {
             try
             {
-                rep.AddUser(null);
+                rep.Add(null);
             }
             catch (Exception e)
             {
@@ -231,14 +231,14 @@ namespace EngManTests.Repository
         [TestMethod]
         public void UserTest_Users_deleteUser_valid()
         {
-            var result = rep.DeleteUser(1);
+            var result = rep.Delete(1);
             Assert.AreEqual(1, result, string.Format("result != expected"));
         }
 
         [TestMethod]
         public void UserTest_Users_deleteUser_invalid()
         {
-            var result = rep.DeleteUser(0);
+            var result = rep.Delete(0);
             Assert.AreEqual(-1, result, string.Format("result != expected"));
         }
     }

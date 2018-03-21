@@ -6,7 +6,7 @@ using EngMan.Repository;
 using EngMan.Service;
 using System.Linq;
 using Moq;
-using System.Threading.Tasks;
+
 namespace EngManTests.Service
 {
     [TestClass]
@@ -24,17 +24,19 @@ namespace EngManTests.Service
         {
             var data = GenerateData();
             var _rep = new Mock<IUserRepository>();
-            _rep.Setup(x => x.AddUser(It.IsAny<User>()))
+            _rep.Setup(x => x.Add(It.IsAny<User>()))
                 .Returns(true);
             _rep.Setup(x => x.ChangePassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(true);
             _rep.Setup(x => x.ChangeRole(It.IsAny<UserView>()))
-                .Returns(Task.FromResult(true));
-            _rep.Setup(x => x.DeleteUser(It.IsAny<int>()))
+                .Returns(true);
+            _rep.Setup(x => x.Delete(It.IsAny<int>()))
                 .Returns<int>(x => x);
-            _rep.Setup(x => x.SaveUser(It.IsAny<UserView>())).Returns(Task.FromResult(true));
-            _rep.Setup(x => x.Users)
+            _rep.Setup(x => x.Edit(It.IsAny<User>())).Returns(true);
+            _rep.Setup(x => x.GetAll())
                 .Returns(data);
+            _rep.Setup(x => x.Get(It.IsAny<int>()))
+                .Returns<int>(x => data.FirstOrDefault());
             service = new UserService(_rep.Object);
             rep = _rep.Object;
         }
@@ -60,7 +62,7 @@ namespace EngManTests.Service
         [TestMethod]
         public void UserServiceTest_ValidateUser_valid()
         {
-            var expected = rep.Users.FirstOrDefault();
+            var expected = rep.Get(1);
             var actual = service.ValidateUser("email1@email.com", "password1");
             Assert.AreEqual(expected.Id, actual.Id);
         }
@@ -81,8 +83,8 @@ namespace EngManTests.Service
         [TestMethod]
         public void UserServiceTest_GetUser_valid()
         {
-            var expected = rep.Users.FirstOrDefault();
-            var actual = service.GetUser(1);
+            var expected = rep.Get(1);
+            var actual = service.Get(1);
             Assert.AreEqual(expected.Id, actual.Id);
         }
 
@@ -91,7 +93,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.GetUser(-1);
+                service.Get(-1);
             }
             catch (Exception e)
             {
@@ -140,7 +142,7 @@ namespace EngManTests.Service
                 Role = "user"
             };
             var expected = true;
-            var actual = service.SaveUser(model).Result;
+            var actual = service.Edit(new User(model));
             Assert.AreEqual(expected, actual);
         }
 
@@ -149,7 +151,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.SaveUser(null);
+                service.Edit(null);
             }
             catch (Exception e)
             {
@@ -161,7 +163,7 @@ namespace EngManTests.Service
         public void UserServiceTest_DeleteUser_valid()
         {
             var expected = "Delete completed successful";
-            var actual = service.DeleteUser(1);
+            var actual = service.Delete(1);
             Assert.AreEqual(expected, actual);
         }
 
@@ -170,7 +172,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.DeleteUser(-1);
+                service.Delete(-1);
             }
             catch (Exception e)
             {
@@ -181,8 +183,8 @@ namespace EngManTests.Service
         [TestMethod]
         public void UserServiceTest_GetUserList_count()
         {
-            var expected = rep.Users.Count();
-            var actual = service.GetUserList().Count();
+            var expected = rep.GetAll().Count();
+            var actual = service.GetAll().Count();
             Assert.AreEqual(expected, actual);
         }
 
@@ -218,8 +220,8 @@ namespace EngManTests.Service
                 LastName = "Lname",
                 Role = "admin"
             };
-            var expected = rep.ChangeRole(model).Result;
-            var actual = service.ChangeRole(model).Result;
+            var expected = rep.ChangeRole(model);
+            var actual = service.ChangeRole(model);
             Assert.AreEqual(expected, actual);
         }
 

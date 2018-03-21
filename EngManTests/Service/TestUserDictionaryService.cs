@@ -6,6 +6,7 @@ using EngMan.Repository;
 using EngMan.Service;
 using System.Linq;
 using Moq;
+
 namespace EngManTests.Service
 {
     [TestClass]
@@ -25,9 +26,9 @@ namespace EngManTests.Service
             var dataWords = GenerateDataWords();
             var dataUserWords = GenerateDataUserWords();
             var _rep = new Mock<IUserDictionaryRepository>();
-            _rep.Setup(x => x.AddWordToDictionary(It.IsAny<int>(), It.IsAny<UserWord>()))
+            _rep.Setup(x => x.Add(It.IsAny<int>(), It.IsAny<UserWord>()))
                 .Returns(true);
-            _rep.Setup(x => x.DeleteWordFromDictionary(It.IsAny<int>(), It.IsAny<int>()))
+            _rep.Setup(x => x.Delete(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns<int, int>((id, x) => x);
             _rep.Setup(x => x.GetUserDictionary(It.IsAny<int>()))
                 .Returns<int>(id => new UserDictionary
@@ -141,7 +142,7 @@ namespace EngManTests.Service
                 UserId = 1,
                 WordId = 1
             };
-            var expected = rep.AddWordToDictionary(1, model);
+            var expected = rep.Add(1, model);
             var actual = service.Add(1, model);
             Assert.AreEqual(expected, actual);
         }

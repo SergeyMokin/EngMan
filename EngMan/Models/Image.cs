@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using System.Collections.Generic;
+﻿using System.Runtime.Serialization;
 
 namespace EngMan.Models
 {

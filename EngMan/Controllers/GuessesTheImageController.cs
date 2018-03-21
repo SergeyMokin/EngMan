@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace EngMan.Controllers
 {
@@ -17,21 +17,21 @@ namespace EngMan.Controllers
 
         //GET api/GuessesTheImage/GetAllCategories
         [HttpGet]
-        public IEnumerable<string> GetAllCategories()
+        public IQueryable<string> GetAllCategories()
         {
             return service.GetAllCategories();
         }
 
         //GET api/GuessesTheImage/GetByCategory
         [HttpGet]
-        public IEnumerable<GuessesTheImageToReturn> GetByCategory(string category)
+        public IQueryable<GuessesTheImageToReturn> GetByCategory(string category)
         {
             return service.GetByCategory(category);
         }
 
         //GET api/GuessesTheImage/GetAllTasks
         [HttpGet]
-        public IEnumerable<GuessesTheImageToReturn> GetAllTasks()
+        public IQueryable<GuessesTheImageToReturn> GetAllTasks()
         {
             return service.GetAll();
         }

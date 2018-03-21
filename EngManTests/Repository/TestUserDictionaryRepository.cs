@@ -70,7 +70,7 @@ namespace EngManTests.Repository
                 UserId = 1,
                 WordId = 105
             };
-            var result = rep.AddWordToDictionary(1, model);
+            var result = rep.Add(1, model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -83,7 +83,7 @@ namespace EngManTests.Repository
                 UserId = 1,
                 WordId = 55
             };
-            var result = rep.AddWordToDictionary(1, model);
+            var result = rep.Add(1, model);
             Assert.AreEqual(false, result, string.Format("result != expected"));
         }
 
@@ -92,7 +92,7 @@ namespace EngManTests.Repository
         {
             try
             {
-                var result = rep.AddWordToDictionary(1, null);
+                var result = rep.Add(1, null);
             }
             catch (Exception e)
             {
@@ -109,7 +109,7 @@ namespace EngManTests.Repository
                 UserId = 1,
                 WordId = 105
             };
-            var result = rep.DeleteWordFromDictionary(1, model.Id);
+            var result = rep.Delete(1, model.Id);
             Assert.AreEqual(model.Id, result, string.Format("result != expected"));
         }
 
@@ -122,7 +122,7 @@ namespace EngManTests.Repository
                 UserId = 1,
                 WordId = 105
             };
-            var result = rep.DeleteWordFromDictionary(1, model.Id);
+            var result = rep.Delete(1, model.Id);
             Assert.AreEqual(-1, result, string.Format("result != expected"));
         }
     }

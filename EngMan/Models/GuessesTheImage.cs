@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+
 namespace EngMan.Models
 {
     public class GuessesTheImage

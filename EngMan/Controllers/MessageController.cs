@@ -3,8 +3,8 @@ using EngMan.Service;
 using EngMan.Models;
 using System.Web;
 using System.Linq;
-using System.Collections.Generic;
 using System.Net.Http;
+
 namespace EngMan.Controllers
 {
     [Authorize]
@@ -19,21 +19,21 @@ namespace EngMan.Controllers
 
         //GET api/message/GetAllMessages
         [HttpGet]
-        public IEnumerable<ReturnMessage> GetAllMessages()
+        public IQueryable<ReturnMessage> GetAllMessages()
         {
             return service.GetMessages(GetCurrentUserId());
         }
 
         //GET api/message/GetMesagesByUserId
         [HttpGet]
-        public IEnumerable<ReturnMessage> GetMessagesByUserId(int otherUserId, int lastReceivedMessageId)
+        public IQueryable<ReturnMessage> GetMessagesByUserId(int otherUserId, int lastReceivedMessageId)
         {
             return service.GetMessagesByUserId(GetCurrentUserId(), otherUserId, lastReceivedMessageId);
         }
 
         //GET api/message/GetNewMessages
         [HttpGet]
-        public IEnumerable<ReturnMessage> GetNewMessages()
+        public IQueryable<ReturnMessage> GetNewMessages()
         {
             return service.GetNewMessages(GetCurrentUserId());
         }

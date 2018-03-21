@@ -1,11 +1,27 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+
 namespace EngMan.Models
 {
     [DataContract]
     public class User
     {
+        public User()
+        {
+
+        }
+
+        public User(UserView _user)
+        {
+            Id = _user.Id;
+            FirstName = _user.FirstName;
+            LastName = _user.LastName;
+            Email = _user.Email;
+            Password = "";
+            Role = _user.Role;
+        }
+
         [Key]
         [DataMember]
         public int Id { get; set; }

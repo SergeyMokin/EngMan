@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using EngMan.Models;
 using System.IO;
 using System.Security.Cryptography;
@@ -74,18 +73,6 @@ namespace EngMan.Extensions
             }
         }
 
-        //Validate User
-        public static bool Validate(this User task)
-        {
-            return task != null
-                && task.Id.Validate()
-                && !String.IsNullOrEmpty(task.FirstName)
-                && !String.IsNullOrEmpty(task.LastName)
-                && task.Email.IsEmail()
-                && task.Password.IsCorrectPassword()
-                && !String.IsNullOrEmpty(task.Role);
-        }
-
         //Validate UserView
         public static bool Validate(this UserView task)
         {
@@ -144,6 +131,18 @@ namespace EngMan.Extensions
                 && task.Id.Validate()
                 && task.Word.Validate(true)
                 && !String.IsNullOrEmpty(task.Path);
+        }
+
+        //Validate User
+        public static bool Validate(this User task, bool checkPassword)
+        {
+            return task != null
+                && task.Id.Validate()
+                && !String.IsNullOrEmpty(task.FirstName)
+                && !String.IsNullOrEmpty(task.LastName)
+                && task.Email.IsEmail()
+                && !String.IsNullOrEmpty(task.Role)
+                && (checkPassword ? task.Password.IsCorrectPassword() : true);
         }
 
         //Validate Word

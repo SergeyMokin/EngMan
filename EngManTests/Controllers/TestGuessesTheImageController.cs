@@ -5,7 +5,6 @@ using EngMan.Controllers;
 using EngMan.Service;
 using System.Linq;
 using Moq;
-using System.Web.Http.Results;
 
 namespace EngManTests.Service
 {
@@ -34,7 +33,7 @@ namespace EngManTests.Service
             _service.Setup(x => x.Edit(It.IsAny<GuessesTheImageToAdd>()))
                 .Returns(true);
             _service.Setup(x => x.GetAll())
-                .Returns(data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) }).AsEnumerable());
+                .Returns(data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) }));
             _service.Setup(x => x.Get(It.IsAny<int>()))
                 .Returns<int>(y => data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(word => word.WordId == word.WordId) }).FirstOrDefault(x => x.Id == y));
             _service.Setup(x => x.GetAllCategories()).Returns(dataWords.GroupBy(x => x.Category).Select(x => x.Key));
@@ -42,7 +41,7 @@ namespace EngManTests.Service
                 .Returns<string>(str => data
                                         .Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) })
                                         .Where(x => x.Word.Category.Equals(str))
-                                        .AsEnumerable());
+                                        );
             _service.Setup(x => x.GetTask(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns<string, string>((str, arr) => data
                                         .Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) })

@@ -1,8 +1,8 @@
 ﻿using System.Web.Http;
-using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EngMan.Controllers
 {
@@ -18,38 +18,38 @@ namespace EngMan.Controllers
 
         //GET api/rule/GetAllCategories
         [HttpGet]
-        public IEnumerable<string> GetAllCategories()
+        public IQueryable<string> GetAllCategories()
         {
             return service.GetAllCategories();
         }
 
         //GET api/rule/GetByCategory
         [HttpGet]
-        public IEnumerable<RuleModel> GetByCategory(string category)
+        public IQueryable<RuleModel> GetByCategory(string category)
         {
             return service.GetByCategory(category);
         }
 
         //GET api/rule/GetAllRules
         [HttpGet]
-        public IEnumerable<RuleModel> GetAllRules()
+        public IQueryable<RuleModel> GetAllRules()
         {
-            return service.Get();
+            return service.GetAll();
         }
 
         //GET api/rule/GetRule
         [HttpGet]
         public RuleModel GetRule(int id)
         {
-            return service.GetById(id);
+            return service.Get(id);
         }
 
         //PUT api/rule/EditRule
         [HttpPut]
         [Authorize(Roles = "admin")]
-        public async Task<bool> EditRule(RuleModel rule)
+        public bool EditRule(RuleModel rule)
         {
-            return await service.Edit(rule);
+            return service.Edit(rule);
         }
 
         //POST api/rule/AddRule
@@ -71,9 +71,9 @@ namespace EngMan.Controllers
         //DELETE api/rule/DeleteRule
         [HttpDelete]
         [Authorize(Roles = "admin")]
-        public async Task<string> DeleteRule(int id)
+        public string DeleteRule(int id)
         {
-            return await service.Delete(id);
+            return service.Delete(id);
         }
 
     }

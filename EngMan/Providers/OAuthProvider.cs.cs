@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Owin.Security.OAuth;
+
 namespace EngMan.Providers
 {
     public class OAuthProvider : OAuthAuthorizationServerProvider

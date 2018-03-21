@@ -1,8 +1,7 @@
 ﻿using System.Web.Http;
-using System.Threading.Tasks;
 using EngMan.Service;
 using EngMan.Models;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace EngMan.Controllers
 {
@@ -18,38 +17,38 @@ namespace EngMan.Controllers
 
         //GET api/word/GetAllCategories
         [HttpGet]
-        public IEnumerable<string> GetAllCategories()
+        public IQueryable<string> GetAllCategories()
         {
             return service.GetAllCategories();
         }
 
         //GET api/word/GetByCategory
         [HttpGet]
-        public IEnumerable<Word> GetByCategory(string category)
+        public IQueryable<Word> GetByCategory(string category)
         {
             return service.GetByCategory(category);
         }
 
         //GET api/word/GetAllWords
         [HttpGet]
-        public IEnumerable<Word> GetAllWords()
+        public IQueryable<Word> GetAllWords()
         {
-            return service.Get();
+            return service.GetAll();
         }
 
         //GET api/word/GetWordById
         [HttpGet]
         public Word GetWordById(int id)
         {
-            return service.GetById(id);
+            return service.Get(id);
         }
 
         //PUT api/word/EditWord
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<bool> EditWord(Word word)
+        public bool EditWord(Word word)
         {
-            return await service.Edit(word);
+            return service.Edit(word);
         }
 
         //POST api/word/AddWord
@@ -63,9 +62,9 @@ namespace EngMan.Controllers
         //DELETE api/word/DeleteWord
         [Authorize(Roles = "admin")]
         [HttpDelete]
-        public async Task<string> DeleteWord(int id)
+        public string DeleteWord(int id)
         {
-            return await service.Delete(id);
+            return service.Delete(id);
         }
 
         //GET api/word/GetWordMap

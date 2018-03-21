@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EngMan.Models;
 using EngMan.Repository;
@@ -30,10 +29,10 @@ namespace EngManTests.Repository
             mockSet.As<IQueryable<RuleModel>>().Setup(m => m.Expression).Returns(data.Expression);
             mockSet.As<IQueryable<RuleModel>>().Setup(m => m.ElementType).Returns(data.ElementType);
             mockSet.As<IQueryable<RuleModel>>().Setup(m => m.GetEnumerator()).Returns(() => data.GetEnumerator());
-            mockSet.Setup(m => m.FindAsync(It.IsAny<object[]>()))
-            .Returns<object[]>(async (d) =>
+            mockSet.Setup(m => m.Find(It.IsAny<object[]>()))
+            .Returns<object[]>((d) =>
             {
-                return await Task.FromResult(data.FirstOrDefault(x => x.RuleId == (int)d[0]));
+                return data.FirstOrDefault(x => x.RuleId == (int)d[0]);
             });
             context.Setup(x => x.Set<RuleModel>()).Returns(mockSet.Object);
             rep = new RuleRepository(context.Object);
@@ -59,7 +58,7 @@ namespace EngManTests.Repository
         public void RuleRepositoryTest_Rules_count()
         {
             var countOfRules = context.Object.Rules.Count();
-            var rep_countOfAllRules= rep.Rules.Count();
+            var rep_countOfAllRules= rep.GetAll().Count();
             Assert.AreEqual(countOfRules, rep_countOfAllRules, string.Format(countOfRules + " != " + rep_countOfAllRules));
         }
 
@@ -89,7 +88,7 @@ namespace EngManTests.Repository
                 Text = "textnew",
                 Title = "newtitle"
             };
-            var result = rep.SaveRule(model).Result;
+            var result = rep.Edit(model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -103,7 +102,7 @@ namespace EngManTests.Repository
                 Text = "textnew",
                 Title = "newtitle"
             };
-            var result = rep.SaveRule(model).Result;
+            var result = rep.Edit(model);
             Assert.AreEqual(false, result, string.Format("result != expected"));
         }
 
@@ -113,11 +112,11 @@ namespace EngManTests.Repository
             RuleModel model = null;
             try
             {
-                var result = rep.SaveRule(model).Result;
+                var result = rep.Edit(model);
             }
             catch(Exception e)
             {
-                Assert.AreEqual("Value cannot be null.", e.InnerException.Message, string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.Message, string.Format("result != expected"));
             }
         }
 
@@ -131,7 +130,7 @@ namespace EngManTests.Repository
                 Text = "textnew",
                 Title = "newtitle"
             };
-            var result = rep.AddRule(model);
+            var result = rep.Add(model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -145,7 +144,7 @@ namespace EngManTests.Repository
                 Text = null,
                 Title = null
             };
-            var result = rep.AddRule(model);
+            var result = rep.Add(model);
             Assert.AreEqual(false, result, string.Format("result != expected"));
         }
 
@@ -155,7 +154,7 @@ namespace EngManTests.Repository
             RuleModel model = null;
             try
             {
-                var result = rep.AddRule(model);
+                var result = rep.Add(model);
             }
             catch (Exception e)
             {
@@ -173,7 +172,7 @@ namespace EngManTests.Repository
                 Text = "textnew",
                 Title = "newtitle"
             };
-            var result = rep.DeleteRule(model.RuleId).Result;
+            var result = rep.Delete(model.RuleId);
             Assert.AreEqual(model.RuleId, result, string.Format("result != expected"));
         }
 
@@ -187,7 +186,7 @@ namespace EngManTests.Repository
                 Text = null,
                 Title = null
             };
-            var result = rep.DeleteRule(model.RuleId).Result;
+            var result = rep.Delete(model.RuleId);
             Assert.AreEqual(-1, result);
         }
 

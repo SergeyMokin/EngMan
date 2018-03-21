@@ -6,7 +6,6 @@ using EngMan.Repository;
 using EngMan.Service;
 using System.Linq;
 using Moq;
-using System.Threading.Tasks;
 
 namespace EngManTests.Service
 {
@@ -25,19 +24,21 @@ namespace EngManTests.Service
         {
             var data = GenerateData();
             var _rep = new Mock<IWordRepository>();
-            _rep.Setup(x => x.AddWord(It.IsAny<Word>()))
+            _rep.Setup(x => x.Add(It.IsAny<Word>()))
                 .Returns(true);
             _rep.Setup(x => x.GetAllCategories())
                 .Returns(data.GroupBy(x => x.Category).Select(x => x.Key));
             _rep.Setup(x => x.GetByCategory(It.IsAny<string>()))
                 .Returns<string>(str => data.Where(x => x.Category.Equals(str)));
-            _rep.Setup(x => x.DeleteWord(It.IsAny<int>()))
-                .Returns<int>(x => Task.FromResult(x));
-            _rep.Setup(x => x.SaveWord(It.IsAny<Word>())).Returns(Task.FromResult(true));
+            _rep.Setup(x => x.Delete(It.IsAny<int>()))
+                .Returns<int>(x => x);
+            _rep.Setup(x => x.Edit(It.IsAny<Word>())).Returns(true);
             _rep.Setup(x => x.GetTasks(It.IsAny<string>(), It.IsAny<int[]>()))
                 .Returns<string, int[]>((str, id) => data.Where(x => x.Category.Equals(str) && x.WordId != id[0]));
-            _rep.Setup(x => x.Words)
+            _rep.Setup(x => x.GetAll())
                 .Returns(data);
+            _rep.Setup(x => x.Get(It.IsAny<int>()))
+                .Returns<int>(x => data.FirstOrDefault(y => y.WordId == x));
             service = new WordService(_rep.Object);
             rep = _rep.Object;
         }
@@ -91,16 +92,16 @@ namespace EngManTests.Service
         [TestMethod]
         public void WordServiceTest_Get_count()
         {
-            var expected = rep.Words.Count();
-            var actual = service.Get().Count();
+            var expected = rep.GetAll().Count();
+            var actual = service.GetAll().Count();
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void WordServiceTest_GetById_valid()
         {
-            var expected = rep.Words.FirstOrDefault(x => x.WordId == 1);
-            var actual = service.GetById(1);
+            var expected = rep.Get(1);
+            var actual = service.Get(1);
             Assert.AreEqual(expected, actual);
         }
 
@@ -109,7 +110,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.GetById(-1);
+                service.Get(-1);
             }
             catch (Exception e)
             {
@@ -128,8 +129,8 @@ namespace EngManTests.Service
                 Translate = "Translate" + 1,
                 Transcription = "Transcription" + 1
             };
-            var expected = rep.SaveWord(model).Result;
-            var actual = service.Edit(model).Result;
+            var expected = rep.Edit(model);
+            var actual = service.Edit(model);
             Assert.AreEqual(expected, actual);
         }
 
@@ -157,7 +158,7 @@ namespace EngManTests.Service
                 Translate = "Translate" + 1,
                 Transcription = "Transcription" + 1
             };
-            var expected = rep.AddWord(model);
+            var expected = rep.Add(model);
             var actual = service.Add(model);
             Assert.AreEqual(expected, actual);
         }
@@ -179,7 +180,7 @@ namespace EngManTests.Service
         public void WordServiceTest_Delete_valid()
         {
             var expected = "Delete completed successful";
-            var actual = service.Delete(1).Result;
+            var actual = service.Delete(1);
             Assert.AreEqual(expected, actual);
         }
 

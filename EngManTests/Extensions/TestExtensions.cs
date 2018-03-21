@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EngMan.Models;
 using EngMan.Extensions;
+
 namespace EngManTests.Extensions
 {
     [TestClass]
@@ -64,8 +65,8 @@ namespace EngManTests.Extensions
                 Password = "Good",
                 Role = "user"
             };
-            Assert.AreEqual(true, good.Validate());
-            Assert.AreEqual(false, bad.Validate());
+            Assert.AreEqual(true, good.Validate(true));
+            Assert.AreEqual(false, bad.Validate(true));
         }
 
         [TestMethod]
@@ -88,7 +89,7 @@ namespace EngManTests.Extensions
                 Role = "user"
             };
             Assert.AreEqual(true, good.Validate());
-            Assert.AreEqual(false, bad.Validate());
+            Assert.AreEqual(false, bad.Validate(true));
         }
 
         [TestMethod]

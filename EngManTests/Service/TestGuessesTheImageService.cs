@@ -32,7 +32,7 @@ namespace EngManTests.Controllers
             _rep.Setup(x => x.Edit(It.IsAny<GuessesTheImageToAdd>()))
                 .Returns(true);
             _rep.Setup(x => x.GetAll())
-                .Returns(data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) }).AsEnumerable());
+                .Returns(data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) }));
             _rep.Setup(x => x.Get(It.IsAny<int>()))
                 .Returns<int>(y => data.Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(word => word.WordId == word.WordId) }).FirstOrDefault(x => x.Id == y));
             _rep.Setup(x => x.GetAllCategories()).Returns(dataWords.GroupBy(x => x.Category).Select(x => x.Key));
@@ -40,12 +40,12 @@ namespace EngManTests.Controllers
                 .Returns<string>(str => data
                                         .Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) })
                                         .Where(x => x.Word.Category.Equals(str))
-                                        .AsEnumerable());
+                                        );
             _rep.Setup(x => x.GetTasks(It.IsAny<string>(), It.IsAny<int[]>()))
                 .Returns<string, int[]>((str, arr) => data
                                         .Select(x => new GuessesTheImageToReturn { Id = x.Id, Path = x.Path, Word = dataWords.FirstOrDefault(y => x.WordId == y.WordId) })
                                         .Where(x => x.Word.Category.Equals(str) && x.Id != arr[0])
-                                        .AsEnumerable());
+                                        );
             service = new GuessesTheImageService(_rep.Object);
             rep = _rep.Object;
         }

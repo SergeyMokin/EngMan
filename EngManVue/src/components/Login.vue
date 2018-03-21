@@ -277,7 +277,6 @@ export default {
             };
             api.login(this.user)
             .then(result =>{
-                console.log(result)
                 if(result.access_token)
                 {
                     this.$cookie.delete('user.login.token.localhost:8080');

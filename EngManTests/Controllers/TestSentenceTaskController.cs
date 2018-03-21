@@ -5,8 +5,7 @@ using EngMan.Controllers;
 using EngMan.Service;
 using System.Linq;
 using Moq;
-using System.Web.Http.Results;
-using System.Threading.Tasks;
+
 namespace EngManTests.Controllers
 {
     [TestClass]
@@ -27,12 +26,12 @@ namespace EngManTests.Controllers
             _service.Setup(x => x.Add(It.IsAny<SentenceTask>()))
                 .Returns(true);
             _service.Setup(x => x.Delete(It.IsAny<int>()))
-                .Returns<int>(x => Task.FromResult("Delete completed successful"));
+                .Returns<int>(x => "Delete completed successful");
             _service.Setup(x => x.Edit(It.IsAny<SentenceTask>()))
-                .Returns(Task.FromResult(true));
-            _service.Setup(x => x.Get())
+                .Returns(true);
+            _service.Setup(x => x.GetAll())
                 .Returns(data);
-            _service.Setup(x => x.GetById(It.IsAny<int>()))
+            _service.Setup(x => x.Get(It.IsAny<int>()))
                 .Returns<int>(id => data.FirstOrDefault(x => x.SentenceTaskId == id));
             _service.Setup(x => x.GetAllCategories()).Returns(data.GroupBy(x => x.Category).Select(x => x.Key));
             _service.Setup(x => x.GetByCategory(It.IsAny<string>()))
@@ -72,7 +71,7 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void SentenceTaskControllerTest_GetAllTasks()
         {
-            var expected = service.Get();
+            var expected = service.GetAll();
             var actual = controller.GetAllTasks();
             Assert.AreEqual(expected.Count(), actual.Count());
         }
@@ -88,7 +87,7 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void SentenceTaskControllerTest_GetTaskById()
         {
-            var expected = service.GetById(1);
+            var expected = service.Get(1);
             var actual = controller.GetTaskById(1);
             Assert.AreEqual(expected.SentenceTaskId, actual.SentenceTaskId);
         }
@@ -96,8 +95,8 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void SentenceTaskControllerTest_EditTask()
         {
-            var expected = service.Edit(new SentenceTask()).Result;
-            var actual = controller.EditTask(new SentenceTask()).Result;
+            var expected = service.Edit(new SentenceTask());
+            var actual = controller.EditTask(new SentenceTask());
             Assert.AreEqual(expected, actual);
         }
 
@@ -112,7 +111,7 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void SentenceTaskControllerTest_DeleteTask()
         {
-            var actual = controller.DeleteTask(1).Result;
+            var actual = controller.DeleteTask(1);
             Assert.AreEqual("Delete completed successful", actual);
         }
 

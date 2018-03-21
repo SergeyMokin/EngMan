@@ -1,8 +1,7 @@
 ﻿using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace EngMan.Controllers
 {
@@ -18,38 +17,38 @@ namespace EngMan.Controllers
 
         //GET api/SentenceTask/GetAllCategories
         [HttpGet]
-        public IEnumerable<string> GetAllCategories()
+        public IQueryable<string> GetAllCategories()
         {
             return service.GetAllCategories();
         }
 
         //GET api/SentenceTask/GetByCategory
         [HttpGet]
-        public IEnumerable<SentenceTask> GetByCategory(string category)
+        public IQueryable<SentenceTask> GetByCategory(string category)
         {
             return service.GetByCategory(category);
         }
 
         //GET api/SentenceTask/GetAllTasks
         [HttpGet]
-        public IEnumerable<SentenceTask> GetAllTasks()
+        public IQueryable<SentenceTask> GetAllTasks()
         {
-            return service.Get();
+            return service.GetAll();
         }
 
         //GET api/SentenceTask/GetTaskById
         [HttpGet]
         public SentenceTask GetTaskById(int id)
         {
-            return service.GetById(id);
+            return service.Get(id);
         }
 
         //PUT api/SentenceTask/EditTask
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<bool> EditTask(SentenceTask task)
+        public bool EditTask(SentenceTask task)
         {
-            return await service.Edit(task);
+            return service.Edit(task);
         }
 
         //POST api/SentenceTask/AddTask
@@ -63,9 +62,9 @@ namespace EngMan.Controllers
         //DELETE api/SentenceTask/DeleteTask
         [Authorize(Roles = "admin")]
         [HttpDelete]
-        public async Task<string> DeleteTask(int id)
+        public string DeleteTask(int id)
         {
-            return await service.Delete(id);
+            return service.Delete(id);
         }
 
         //GET api/SentenceTask/GetTask

@@ -6,7 +6,7 @@ using EngMan.Repository;
 using EngMan.Service;
 using System.Linq;
 using Moq;
-using System.Threading.Tasks;
+
 namespace EngManTests.Service
 {
     [TestClass]
@@ -24,14 +24,16 @@ namespace EngManTests.Service
         {
             var data = GenerateData();
             var _rep = new Mock<IRuleRepository>();
-            _rep.Setup(x => x.AddRule(It.IsAny<RuleModel>()))
+            _rep.Setup(x => x.Add(It.IsAny<RuleModel>()))
                 .Returns(true);
-            _rep.Setup(x => x.DeleteRule(It.IsAny<int>()))
-                .Returns<int>(x => Task.FromResult(x));
-            _rep.Setup(x => x.SaveRule(It.IsAny<RuleModel>()))
-                .Returns(Task.FromResult(true));
-            _rep.Setup(x => x.Rules)
+            _rep.Setup(x => x.Delete(It.IsAny<int>()))
+                .Returns<int>(x => x);
+            _rep.Setup(x => x.Edit(It.IsAny<RuleModel>()))
+                .Returns(true);
+            _rep.Setup(x => x.GetAll())
                 .Returns(data);
+            _rep.Setup(x => x.Get(It.IsAny<int>()))
+                .Returns<int>(x => data.FirstOrDefault());
             _rep.Setup(x => x.GetAllCategories()).Returns(data.GroupBy(x => x.Category).Select(x => x.Key));
             _rep.Setup(x => x.GetByCategory(It.IsAny<string>()))
                 .Returns<string>(str => data.Where(x => x.Category.Equals(str)));
@@ -87,16 +89,16 @@ namespace EngManTests.Service
         [TestMethod]
         public void RuleServiceTest_Get_count()
         {
-            var expected = rep.Rules.Count();
-            var actual = service.Get().Count();
+            var expected = rep.GetAll().Count();
+            var actual = service.GetAll().Count();
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void RuleServiceTest_GetById_valid()
         {
-            var expected = rep.Rules.FirstOrDefault(x => x.RuleId == 1);
-            var actual = service.GetById(1);
+            var expected = rep.Get(1);
+            var actual = service.Get(1);
             Assert.AreEqual(expected, actual);
         }
 
@@ -105,7 +107,7 @@ namespace EngManTests.Service
         {
             try
             {
-                service.GetById(-1);
+                service.Get(-1);
             }
             catch (Exception e)
             {
@@ -123,8 +125,8 @@ namespace EngManTests.Service
                 Text = "Text",
                 Title = "Title"
             };
-            var expected = rep.SaveRule(model).Result;
-            var actual = service.Edit(model).Result;
+            var expected = rep.Edit(model);
+            var actual = service.Edit(model);
             Assert.AreEqual(expected, actual);
         }
 
@@ -151,7 +153,7 @@ namespace EngManTests.Service
                 Text = "Text",
                 Title = "Title"
             };
-            var expected = rep.AddRule(model);
+            var expected = rep.Add(model);
             var actual = service.Add(model);
             Assert.AreEqual(expected, actual);
         }
@@ -173,7 +175,7 @@ namespace EngManTests.Service
         public void RuleServiceTest_Delete_valid()
         {
             var expected = "Delete completed successful";
-            var actual = service.Delete(1).Result;
+            var actual = service.Delete(1);
             Assert.AreEqual(expected, actual);
         }
 

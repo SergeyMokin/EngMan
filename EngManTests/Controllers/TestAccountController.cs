@@ -5,7 +5,6 @@ using EngMan.Controllers;
 using EngMan.Service;
 using System.Linq;
 using Moq;
-using System.Web.Http.Results;
 using System.Threading.Tasks;
 using System.Dynamic;
 
@@ -32,13 +31,13 @@ namespace EngManTests.Controllers
             _service.Setup(x => x.ChangePassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(true);
             _service.Setup(x => x.ChangeRole(It.IsAny<UserView>()))
-                .Returns(Task.FromResult(true));
-            _service.Setup(x => x.DeleteUser(It.IsAny<int>()))
+                .Returns(true);
+            _service.Setup(x => x.Delete(It.IsAny<int>()))
                 .Returns<int>(x => "Delete completed successful");
-            _service.Setup(x => x.SaveUser(It.IsAny<UserView>())).Returns(Task.FromResult(true));
-            _service.Setup(x => x.GetUserList())
-                .Returns(data.Select(x => new UserView { Id = x.Id }).ToList());
-            _service.Setup(x => x.GetUser(It.IsAny<int>()))
+            _service.Setup(x => x.Edit(It.IsAny<User>())).Returns(true);
+            _service.Setup(x => x.GetAll())
+                .Returns(data.Select(x => new UserView { Id = x.Id }));
+            _service.Setup(x => x.Get(It.IsAny<int>()))
                 .Returns<int>(id => data.Select(x => new UserView { Id = x.Id }).FirstOrDefault(x => x.Id == id));
             _service.Setup(x => x.ValidateUser(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns<string, string>((email, password) => data.FirstOrDefault());
@@ -68,7 +67,7 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void AccountControllerTest_GetAllUsers()
         {
-            var expected = serviceUser.GetUserList();
+            var expected = serviceUser.GetAll();
             var actual = controller.GetAllUsers();
             Assert.AreEqual(expected.Count(), actual.Count());
         }
@@ -76,7 +75,7 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void AccountControllerTest_GetUserById()
         {
-            var expected = serviceUser.GetUser(1);
+            var expected = serviceUser.Get(1);
             var actual = controller.GetUserById(1);
             Assert.AreEqual(expected.Id, actual.Id);
         }
@@ -84,8 +83,8 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void AccountControllerTest_EditUser()
         {
-            var expected = serviceUser.SaveUser(new UserView { Id = 1 }).Result;
-            var actual = controller.EditUser(new UserView { Id = 1 }).Result;
+            var expected = serviceUser.Edit(new User { Id = 1 });
+            var actual = controller.EditUser(new UserView { Id = 1 });
             Assert.AreEqual(expected, actual);
         }
 
@@ -99,8 +98,8 @@ namespace EngManTests.Controllers
         [TestMethod]
         public void AccountControllerTest_ChangeRole()
         {
-            var expected = serviceUser.ChangeRole(new UserView { Id = 1 }).Result;
-            var actual = controller.ChangeRole(new UserView { Id = 1 }).Result;
+            var expected = serviceUser.ChangeRole(new UserView { Id = 1 });
+            var actual = controller.ChangeRole(new UserView { Id = 1 });
             Assert.AreEqual(expected, actual);
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EngMan.Models;
 using EngMan.Repository;
@@ -30,10 +29,10 @@ namespace EngManTests.Repository
             mockSet.As<IQueryable<Word>>().Setup(m => m.Expression).Returns(data.Expression);
             mockSet.As<IQueryable<Word>>().Setup(m => m.ElementType).Returns(data.ElementType);
             mockSet.As<IQueryable<Word>>().Setup(m => m.GetEnumerator()).Returns(() => data.GetEnumerator());
-            mockSet.Setup(m => m.FindAsync(It.IsAny<object[]>()))
-            .Returns<object[]>(async (d) =>
+            mockSet.Setup(m => m.Find(It.IsAny<object[]>()))
+            .Returns<object[]>((d) =>
             {
-                return await Task.FromResult(data.FirstOrDefault(x => x.WordId == (int)d[0]));
+                return data.FirstOrDefault(x => x.WordId == (int)d[0]);
             });
             context.Setup(x => x.Set<Word>()).Returns(mockSet.Object);
             rep = new WordRepository(context.Object);
@@ -73,7 +72,7 @@ namespace EngManTests.Repository
         public void WordRepositoryTest_Words_count()
         {
             var count = context.Object.Words.Count();
-            var rep_count = rep.Words.Count();
+            var rep_count = rep.GetAll().Count();
             Assert.AreEqual(count, rep_count, string.Format(count + " != " + rep_count));
         }
 
@@ -117,7 +116,7 @@ namespace EngManTests.Repository
                 Translate = "Translate",
                 Transcription = "Transcription"
             };
-            var result = rep.SaveWord(model).Result;
+            var result = rep.Edit(model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -132,7 +131,7 @@ namespace EngManTests.Repository
                 Translate = "Translate",
                 Transcription = "Transcription"
             };
-            var result = rep.SaveWord(model).Result;
+            var result = rep.Edit(model);
             Assert.AreEqual(false, result, string.Format("result != expected"));
         }
 
@@ -142,11 +141,11 @@ namespace EngManTests.Repository
             Word model = null;
             try
             {
-                var result = rep.SaveWord(model).Result;
+                var result = rep.Edit(model);
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Value cannot be null.", e.InnerException.Message, string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.Message, string.Format("result != expected"));
             }
         }
 
@@ -161,7 +160,7 @@ namespace EngManTests.Repository
                 Translate = "Translate",
                 Transcription = "Transcription"
             };
-            var result = rep.AddWord(model);
+            var result = rep.Add(model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -176,7 +175,7 @@ namespace EngManTests.Repository
                 Translate = "Translate",
                 Transcription = "Transcription"
             };
-            var result = rep.AddWord(model);
+            var result = rep.Add(model);
             Assert.AreEqual(false, result, string.Format("result != expected"));
         }
 
@@ -186,7 +185,7 @@ namespace EngManTests.Repository
             Word model = null;
             try
             {
-                var result = rep.AddWord(model);
+                var result = rep.Add(model);
             }
             catch (Exception e)
             {
@@ -205,7 +204,7 @@ namespace EngManTests.Repository
                 Translate = "Translate",
                 Transcription = "Transcription"
             };
-            var result = rep.DeleteWord(model.WordId).Result;
+            var result = rep.Delete(model.WordId);
             Assert.AreEqual(model.WordId, result, string.Format("result != expected"));
         }
 
@@ -220,7 +219,7 @@ namespace EngManTests.Repository
                 Translate = null,
                 Transcription = null
             };
-            var result = rep.DeleteWord(model.WordId).Result;
+            var result = rep.Delete(model.WordId);
             Assert.AreEqual(-1, result);
         }
 

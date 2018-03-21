@@ -5,7 +5,6 @@ using System.Web.Http;
 using EngMan.Service;
 using EngMan.Models;
 using System.Linq;
-using System.Collections.Generic;
 using System.Dynamic;
 
 namespace EngMan.Controllers
@@ -44,14 +43,14 @@ namespace EngMan.Controllers
         
         //GET api/account/GetAllUsers
         [HttpGet]
-        public List<UserView> GetAllUsers()
+        public IQueryable<UserView> GetAllUsers()
         {
-            return service.GetUserList();
+            return service.GetAll();
         }
 
         //GET api/account/GetAllCategoriesOfDictionary
         [HttpGet]
-        public IEnumerable<string> GetAllCategoriesOfDictionary()
+        public IQueryable<string> GetAllCategoriesOfDictionary()
         {
             return serviceDictionary.GetAllCategories(GetCurrentUserId());
         }
@@ -88,21 +87,21 @@ namespace EngMan.Controllers
         [HttpGet]
         public UserView GetUserData()
         {
-            return service.GetUser(GetCurrentUserId());
+            return service.Get(GetCurrentUserId());
         }
 
         //GET api/account/GetUserById
         [HttpGet]
         public UserView GetUserById(int id)
         {
-            return service.GetUser(id);
+            return service.Get(id);
         }
 
         //PUT api/account/EditUser
         [HttpPut]
-        public async Task<bool> EditUser(UserView user)
+        public bool EditUser(UserView user)
         {
-            return await service.SaveUser(user);
+            return service.Edit(new User(user));
         }
 
         //DELETE api/account/DeleteUser
@@ -111,7 +110,7 @@ namespace EngMan.Controllers
         [HttpDelete]
         public string DeleteUser(int id)
         {
-            return service.DeleteUser(id);
+            return service.Delete(id);
         }
         
         //POST api/account/LogOut
@@ -126,9 +125,9 @@ namespace EngMan.Controllers
         //PUT api/account/ChangeRole
         [HttpPut]
         [Authorize(Roles = "admin")]
-        public async Task<bool> ChangeRole(UserView user)
+        public bool ChangeRole(UserView user)
         {
-            return await service.ChangeRole(user);
+            return service.ChangeRole(user);
         }
 
         //PUT api/account/ChangePassword

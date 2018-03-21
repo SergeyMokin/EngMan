@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EngMan.Models;
 using EngMan.Repository;
@@ -30,10 +29,10 @@ namespace EngManTests.Repository
             mockSet.As<IQueryable<SentenceTask>>().Setup(m => m.Expression).Returns(data.Expression);
             mockSet.As<IQueryable<SentenceTask>>().Setup(m => m.ElementType).Returns(data.ElementType);
             mockSet.As<IQueryable<SentenceTask>>().Setup(m => m.GetEnumerator()).Returns(() => data.GetEnumerator());
-            mockSet.Setup(m => m.FindAsync(It.IsAny<object[]>()))
-            .Returns<object[]>(async (d) =>
+            mockSet.Setup(m => m.Find(It.IsAny<object[]>()))
+            .Returns<object[]>((d) =>
             {
-                return await Task.FromResult(data.FirstOrDefault(x => x.SentenceTaskId == (int)d[0]));
+                return data.FirstOrDefault(x => x.SentenceTaskId == (int)d[0]);
             });
             context.Setup(x => x.Set<SentenceTask>()).Returns(mockSet.Object);
             rep = new SentenceTaskRepository(context.Object);
@@ -72,7 +71,7 @@ namespace EngManTests.Repository
         public void SentenceTaskRepositoryTest_SentenceTasks_count()
         {
             var count = context.Object.SentenceTasks.Count();
-            var rep_count = rep.SentenceTasks.Count();
+            var rep_count = rep.GetAll().Count();
             Assert.AreEqual(count, rep_count, string.Format(count + " != " + rep_count));
         }
 
@@ -115,7 +114,7 @@ namespace EngManTests.Repository
                 Category = "Category",
                 Translate = "Translate"
             };
-            var result = rep.SaveTask(model).Result;
+            var result = rep.Edit(model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -129,7 +128,7 @@ namespace EngManTests.Repository
                 Category = "Category",
                 Translate = "Translate"
             };
-            var result = rep.SaveTask(model).Result;
+            var result = rep.Edit(model);
             Assert.AreEqual(false, result, string.Format("result != expected"));
         }
 
@@ -138,11 +137,11 @@ namespace EngManTests.Repository
         {
             try
             {
-                var result = rep.SaveTask(null).Result;
+                var result = rep.Edit(null);
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Value cannot be null.", e.InnerException.Message, string.Format("result != expected"));
+                Assert.AreEqual("Value cannot be null.", e.Message, string.Format("result != expected"));
             }
         }
 
@@ -156,7 +155,7 @@ namespace EngManTests.Repository
                 Category = "Category",
                 Translate = "Translate"
             };
-            var result = rep.AddTask(model);
+            var result = rep.Add(model);
             Assert.AreEqual(true, result, string.Format("result != expected"));
         }
 
@@ -170,7 +169,7 @@ namespace EngManTests.Repository
                 Category = "Category",
                 Translate = "Translate"
             };
-            var result = rep.AddTask(model);
+            var result = rep.Add(model);
             Assert.AreEqual(false, result, string.Format("result != expected"));
         }
 
@@ -179,7 +178,7 @@ namespace EngManTests.Repository
         {
             try
             {
-                var result = rep.AddTask(null);
+                var result = rep.Add(null);
             }
             catch (Exception e)
             {
@@ -197,7 +196,7 @@ namespace EngManTests.Repository
                 Category = "Category",
                 Translate = "Translate"
             };
-            var result = rep.DeleteTask(model.SentenceTaskId).Result;
+            var result = rep.Delete(model.SentenceTaskId);
             Assert.AreEqual(model.SentenceTaskId, result, string.Format("result != expected"));
         }
 
@@ -211,7 +210,7 @@ namespace EngManTests.Repository
                 Category = "Category",
                 Translate = "Translate"
             };
-            var result = rep.DeleteTask(model.SentenceTaskId).Result;
+            var result = rep.Delete(model.SentenceTaskId);
             Assert.AreEqual(-1, result);
         }
     }
