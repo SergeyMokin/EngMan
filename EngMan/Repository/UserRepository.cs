@@ -1,83 +1,28 @@
-﻿using System.Threading.Tasks;
-using System.Linq;
+﻿using System.Linq;
 using EngMan.Models;
 using EngMan.Extensions;
-using System.Collections.Generic;
 
 namespace EngMan.Repository
 {
     public class UserRepository: IUserRepository
     {
-        public IEnumerable<User> Users
-        {
-            get
-            {
-                return context.Users;
-            }
-        }
-
         private EFDbContext context;
 
         public UserRepository(EFDbContext _context)
         {
             context = _context;
         }
-
-        public async Task<bool> SaveUser(UserView user)
+        public IQueryable<User> GetAll()
         {
-            if(user == null)
-            {
-                throw new System.ArgumentNullException();
-            }
-            var entity = await context.Users.FindAsync(user.Id);
-            if (entity == null)
-            {
-                return false;
-            }
-            entity.FirstName = user.FirstName;
-            entity.LastName = user.LastName;
-            entity.Email = user.Email;
-            context.SaveChanges();
-            return true;
-        }
-        
-        public bool ChangePassword(int id, string oldpassword, string newpassword)
-        {
-            if (oldpassword == null || newpassword == null)
-            {
-                throw new System.ArgumentNullException();
-            }
-            if (id < 1)
-            {
-                return false;
-            }
-            var entity = context.Users.Find(id);
-            if (entity == null || !entity.Password.VerifyHashedPassword(oldpassword))
-            {
-                return false;
-            }
-            entity.Password = newpassword.HashPassword();
-            context.SaveChanges();
-            return true;
+            return context.Users;
         }
 
-        public async Task<bool> ChangeRole(UserView user)
+        public User Get(int id)
         {
-            if (user == null)
-            {
-                throw new System.ArgumentNullException();
-            }
-            var entity = await context.Users.FindAsync(user.Id);
-            if (entity == null)
-            {
-                return false;
-            }
-            entity.Role = user.Role;
-            context.SaveChanges();
-            return true;
+            return context.Users.FirstOrDefault(x => x.Id == id);
         }
 
-        public bool AddUser(User user)
+        public bool Add(User user)
         {
             if (user == null)
             {
@@ -102,7 +47,25 @@ namespace EngMan.Repository
             return true;
         }
 
-        public int DeleteUser(int id)
+        public bool Edit(User user)
+        {
+            if(user == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+            var entity = context.Users.Find(user.Id);
+            if (entity == null)
+            {
+                return false;
+            }
+            entity.FirstName = user.FirstName;
+            entity.LastName = user.LastName;
+            entity.Email = user.Email;
+            context.SaveChanges();
+            return true;
+        }
+
+        public int Delete(int id)
         {
             if (id < 1)
             {
@@ -116,6 +79,42 @@ namespace EngMan.Repository
             context.Users.Remove(entity);
             context.SaveChanges();
             return entity.Id;
+        }
+
+        public bool ChangePassword(int id, string oldpassword, string newpassword)
+        {
+            if (oldpassword == null || newpassword == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+            if (id < 1)
+            {
+                return false;
+            }
+            var entity = context.Users.Find(id);
+            if (entity == null || !entity.Password.VerifyHashedPassword(oldpassword))
+            {
+                return false;
+            }
+            entity.Password = newpassword.HashPassword();
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool ChangeRole(UserView user)
+        {
+            if (user == null)
+            {
+                throw new System.ArgumentNullException();
+            }
+            var entity = context.Users.Find(user.Id);
+            if (entity == null)
+            {
+                return false;
+            }
+            entity.Role = user.Role;
+            context.SaveChanges();
+            return true;
         }
     }
 }

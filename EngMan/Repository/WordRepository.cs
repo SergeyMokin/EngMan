@@ -103,7 +103,8 @@ namespace EngMan.Repository
 
             for (var i = 0; i < length; i++)
             {
-                query = query.Where(x => x.WordId != indexes.ElementAt(i));
+                var index = indexes.ElementAt(i);
+                query = query.Where(x => x.WordId != index);
             }
             return query;
         }

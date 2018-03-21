@@ -282,30 +282,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\OAuthProvider.cs.cs" />
     <Compile Include="Repository\GuessesTheImageRepository.cs" />
-    <Compile Include="Repository\IGuessesTheImageRepository.cs" />
-    <Compile Include="Repository\IMessageRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
-    <Compile Include="Repository\IUserDictionaryRepository.cs" />
-    <Compile Include="Repository\IUserRepository.cs" />
     <Compile Include="Repository\MessageRepository.cs" />
     <Compile Include="Repository\SentenceTaskRepository.cs" />
     <Compile Include="Repository\EFDbContext.cs" />
-    <Compile Include="Repository\ISentenceTaskRepository.cs" />
-    <Compile Include="Repository\IRuleRepository.cs" />
-    <Compile Include="Repository\IWordRepository.cs" />
     <Compile Include="Repository\RuleRepository.cs" />
     <Compile Include="Models\Rule.cs" />
     <Compile Include="Repository\UserDictionaryRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="Repository\WordRepository.cs" />
     <Compile Include="Service\GuessesTheImageService.cs" />
-    <Compile Include="Service\IGuessesTheImageService.cs" />
-    <Compile Include="Service\IMessageService.cs" />
-    <Compile Include="Service\IRuleService.cs" />
-    <Compile Include="Service\ISentenceTaskService.cs" />
-    <Compile Include="Service\IUserDictionaryService.cs" />
-    <Compile Include="Service\IUserService.cs" />
-    <Compile Include="Service\IWordService.cs" />
+    <Compile Include="Service\IService.cs" />
     <Compile Include="Service\MessageService.cs" />
     <Compile Include="Service\RuleService.cs" />
     <Compile Include="Service\SentenceTaskService.cs" />
@@ -323,8 +310,8 @@
     <Content Include="Scripts\jquery.signalR-2.2.2.js" />
     <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
     <None Include="SQLScripts\words.doc" />
-    <Content Include="SQLScripts\SqlScriptForCreateDBWithTestData.sql" />
     <Content Include="SQLScripts\SqlScriptForCreateDB.sql" />
+    <Content Include="SQLScripts\SqlScriptForCreateDBWithTestData.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System.Linq;
 using EngMan.Models;
 
 namespace EngMan.Repository
@@ -14,15 +12,53 @@ namespace EngMan.Repository
             context = _context;
         }
 
+        private IQueryable<ReturnMessage> GetAll()
+        {
+            return context.Messages
+                .Join(context.Users,
+                    message => message.BeneficiaryId,
+                    user => user.Id,
+                    (message, user) => new { Message = message, Beneficiary = user })
+                .Join(context.Users,
+                    message => message.Message.SenderId,
+                    user => user.Id,
+                    (message, user) => new { message.Message, message.Beneficiary, Sender = user })
+                .Select(x => new ReturnMessage
+                {
+                    MessageId = x.Message.MessageId,
+                    CheckReadMes = x.Message.CheckReadMes,
+                    Text = x.Message.Text,
+                    Time = x.Message.Time,
+                    Sender = new UserView
+                    {
+                        Id = x.Sender.Id,
+                        FirstName = x.Sender.FirstName,
+                        LastName = x.Sender.LastName,
+                        Email = x.Sender.Email,
+                        Role = x.Sender.Role
+                    },
+                    Beneficiary = new UserView
+                    {
+                        Id = x.Beneficiary.Id,
+                        FirstName = x.Beneficiary.FirstName,
+                        LastName = x.Beneficiary.LastName,
+                        Email = x.Beneficiary.Email,
+                        Role = x.Beneficiary.Role
+                    }
+                });
+        }
+
         public int ReadMessages(int senderId, int beneficiaryId)
         {
-            return context.Database.ExecuteSqlCommand(
-                @"UPDATE[EngMan].[dbo].[Messages]
-                  SET[EngMan].[dbo].[Messages].[CheckReadMes] = 1
-                  WHERE[EngMan].[dbo].[Messages].[CheckReadMes] = 0 
-                  AND [EngMan].[dbo].[Messages].[BeneficiaryId] = @beneficiaryId 
-                  AND [EngMan].[dbo].[Messages].[SenderId] = @senderId",
-                new[] { new SqlParameter("beneficiaryId", beneficiaryId), new SqlParameter("senderId", senderId) });
+            var query = context.Messages.Where(x => x.SenderId == senderId && x.BeneficiaryId == beneficiaryId && !x.CheckReadMes);
+            var count = 0;
+            foreach (var el in query)
+            {
+                el.CheckReadMes = true;
+                count++;
+            }
+            context.SaveChanges();
+            return count;
         }
 
         public bool SendMessage(Message mes, int userId)
@@ -43,161 +79,39 @@ namespace EngMan.Repository
             return true;
         }
 
-        public IEnumerable<ReturnMessage> GetMessages(int userId)
+        public IQueryable<ReturnMessage> GetMessages(int userId)
         {
-            return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(
-                    @"SELECT [MessageId]
-                          , B.[Id] [SenderId]
-	                      , B.[FirstName] [SenderFirstName]
-	                      , B.[LastName] [SenderLastName]
-	                      , B.[Email] [SenderEmail]
-	                      , B.[Role] [SenderRole]
-                          , A.[Id] [BeneficiaryId]
-	                      , A.[FirstName] [BeneficiaryFirstName]
-	                      , A.[LastName] [BeneficiaryLastName]
-	                      , A.[Email] [BeneficiaryEmail]
-	                      , A.[Role] [BeneficiaryRole]
-                          ,[Text]
-                          ,[Time]
-                          ,[CheckReadMes]
-                      FROM [EngMan].[dbo].[Messages]
-                      JOIN [EngMan].[dbo].[Users] A ON A.[Id] = [EngMan].[dbo].[Messages].[BeneficiaryId]
-                      JOIN [EngMan].[dbo].[Users] B ON B.[Id] = [EngMan].[dbo].[Messages].[SenderId]
-                      WHERE [EngMan].[dbo].[Messages].[BeneficiaryId] = @userId OR [EngMan].[dbo].[Messages].[SenderId] = @userId
-                      ORDER BY [MessageId] DESC",
-                new SqlParameter("userId", userId))
-                .Select(x => new ReturnMessage
-                {
-                    MessageId = x.MessageId,
-                    CheckReadMes = x.CheckReadMes,
-                    Text = x.Text,
-                    Time = x.Time,
-                    Sender = new UserView
-                    {
-                        Id = x.SenderId,
-                        FirstName = x.SenderFirstName,
-                        LastName = x.SenderLastName,
-                        Email = x.SenderEmail,
-                        Role = x.SenderRole
-                    },
-                    Beneficiary = new UserView
-                    {
-                        Id = x.BeneficiaryId,
-                        FirstName = x.BeneficiaryFirstName,
-                        LastName = x.BeneficiaryLastName,
-                        Email = x.BeneficiaryEmail,
-                        Role = x.BeneficiaryRole
-                    }
-                });
+            return GetAll()
+                .Where(x => x.Beneficiary.Id == userId || x.Sender.Id == userId)
+                .OrderByDescending(x => x.MessageId);
         }
 
-        public IEnumerable<ReturnMessage> GetNewMessages(int userId)
+        public IQueryable<ReturnMessage> GetNewMessages(int userId)
         {
-            return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(
-                    @"SELECT[MessageId]
-                       , B.[Id][SenderId]
-                       , B.[FirstName][SenderFirstName]
-                       , B.[LastName][SenderLastName]
-                       , B.[Email][SenderEmail]
-                       , B.[Role][SenderRole]
-                       , A.[Id][BeneficiaryId]
-                       , A.[FirstName][BeneficiaryFirstName]
-                       , A.[LastName][BeneficiaryLastName]
-                       , A.[Email][BeneficiaryEmail]
-                       , A.[Role][BeneficiaryRole]
-                          ,[Text]
-                          ,[Time]
-                          ,[CheckReadMes]
-                    FROM[EngMan].[dbo].[Messages]
-                    JOIN[EngMan].[dbo].[Users] A ON A.[Id] = [EngMan].[dbo].[Messages].[BeneficiaryId]
-                    JOIN[EngMan].[dbo].[Users] B ON B.[Id] = [EngMan].[dbo].[Messages].[SenderId]
-                    WHERE[EngMan].[dbo].[Messages].[CheckReadMes] = 0 
-                    AND[EngMan].[dbo].[Messages].[BeneficiaryId] = @userId
-                    AND[MessageId] IN (
-						SELECT MAX([MessageId])
-						FROM[EngMan].[dbo].[Messages]
-						GROUP BY [SenderId]
-					)",
-                new SqlParameter("userId", userId))
-                .Select(x => new ReturnMessage
-                {
-                    MessageId = x.MessageId,
-                    CheckReadMes = x.CheckReadMes,
-                    Text = x.Text,
-                    Time = x.Time,
-                    Sender = new UserView
-                    {
-                        Id = x.SenderId,
-                        FirstName = x.SenderFirstName,
-                        LastName = x.SenderLastName,
-                        Email = x.SenderEmail,
-                        Role = x.SenderRole
-                    },
-                    Beneficiary = new UserView
-                    {
-                        Id = x.BeneficiaryId,
-                        FirstName = x.BeneficiaryFirstName,
-                        LastName = x.BeneficiaryLastName,
-                        Email = x.BeneficiaryEmail,
-                        Role = x.BeneficiaryRole
-                    }
-                });
+            var messages = GetAll();
+            var query = messages
+                .Where(x => !x.CheckReadMes
+                && x.Beneficiary.Id == userId
+                && messages.Where(mes => mes.Sender.Id == x.Sender.Id).Max(mes => mes.MessageId) == x.MessageId);
+            return query.OrderByDescending(x => x.MessageId);
         }
 
-        public IEnumerable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId)
+        public IQueryable<ReturnMessage> GetMessagesByUserId(int currentUserId, int otherUserId, int lastReceivedMessageId)
         {
             const int minRecivedId = 1;
-            var sqlQuery = @"SELECT TOP 100 [MessageId]
-                       , B.[Id][SenderId]
-                       , B.[FirstName][SenderFirstName]
-                       , B.[LastName][SenderLastName]
-                       , B.[Email][SenderEmail]
-                       , B.[Role][SenderRole]
-                       , A.[Id][BeneficiaryId]
-                       , A.[FirstName][BeneficiaryFirstName]
-                       , A.[LastName][BeneficiaryLastName]
-                       , A.[Email][BeneficiaryEmail]
-                       , A.[Role][BeneficiaryRole]
-                          ,[Text]
-                          ,[Time]
-                          ,[CheckReadMes]
-                    FROM[EngMan].[dbo].[Messages]
-                    JOIN[EngMan].[dbo].[Users] A ON A.[Id] = [EngMan].[dbo].[Messages].[BeneficiaryId]
-                    JOIN[EngMan].[dbo].[Users] B ON B.[Id] = [EngMan].[dbo].[Messages].[SenderId]
-                    WHERE([EngMan].[dbo].[Messages].[BeneficiaryId] = @currentUserId OR[EngMan].[dbo].[Messages].[SenderId] = @currentUserId)
-                    AND([EngMan].[dbo].[Messages].[BeneficiaryId] = @otherUserId OR[EngMan].[dbo].[Messages].[SenderId] = @otherUserId)";
-            var parameters = new[] { new SqlParameter("currentUserId", currentUserId),
-                    new SqlParameter("otherUserId", otherUserId),
-                    new SqlParameter("lastReceivedMessageId", lastReceivedMessageId) };
+            var sqlQuery = GetAll()
+                .Where(x => 
+                (x.Sender.Id == currentUserId 
+                || x.Beneficiary.Id == currentUserId) 
+                && (x.Sender.Id == otherUserId 
+                || x.Beneficiary.Id == otherUserId));
+
             if (lastReceivedMessageId > minRecivedId)
             {
-                sqlQuery += " AND [MessageId] < @lastReceivedMessageId";
+                sqlQuery = sqlQuery.Where(x => x.MessageId < lastReceivedMessageId);
             }
-            sqlQuery += " ORDER BY[MessageId] DESC";
-            return context.Database.SqlQuery<ReturnMessageWithTheQueryBD>(sqlQuery, parameters)
-                .Select(x => new ReturnMessage
-                {
-                    MessageId = x.MessageId,
-                    CheckReadMes = x.CheckReadMes,
-                    Text = x.Text,
-                    Time = x.Time,
-                    Sender = new UserView
-                    {
-                        Id = x.SenderId,
-                        FirstName = x.SenderFirstName,
-                        LastName = x.SenderLastName,
-                        Email = x.SenderEmail,
-                        Role = x.SenderRole
-                    },
-                    Beneficiary = new UserView
-                    {
-                        Id = x.BeneficiaryId,
-                        FirstName = x.BeneficiaryFirstName,
-                        LastName = x.BeneficiaryLastName,
-                        Email = x.BeneficiaryEmail,
-                        Role = x.BeneficiaryRole
-                    }
-                });
+            
+            return sqlQuery.OrderByDescending(x => x.MessageId).Take(100);
         }
 
         public int DeleteMessage(int mesId, int userId)

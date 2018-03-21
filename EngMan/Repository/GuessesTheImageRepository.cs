@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using EngMan.Models;
 
@@ -123,7 +122,8 @@ namespace EngMan.Repository
 
             for (var i = 0; i < length; i++)
             {
-                query = query.Where(x => x.Id != indexes.ElementAt(i));
+                var index = indexes.ElementAt(i);
+                query = query.Where(x => x.Id != index);
             }
 
             return query;

@@ -98,7 +98,8 @@ namespace EngMan.Repository
 
             for (var i = 0; i < length; i++)
             {
-                query = query.Where(x => x.SentenceTaskId != indexes.ElementAt(i));
+                var index = indexes.ElementAt(i);
+                query = query.Where(x => x.SentenceTaskId != index);
             }
             return query;
         }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using EngMan.Models;
+
 namespace EngMan.Repository
 {
     public class RuleRepository: IRuleRepository
