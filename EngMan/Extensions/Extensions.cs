@@ -192,7 +192,7 @@ namespace EngMan.Extensions
                 return string.Format("Can not be written");
             }
             File.WriteAllBytes(path, bytearr);
-            return string.Format("http://ecsc00a01a18:99/uploads/" + time + image.Name);
+            return string.Format("http://ecsc00a01a18/uploads/" + time + image.Name);
         }
 
         //creating hashpassword

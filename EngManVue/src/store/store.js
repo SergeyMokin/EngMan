@@ -155,7 +155,7 @@ const actions = {
         .catch(e => console.log(e))
     }
     , connectToServ: ( {dispatch, commit}, userview ) => {
-        var connection = $.hubConnection('http://ecsc00a01a18:99'); 
+        var connection = $.hubConnection('http://ecsc00a01a18'); 
         var proxy = connection.createHubProxy('chat');
         proxy.on('onUpdateMessages', function(){
           dispatch('getNewMessages');
