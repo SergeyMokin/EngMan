@@ -12,7 +12,8 @@
                 style = "width: 250px" 
                 v-model = "category" 
                 class = "select-form" 
-                v-on:change = "getWordsByCategory()">
+                v-on:change = "getWordsByCategory()"
+                v-if="categories.length > 0">
                 <option v-for = "category in categories" :key = "category">
                     {{category}}
                 </option>
@@ -47,6 +48,11 @@
                                 src = "../assets/close-icon.png">
                     </span>
                 </div>
+            </div>
+
+            <div
+                v-if="categories.length == 0">
+                <span>You have no words in your dictionary</span>
             </div>
         </div>
     </div>

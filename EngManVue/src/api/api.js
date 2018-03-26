@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://localhost:58099/api'
+const url = 'http://ecsc00a01a18:99/api'
 
 export default {
   addToken(token){

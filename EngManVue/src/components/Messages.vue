@@ -259,6 +259,17 @@ export default {
                     {
                         if(res === true)
                         {
+                            this.$store.state.messages.unshift(
+                                {
+                                    MessageId: this.$store.state.messages[0] ? this.$store.state.messages[0].MessageId + 1 : 1,
+                                    Sender: this.sender,
+                                    Beneficiary: this.beneficiary,
+                                    Text: this.message,
+                                    Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
+                                    CheckReadMes: 0
+                                }
+                            );
+                            this.message = '';
                             var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
                             proxy.invoke("Send", {
                                 MessageId: 0,
@@ -268,17 +279,6 @@ export default {
                                 Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
                                 CheckReadMes: 0
                             });
-                            this.$store.state.messages.unshift(
-                                {
-                                    MessageId: this.$store.state.messages[0].MessageId + 1,
-                                    Sender: this.sender,
-                                    Beneficiary: this.beneficiary,
-                                    Text: this.message,
-                                    Time: date.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":" + seconds + "+03:00",
-                                    CheckReadMes: 0
-                                }
-                            );
-                            this.message = '';
                         }
                         else
                         {

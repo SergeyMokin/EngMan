@@ -97,6 +97,7 @@
             <img 
                 title="Selected task image" 
                 :src = "task.Path" 
+                v-if="!clickAdd"
                 style = "width: 80%; margin-bottom: 5px;">
             
             <span>Category: </span>
@@ -395,7 +396,8 @@ export default {
       {
         var vue = this;
         var word = this.downloadWords.filter(function(word){
-            return word.Original.toLowerCase() === vue.choosenWord.toLowerCase();
+            if(word.Original) return word.Original.toLowerCase() === vue.choosenWord.toLowerCase();
+            return false;
         });
         return word[0].WordId;
       }
@@ -406,8 +408,12 @@ export default {
     {
       var vue = this;
       return this.$store.getters.guessestheimages.filter(function(task){
-          return task.Word.Original.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1 
-          && task.Word.Category.toLowerCase().indexOf(vue.category.toLowerCase()) > -1;
+          if(task.Word.Original)
+          {
+            return task.Word.Original.toLowerCase().indexOf(vue.searchKey.toLowerCase()) > -1 
+            && task.Word.Category.toLowerCase().indexOf(vue.category.toLowerCase()) > -1;
+          }
+          return false;
       });
     }
   },

@@ -29,8 +29,6 @@ export default {
         logout(){
             if(this.inProgress) return;
             this.inProgress = true;
-            var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
-            proxy.invoke("Disconnect");
             api.signout()
             .then(res => {
                 if(res == "Successfully completed")
@@ -56,6 +54,8 @@ export default {
                 console.log(e);
                 this.inProgress = false;
             });
+            var proxy = this.$store.state.connectionSignalR.createHubProxy('chat');
+            proxy.invoke("Disconnect");
         },
         toProfile(){
             if(this.inProgress) return;
