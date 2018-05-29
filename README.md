@@ -1,5 +1,5 @@
 # EngMan
-    // url = http://ecsc00a01a18/api
+    // url = http://*host*/api
     // /account/login post
     // /account/registration post
     // /account/logout post
