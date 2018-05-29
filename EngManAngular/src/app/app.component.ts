@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from './api.service';
+import * as M from 'materialize-css';
 
 @Component({
   selector: 'app-root',
@@ -11,16 +12,16 @@ import { ApiService } from './api.service';
 export class AppComponent implements OnInit{
   title = 'app';
 
-  private EnableProfileSetting: boolean = false;
-
   constructor(private cookieService:CookieService,
     private router: Router,
     private apiService: ApiService)
   {
-
+    document.addEventListener('DOMContentLoaded', function() {
+      M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), {hover:true});
+    });
   }
 
-  ngOnInit() 
+  ngOnInit(): void
   {
     if(this.cookieService.get('user.login.token.engmanangular').length > 0)
     {
@@ -32,16 +33,7 @@ export class AppComponent implements OnInit{
       return;
     }
     this.router.navigate(["login"]);
-  }
-
-  ShowProfileSettings(): void
-  {
-    this.EnableProfileSetting = true;
-  }
-
-  CloseProfileSettings(): void
-  {
-    this.EnableProfileSetting = false;
+    
   }
 
   Logout(): void

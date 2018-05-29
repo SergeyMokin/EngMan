@@ -25,7 +25,7 @@ export class LoginFormPageComponent implements OnInit {
     this.RegistrationUser = new RegistrationUserModel();
   }
 
-  ngOnInit() 
+  ngOnInit(): void
   {
     if(this.cookieService.get('user.login.token.engmanangular').length > 0)
     {
@@ -37,6 +37,7 @@ export class LoginFormPageComponent implements OnInit {
 
   ChangeForm(): void
   {
+    this.ErrorMessage = ``;
     this.RegistrationFormEnable = !this.RegistrationFormEnable;
   }
 

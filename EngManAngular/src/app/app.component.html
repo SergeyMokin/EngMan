@@ -1,13 +1,18 @@
 <nav>
     <div class="nav-wrapper">
-      <a (mouseenter)="ShowProfileSettings()" (mouseleave)="CloseProfileSettings()" href="javascript:0" class="brand-logo left"><img title="home" style="height: 64px; padding-left: 10px;filter: invert(100%);" src="http://static1.squarespace.com/static/579012ce15d5dbcc832517ab/t/57a37e16ff7c508424d40845/1470332439749/CJ-favicon.png?format=1000w"></a>
+      <a data-target='dropdown1' href="javascript:0" class="brand-logo left dropdown-trigger">
+          <img 
+            title="home" 
+            style="height: 64px; padding-left: 10px;filter: invert(100%);" 
+            src="http://static1.squarespace.com/static/579012ce15d5dbcc832517ab/t/57a37e16ff7c508424d40845/1470332439749/CJ-favicon.png?format=1000w">
+      </a>
       <a class="brand-logo center">{{this.router.url.substring(1).toUpperCase()}}</a>
       <ul id="nav-mobile" class="right">
         <li><a [routerLink]="['login']"><i class="material-icons" title="home">home</i></a></li>
-        <li><a [routerLink]="['login']"><i class="material-icons" title="grammar">library_books</i></a></li>
-        <li><a [routerLink]="['login']"><i class="material-icons" title="trainings">lightbulb_outline</i></a></li>
         <li><a [routerLink]="['login']"><i class="material-icons" title="dictionary">sort_by_alpha</i></a></li>
-        <li><a [routerLink]="['login']"><i class="material-icons" title="admin panel">build</i></a></li>
+        <li><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown2' title="grammar">library_books</i></a></li>
+        <li><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown3' title="trainings">lightbulb_outline</i></a></li>
+        <li><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown4' title="admin panel">build</i></a></li>
       </ul>
     </div>
 </nav>
@@ -22,7 +27,31 @@
     </div>
 </div>
 
-<div class="profile-popup" [style.display]="EnableProfileSetting?'block':'none'" (mouseenter)="ShowProfileSettings()" (mouseleave)="CloseProfileSettings()">
-    <a class="waves-effect waves-light btn" style="width:173px">Settings</a>
-    <a class="waves-effect waves-light btn" (click)="Logout()" style="width:173px; margin-top: 2px;">Logout</a>
-</div>
+<!--Dropdown menu of profile-->
+<ul id='dropdown1' class="dropdown-content">
+        <li><a href="javascript:0">Settings</a></li>
+        <li><a href="javascript:0" (click)="Logout()">Logout</a></li>
+</ul>
+
+<!--Dropdown menu of grammar-->
+<ul id='dropdown2' class="dropdown-content">
+        <li><a [routerLink]="['rules']">Rules</a></li>
+        <li><a [routerLink]="['practice-rules']">Practice Rules</a></li>
+</ul>
+
+<!--Dropdown menu of trainings-->
+<ul id='dropdown3' class="dropdown-content">
+        <li><a href="javascript:0">Word-Translate</a></li>
+        <li><a href="javascript:0">Translate-Word</a></li>
+        <li><a href="javascript:0">Word Cards</a></li>
+        <li><a href="javascript:0">Guesses the images</a></li>
+</ul>
+
+<!--Dropdown menu of admin panel-->
+<ul id='dropdown4' class="dropdown-content">
+        <li><a href="javascript:0">Rules</a></li>
+        <li><a href="javascript:0">Sentences</a></li>
+        <li><a href="javascript:0">Words</a></li>
+        <li><a href="javascript:0">Users</a></li>
+        <li><a href="javascript:0">Guesses the images</a></li>
+</ul>

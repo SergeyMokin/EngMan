@@ -14,7 +14,7 @@ export class RulesListFormComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
 
-  ngOnInit() 
+  ngOnInit(): void
   {
     this.OpenedRule = null;
     this.apiService.GetRules().subscribe(obj => 
@@ -33,12 +33,12 @@ export class RulesListFormComponent implements OnInit {
       )
   }
 
-  OpenModalDialog(rule:RuleModel)
+  OpenModalDialog(rule:RuleModel): void
   {
     this.OpenedRule = rule;
   }
 
-  CloseModalDialog()
+  CloseModalDialog(): void
   {
     document.getElementById("ModalDialog").scrollTop = 0;
     this.OpenedRule = null;

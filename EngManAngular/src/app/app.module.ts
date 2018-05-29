@@ -10,6 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { RulesListFormComponent } from './rules-list-form/rules-list-form.component';
 import { AppInterceptor } from './app.interceptor'
 import { ApiService } from './api.service';
+import { PracticeRulesPageComponent } from './practice-rules-page/practice-rules-page.component';
 
 
 const routes = [
@@ -20,6 +21,10 @@ const routes = [
   {
     path: 'rules',
     component: RulesListFormComponent
+  },
+  {
+    path: 'practice-rules',
+    component: PracticeRulesPageComponent
   }
 ]
 
@@ -28,7 +33,8 @@ const routes = [
   declarations: [
     AppComponent,
     LoginFormPageComponent,
-    RulesListFormComponent
+    RulesListFormComponent,
+    PracticeRulesPageComponent
   ],
   imports: [
     BrowserModule,

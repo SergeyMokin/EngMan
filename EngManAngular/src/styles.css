@@ -71,3 +71,23 @@ input:not(.browser-default):focus:not([readonly])
 {
     top: 100px;
 }
+
+.dropdown-content
+{
+    top: 64px !important;
+    opacity: 1 !important;
+}
+
+.dropdown-content li > a, .dropdown-content li > span
+{
+    color: darkred !important;
+}
+
+.card-panel:hover
+{
+    position:relative;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    transition: .2s all;
+    z-index: 25;
+}
