@@ -1,0 +1,63 @@
+import { Injectable } from "@angular/core"
+
+@Injectable()
+export class RegistrationUserModel
+{
+    public Id: number;
+
+    public FirstName: string;
+
+    public LastName: string;
+    
+    public Email: string;
+
+    public Password: string;
+
+    public Role: string = `user`;
+}
+
+@Injectable()
+export class UserModel
+{
+    public Email: string;
+    public Password: string;
+}
+
+@Injectable()
+export class UserViewModel
+{
+    public Id: number;
+
+    public FirstName: string;
+
+    public LastName: string;
+
+    public Email: string;
+
+    public Role: string;
+}
+
+@Injectable()
+export class UserHubConnectModel
+{
+    public Id: number;
+
+    public ConnectionId: string;
+
+    public FirstName: string;
+
+    public LastName: string;
+
+    public Email: string;
+
+    public Role: string;
+}
+
+@Injectable()
+export class RuleModel
+{
+    public RuleId: number
+    public Title: string
+    public Text: string
+    public Category: string
+}

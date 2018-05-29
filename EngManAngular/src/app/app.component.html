@@ -1,0 +1,28 @@
+<nav>
+    <div class="nav-wrapper">
+      <a (mouseenter)="ShowProfileSettings()" (mouseleave)="CloseProfileSettings()" href="javascript:0" class="brand-logo left"><img title="home" style="height: 64px; padding-left: 10px;filter: invert(100%);" src="http://static1.squarespace.com/static/579012ce15d5dbcc832517ab/t/57a37e16ff7c508424d40845/1470332439749/CJ-favicon.png?format=1000w"></a>
+      <a class="brand-logo center">{{this.router.url.substring(1).toUpperCase()}}</a>
+      <ul id="nav-mobile" class="right">
+        <li><a [routerLink]="['login']"><i class="material-icons" title="home">home</i></a></li>
+        <li><a [routerLink]="['login']"><i class="material-icons" title="grammar">library_books</i></a></li>
+        <li><a [routerLink]="['login']"><i class="material-icons" title="trainings">lightbulb_outline</i></a></li>
+        <li><a [routerLink]="['login']"><i class="material-icons" title="dictionary">sort_by_alpha</i></a></li>
+        <li><a [routerLink]="['login']"><i class="material-icons" title="admin panel">build</i></a></li>
+      </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <router-outlet></router-outlet>
+<div>
+
+<div class="engman-footer">
+    <div class="container center">
+        © 2018 <a href="https://lingualeo.com/" class="white-text" target="_blank">lingualeo.com</a> - from this source was taken material
+    </div>
+</div>
+
+<div class="profile-popup" [style.display]="EnableProfileSetting?'block':'none'" (mouseenter)="ShowProfileSettings()" (mouseleave)="CloseProfileSettings()">
+    <a class="waves-effect waves-light btn" style="width:173px">Settings</a>
+    <a class="waves-effect waves-light btn" (click)="Logout()" style="width:173px; margin-top: 2px;">Logout</a>
+</div>

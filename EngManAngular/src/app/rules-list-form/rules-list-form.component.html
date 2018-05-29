@@ -1,0 +1,18 @@
+<div class="modal modal-fixed-footer" [style.display]="OpenedRule==null?'none':'block'">
+    <div id="ModalDialog" class="modal-content">
+      <h4>{{OpenedRule == null ? "" : OpenedRule.Title}}</h4>
+      <p [innerHTML] = "OpenedRule == null ? '' : OpenedRule.Text"></p>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat" (click)="CloseModalDialog()">Ok</a>
+      </div>
+</div>
+
+<div class="row">
+    <div *ngFor="let rule of Rules" class="col s6 m3" (click) = "OpenModalDialog(rule)">
+      <div class="card-panel teal" style="background-color: darkred !important; height: 100px;">
+        <span class="white-text">{{rule.Title}}
+        </span>
+      </div>
+    </div>
+</div>

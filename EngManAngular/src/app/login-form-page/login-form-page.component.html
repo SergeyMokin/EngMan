@@ -1,0 +1,63 @@
+<div class="column center">
+    <!--Sign In-->
+    <form class="col" [style.display]="RegistrationFormEnable==false?'block':'none'">
+      <div class="row">
+          <p class="center flow-text">Sign In</p>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="email" type="email" class="validate" [(ngModel)]="User.Email" [ngModelOptions]="{standalone: true}">
+          <label for="email">Email</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="password" type="password" class="validate" [(ngModel)]="User.Password" [ngModelOptions]="{standalone: true}">
+          <label for="password">Password</label>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn waves-effect waves-light" type="submit" name="action" (click)="SignIn()">Sign in
+            <i class="material-icons right">send</i>
+        </button>
+        <p><a href="javascript:0" (click)="ChangeForm()">Sign Up</a></p>
+      </div>
+    </form>
+
+    <!--Sign Up-->
+    <form class="col" [style.display]="RegistrationFormEnable==true?'block':'none'">
+        <div class="row">
+            <p class="center flow-text">Sign Up</p>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+              <input id="first_name" type="text" class="validate" [(ngModel)]="RegistrationUser.FirstName" [ngModelOptions]="{standalone: true}">
+              <label for="first_name">First name</label>
+          </div>
+          <div class="input-field col s6">
+              <input id="last_name" type="text" class="validate" [(ngModel)]="RegistrationUser.LastName" [ngModelOptions]="{standalone: true}">
+              <label for="last_name">Last Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+            <input id="emailReg" type="email" class="validate" [(ngModel)]="RegistrationUser.Email" [ngModelOptions]="{standalone: true}">
+            <label for="emailReg">Email</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="passwordReg" type="password" class="validate" [(ngModel)]="RegistrationUser.Password" [ngModelOptions]="{standalone: true}">
+            <label for="passwordReg">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn waves-effect waves-light" type="submit" name="action" (click)="SignUp()">Sign Up
+              <i class="material-icons right">send</i>
+          </button>
+          <p><a href="javascript:0" (click)="ChangeForm()">Sign In</a></p>
+        </div>
+      </form>
+
+      <div class="container" [style.display]="ErrorMessage.length > 0 ?'block':'none'">
+        <div class="row red-text">
+            {{ErrorMessage}}
+        </div>
+      </div>
+  </div>
