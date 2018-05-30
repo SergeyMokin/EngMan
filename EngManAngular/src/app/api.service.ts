@@ -1,16 +1,21 @@
 import { Injectable } from "@angular/core";
-import { RuleModel, UserModel, UserViewModel, RegistrationUserModel } from './app.models'
+import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel } from './app.models'
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class ApiService
 {
-    public readonly Url:string = 'http://ecsc00a01a18/api';
+    private readonly Url:string = 'http://ecsc00a01a18/api';
 
-    public BearerToken:string;
+    public RoleOfUser: string = ``;
 
-    constructor(private http: HttpClient) {}
+    public BearerToken:string = ``;
+
+    constructor(private http: HttpClient) 
+    {
+
+    }
 
     //Account api.
     SetToken(token:string): void
@@ -38,6 +43,11 @@ export class ApiService
         return this.http.post(this.Url + `/account/logout`, {});
     }
 
+    GetUserData(): Observable<UserViewModel>
+    {
+        return this.http.get<UserViewModel>(this.Url + `/account/getuserdata`);
+    }
+
     //Rule api.
     GetRules(): Observable<RuleModel[]> 
     {
@@ -49,12 +59,18 @@ export class ApiService
     {
         return this.http.get<string[]>(this.Url + `/sentencetask/GetAllCategories`);
     }
+
+    GetSenteceTask(category:string, indexes:string): Observable<SentenceTaskModel>
+    {
+        return this.http.get<SentenceTaskModel>(this.Url + `/sentencetask/gettask?category=${category}&indexes=${indexes}`)
+    }
+
+    CheckTheAnswerOfSentenceTask(sentence: SentenceTaskModel): Observable<boolean>
+    {
+        return this.http.post<boolean>(this.Url + `/sentencetask/verificationcorrectness`, sentence)
+    }
     
     // url = http://*host*/api
-    // /account/login post
-    // /account/registration post
-    // /account/logout post
-    // /account/getuserdata get
     // /account/getuserdictionary get
     // /account/deletewordfromdictionary/ delete
     // /account/addwordtodictionary/ post
@@ -65,7 +81,6 @@ export class ApiService
     // /account/edituser put
     // /account/GetAllCategoriesOfDictionary get
     // /account/GetByCategoryDictionary?category= get
-    // /rule/getallrules get
     // /rule/getrule/ get
     // /rule/addrule post
     // /rule/editrule put
@@ -77,7 +92,6 @@ export class ApiService
     // /sentencetask/verificationcorrectness post
     // /word/getwordmap?category=' + category + '&indexes=' + indexes + '&translate= get
     // /word/VerificationCorrectness?translate=' + translate post
-    // /sentencetask/GetAllCategories get
     // /sentencetask/GetAllTasks get
     // /sentencetask/GetTaskById/ get
     // /sentencetask/AddTask post

@@ -1,12 +1,14 @@
-<div class="modal modal-fixed-footer" [style.display]="OpenedRule==null?'none':'block'">
-    <div id="ModalDialog" class="modal-content">
-      <h4>{{OpenedRule == null ? "" : OpenedRule.Title}}</h4>
-      <p [innerHTML] = "OpenedRule == null ? '' : OpenedRule.Text"></p>
-    </div>
-    <div class="modal-footer">
-        <a class="btn" style="margin-right:3px" (click)="0">Practice</a>
-        <a class="btn" (click)="CloseModalDialog()">Ok</a>
+<div class="popup-background" [style.display]="OpenedRule==null?'none':'block'">
+  <div class="modal modal-fixed-footer" [style.display]="OpenedRule==null?'none':'block'">
+      <div id="ModalDialog" class="modal-content">
+        <h4>{{OpenedRule == null ? "" : OpenedRule.Title}}</h4>
+        <p [innerHTML] = "OpenedRule == null ? '' : OpenedRule.Text"></p>
       </div>
+      <div class="modal-footer">
+          <a class="btn" style="margin-right:3px" (click)="GoPractice(OpenedRule)">Practice</a>
+          <a class="btn" (click)="CloseModalDialog()">Ok</a>
+        </div>
+  </div>
 </div>
 
 <div class="row">

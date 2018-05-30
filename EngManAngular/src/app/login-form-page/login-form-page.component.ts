@@ -55,6 +55,7 @@ export class LoginFormPageComponent implements OnInit {
         {
           this.apiService.BearerToken = `bearer ` + obj.access_token
           this.cookieService.set('user.login.token.engmanangular', `bearer ` + obj.access_token);
+          this.GetUserData();
           this.router.navigate(['rules']);
         }
         else
@@ -84,6 +85,7 @@ export class LoginFormPageComponent implements OnInit {
         {
           this.apiService.BearerToken = `bearer ` + obj.access_token
           this.cookieService.set('user.login.token.engmanangular', `bearer ` + obj.access_token);
+          this.GetUserData();
           this.router.navigate(['rules']);
         }
         else
@@ -98,6 +100,17 @@ export class LoginFormPageComponent implements OnInit {
         this.InProgress = false;
       })
     this.apiService.SetToken('');
+  }
+
+  GetUserData(): void
+  {
+    this.apiService.GetUserData().subscribe(
+      obj => 
+      {
+        this.apiService.RoleOfUser = obj.Role;
+      },
+      error => console.log(error)
+    )
   }
 
   ClearForm(): void

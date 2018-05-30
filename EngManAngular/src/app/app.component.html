@@ -6,13 +6,13 @@
             style="height: 64px; padding-left: 10px;filter: invert(100%);" 
             src="http://static1.squarespace.com/static/579012ce15d5dbcc832517ab/t/57a37e16ff7c508424d40845/1470332439749/CJ-favicon.png?format=1000w">
       </a>
-      <a class="brand-logo center">{{this.router.url.substring(1).toUpperCase()}}</a>
+      <a class="brand-logo center">{{GetCurrentPage()}}</a>
       <ul id="nav-mobile" class="right">
         <li><a [routerLink]="['login']"><i class="material-icons" title="home">home</i></a></li>
-        <li><a [routerLink]="['login']"><i class="material-icons" title="dictionary">sort_by_alpha</i></a></li>
-        <li><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown2' title="grammar">library_books</i></a></li>
-        <li><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown3' title="trainings">lightbulb_outline</i></a></li>
-        <li><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown4' title="admin panel">build</i></a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a [routerLink]="['login']"><i class="material-icons" title="dictionary">sort_by_alpha</i></a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown2' title="grammar">library_books</i></a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown3' title="trainings">lightbulb_outline</i></a></li>
+        <li [style.display]="apiService.RoleOfUser === 'admin' ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown4' title="admin panel">build</i></a></li>
       </ul>
     </div>
 </nav>

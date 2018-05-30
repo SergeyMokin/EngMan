@@ -91,3 +91,14 @@ input:not(.browser-default):focus:not([readonly])
     transition: .2s all;
     z-index: 25;
 }
+
+.popup-background
+{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.select-wrapper input.select-dropdown:focus {
+    border-bottom: 1px solid darkred !important;
+}

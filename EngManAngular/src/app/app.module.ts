@@ -25,6 +25,10 @@ const routes = [
   {
     path: 'practice-rules',
     component: PracticeRulesPageComponent
+  },
+  {
+    path: '**', 
+    redirectTo: '/rules'
   }
 ]
 

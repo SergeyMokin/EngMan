@@ -61,3 +61,15 @@ export class RuleModel
     public Text: string
     public Category: string
 }
+
+@Injectable()
+export class SentenceTaskModel
+{
+    public SentenceTaskId: number;
+    
+    public Sentence: string;
+    
+    public Category: string;
+    
+    public Translate: string;
+}

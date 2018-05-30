@@ -1,3 +1,25 @@
-<p>
-  practice-rules-page works!
-</p>
+<div class="popup-background" [style.display]="Task==null?'none':'block'">
+    <div class="modal modal-fixed-footer" style="margin-top: 50px; height: 350px" [style.display]="Task==null?'none':'block'">
+        <div id="ModalDialog" class="modal-content">
+          <h4>{{Task == null ? "" : Task.Translate}}</h4>
+          <div *ngFor="let word of SplitedSentence" class="btn grey" style="margin-left:3px" [id]="word" (click)="ChooseWord(word)">{{word}}</div>
+          <div><br/><br/>> {{AnswerTask}}</div>
+          <div id="msg-result-form" class="green-text"><br/>{{ResultMessageOfTask}}</div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn disabled" style="margin-right:3px;" id="close-btn" (click)="Close()">Close</a>
+            <a class="btn" style="margin-right:3px;" id="end-btn" (click)="EndOfTask()">End</a>
+            <a class="btn" style="margin-right:3px" id="next-btn" (click)="Next()">Next</a>
+            <a class="btn" style="margin-right:3px" id="refresh-btn" (click)="Refresh()">Refresh</a>
+            <a class="btn" (click)="0" id="check-btn" (click)="Check()">Check</a>
+        </div>
+    </div>
+</div>
+<div style="margin-top:25px" class="input-field col s12">
+    <select id="selectCategoryOfTask">
+      <option value="" disabled selected>Choose your option</option>
+    </select>
+    <label>Choose category</label>
+</div>
+<a class="btn right" (click)="Start(null)">Start</a>
+<p class="red-text">{{ErrorMessage}}</p>

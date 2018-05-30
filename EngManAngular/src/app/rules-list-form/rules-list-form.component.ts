@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RuleModel } from '../app.models';
 import { ApiService } from '../api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rules-list-form',
@@ -12,7 +13,7 @@ export class RulesListFormComponent implements OnInit {
 
   private OpenedRule: RuleModel;
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private router: Router) { }
 
   ngOnInit(): void
   {
@@ -42,6 +43,11 @@ export class RulesListFormComponent implements OnInit {
   {
     document.getElementById("ModalDialog").scrollTop = 0;
     this.OpenedRule = null;
+  }
+
+  GoPractice(rule: RuleModel): void
+  {
+    this.router.navigate(["/practice-rules"], {queryParams: {'category': rule.Category}});
   }
 
 }

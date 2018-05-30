@@ -26,10 +26,7 @@ export class AppComponent implements OnInit{
     if(this.cookieService.get('user.login.token.engmanangular').length > 0)
     {
       this.apiService.BearerToken = this.cookieService.get('user.login.token.engmanangular');
-      if(this.router.url == '/')
-      {
-        this.router.navigate(["rules"]);
-      }
+      this.GetUserData();
       return;
     }
     this.router.navigate(["login"]);
@@ -42,8 +39,33 @@ export class AppComponent implements OnInit{
     {
       this.cookieService.delete(`user.login.token.engmanangular`);
       this.apiService.BearerToken = ``;
+      this.apiService.RoleOfUser = ``;
       this.router.navigate([`login`]);
     })
   }
 
+  GetUserData(): void
+  {
+    this.apiService.GetUserData().subscribe(
+      obj => 
+      {
+        this.apiService.RoleOfUser = obj.Role;
+      },
+      error => console.log(error)
+    )
+  }
+
+  GetCurrentPage(): string
+  {
+    let urlToReturn: string = ''
+    if(this.router.url.indexOf('?') > 0)
+    {
+      urlToReturn = this.router.url.substring(1, this.router.url.indexOf('?')).toUpperCase();
+    }
+    else
+    {
+      urlToReturn = this.router.url.substring(1).toUpperCase();
+    }
+    return urlToReturn;
+  }
 }
