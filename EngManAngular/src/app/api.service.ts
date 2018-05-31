@@ -48,6 +48,16 @@ export class ApiService
         return this.http.get<UserViewModel>(this.Url + `/account/getuserdata`);
     }
 
+    ChangePassword(id: number, oldpassword: string, newpassword: string)
+    {
+        return this.http.put(this.Url + `/account/ChangePassword?id=${id}&oldpassword=${oldpassword}&newpassword=${newpassword}`, {});
+    }
+
+    EditCurrentProfile(user: UserViewModel)
+    {
+        return this.http.put(this.Url + '/account/edituser', user);
+    }
+
     //Rule api.
     GetRules(): Observable<RuleModel[]> 
     {
@@ -77,8 +87,6 @@ export class ApiService
     // /account/getallusers get
     // /account/deleteuser/ delete
     // /account/changerole put
-    // /account/ChangePassword?id= put
-    // /account/edituser put
     // /account/GetAllCategoriesOfDictionary get
     // /account/GetByCategoryDictionary?category= get
     // /rule/getrule/ get

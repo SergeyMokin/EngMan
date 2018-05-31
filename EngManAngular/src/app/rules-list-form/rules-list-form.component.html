@@ -1,3 +1,4 @@
+<!--Popup-window-->
 <div class="popup-background" [style.display]="OpenedRule==null?'none':'block'">
   <div class="modal modal-fixed-footer" [style.display]="OpenedRule==null?'none':'block'">
       <div id="ModalDialog" class="modal-content">
@@ -11,6 +12,7 @@
   </div>
 </div>
 
+<!--Main-window-->
 <div class="row">
     <div *ngFor="let rule of Rules" class="col s6 m3" (click) = "OpenModalDialog(rule)">
       <div class="card-panel teal" style="background-color: darkred !important; height: 100px;">

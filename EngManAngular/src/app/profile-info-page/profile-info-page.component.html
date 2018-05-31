@@ -1,3 +1,51 @@
-<p>
-  profile-info-page works!
-</p>
+<!--Main-Window-->
+<div class="row">
+  <form class="col s12">
+    <div class="row" style="margin-top:25px">
+      <div class="input-field col s6">
+        <input id="first_name_input_field" type="text" class="validate" [(ngModel)]="CurrentUser.FirstName" [ngModelOptions]="{standalone:true}">
+        <label for="first_name_input_field" id="first_name_label">First Name</label>
+      </div>
+      <div class="input-field col s6">
+        <input id="last_name_input_field" type="text" class="validate" [(ngModel)]="CurrentUser.LastName" [ngModelOptions]="{standalone:true}">
+        <label for="last_name_input_field" id="last_name_label">Last Name</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s6">
+        <input id="email_input_field" type="email" class="validate" [(ngModel)]="CurrentUser.Email" [ngModelOptions]="{standalone:true}">
+        <label for="email_input_field" id="email_label">Email</label>
+      </div>
+      <div class="input-field col s6">
+        <input disabled id="role_input_field" type="text" class="validate" [(ngModel)]="CurrentUser.Role" [ngModelOptions]="{standalone:true}">
+        <label for="role_input_field" id="role_label">Role</label>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <a class="left green-text">{{SuccessfullyMessage}}</a>
+    <a class="left red-text">{{ErrorMessageEditProfile}}</a>
+    <a class="btn right" (click)="SaveChanges()">Save Changes</a>
+  </div> 
+  <div class="row"><a href="javascript:0" style="margin-right:10px" class="right" (click)="ChangeOpenedChangePassword()" id="change_pass_btn">Change Password</a></div>
+</div>
+<div class="row" [style.display]="OpenedChangePassword?'block':'none'">
+  <div class="col s12">
+    <div class="row">
+        <div class="input-field col s12">
+          <input id="oldpassword_input_field" type="password" class="validate" [(ngModel)]="OldPassword">
+          <label for="oldpassword_input_field" id="oldpassword_label">Old Password</label>
+        </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="newpassword_input_field" type="password" class="validate" [(ngModel)]="NewPassword">
+        <label for="newpassword_input_field" id="newpassword_label">New Password</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <a class="left red-text">{{ErrorMessageChangePassword}}</a>
+    <a class="btn right" (click)="ChangePassword()">Change Password</a>
+  </div> 
+</div>
