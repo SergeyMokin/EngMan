@@ -13,7 +13,7 @@ export class PracticeRulesPageComponent implements OnInit {
   private Categories: string[];
   private ErrorMessage: string;
 
-  private Indexes: string = `,`;
+  private Indexes: string = `_`;
   private Task: SentenceTaskModel;
   private SplitedSentence: string[] = [];
 
@@ -48,7 +48,6 @@ export class PracticeRulesPageComponent implements OnInit {
             {
               let doc:any;
               doc = document.getElementById("selectCategoryOfTask");
-              console.log(doc)
               doc.options[doc.selectedIndex].text = queryParam['category']; 
               M.FormSelect.init(document.querySelectorAll('select'), null);   
             }
@@ -66,6 +65,14 @@ export class PracticeRulesPageComponent implements OnInit {
 
   Start(category:string): void
   {
+    this.ErrorMessage = ``;
+    this.CountOftrying = 0;
+    this.Indexes = `_`;
+    this.AnswerTask = ``;
+    this.SplitedSentence = [];
+    this.ResultMessageOfTask = ``;
+    this.CountOfCorrectAnswers = 0;
+    this.TotalCountOfTask = 0;
     document.getElementById("next-btn").className = "btn";
     document.getElementById("refresh-btn").className = "btn";
     document.getElementById("check-btn").className = "btn";
@@ -117,16 +124,22 @@ export class PracticeRulesPageComponent implements OnInit {
         {
           this.ResultMessageOfTask = `Correct answer.`;
           document.getElementById("msg-result-form").className = "green-text";
-          if(this.CountOftrying==0)
+          if(this.CountOftrying == 0)
           {
             this.CountOfCorrectAnswers++;
           }
           this.CountOftrying = 0;
           document.getElementById("check-btn").className = "btn disabled";
           document.getElementById("refresh-btn").className = "btn disabled";
+          if(this.TotalCountOfTask == 10)
+          {
+            this.EndOfTask();
+            return;
+          }
         }
         else
         {
+          this.CountOftrying++;
           this.ResultMessageOfTask = `Incorrect answer.`;
           document.getElementById("msg-result-form").className = "red-text";
         }
@@ -138,9 +151,8 @@ export class PracticeRulesPageComponent implements OnInit {
 
   Next(): void
   {
-    if(this.TotalCountOfTask == 9)
+    if(this.TotalCountOfTask == 10)
     {
-      this.TotalCountOfTask++;
       this.EndOfTask();
       return;
     }
@@ -154,8 +166,14 @@ export class PracticeRulesPageComponent implements OnInit {
         this.SplitedSentence = this.Task.Sentence.split(" ");
         this.Indexes += this.Task.SentenceTaskId + ",";
         this.TotalCountOfTask++;
+        this.CountOftrying = 0;
       },
-      error => this.ErrorMessage = error.message
+      error => 
+      {
+        this.ErrorMessage = error.message;
+        this.ResultMessageOfTask = error.message;
+        document.getElementById("msg-result-form").className = "red-text";
+      }
     );
   }
 
@@ -180,7 +198,7 @@ export class PracticeRulesPageComponent implements OnInit {
     this.Task = null;
     this.ErrorMessage = ``;
     this.CountOftrying = 0;
-    this.Indexes = `,`;
+    this.Indexes = `_`;
     this.AnswerTask = ``;
     this.SplitedSentence = [];
     this.ResultMessageOfTask = ``;

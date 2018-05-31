@@ -29,8 +29,8 @@
 
 <!--Dropdown menu of profile-->
 <ul id='dropdown1' class="dropdown-content">
-        <li><a href="javascript:0">Settings</a></li>
-        <li><a href="javascript:0" (click)="Logout()">Logout</a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a [routerLink]="['profile-info']">Settings</a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0" (click)="Logout()">Logout</a></li>
 </ul>
 
 <!--Dropdown menu of grammar-->

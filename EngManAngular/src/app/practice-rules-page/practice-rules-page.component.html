@@ -15,11 +15,9 @@
         </div>
     </div>
 </div>
-<div style="margin-top:25px" class="input-field col s12">
-    <select id="selectCategoryOfTask">
-      <option value="" disabled selected>Choose your option</option>
-    </select>
-    <label>Choose category</label>
-</div>
-<a class="btn right" (click)="Start(null)">Start</a>
-<p class="red-text">{{ErrorMessage}}</p>
+<label style="position:relative;top:50px;">Choose category</label>  
+<select id="selectCategoryOfTask" class="browser-default" style="margin-top: 50px;">
+    <option value="" disabled selected>Choose your option</option>
+</select>
+<a class="btn right" style="margin-top:25px" (click)="Start(null)">Start</a>
+<p class="red-text" style="margin-top:25px">{{ErrorMessage}}</p>
