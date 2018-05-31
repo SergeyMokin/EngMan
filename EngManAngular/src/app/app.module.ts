@@ -11,6 +11,7 @@ import { RulesListFormComponent } from './rules-list-form/rules-list-form.compon
 import { AppInterceptor } from './app.interceptor'
 import { ApiService } from './api.service';
 import { PracticeRulesPageComponent } from './practice-rules-page/practice-rules-page.component';
+import { ProfileInfoPageComponent } from './profile-info-page/profile-info-page.component';
 
 
 const routes = [
@@ -27,6 +28,10 @@ const routes = [
     component: PracticeRulesPageComponent
   },
   {
+    path: 'profile-info',
+    component: ProfileInfoPageComponent
+  },
+  {
     path: '**', 
     redirectTo: '/rules'
   }
@@ -38,7 +43,8 @@ const routes = [
     AppComponent,
     LoginFormPageComponent,
     RulesListFormComponent,
-    PracticeRulesPageComponent
+    PracticeRulesPageComponent,
+    ProfileInfoPageComponent
   ],
   imports: [
     BrowserModule,
