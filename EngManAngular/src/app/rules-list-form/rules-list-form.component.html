@@ -15,7 +15,7 @@
 <!--Main-window-->
 <div class="row">
     <div *ngFor="let rule of Rules" class="col s6 m3" (click) = "OpenModalDialog(rule)">
-      <div class="card-panel teal" style="background-color: darkred !important; height: 100px;">
+      <div class="card-panel teal" style="background-color: darkred !important; height: 100px;" hoveredRule>
         <span class="white-text">{{rule.Title}}
         </span>
       </div>

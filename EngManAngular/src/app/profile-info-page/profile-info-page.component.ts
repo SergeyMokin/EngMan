@@ -18,6 +18,7 @@ export class ProfileInfoPageComponent implements OnInit, DoCheck {
 
   constructor(private apiService: ApiService) 
   { 
+    
   }
 
   ngOnInit(): void
@@ -33,7 +34,7 @@ export class ProfileInfoPageComponent implements OnInit, DoCheck {
     );
   }
 
-  ngDoCheck()
+  ngDoCheck(): void
   {
     document.getElementById("first_name_label").className = "active";
     document.getElementById("last_name_label").className = "active";

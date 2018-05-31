@@ -1,0 +1,28 @@
+<label style="position:relative;top:50px;">Choose category</label>  
+<select id="selectCategoryOfDictionary" class="browser-default" style="margin-top: 50px;" (change)="ChangeSelector()">
+    <option value="" disabled selected>Choose your option</option>
+</select>
+<div class="input-field col s12" style="margin-top: 25px" [style.display]="ChoosenCategory == '' ? 'none' : 'block'">
+    <input id="search" type="text" class="validate" [(ngModel)]="SearchString">
+    <label for="search">Search</label>
+</div>
+<p class="red-text" style="margin-top:25px">{{ErrorMessage}}</p>
+<table [style.display]="ChoosenCategory == '' ? 'none' : 'table'">
+    <thead>
+      <tr>
+          <th>Original</th>
+          <th>Translate</th>
+          <th>Transcription</th>
+          <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let word of UserDictionary.Words | searchUserDictionary: SearchString">
+        <td>{{word.Original}}</td>
+        <td>{{word.Translate}}</td>
+        <td>{{word.Transcription}}</td>
+        <td><a class="btn" (click)="DeleteWord(word)">Delete</a></td>
+      </tr>
+    </tbody>
+</table>

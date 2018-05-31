@@ -83,7 +83,7 @@ input:not(.browser-default):focus:not([readonly])
     color: darkred !important;
 }
 
-.card-panel:hover
+.hovered-rule
 {
     position:relative;
     transform: scale(1.05);
@@ -97,6 +97,7 @@ input:not(.browser-default):focus:not([readonly])
     position: fixed;
     width: 100%;
     height: 100%;
+    z-index: 9999999;
 }
 
 .select-wrapper input.select-dropdown:focus {

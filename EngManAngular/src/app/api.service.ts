@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel } from './app.models'
+import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel, UserDictionaryModel } from './app.models'
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -58,6 +58,22 @@ export class ApiService
         return this.http.put(this.Url + '/account/edituser', user);
     }
 
+    GetUserDictionaryCategories(): Observable<string[]>
+    {
+        return this.http.get<string[]>(this.Url + '/account/GetAllCategoriesOfDictionary');
+    }
+
+    GetUserDictionaryByCategory(category: string): Observable<UserDictionaryModel>
+    {
+        return this.http.get<UserDictionaryModel>(this.Url + `/account/GetByCategoryDictionary?category=${category}`)
+    }
+    // /account/deletewordfromdictionary/ delete
+
+    DeleteUserDictionaryWord(id: number): Observable<boolean>
+    {
+        return this.http.delete<boolean>(this.Url + `/account/deletewordfromdictionary?id=${id}`);
+    }
+
     //Rule api.
     GetRules(): Observable<RuleModel[]> 
     {
@@ -79,16 +95,14 @@ export class ApiService
     {
         return this.http.post<boolean>(this.Url + `/sentencetask/verificationcorrectness`, sentence)
     }
+
     
     // url = http://*host*/api
     // /account/getuserdictionary get
-    // /account/deletewordfromdictionary/ delete
     // /account/addwordtodictionary/ post
     // /account/getallusers get
     // /account/deleteuser/ delete
     // /account/changerole put
-    // /account/GetAllCategoriesOfDictionary get
-    // /account/GetByCategoryDictionary?category= get
     // /rule/getrule/ get
     // /rule/addrule post
     // /rule/editrule put

@@ -12,6 +12,9 @@ import { AppInterceptor } from './app.interceptor'
 import { ApiService } from './api.service';
 import { PracticeRulesPageComponent } from './practice-rules-page/practice-rules-page.component';
 import { ProfileInfoPageComponent } from './profile-info-page/profile-info-page.component';
+import { UserDictionaryPageComponent } from './user-dictionary-page/user-dictionary-page.component';
+import { SearchUserDictionaryPipe } from './user-dictionary-page/user-dictionary-page.pipe';
+import { HoveredRuleDirective } from './rules-list-form/rules-list-form.directive';
 
 
 const routes = [
@@ -32,6 +35,10 @@ const routes = [
     component: ProfileInfoPageComponent
   },
   {
+    path: 'user-dictionary',
+    component: UserDictionaryPageComponent
+  },
+  {
     path: '**', 
     redirectTo: '/rules'
   }
@@ -44,7 +51,10 @@ const routes = [
     LoginFormPageComponent,
     RulesListFormComponent,
     PracticeRulesPageComponent,
-    ProfileInfoPageComponent
+    ProfileInfoPageComponent,
+    UserDictionaryPageComponent,
+    SearchUserDictionaryPipe,
+    HoveredRuleDirective
   ],
   imports: [
     BrowserModule,

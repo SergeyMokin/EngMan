@@ -73,3 +73,20 @@ export class SentenceTaskModel
     
     public Translate: string;
 }
+
+@Injectable()
+export class UserDictionaryModel
+{
+    public User: UserViewModel;
+    public Words: WordModel[];
+}
+
+@Injectable()
+export class WordModel
+{
+    public WordId: number;
+    public Original: string;
+    public Translate: string;
+    public Category: string;
+    public Transcription: string;
+}

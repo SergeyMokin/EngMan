@@ -9,7 +9,7 @@
       <a class="brand-logo center">{{GetCurrentPage()}}</a>
       <ul id="nav-mobile" class="right">
         <li><a [routerLink]="['login']"><i class="material-icons" title="home">home</i></a></li>
-        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a [routerLink]="['login']"><i class="material-icons" title="dictionary">sort_by_alpha</i></a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a [routerLink]="['user-dictionary']"><i class="material-icons" title="dictionary">sort_by_alpha</i></a></li>
         <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown2' title="grammar">library_books</i></a></li>
         <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown3' title="trainings">lightbulb_outline</i></a></li>
         <li [style.display]="apiService.RoleOfUser === 'admin' ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown4' title="admin panel">build</i></a></li>
