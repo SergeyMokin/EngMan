@@ -1,6 +1,43 @@
+<div class="popup-background" [style.display]="Task==null?'none':'block'">
+    <div class="modal modal-fixed-footer" style="margin-top: 50px; height: 550px" [style.display]="Task==null?'none':'block'">
+        <div id="ModalDialog" class="modal-content">
+          <h4 class="center">{{(Task == null ? "" : Task.Word).toUpperCase()}}</h4>
+          <div class="row" *ngFor="let word of Task == null ? [] : Task.Answers">
+            <div class="btn grey" style="margin:3px; width: 100%;" [id]="word" (click)="ChooseWord(word)">{{word}}</div>
+          </div>
+          <div id="msg-result-form" class="green-text"><br/>{{ResultMessageOfTask}}</div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn disabled" style="margin-right:3px;" id="close-btn" (click)="Close()">Close</a>
+            <a class="btn" style="margin-right:3px;" id="end-btn" (click)="EndOfTask()">End</a>
+            <a class="btn" style="margin-right:3px" id="next-btn" (click)="Next()">Next</a>
+            <a class="btn" (click)="0" id="check-btn" (click)="Check()">Check</a>
+        </div>
+    </div>
+</div>
 <label style="position:relative;top:50px;">Choose category</label>  
-<select id="selectCategoryOfTask" class="browser-default" style="margin-top: 50px;">
+<select id="selectCategoryOfTask" class="browser-default" style="margin-top: 50px;" (change)="UpdateCategory()">
     <option value="" disabled selected>Choose your option</option>
+    <option value="" *ngFor="let c of Categories">{{c}}</option>
 </select>
-<a class="btn right" style="margin-top:25px" (click)="Start()">Start</a>
+<a class="btn right" style="margin-top:25px" (click)="Start(null)">Start</a>
 <p class="red-text" style="margin-top:25px">{{ErrorMessage}}</p>
+<table [style.display]="ChoosenCategory === '' ? 'none' : 'table'" style = "margin-bottom: 25px;">
+    <thead>
+      <tr>
+          <th>Original</th>
+          <th>Translate</th>
+          <th>Transcription</th>
+          <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let word of WordsByCategory">
+        <td>{{word.Original}}</td>
+        <td>{{word.Translate}}</td>
+        <td>{{word.Transcription}}</td>
+        <td><a class="btn" (click)="AddToDictionary(word)">Add</a></td>
+      </tr>
+    </tbody>
+</table>

@@ -108,6 +108,7 @@ export class LoginFormPageComponent implements OnInit {
       obj => 
       {
         this.apiService.RoleOfUser = obj.Role;
+        this.apiService.UserId = obj.Id;
       },
       error => console.log(error)
     )

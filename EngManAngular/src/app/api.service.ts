@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel, UserDictionaryModel } from './app.models'
+import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel, UserDictionaryModel, WordTaskModel, WordModel } from './app.models'
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -9,6 +9,8 @@ export class ApiService
     private readonly Url:string = 'http://ecsc00a01a18/api';
 
     public RoleOfUser: string = ``;
+
+    public UserId: number = -1;
 
     public BearerToken:string = ``;
 
@@ -73,6 +75,16 @@ export class ApiService
         return this.http.delete<string>(this.Url + `/account/deletewordfromdictionary?id=${id}`);
     }
 
+    public AddWordToDictionaryOfCurrentUser(id: number): Observable<boolean>
+    {
+        let toAdd: any = 
+        {
+            UserId: this.UserId,
+            WordId: id
+        }
+        return this.http.post<boolean>(this.Url + `/account/addwordtodictionary`, toAdd);
+    }
+
     //Rule api.
     public GetRules(): Observable<RuleModel[]> 
     {
@@ -100,6 +112,21 @@ export class ApiService
     {
         return this.http.get<string[]>(this.Url + `/word/GetAllCategories`);
     }
+
+    public GetWordTask(category: string, indexes: string, translate: boolean): Observable<WordTaskModel>
+    {
+        return this.http.get<WordTaskModel>(this.Url + `/word/getwordmap?category=${category}&indexes=${indexes}&translate=${translate}`);
+    }
+
+    public CheckTheAnswerOfWordTask(word: WordModel, translate: boolean): Observable<boolean>
+    {
+        return this.http.post<boolean>(this.Url + `/word/VerificationCorrectness?translate=${translate}`, word);
+    }
+
+    public GetWordsByCategory(category: string): Observable<WordModel[]>
+    {
+        return this.http.get<WordModel[]>(this.Url + `/word/GetByCategory?category=${category}`);
+    }
     
     // url = http://*host*/api
     // /account/getuserdictionary get
@@ -114,10 +141,6 @@ export class ApiService
     // /rule/GetAllCategories get
     // /rule/GetByCategory?category= get
     // /rule/addimages post
-    // /sentencetask/gettask?category=' + category + '&indexes= get
-    // /sentencetask/verificationcorrectness post
-    // /word/getwordmap?category=' + category + '&indexes=' + indexes + '&translate= get
-    // /word/VerificationCorrectness?translate=' + translate post
     // /sentencetask/GetAllTasks get
     // /sentencetask/GetTaskById/ get
     // /sentencetask/AddTask post

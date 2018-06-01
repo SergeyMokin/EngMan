@@ -1,6 +1,3 @@
-import { Injectable } from "@angular/core"
-
-@Injectable()
 export class RegistrationUserModel
 {
     public Id: number;
@@ -16,7 +13,6 @@ export class RegistrationUserModel
     public Role: string = `user`;
 }
 
-@Injectable()
 export class UserModel
 {
     public Email: string;
@@ -24,7 +20,6 @@ export class UserModel
     public Password: string;
 }
 
-@Injectable()
 export class UserViewModel
 {
     public Id: number;
@@ -38,7 +33,6 @@ export class UserViewModel
     public Role: string;
 }
 
-@Injectable()
 export class UserHubConnectModel
 {
     public Id: number;
@@ -54,7 +48,6 @@ export class UserHubConnectModel
     public Role: string;
 }
 
-@Injectable()
 export class RuleModel
 {
     public RuleId: number;
@@ -66,7 +59,6 @@ export class RuleModel
     public Category: string;
 }
 
-@Injectable()
 export class SentenceTaskModel
 {
     public SentenceTaskId: number;
@@ -78,7 +70,6 @@ export class SentenceTaskModel
     public Translate: string;
 }
 
-@Injectable()
 export class UserDictionaryModel
 {
     public User: UserViewModel;
@@ -86,7 +77,6 @@ export class UserDictionaryModel
     public Words: WordModel[];
 }
 
-@Injectable()
 export class WordModel
 {
     public WordId: number;
@@ -100,7 +90,6 @@ export class WordModel
     public Transcription: string;
 }
 
-@Injectable()
 export class WordTaskModel
 {
     public WordId: number;

@@ -50,6 +50,7 @@ export class AppComponent implements OnInit{
       obj => 
       {
         this.apiService.RoleOfUser = obj.Role;
+        this.apiService.UserId = obj.Id;
       },
       error => console.log(error)
     )

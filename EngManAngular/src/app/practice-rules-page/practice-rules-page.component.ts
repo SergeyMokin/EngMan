@@ -97,7 +97,7 @@ export class PracticeRulesPageComponent implements OnInit {
   {
     if(this.AnswerTask.length != this.Task.Sentence.length + 1)
     {
-      this.ResultMessageOfTask = `Make a fuul sentence.`;
+      this.ResultMessageOfTask = `Make a full sentence.`;
       document.getElementById("msg-result-form").className = "red-text";
       return;
     }
@@ -145,7 +145,10 @@ export class PracticeRulesPageComponent implements OnInit {
       this.EndOfTask();
       return;
     }
-    this.Refresh();
+    if(this.Task != null)
+    {
+      this.Refresh();
+    }
     document.getElementById("check-btn").className = "btn";
     document.getElementById("refresh-btn").className = "btn";
     this.apiService.GetSenteceTask(this.ChoosenCategory, this.Indexes).subscribe(
