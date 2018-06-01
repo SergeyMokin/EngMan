@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import * as M from 'materialize-css';
 import { SentenceTaskModel } from '../app.models';
 import { ActivatedRoute } from '@angular/router';
 
@@ -30,40 +29,30 @@ export class PracticeRulesPageComponent implements OnInit {
     this.Categories = [];
   }
 
-  ngOnInit(): void
+  public ngOnInit(): void
   {
-    this.apiService.GetSentenceTaskCategories().subscribe(
-      obj => 
-      {
-        for(var i = 0; i < obj.length; i++)
+    this.activateRoute.queryParams.subscribe(
+      (queryParam: any) => {
+        if(queryParam['category'] != undefined)
         {
-          var option = document.createElement("option");
-          option.text = obj[i];
-          document.getElementById("selectCategoryOfTask").appendChild(option);
+          let doc:any;
+          doc = document.getElementById("selectCategoryOfTask");
+          doc.options[doc.selectedIndex].text = queryParam['category']; 
         }
-        M.FormSelect.init(document.querySelectorAll('select'), null);        
-        this.activateRoute.queryParams.subscribe(
-          (queryParam: any) => {
-            if(queryParam['category'] != undefined)
-            {
-              let doc:any;
-              doc = document.getElementById("selectCategoryOfTask");
-              doc.options[doc.selectedIndex].text = queryParam['category']; 
-              M.FormSelect.init(document.querySelectorAll('select'), null);   
-            }
-          }
-        )
-      },
+      }
+    )
+    this.apiService.GetSentenceTaskCategories().subscribe(
+      obj => this.Categories = obj,
       error => console.log(error));
   }
 
-  ChooseWord(word:string): void
+  private ChooseWord(word:string): void
   {
     document.getElementById(word).className += " disabled"
     this.AnswerTask += word.toUpperCase() + ` `;
   }
 
-  Start(category:string): void
+  private Start(category:string): void
   {
     this.ErrorMessage = ``;
     this.CountOftrying = 0;
@@ -94,7 +83,7 @@ export class PracticeRulesPageComponent implements OnInit {
     this.Next();
   }
 
-  Refresh(): void
+  private Refresh(): void
   {
     for(let i = 0; i < this.SplitedSentence.length; i++)
     {
@@ -104,7 +93,7 @@ export class PracticeRulesPageComponent implements OnInit {
     this.ResultMessageOfTask = ``;
   }
 
-  Check(): void
+  private Check(): void
   {
     if(this.AnswerTask.length != this.Task.Sentence.length + 1)
     {
@@ -149,7 +138,7 @@ export class PracticeRulesPageComponent implements OnInit {
     this.ResultMessageOfTask = "";
   }
 
-  Next(): void
+  private Next(): void
   {
     if(this.TotalCountOfTask == 10)
     {
@@ -177,7 +166,7 @@ export class PracticeRulesPageComponent implements OnInit {
     );
   }
 
-  EndOfTask(): void
+  private EndOfTask(): void
   {
     document.getElementById("next-btn").className += " disabled";
     document.getElementById("refresh-btn").className += " disabled";
@@ -188,7 +177,7 @@ export class PracticeRulesPageComponent implements OnInit {
     document.getElementById("end-btn").className = "btn disabled";
   }
 
-  Close(): void
+  private Close(): void
   {
     document.getElementById("check-btn").className = "btn";
     document.getElementById("next-btn").className = "btn";

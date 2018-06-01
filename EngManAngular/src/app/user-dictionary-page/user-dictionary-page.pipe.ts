@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
+import { WordModel } from "../app.models";
 
 @Pipe(
     {
@@ -8,7 +9,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 )
 export class SearchUserDictionaryPipe implements PipeTransform
 {
-    transform(words, value)
+    public transform(words: WordModel[], value: string): WordModel[]
     {
         if(words === undefined)
         {

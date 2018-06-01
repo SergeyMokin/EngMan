@@ -12,7 +12,7 @@ export class AppInterceptor implements HttpInterceptor {
 
     }
 
-    intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    public intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let authReq: HttpRequest<any>;
         this.Token = this.apiService.BearerToken;
         if(req.url.includes('login')

@@ -21,7 +21,7 @@ export class AppComponent implements OnInit{
     });
   }
 
-  ngOnInit(): void
+  public ngOnInit(): void
   {
     if(this.cookieService.get('user.login.token.engmanangular').length > 0)
     {
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit{
     
   }
 
-  Logout(): void
+  private Logout(): void
   {
     this.apiService.Logout().subscribe(obj => 
     {
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit{
     })
   }
 
-  GetUserData(): void
+  private GetUserData(): void
   {
     this.apiService.GetUserData().subscribe(
       obj => 
@@ -55,7 +55,7 @@ export class AppComponent implements OnInit{
     )
   }
 
-  GetCurrentPage(): string
+  private GetCurrentPage(): string
   {
     let urlToReturn: string = ''
     if(this.router.url.indexOf('?') > 0)

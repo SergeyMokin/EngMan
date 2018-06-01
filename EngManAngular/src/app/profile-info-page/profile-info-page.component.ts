@@ -21,7 +21,7 @@ export class ProfileInfoPageComponent implements OnInit, DoCheck {
     
   }
 
-  ngOnInit(): void
+  public ngOnInit(): void
   {
     this.ErrorMessageEditProfile = ``;
     this.ErrorMessageChangePassword = ``;
@@ -34,7 +34,7 @@ export class ProfileInfoPageComponent implements OnInit, DoCheck {
     );
   }
 
-  ngDoCheck(): void
+  public ngDoCheck(): void
   {
     document.getElementById("first_name_label").className = "active";
     document.getElementById("last_name_label").className = "active";
@@ -42,7 +42,7 @@ export class ProfileInfoPageComponent implements OnInit, DoCheck {
     document.getElementById("role_label").className = "active";
   }
 
-  SaveChanges(): void
+  private SaveChanges(): void
   {
     this.SuccessfullyMessage = ``;
     this.ErrorMessageEditProfile = ``;
@@ -68,7 +68,7 @@ export class ProfileInfoPageComponent implements OnInit, DoCheck {
     )
   }
 
-  ChangeOpenedChangePassword(): void
+  private ChangeOpenedChangePassword(): void
   {
     if(this.OpenedChangePassword)
     {
@@ -84,7 +84,7 @@ export class ProfileInfoPageComponent implements OnInit, DoCheck {
     this.ErrorMessageChangePassword = ``;
   }
 
-  ChangePassword(): void
+  private ChangePassword(): void
   {
     this.SuccessfullyMessage = ``;
     this.ErrorMessageEditProfile = ``;

@@ -1,6 +1,7 @@
 <label style="position:relative;top:50px;">Choose category</label>  
 <select id="selectCategoryOfDictionary" class="browser-default" style="margin-top: 50px;" (change)="ChangeSelector()">
     <option value="" disabled selected>Choose your option</option>
+    <option value="" *ngFor="let c of Categories">{{c}}</option>
 </select>
 <div class="input-field col s12" style="margin-top: 25px" [style.display]="ChoosenCategory == '' ? 'none' : 'block'">
     <input id="search" type="text" class="validate" [(ngModel)]="SearchString">

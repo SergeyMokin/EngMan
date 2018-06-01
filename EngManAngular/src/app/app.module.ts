@@ -15,12 +15,24 @@ import { ProfileInfoPageComponent } from './profile-info-page/profile-info-page.
 import { UserDictionaryPageComponent } from './user-dictionary-page/user-dictionary-page.component';
 import { SearchUserDictionaryPipe } from './user-dictionary-page/user-dictionary-page.pipe';
 import { HoveredRuleDirective } from './rules-list-form/rules-list-form.directive';
+import { WordTranslatePageComponent } from './word-translate-page/word-translate-page.component';
+import { TranslateWordPageComponent } from './translate-word-page/translate-word-page.component';
+import { WordCardPageComponent } from './word-card-page/word-card-page.component';
+import { GuessesTheImagePageComponent } from './guesses-the-image-page/guesses-the-image-page.component';
 
 
 const routes = [
   {
     path: 'login',
     component: LoginFormPageComponent
+  },
+  {
+    path: 'profile-info',
+    component: ProfileInfoPageComponent
+  },
+  {
+    path: 'user-dictionary',
+    component: UserDictionaryPageComponent
   },
   {
     path: 'rules',
@@ -31,12 +43,20 @@ const routes = [
     component: PracticeRulesPageComponent
   },
   {
-    path: 'profile-info',
-    component: ProfileInfoPageComponent
+    path: 'word-translate',
+    component: WordTranslatePageComponent
   },
   {
-    path: 'user-dictionary',
-    component: UserDictionaryPageComponent
+    path: 'translate-word',
+    component: TranslateWordPageComponent
+  },
+  {
+    path: 'word-card',
+    component: WordCardPageComponent
+  },
+  {
+    path: 'guesses-the-image',
+    component: GuessesTheImagePageComponent
   },
   {
     path: '**', 
@@ -54,7 +74,11 @@ const routes = [
     ProfileInfoPageComponent,
     UserDictionaryPageComponent,
     SearchUserDictionaryPipe,
-    HoveredRuleDirective
+    HoveredRuleDirective,
+    WordTranslatePageComponent,
+    TranslateWordPageComponent,
+    WordCardPageComponent,
+    GuessesTheImagePageComponent
   ],
   imports: [
     BrowserModule,

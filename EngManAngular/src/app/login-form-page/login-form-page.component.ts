@@ -25,7 +25,7 @@ export class LoginFormPageComponent implements OnInit {
     this.RegistrationUser = new RegistrationUserModel();
   }
 
-  ngOnInit(): void
+  public ngOnInit(): void
   {
     if(this.cookieService.get('user.login.token.engmanangular').length > 0)
     {
@@ -35,13 +35,13 @@ export class LoginFormPageComponent implements OnInit {
     }
   }
 
-  ChangeForm(): void
+  private ChangeForm(): void
   {
     this.ErrorMessage = ``;
     this.RegistrationFormEnable = !this.RegistrationFormEnable;
   }
 
-  SignUp(): void
+  private SignUp(): void
   {
     if(this.InProgress) return;
     if(this.cookieService.get('user.login.token.engmanangular') != undefined)
@@ -71,7 +71,7 @@ export class LoginFormPageComponent implements OnInit {
       })
   }
 
-  SignIn(): void
+  private SignIn(): void
   {
     if(this.InProgress) return;
     if(this.cookieService.get('user.login.token.engmanangular') != undefined)
@@ -102,7 +102,7 @@ export class LoginFormPageComponent implements OnInit {
     this.apiService.SetToken('');
   }
 
-  GetUserData(): void
+  private GetUserData(): void
   {
     this.apiService.GetUserData().subscribe(
       obj => 
@@ -113,7 +113,7 @@ export class LoginFormPageComponent implements OnInit {
     )
   }
 
-  ClearForm(): void
+  private ClearForm(): void
   { 
     location.reload();
   }

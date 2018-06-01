@@ -1,11 +1,11 @@
 <nav>
     <div class="nav-wrapper">
-      <a data-target='dropdown1' href="javascript:0" class="brand-logo left dropdown-trigger">
+      <span data-target='dropdown1' href="javascript:0" class="brand-logo left dropdown-trigger">
           <img 
             title="home" 
             style="height: 64px; padding-left: 10px;filter: invert(100%);" 
             src="http://static1.squarespace.com/static/579012ce15d5dbcc832517ab/t/57a37e16ff7c508424d40845/1470332439749/CJ-favicon.png?format=1000w">
-      </a>
+      </span>
       <a class="brand-logo center">{{GetCurrentPage()}}</a>
       <ul id="nav-mobile" class="right">
         <li><a [routerLink]="['login']"><i class="material-icons" title="home">home</i></a></li>
@@ -41,10 +41,10 @@
 
 <!--Dropdown menu of trainings-->
 <ul id='dropdown3' class="dropdown-content">
-        <li><a href="javascript:0">Word-Translate</a></li>
-        <li><a href="javascript:0">Translate-Word</a></li>
-        <li><a href="javascript:0">Word Cards</a></li>
-        <li><a href="javascript:0">Guesses the images</a></li>
+        <li><a [routerLink]="['word-translate']">Word-Translate</a></li>
+        <li><a [routerLink]="['translate-word']">Translate-Word</a></li>
+        <li><a [routerLink]="['word-card']">Word Cards</a></li>
+        <li><a [routerLink]="['guesses-the-image']">Guesses the images</a></li>
 </ul>
 
 <!--Dropdown menu of admin panel-->

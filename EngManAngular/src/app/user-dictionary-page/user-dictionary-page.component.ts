@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import * as M from 'materialize-css';
 import { UserDictionaryModel, UserViewModel, WordModel } from '../app.models';
 import { SearchUserDictionaryPipe } from './user-dictionary-page.pipe';
 
@@ -14,32 +13,27 @@ export class UserDictionaryPageComponent implements OnInit {
   private ChoosenCategory: string = ``;
   private UserDictionary: UserDictionaryModel = new UserDictionaryModel();
   private SearchString: string = ``;
+  private Categories: string[] = [];
 
   constructor(private apiService: ApiService) 
   {
   }
 
-  ngOnInit(): void
+  public ngOnInit(): void
   {
     this.apiService
     .GetUserDictionaryCategories()
     .subscribe(
       obj => 
       {
-        for(var i = 0; i < obj.length; i++)
-        {
-          var option = document.createElement("option");
-          option.text = obj[i];
-          document.getElementById("selectCategoryOfDictionary").appendChild(option);
-        }
-        M.FormSelect.init(document.querySelectorAll('select'), null);
+        this.Categories = obj;
         this.ChoosenCategory = ``;
       },
       error => console.log(error)
     )
   }
 
-  ChangeSelector(): void
+  private ChangeSelector(): void
   {
     let doc:any;
     doc = document.getElementById("selectCategoryOfDictionary");
@@ -52,16 +46,15 @@ export class UserDictionaryPageComponent implements OnInit {
     )
   }
 
-  DeleteWord(word: WordModel): void
+  private DeleteWord(word: WordModel): void
   {
     this.apiService
     .DeleteUserDictionaryWord(word.WordId)
     .subscribe(
       obj =>
       {
-        if(obj)
+        if(obj === `Delete completed successful`)
         {
-          console.log(obj)
           let index = this.UserDictionary.Words.indexOf(word);
           if(index > -1)
           {

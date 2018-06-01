@@ -18,84 +18,88 @@ export class ApiService
     }
 
     //Account api.
-    SetToken(token:string): void
+    public SetToken(token:string): void
     {
         this.BearerToken = token;
     }
 
-    DeleteToken(): void
+    public DeleteToken(): void
     {
         this.BearerToken = ``;
     }
     
-    Login(model: UserModel): Observable<any>
+    public Login(model: UserModel): Observable<any>
     {
         return this.http.post(this.Url + `/account/login`, model);
     }
 
-    Registration(model: RegistrationUserModel): Observable<any>
+    public Registration(model: RegistrationUserModel): Observable<any>
     {
         return this.http.post(this.Url + `/account/registration`, model);
     }
 
-    Logout(): Observable<any>
+    public Logout(): Observable<any>
     {
         return this.http.post(this.Url + `/account/logout`, {});
     }
 
-    GetUserData(): Observable<UserViewModel>
+    public GetUserData(): Observable<UserViewModel>
     {
         return this.http.get<UserViewModel>(this.Url + `/account/getuserdata`);
     }
 
-    ChangePassword(id: number, oldpassword: string, newpassword: string)
+    public ChangePassword(id: number, oldpassword: string, newpassword: string)
     {
         return this.http.put(this.Url + `/account/ChangePassword?id=${id}&oldpassword=${oldpassword}&newpassword=${newpassword}`, {});
     }
 
-    EditCurrentProfile(user: UserViewModel)
+    public EditCurrentProfile(user: UserViewModel)
     {
         return this.http.put(this.Url + '/account/edituser', user);
     }
 
-    GetUserDictionaryCategories(): Observable<string[]>
+    public GetUserDictionaryCategories(): Observable<string[]>
     {
         return this.http.get<string[]>(this.Url + '/account/GetAllCategoriesOfDictionary');
     }
 
-    GetUserDictionaryByCategory(category: string): Observable<UserDictionaryModel>
+    public GetUserDictionaryByCategory(category: string): Observable<UserDictionaryModel>
     {
         return this.http.get<UserDictionaryModel>(this.Url + `/account/GetByCategoryDictionary?category=${category}`)
     }
-    // /account/deletewordfromdictionary/ delete
 
-    DeleteUserDictionaryWord(id: number): Observable<boolean>
+    public DeleteUserDictionaryWord(id: number): Observable<string>
     {
-        return this.http.delete<boolean>(this.Url + `/account/deletewordfromdictionary?id=${id}`);
+        return this.http.delete<string>(this.Url + `/account/deletewordfromdictionary?id=${id}`);
     }
 
     //Rule api.
-    GetRules(): Observable<RuleModel[]> 
+    public GetRules(): Observable<RuleModel[]> 
     {
         return this.http.get<RuleModel[]>(this.Url + `/rule/getallrules`);
     }
 
     //SentenceTask api.
-    GetSentenceTaskCategories(): Observable<string[]>
+    public GetSentenceTaskCategories(): Observable<string[]>
     {
         return this.http.get<string[]>(this.Url + `/sentencetask/GetAllCategories`);
     }
 
-    GetSenteceTask(category:string, indexes:string): Observable<SentenceTaskModel>
+    public GetSenteceTask(category:string, indexes:string): Observable<SentenceTaskModel>
     {
         return this.http.get<SentenceTaskModel>(this.Url + `/sentencetask/gettask?category=${category}&indexes=${indexes}`)
     }
 
-    CheckTheAnswerOfSentenceTask(sentence: SentenceTaskModel): Observable<boolean>
+    public CheckTheAnswerOfSentenceTask(sentence: SentenceTaskModel): Observable<boolean>
     {
         return this.http.post<boolean>(this.Url + `/sentencetask/verificationcorrectness`, sentence)
     }
 
+    //Word api.
+    public GetWordTaskCategories(): Observable<string[]>
+    {
+        return this.http.get<string[]>(this.Url + `/word/GetAllCategories`);
+    }
     
     // url = http://*host*/api
     // /account/getuserdictionary get

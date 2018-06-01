@@ -15,7 +15,7 @@ export class RulesListFormComponent implements OnInit {
 
   constructor(private apiService: ApiService, private router: Router) { }
 
-  ngOnInit(): void
+  public ngOnInit(): void
   {
     this.OpenedRule = null;
     this.apiService.GetRules().subscribe(obj => 
@@ -34,18 +34,18 @@ export class RulesListFormComponent implements OnInit {
       )
   }
 
-  OpenModalDialog(rule:RuleModel): void
+  private OpenModalDialog(rule:RuleModel): void
   {
     this.OpenedRule = rule;
   }
 
-  CloseModalDialog(): void
+  private CloseModalDialog(): void
   {
     document.getElementById("ModalDialog").scrollTop = 0;
     this.OpenedRule = null;
   }
 
-  GoPractice(rule: RuleModel): void
+  private GoPractice(rule: RuleModel): void
   {
     this.router.navigate(["/practice-rules"], {queryParams: {'category': rule.Category}});
   }

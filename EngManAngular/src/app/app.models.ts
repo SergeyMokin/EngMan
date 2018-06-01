@@ -20,6 +20,7 @@ export class RegistrationUserModel
 export class UserModel
 {
     public Email: string;
+
     public Password: string;
 }
 
@@ -56,10 +57,13 @@ export class UserHubConnectModel
 @Injectable()
 export class RuleModel
 {
-    public RuleId: number
-    public Title: string
-    public Text: string
-    public Category: string
+    public RuleId: number;
+
+    public Title: string;
+
+    public Text: string;
+
+    public Category: string;
 }
 
 @Injectable()
@@ -78,6 +82,7 @@ export class SentenceTaskModel
 export class UserDictionaryModel
 {
     public User: UserViewModel;
+
     public Words: WordModel[];
 }
 
@@ -85,8 +90,24 @@ export class UserDictionaryModel
 export class WordModel
 {
     public WordId: number;
+
     public Original: string;
+
     public Translate: string;
+
     public Category: string;
+
     public Transcription: string;
+}
+
+@Injectable()
+export class WordTaskModel
+{
+    public WordId: number;
+
+    public Word: string;
+
+    public Answers: string[];
+    
+    public Category: string;
 }
