@@ -20,6 +20,9 @@ import { TranslateWordPageComponent } from './translate-word-page/translate-word
 import { WordCardPageComponent } from './word-card-page/word-card-page.component';
 import { GuessesTheImagePageComponent } from './guesses-the-image-page/guesses-the-image-page.component';
 
+import { MessagesService } from './messages.service';
+
+
 
 const routes = [
   {
@@ -92,7 +95,8 @@ const routes = [
     multi: true
   },
   CookieService,
-  ApiService],
+  ApiService,
+  MessagesService],
   bootstrap: [AppComponent]
 
 })
