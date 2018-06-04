@@ -76,6 +76,7 @@ input:not(.browser-default):focus:not([readonly])
 {
     top: 64px !important;
     opacity: 1 !important;
+    width: 120px !important;
 }
 
 .dropdown-content li > a, .dropdown-content li > span
@@ -100,6 +101,12 @@ input:not(.browser-default):focus:not([readonly])
     z-index: 9999999;
 }
 
-.select-wrapper input.select-dropdown:focus {
+.select-wrapper input.select-dropdown:focus 
+{
     border-bottom: 1px solid darkred !important;
+}
+
+#toast-container
+{
+    width: 180px !important;
 }
