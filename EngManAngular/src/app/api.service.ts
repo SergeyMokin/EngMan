@@ -127,6 +127,11 @@ export class ApiService
     {
         return this.http.get<WordModel[]>(this.Url + `/word/GetByCategory?category=${category}`);
     }
+
+    public GetWordCategories(): Observable<string[]>
+    {
+        return this.http.get<string[]>(this.Url + `/word/GetAllCategories`);
+    }
     
     // url = http://*host*/api
     // /account/getuserdictionary get
@@ -147,13 +152,11 @@ export class ApiService
     // /sentencetask/EditTask put
     // /sentencetask/DeleteTask/ delete
     // /sentencetask/GetByCategory?category= get
-    // /word/GetAllCategories get
     // /word/GetAllWords get
     // /word/GetWordById/ get
     // /word/AddWord post
     // /word/EditWord put
     // /word/DeleteWord/ delete
-    // /word/GetByCategory?category= get
     // /message/readmessages?senderId= post
     // /message/getallmessages/ get
     // /message/getnewmessages/ get
