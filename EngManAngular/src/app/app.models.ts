@@ -100,3 +100,12 @@ export class WordTaskModel
     
     public Category: string;
 }
+
+export class GuessesTheImageTaskModel
+{
+    public Id: number;
+
+    public Word: WordModel;
+
+    public Path: string;
+}

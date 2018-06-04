@@ -1,6 +1,30 @@
+<div class="popup-background" [style.display]="Task==null?'none':'block'">
+    <div class="modal modal-fixed-footer" style="margin-top: 50px; height: 550px" [style.display]="Task==null?'none':'block'">
+        <div id="ModalDialog" class="modal-content">
+          <div class="row center">
+            <a href="javascript:0" (click)="ShowTranslate=!ShowTranslate">{{ShowTranslate ? (Task == null ? "" : Task.Word.Translate).toUpperCase() : "Show"}}</a>
+          </div>
+          <div class="row center">
+            <img [src]="Task == null ? '' : Task.Path">
+          </div>
+          <div class="row">
+            <label for="answer_text">Answer</label>
+            <input id="answer_text" type="text" [(ngModel)]="AnswerOriginal">
+          </div>
+          <div id="msg-result-form" class="green-text"><br/>{{ResultMessageOfTask}}</div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn disabled" style="margin-right:3px;" id="close-btn" (click)="Close()">Close</a>
+            <a class="btn" style="margin-right:3px;" id="end-btn" (click)="EndOfTask()">End</a>
+            <a class="btn" style="margin-right:3px" id="next-btn" (click)="Next()">Next</a>
+            <a class="btn" (click)="0" id="check-btn" (click)="Check()">Check</a>
+        </div>
+    </div>
+</div>
 <label style="position:relative;top:50px;">Choose category</label>  
-<select id="selectCategoryOfTask" class="browser-default" style="margin-top: 50px;">
+<select id="selectCategoryOfTask" class="browser-default" style="margin-top: 50px;" (change)="UpdateCategory()">
     <option value="" disabled selected>Choose your option</option>
+    <option value="" *ngFor="let c of Categories">{{c}}</option>
 </select>
-<a class="btn right" style="margin-top:25px" (click)="Start()">Start</a>
+<a class="btn right" style="margin-top:25px" (click)="Start(null)">Start</a>
 <p class="red-text" style="margin-top:25px">{{ErrorMessage}}</p>

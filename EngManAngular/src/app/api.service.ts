@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel, UserDictionaryModel, WordTaskModel, WordModel } from './app.models'
+import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel, UserDictionaryModel, WordTaskModel, WordModel, GuessesTheImageTaskModel } from './app.models'
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -132,6 +132,22 @@ export class ApiService
     {
         return this.http.get<string[]>(this.Url + `/word/GetAllCategories`);
     }
+
+    //GuessesTheImages api.
+    public GetGuessesTheImageTaskCategories(): Observable<string[]>
+    {
+        return this.http.get<string[]>(this.Url + `/guessestheimage/GetAllCategories`);
+    }
+
+    public GetGuessesTheImageTask(category:string, indexes:string): Observable<GuessesTheImageTaskModel>
+    {
+        return this.http.get<GuessesTheImageTaskModel>(this.Url + `/guessestheimage/gettask?category=${category}&indexes=${indexes}`)
+    }
+
+    public CheckTheAnswerOfGuessesTheImageTask(task: GuessesTheImageTaskModel): Observable<boolean>
+    {
+        return this.http.post<boolean>(this.Url + `/guessestheimage/verificationcorrectness`, task)
+    }
     
     // url = http://*host*/api
     // /account/getuserdictionary get
@@ -163,14 +179,11 @@ export class ApiService
     // /message/getmessagesbyuserid?otherUserId=' + otherUserId + '&lastReceivedMessageId=' + lastReceivedMessageId get
     // /message/deletemessage/ delete
     // /message/SendMessage post
-    // /guessestheimage/gettask?category=' + category + "&indexes= get
-    // /guessestheimage/verificationcorrectness/ post
     // /guessestheimage/getalltasks/ get
     // /guessestheimage/gettaskbyid/ get
     // /guessestheimage/edittask/ put
     // /guessestheimage/addtask/ post
     // /guessestheimage/deletetask/ delete
-    // /guessestheimage/GetAllCategories get
     // /guessestheimage/GetByCategory?category= get
     // hubConnection('http://ecsc00a01a18')
     // get new messages in real time: onUpdateMessages
