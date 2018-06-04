@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { WordTaskModel, WordModel } from '../app.models';
+import * as M from 'materialize-css';
 
 @Component({
   selector: 'app-translate-word-page',
@@ -45,7 +46,7 @@ export class TranslateWordPageComponent implements OnInit {
     this.apiService
     .AddWordToDictionaryOfCurrentUser(word.WordId)
     .subscribe(
-      obj => alert(obj ? "Successfully." : "Already added."),
+      obj => M.toast({html: obj ? "Successfully." : "Already added.", classes: 'rounded'}),
       error => console.log(error)
     )
   }
