@@ -20,7 +20,7 @@
               <span>{{message.Text}}</span>
           </blockquote>
         </div>
-        <div class="row center"><a *ngIf="messagesService.Messages.length % 100 == 0" href="javascript:0" (click)="DownloadMore()">more...</a></div>
+        <div class="row center"><a *ngIf="messagesService.Messages.length > 0 && messagesService.Messages.length % 100 == 0" href="javascript:0" (click)="DownloadMore()">more...</a></div>
       </div>
       <div *ngIf="ChoosenUser=='Main'" style="padding-bottom:25px">
           <div class="row" *ngFor="let message of messagesService.NewMessages">
