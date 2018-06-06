@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel, UserDictionaryModel, WordTaskModel, WordModel, GuessesTheImageTaskModel } from './app.models'
+import { RuleModel, UserModel, UserViewModel, RegistrationUserModel, SentenceTaskModel, UserDictionaryModel, WordTaskModel, WordModel, GuessesTheImageTaskModel, ReturnMessageModel, MessageModel } from './app.models'
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -148,6 +148,32 @@ export class ApiService
     {
         return this.http.post<boolean>(this.Url + `/guessestheimage/verificationcorrectness`, task)
     }
+
+    //Messages api.
+    public ReadMessages(userId: number): Observable<boolean>
+    {
+        return this.http.post<boolean>(this.Url + ` /message/readmessages?senderId=${userId}`, {});
+    }
+
+    public GetNewMessages(): Observable<ReturnMessageModel[]>
+    {
+        return this.http.get<ReturnMessageModel[]>(this.Url + `/message/getnewmessages/`);
+    }
+
+    public GetMessagesByUserId(userId: number, lastReceivedMessageId: number): Observable<ReturnMessageModel[]>
+    {
+        return this.http.get<ReturnMessageModel[]>(this.Url + `/message/getmessagesbyuserid?otherUserId=${userId}&lastReceivedMessageId=${lastReceivedMessageId}`);
+    }
+
+    public DeleteMessage(messageId: number): Observable<boolean>
+    {
+        return this.http.delete<boolean>(this.Url + `/message/deletemessage/`);
+    }
+
+    public SendMessage(message: MessageModel): Observable<boolean>
+    {
+        return this.http.post<boolean>(this.Url + `/message/SendMessage`, {});
+    }
     
     // url = http://*host*/api
     // /account/getuserdictionary get
@@ -173,12 +199,7 @@ export class ApiService
     // /word/AddWord post
     // /word/EditWord put
     // /word/DeleteWord/ delete
-    // /message/readmessages?senderId= post
     // /message/getallmessages/ get
-    // /message/getnewmessages/ get
-    // /message/getmessagesbyuserid?otherUserId=' + otherUserId + '&lastReceivedMessageId=' + lastReceivedMessageId get
-    // /message/deletemessage/ delete
-    // /message/SendMessage post
     // /guessestheimage/getalltasks/ get
     // /guessestheimage/gettaskbyid/ get
     // /guessestheimage/edittask/ put

@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -19,8 +18,9 @@ import { WordTranslatePageComponent } from './word-translate-page/word-translate
 import { TranslateWordPageComponent } from './translate-word-page/translate-word-page.component';
 import { WordCardPageComponent } from './word-card-page/word-card-page.component';
 import { GuessesTheImagePageComponent } from './guesses-the-image-page/guesses-the-image-page.component';
-
 import { MessagesService } from './messages.service';
+import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
+import { MessagesComponentComponent } from './messages-component/messages-component.component';
 
 
 
@@ -67,6 +67,14 @@ const routes = [
   }
 ]
 
+export function createConfig(): SignalRConfiguration {
+  const c = new SignalRConfiguration();
+  c.hubName = 'chat';
+  c.url = 'http://ecsc00a01a18/';
+  c.logging = true;
+  return c;
+}
+
 
 @NgModule({
   declarations: [
@@ -81,13 +89,15 @@ const routes = [
     WordTranslatePageComponent,
     TranslateWordPageComponent,
     WordCardPageComponent,
-    GuessesTheImagePageComponent
+    GuessesTheImagePageComponent,
+    MessagesComponentComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    SignalRModule.forRoot(createConfig)
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

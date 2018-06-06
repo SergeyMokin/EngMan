@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from './api.service';
 import * as M from 'materialize-css';
+import { BroadcastEventListener, ISignalRConnection } from 'ng2-signalr';
+import { MessagesService } from './messages.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,8 @@ export class AppComponent implements OnInit{
 
   constructor(private cookieService:CookieService,
     private router: Router,
-    private apiService: ApiService)
+    private apiService: ApiService,
+    private messagesService: MessagesService)
   {
     document.addEventListener('DOMContentLoaded', function() {
       M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), {hover:true});
@@ -40,6 +43,7 @@ export class AppComponent implements OnInit{
       this.cookieService.delete(`user.login.token.engmanangular`);
       this.apiService.BearerToken = ``;
       this.apiService.RoleOfUser = ``;
+      this.messagesService.Connection.invoke("Disconnect");
       this.router.navigate([`login`]);
     })
   }
@@ -49,6 +53,7 @@ export class AppComponent implements OnInit{
     this.apiService.GetUserData().subscribe(
       obj => 
       {
+        this.messagesService.Connect(obj);
         this.apiService.RoleOfUser = obj.Role;
         this.apiService.UserId = obj.Id;
       },

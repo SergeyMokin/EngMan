@@ -109,3 +109,34 @@ export class GuessesTheImageTaskModel
 
     public Path: string;
 }
+
+export class MessageModel
+{
+    public MessageId: number;
+
+    public SenderId: number;
+
+    public BeneficiaryId: number;
+
+    public Text: string;
+
+    public Time: Date;
+
+    public CheckReadMes: boolean;
+
+}
+
+export class ReturnMessageModel
+{
+    public MessageId: number;
+
+    public Sender: UserViewModel;
+
+    public Beneficiary: UserViewModel;
+
+    public Text: string;
+
+    public Time: Date;
+
+    public CheckReadMes: boolean;
+}

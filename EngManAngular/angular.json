@@ -27,6 +27,8 @@
               "node_modules/materialize-css/dist/css/materialize.css"
             ],
             "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/signalr/jquery.signalR.js",
               "node_modules/materialize-css/dist/js/materialize.js"
             ]
           },
@@ -79,6 +81,8 @@
               "node_modules/materialize-css/dist/css/materialize.css"
             ],
             "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/signalr/jquery.signalR.js",
               "node_modules/materialize-css/dist/js/materialize.js"
             ],
             "assets": [

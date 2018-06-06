@@ -3,6 +3,7 @@ import { UserModel, RegistrationUserModel} from '../app.models'
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import { MessagesService } from '../messages.service';
 
 @Component({
   selector: 'app-login-form-page',
@@ -19,7 +20,8 @@ export class LoginFormPageComponent implements OnInit {
 
   constructor(private router: Router
     , private cookieService: CookieService
-    , private apiService: ApiService) 
+    , private apiService: ApiService
+    , private messagesService: MessagesService) 
   {
     this.User = new UserModel();
     this.RegistrationUser = new RegistrationUserModel();
@@ -107,6 +109,7 @@ export class LoginFormPageComponent implements OnInit {
     this.apiService.GetUserData().subscribe(
       obj => 
       {
+        this.messagesService.Connect(obj);
         this.apiService.RoleOfUser = obj.Role;
         this.apiService.UserId = obj.Id;
       },
