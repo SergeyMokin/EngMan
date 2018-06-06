@@ -110,6 +110,7 @@ export class LoginFormPageComponent implements OnInit {
       obj => 
       {
         this.messagesService.Connect(obj);
+        this.messagesService.GetNewMessages();
         this.apiService.RoleOfUser = obj.Role;
         this.apiService.UserId = obj.Id;
       },

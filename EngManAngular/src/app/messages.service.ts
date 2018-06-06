@@ -31,7 +31,7 @@ export class MessagesService
             {
               this.UpdateMessagesSubscription = connection.listenFor("onUpdateMessages");
               this.UpdateMessagesSubscription.subscribe(() => {
-                document.getElementById("message-icon").className += " animation-new-mess-blink";
+                document.getElementById("message-icon").className = "medium material-icons animation-new-mess-blink";
                 this.GetNewMessages();
               })
             })
@@ -45,7 +45,18 @@ export class MessagesService
       this.apiService
       .GetNewMessages()
       .subscribe(
-        obj => this.NewMessages = obj,
+        obj => 
+        {
+          this.NewMessages = obj
+          if(this.NewMessages.length > 0)
+          {
+            document.getElementById("message-icon").className = "medium material-icons animation-new-mess-blink";
+          }
+          else
+          {
+            document.getElementById("message-icon").className = "medium material-icons";
+          }
+        },
         error => console.log(error)
       )
     }

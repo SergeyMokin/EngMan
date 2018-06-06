@@ -16,7 +16,7 @@
     </div>
 </nav>
 
-<app-messages-component></app-messages-component>
+<app-messages-component [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"></app-messages-component>
 
 <div class="container">
     <router-outlet></router-outlet>

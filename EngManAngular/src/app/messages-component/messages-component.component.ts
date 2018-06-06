@@ -27,21 +27,6 @@ export class MessagesComponentComponent implements OnInit {
       let elems = document.querySelectorAll('.modal');
       let instances = M.Modal.init(elems, {});
     });
-    this.apiService
-    .GetAllUsers()
-    .subscribe(
-      obj => 
-      {
-        for(let i = 0; i < obj.length; i++)
-        {
-          if(obj[i].Id != this.apiService.UserId)
-          {
-            this.Users.push(obj[i]);
-          }
-        }
-      },
-      error => console.log(error)
-    )
   }
 
   private UpdateUser(): void
@@ -67,8 +52,25 @@ export class MessagesComponentComponent implements OnInit {
 
   private OpenMessages(): void
   {
-    document.getElementById("message-icon").className = "medium material-icons";
+    this.Users = [];
+    this.apiService
+    .GetAllUsers()
+    .subscribe(
+      obj => 
+      {
+        for(let i = 0; i < obj.length; i++)
+        {
+          if(obj[i].Id != this.apiService.UserId)
+          {
+            this.Users.push(obj[i]);
+          }
+        }
+      },
+      error => console.log(error)
+    )
+    this.messagesService.Messages = [];
     this.messagesService.GetNewMessages();
+    document.getElementById("message-icon").className = "medium material-icons";
     let doc:any = document.getElementById("selectUser");
     doc.value = "Main";
     this.ChoosenUser = "Main";
