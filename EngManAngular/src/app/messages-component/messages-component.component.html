@@ -2,13 +2,42 @@
   <a class="modal-trigger" style="color:darkred" href="#modal1" (click)="OpenMessages()"><i id="message-icon" class="medium material-icons">email</i></a>
 </p>
 
-<div id="modal1" class="modal bottom-sheet">
+<div id="modal1" class="modal bottom-sheet modal-fixed-footer" style="width: 500px; right: 0; left: auto">
     <div class="modal-content">
-      <h4>Messages</h4>
       <label>Choose user</label>  
       <select id="selectUser" class="browser-default" (change)="UpdateUser()">
-          <option value="" disabled selected>Choose</option>
+          <option value="" selected>Main</option>
+          <option *ngFor="let user of Users">{{user.Email}}</option>
       </select>
+      <div *ngIf="ChoosenUser!='Main'" style="padding-bottom:25px">
+        <div class="row" *ngFor="let message of messagesService.Messages">
+          <blockquote class="text left" *ngIf="message.Sender.Id != apiService.UserId">
+            <h6>{{message.Sender.FirstName}} {{message.Time | date:"HH:mm yyyy-MM-dd"}} <a href="javascript:0" (click)="Delete(message)">delete</a></h6>
+            <span>{{message.Text}}</span>
+          </blockquote>
+          <blockquote class="text right" *ngIf="message.Sender.Id == apiService.UserId">
+              <h6><a href="javascript:0" (click)="Delete(message)">delete</a> {{message.Time | date:"HH:mm yyyy-MM-dd"}} You</h6>
+              <span>{{message.Text}}</span>
+          </blockquote>
+        </div>
+        <div class="row center"><a *ngIf="messagesService.Messages.length % 100 == 0" href="javascript:0" (click)="DownloadMore()">more...</a></div>
+      </div>
+      <div *ngIf="ChoosenUser=='Main'" style="padding-bottom:25px">
+          <div class="row" *ngFor="let message of messagesService.NewMessages">
+            <blockquote class="text left" *ngIf="message.Sender.Id != apiService.UserId">
+              <span style="cursor:pointer" (click)="UpdateMessages(message.Sender.Email)">{{message.Sender.FirstName + " " + message.Sender.LastName}}</span>
+            </blockquote>
+          </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="height: 113px;">
+      <div class="row">
+          <div class="input-field col s10">
+              <textarea id="icon_prefix2" class="materialize-textarea" [disabled]="ChoosenUser == 'Main'" [(ngModel)]="Message"></textarea>
+              <label for="icon_prefix2">Message</label>
+          </div>
+          <a class="btn" style="margin-top: 20px" [class.disabled]="ChoosenUser == 'Main'" (click)="Send()">send</a>
+      </div>
     </div>
 </div>
 

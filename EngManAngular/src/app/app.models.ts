@@ -120,7 +120,7 @@ export class MessageModel
 
     public Text: string;
 
-    public Time: Date;
+    public Time: any;
 
     public CheckReadMes: boolean;
 
@@ -136,7 +136,7 @@ export class ReturnMessageModel
 
     public Text: string;
 
-    public Time: Date;
+    public Time: any;
 
     public CheckReadMes: boolean;
 }

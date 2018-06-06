@@ -45,6 +45,11 @@ export class ApiService
         return this.http.post(this.Url + `/account/logout`, {});
     }
 
+    public GetAllUsers(): Observable<UserViewModel[]>
+    {
+        return this.http.get<UserViewModel[]>(this.Url + `/account/getallusers`);
+    }
+
     public GetUserData(): Observable<UserViewModel>
     {
         return this.http.get<UserViewModel>(this.Url + `/account/getuserdata`);
@@ -152,7 +157,7 @@ export class ApiService
     //Messages api.
     public ReadMessages(userId: number): Observable<boolean>
     {
-        return this.http.post<boolean>(this.Url + ` /message/readmessages?senderId=${userId}`, {});
+        return this.http.post<boolean>(this.Url + `/message/readmessages?senderId=${userId}`, {});
     }
 
     public GetNewMessages(): Observable<ReturnMessageModel[]>
@@ -165,20 +170,19 @@ export class ApiService
         return this.http.get<ReturnMessageModel[]>(this.Url + `/message/getmessagesbyuserid?otherUserId=${userId}&lastReceivedMessageId=${lastReceivedMessageId}`);
     }
 
-    public DeleteMessage(messageId: number): Observable<boolean>
+    public DeleteMessage(messageId: number): Observable<string>
     {
-        return this.http.delete<boolean>(this.Url + `/message/deletemessage/`);
+        return this.http.delete<string>(this.Url + `/message/deletemessage?id=${messageId}`);
     }
 
     public SendMessage(message: MessageModel): Observable<boolean>
     {
-        return this.http.post<boolean>(this.Url + `/message/SendMessage`, {});
+        return this.http.post<boolean>(this.Url + `/message/SendMessage`, message);
     }
     
     // url = http://*host*/api
     // /account/getuserdictionary get
     // /account/addwordtodictionary/ post
-    // /account/getallusers get
     // /account/deleteuser/ delete
     // /account/changerole put
     // /rule/getrule/ get
@@ -206,7 +210,4 @@ export class ApiService
     // /guessestheimage/addtask/ post
     // /guessestheimage/deletetask/ delete
     // /guessestheimage/GetByCategory?category= get
-    // hubConnection('http://ecsc00a01a18')
-    // get new messages in real time: onUpdateMessages
-    // connect to server: Connect + model UserView
 }

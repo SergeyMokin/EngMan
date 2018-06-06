@@ -11,11 +11,12 @@ nav, .page-footer
 {
     color: darkred !important;
 }
-input:not(.browser-default):focus:not([readonly])
+input:not(.browser-default):focus:not([readonly]), textarea:not(.browser-default):focus:not([readonly])
 {
     border-bottom: 1px solid darkred !important;
     box-shadow: 0 1px 0 0 darkred !important;
 }
+
 .btn
 {
     background: darkred !important;
