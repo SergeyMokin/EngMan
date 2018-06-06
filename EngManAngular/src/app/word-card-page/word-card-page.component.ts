@@ -46,6 +46,7 @@ export class WordCardPageComponent implements OnInit {
     .subscribe(
       obj => 
       {
+        M.toast({html: obj ? "Successfully." : "Already added.", classes: 'rounded'})
         if(obj)
         {
           this.CountOfIncorrectAnswers++;
