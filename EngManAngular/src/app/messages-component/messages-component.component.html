@@ -1,0 +1,14 @@
+<p style="position: absolute; right:25px; bottom: 25px">
+  <a class="modal-trigger" style="color:darkred" href="#modal1" (click)="OpenMessages()"><i id="message-icon" class="medium material-icons">email</i></a>
+</p>
+
+<div id="modal1" class="modal bottom-sheet">
+    <div class="modal-content">
+      <h4>Messages</h4>
+      <label>Choose user</label>  
+      <select id="selectUser" class="browser-default" (change)="UpdateUser()">
+          <option value="" disabled selected>Choose</option>
+      </select>
+    </div>
+</div>
+

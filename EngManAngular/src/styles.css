@@ -110,3 +110,16 @@ input:not(.browser-default):focus:not([readonly])
 {
     width: 180px !important;
 }
+
+.animation-new-mess-blink {   
+  animation: new-mess-blink 800ms alternate infinite;
+}
+
+@keyframes new-mess-blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.1;
+  }
+}

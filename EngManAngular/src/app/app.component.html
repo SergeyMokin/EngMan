@@ -12,10 +12,11 @@
         <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a [routerLink]="['user-dictionary']"><i class="material-icons" title="dictionary">sort_by_alpha</i></a></li>
         <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown2' title="grammar">library_books</i></a></li>
         <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown3' title="trainings">lightbulb_outline</i></a></li>
-        <li [style.display]="apiService.RoleOfUser === 'admin' ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown4' title="admin panel">build</i></a></li>
       </ul>
     </div>
 </nav>
+
+<app-messages-component></app-messages-component>
 
 <div class="container">
     <router-outlet></router-outlet>
@@ -45,13 +46,4 @@
         <li><a [routerLink]="['translate-word']">Translate-Word</a></li>
         <li><a [routerLink]="['word-card']">Word Cards</a></li>
         <li><a [routerLink]="['guesses-the-image']">Guesses the images</a></li>
-</ul>
-
-<!--Dropdown menu of admin panel-->
-<ul id='dropdown4' class="dropdown-content">
-        <li><a href="javascript:0">Rules</a></li>
-        <li><a href="javascript:0">Sentences</a></li>
-        <li><a href="javascript:0">Words</a></li>
-        <li><a href="javascript:0">Users</a></li>
-        <li><a href="javascript:0">Guesses the images</a></li>
 </ul>
