@@ -33,7 +33,7 @@
     <div class="modal-footer" style="height: 113px;">
       <div class="row">
           <div class="input-field col s10">
-              <textarea id="icon_prefix2" class="materialize-textarea" [disabled]="ChoosenUser == 'Main'" [(ngModel)]="Message"></textarea>
+              <textarea id="icon_prefix2" class="materialize-textarea" [disabled]="ChoosenUser == 'Main'" [(ngModel)]="Message" (keyup.enter)="Send()"></textarea>
               <label for="icon_prefix2">Message</label>
           </div>
           <a class="btn" style="margin-top: 20px" [class.disabled]="ChoosenUser == 'Main'" (click)="Send()">send</a>
