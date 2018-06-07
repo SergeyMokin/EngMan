@@ -46,7 +46,8 @@ export class MessagesComponentComponent implements OnInit {
     let doc:any = document.getElementById("selectUser");
     doc.value = email;
     this.ChoosenUser = email;
-    this.messagesService.GetMessages(this.FindUserByEmail(email).Id, 0);
+    this.messagesService.ChoosenUserId = this.FindUserByEmail(email).Id;
+    this.messagesService.GetMessages(0);
     this.Message = "";
   }
 
@@ -104,7 +105,7 @@ export class MessagesComponentComponent implements OnInit {
 
   private DownloadMore(): void
   {
-    this.messagesService.GetMessages(this.FindUserByEmail(this.ChoosenUser).Id, this.messagesService.Messages[this.messagesService.Messages.length - 1].MessageId);
+    this.messagesService.GetMessages(this.messagesService.Messages[this.messagesService.Messages.length - 1].MessageId);
   }
 
   private FindUserByEmail(email: string): UserViewModel

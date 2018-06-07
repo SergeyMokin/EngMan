@@ -13,6 +13,8 @@ export class MessagesService
     public Messages: ReturnMessageModel[] = [];
     public NewMessages: ReturnMessageModel[] = [];
 
+    public ChoosenUserId: number = null;
+
     constructor(private signalR: SignalR,
       private apiService: ApiService)
     {
@@ -33,6 +35,17 @@ export class MessagesService
               this.UpdateMessagesSubscription.subscribe(() => {
                 document.getElementById("message-icon").className = "medium material-icons animation-new-mess-blink";
                 this.GetNewMessages();
+                if(this.ChoosenUserId != null)
+                {
+                  let thisis = this;
+                  setTimeout(
+                    function()
+                    { 
+                      thisis.Messages = [];
+                      thisis.GetMessages(0); 
+                    }, 
+                    1200);
+                }
               })
             })
             .catch(error => console.log(error))
@@ -61,11 +74,11 @@ export class MessagesService
       )
     }
 
-    public GetMessages(id: number, idOfLastMessage: number): void
+    public GetMessages(idOfLastMessage: number): void
     {
-      this.ReadMessages(id);
+      this.ReadMessages(this.ChoosenUserId);
       this.apiService
-      .GetMessagesByUserId(id, idOfLastMessage)
+      .GetMessagesByUserId(this.ChoosenUserId, idOfLastMessage)
       .subscribe(
         obj => 
         {
@@ -118,10 +131,11 @@ export class MessagesService
           if(obj)
           {
             this.Messages = [];
-            this.GetMessages(mes.BeneficiaryId, 0);
+            this.GetMessages(0);
           }
         },
         error => console.log(error)
       )
+      this.Connection.invoke("Send", mes);
     }
 }
