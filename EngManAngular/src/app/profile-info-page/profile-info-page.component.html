@@ -27,7 +27,7 @@
     <a class="left red-text">{{ErrorMessageEditProfile}}</a>
     <a class="btn right" (click)="SaveChanges()">Save Changes</a>
   </div> 
-  <div class="row"><a href="javascript:0" style="margin-right:10px" class="right" (click)="ChangeOpenedChangePassword()" id="change_pass_btn">Change Password</a></div>
+  <div class="row"><a style="margin-right:10px; cursor:pointer;" class="right" (click)="ChangeOpenedChangePassword()" id="change_pass_btn">Change Password</a></div>
 </div>
 <div class="row" [style.display]="OpenedChangePassword?'block':'none'">
   <div class="col s12">

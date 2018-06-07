@@ -2,7 +2,7 @@
     <div class="modal modal-fixed-footer" style="margin-top: 50px; height: 550px" [style.display]="Task==null?'none':'block'">
         <div id="ModalDialog" class="modal-content">
           <div class="row center">
-            <a href="javascript:0" (click)="ShowTranslate=!ShowTranslate">{{ShowTranslate ? (Task == null ? "" : Task.Word.Translate).toUpperCase() : "Show"}}</a>
+            <a style="cursor:pointer;" (click)="ShowTranslate=!ShowTranslate">{{ShowTranslate ? (Task == null ? "" : Task.Word.Translate).toUpperCase() : "Show"}}</a>
           </div>
           <div class="row center">
             <img [src]="Task == null ? '' : Task.Path">

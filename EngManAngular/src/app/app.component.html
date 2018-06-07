@@ -1,6 +1,6 @@
 <nav>
     <div class="nav-wrapper">
-      <span data-target='dropdown1' href="javascript:0" class="brand-logo left dropdown-trigger">
+      <span data-target='dropdown1' style="cursor:pointer;" class="brand-logo left dropdown-trigger">
           <img 
             title="home" 
             style="height: 64px; padding-left: 10px;filter: invert(100%);" 
@@ -10,8 +10,8 @@
       <ul id="nav-mobile" class="right">
         <li><a [routerLink]="['login']"><i class="material-icons" title="home">home</i></a></li>
         <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a [routerLink]="['user-dictionary']"><i class="material-icons" title="dictionary">sort_by_alpha</i></a></li>
-        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown2' title="grammar">library_books</i></a></li>
-        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0"><i class="material-icons dropdown-trigger" data-target='dropdown3' title="trainings">lightbulb_outline</i></a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a style="cursor:pointer;"><i class="material-icons dropdown-trigger" data-target='dropdown2' title="grammar">library_books</i></a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a style="cursor:pointer;"><i class="material-icons dropdown-trigger" data-target='dropdown3' title="trainings">lightbulb_outline</i></a></li>
       </ul>
     </div>
 </nav>
@@ -31,7 +31,7 @@
 <!--Dropdown menu of profile-->
 <ul id='dropdown1' class="dropdown-content">
         <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a [routerLink]="['profile-info']">Settings</a></li>
-        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a href="javascript:0" (click)="Logout()">Logout</a></li>
+        <li [style.display]="apiService.RoleOfUser.length > 0 ? 'block' :'none'"><a style="cursor:pointer;" (click)="Logout()">Logout</a></li>
 </ul>
 
 <!--Dropdown menu of grammar-->
