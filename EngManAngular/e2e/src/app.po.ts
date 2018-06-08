@@ -1,11 +1,21 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 export class AppPage {
-  navigateTo() {
-    return browser.get('/');
+  navigateTo(str: string) {
+    browser.waitForAngularEnabled(false)
+    browser.get(str, 2000)
   }
 
   getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+    return element(by.className("brand-logo center")).getText();
+  }
+
+  login()
+  {
+    element(by.id("email")).sendKeys("s.a.mokin@list.ru");
+    element(by.id("password")).sendKeys("DefaultAdmin9856");
+    let btn = element(by.className("btn waves-effect waves-light"));
+    browser.waitForAngularEnabled(true)
+    btn.click();
   }
 }
