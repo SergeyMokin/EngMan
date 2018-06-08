@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class ApiService
 {
-    private readonly Url:string = 'http://ecsc00a01a18/api';
+    public readonly Url:string = 'http://ecsc00a01a18/api';
 
     public RoleOfUser: string = ``;
 

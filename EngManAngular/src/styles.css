@@ -116,6 +116,15 @@ input:not(.browser-default):focus:not([readonly]), textarea:not(.browser-default
   animation: new-mess-blink 800ms alternate infinite;
 }
 
+.progress
+{
+    background-color: indianred !important;
+}
+
+.progress .indeterminate {
+    background-color: darkred !important;
+}
+
 @keyframes new-mess-blink {
   from {
     opacity: 1;
